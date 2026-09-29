@@ -13,6 +13,22 @@ nível  8  estilo clássico ao piano    █████░░░░░░░
 nível 10  escrita livre               █░░░░░░░░░░░  quase tudo é info
 ```
 
+## Versão web (celular)
+
+A pasta [`web/`](web/) tem o mesmo verificador em JavaScript, numa página que funciona no
+navegador do celular: você escreve o exercício (com um teclado de notas na tela), escolhe o
+nível, vê a partitura com os erros marcados e ouve o resultado.
+
+| arquivo | o que tem |
+|---------|-----------|
+| `web/index.html` | a página |
+| `web/motor.js` | as regras e a tabela de níveis, portadas do Python |
+| `web/exemplos.js` | os exemplos de `exercicios/exemplos/`, gerados por `python web/gerar_exemplos.py` |
+
+`tests/test_web.py` roda os dois verificadores (Python e JavaScript) em todos os exemplos e em
+400 exercícios aleatórios, nos 10 níveis, e exige resultados idênticos. Quando mudar uma regra
+ou a tabela em Python, mude também em `web/motor.js` e rode os testes.
+
 ## Instalação
 
 ```
