@@ -16,14 +16,20 @@ nível 10  escrita livre               █░░░░░░░░░░░  qua
 ## Versão web (celular)
 
 A pasta [`web/`](web/) tem o mesmo verificador em JavaScript, numa página que funciona no
-navegador do celular: você escreve o exercício (com um teclado de notas na tela), escolhe o
-nível, vê a partitura com os erros marcados e ouve o resultado.
+navegador do celular: você escreve no piano (com duração, pausa, ponto e ligadura), sorteia
+cantus firmi, escolhe o nível, vê a partitura com os erros marcados e ouve o resultado.
 
 | arquivo | o que tem |
 |---------|-----------|
 | `web/index.html` | a página |
 | `web/motor.js` | as regras e a tabela de níveis, portadas do Python |
+| `web/editor.js` | o modelo que o piano edita, e a conversão para o formato de texto |
+| `web/cantus.js` | sorteio de cantus firmi; cada um só é aceito se existir contraponto de 1ª espécie sem erros acima e abaixo dele |
 | `web/exemplos.js` | os exemplos de `exercicios/exemplos/`, gerados por `python web/gerar_exemplos.py` |
+
+Na versão web um erro só aparece quando todas as vozes completaram o compasso dele; as regras
+que dependem do fim (cadência, final, ponto culminante) esperam o exercício inteiro. Cada erro
+traz uma explicação de por que é um problema e de como corrigir.
 
 `tests/test_web.py` roda os dois verificadores (Python e JavaScript) em todos os exemplos e em
 400 exercícios aleatórios, nos 10 níveis, e exige resultados idênticos. Quando mudar uma regra

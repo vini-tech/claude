@@ -3,8 +3,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Music&display=swap">
 <style>
-/* Layout: uma coluna no celular (nível → partitura → editor → correção), duas no computador;
-   barra de veredito fixa embaixo. Cores de papel pautado frio com tinta azul-da-prússia. */
+/* Layout: página em uma coluna no celular (nível → partitura → exercício → correção), duas no
+   computador; embaixo, uma doca fixa com piano e ferramentas de escrita, como num app de partitura.
+   Cores de papel pautado frio com tinta azul-da-prússia. */
 :root {
   --papel: #eef1f4;
   --folha: #ffffff;
@@ -14,6 +15,7 @@
   --linha: #d6dce3;
   --acento: #1d4f91;
   --acento-suave: #dfe8f5;
+  --sobre-acento: #ffffff;
   --erro: #b93a2e;
   --aviso: #a86c12;
   --info: #6452b0;
@@ -22,60 +24,65 @@
   --aviso-fundo: #f6ecd9;
   --info-fundo: #ebe7f7;
   --ok-fundo: #e1f0e6;
+  --tecla-branca: #fbfcfd;
+  --tecla-preta: #1f2833;
+  --tecla-borda: #aeb8c3;
   --f-titulo: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --f-texto: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --f-musica: "Noto Music", "Bravura Text", "Apple Symbols", serif;
   --raio: 10px;
+  --doca: 300px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --papel: #0f141a; --folha: #161d25; --tinta: #e4e9ef; --apagado: #93a0ae; --pauta: #4a5664; --linha: #2a3440;
-    --acento: #86ade6; --acento-suave: #1d2b3e; --erro: #f07b6b; --aviso: #e3b05a; --info: #ab9df2; --ok: #6cc28f;
-    --erro-fundo: #3a1f1c; --aviso-fundo: #372a14; --info-fundo: #262040; --ok-fundo: #1a3325; color-scheme: dark;
+    --acento: #86ade6; --acento-suave: #1d2b3e; --sobre-acento: #0f141a; --erro: #f07b6b; --aviso: #e3b05a; --info: #ab9df2; --ok: #6cc28f;
+    --erro-fundo: #3a1f1c; --aviso-fundo: #372a14; --info-fundo: #262040; --ok-fundo: #1a3325;
+    --tecla-branca: #d9dfe6; --tecla-preta: #0b0f14; --tecla-borda: #3a4553; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --papel: #0f141a; --folha: #161d25; --tinta: #e4e9ef; --apagado: #93a0ae; --pauta: #4a5664; --linha: #2a3440;
-  --acento: #86ade6; --acento-suave: #1d2b3e; --erro: #f07b6b; --aviso: #e3b05a; --info: #ab9df2; --ok: #6cc28f;
-  --erro-fundo: #3a1f1c; --aviso-fundo: #372a14; --info-fundo: #262040; --ok-fundo: #1a3325; color-scheme: dark;
+  --acento: #86ade6; --acento-suave: #1d2b3e; --sobre-acento: #0f141a; --erro: #f07b6b; --aviso: #e3b05a; --info: #ab9df2; --ok: #6cc28f;
+  --erro-fundo: #3a1f1c; --aviso-fundo: #372a14; --info-fundo: #262040; --ok-fundo: #1a3325;
+  --tecla-branca: #d9dfe6; --tecla-preta: #0b0f14; --tecla-borda: #3a4553; color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { background: var(--papel); color: var(--tinta); font: 16px/1.5 var(--f-texto); margin: 0; }
-.pagina { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 110px; display: grid; gap: 18px; }
+.pagina { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 20px calc(var(--doca) + 24px); display: grid; gap: 16px; }
 h1, h2 { font-family: var(--f-titulo); font-weight: 500; text-wrap: balance; margin: 0; }
-h1 { font-size: clamp(1.9rem, 6vw, 2.8rem); line-height: 1.05; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.8rem, 6vw, 2.6rem); line-height: 1.05; letter-spacing: -0.01em; }
 h1 em { font-style: italic; color: var(--acento); }
-h2 { font-size: 1.3rem; }
+h2 { font-size: 1.15rem; }
 .rotulo { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--apagado); }
 .sub { color: var(--apagado); max-width: 62ch; margin: 6px 0 0; }
 button, select, input, textarea { font: inherit; color: inherit; }
-button { cursor: pointer; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
 
 .cartao { background: var(--folha); border: 1px solid var(--linha); border-radius: var(--raio); padding: 14px; min-width: 0; }
-.colunas { display: grid; gap: 18px; }
-@media (min-width: 920px) { .colunas { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); align-items: start; } .lateral { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); } }
-.principal, .lateral { display: grid; gap: 18px; min-width: 0; }
+.colunas { display: grid; gap: 16px; }
+@media (min-width: 920px) { .colunas { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); align-items: start; } }
+.principal, .lateral { display: grid; gap: 16px; min-width: 0; }
 
 /* seletor de nível: cada botão mostra quantas regras valem como erro, aviso e info */
 .niveis { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; margin-top: 10px; }
 .nivel { border: 1px solid var(--linha); background: var(--folha); border-radius: 8px; padding: 6px 2px 5px; display: grid; justify-items: center; gap: 4px; min-width: 0; }
 .nivel[aria-pressed="true"] { border-color: var(--acento); background: var(--acento-suave); box-shadow: inset 0 0 0 1px var(--acento); }
 .nivel .num { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
-.barras { display: flex; flex-direction: column-reverse; width: 10px; height: 40px; border-radius: 2px; overflow: hidden; background: var(--linha); }
+.barras { display: flex; flex-direction: column-reverse; width: 10px; height: 36px; border-radius: 2px; overflow: hidden; background: var(--linha); }
 .barras i { display: block; width: 100%; }
 .barras .e { background: var(--erro); } .barras .a { background: var(--aviso); } .barras .i { background: var(--info); }
 .nome-nivel { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
-.nome-nivel strong { font-family: var(--f-titulo); font-size: 1.15rem; font-weight: 500; }
+.nome-nivel strong { font-family: var(--f-titulo); font-size: 1.1rem; font-weight: 500; }
 .legenda { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.8rem; color: var(--apagado); }
 .legenda span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; background: var(--c); }
 
 /* partitura */
-.partitura-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
-.partitura-topo h2 { font-size: 1.1rem; }
+.partitura-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
 #partitura { width: 100%; overflow-x: auto; }
 #partitura svg { display: block; touch-action: manipulation; }
 .pauta-linha { stroke: var(--pauta); stroke-width: 1; }
@@ -88,55 +95,62 @@ button { cursor: pointer; }
 .suplementar { stroke: var(--tinta); stroke-width: 1.1; }
 .glifo { font-family: var(--f-musica); fill: var(--tinta); }
 .nome-voz { font: 600 10px var(--f-texto); fill: var(--apagado); letter-spacing: 0.04em; text-transform: uppercase; }
+.nome-voz.ativa { fill: var(--acento); }
 .num-compasso { font: 10px var(--f-texto); fill: var(--apagado); font-variant-numeric: tabular-nums; }
 .sev-erro { --sev: var(--erro); } .sev-aviso { --sev: var(--aviso); } .sev-info { --sev: var(--info); }
 .marcada .tinta, .marcada.tinta { fill: var(--sev); }
-.marcada .contorno, .marcada.contorno { stroke: var(--sev); }
+.marcada .contorno { stroke: var(--sev); }
 .marcada .haste { stroke: var(--sev); }
 .halo { fill: var(--sev); opacity: 0.22; }
 .halo-anel { fill: none; stroke: var(--sev); stroke-width: 1.6; }
 .faixa { fill: var(--sev); opacity: 0.07; }
 .risco { fill: var(--sev); }
+.selecao { fill: var(--acento); opacity: 0.16; }
+.caret { stroke: var(--acento); stroke-width: 2.2; stroke-linecap: round; }
+.caret-alvo { fill: var(--acento); }
 .cursor { stroke: var(--acento); stroke-width: 2; }
 .vazio { padding: 26px 8px; text-align: center; color: var(--apagado); }
 
-/* editor */
-.editor-topo { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.detalhe { margin-top: 10px; border-radius: 8px; border: 1px solid var(--sev); background: var(--papel); padding: 10px 12px; display: grid; gap: 6px; }
+.detalhe .cab { display: flex; justify-content: space-between; gap: 8px; align-items: start; }
+.detalhe .cab b { font-size: 0.95rem; }
+.detalhe .fechar { border: 0; background: none; color: var(--apagado); font-size: 1.1rem; line-height: 1; padding: 2px 4px; }
+.explica { display: grid; gap: 6px; font-size: 0.9rem; line-height: 1.45; }
+.explica p { margin: 0; }
+.explica .t { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--apagado); }
+.explica .nivel-nota { color: var(--sev); font-weight: 600; font-size: 0.84rem; }
+
+/* exercício */
+.editor-topo { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
 .acoes { display: flex; flex-wrap: wrap; gap: 6px; }
 .botao { border: 1px solid var(--linha); background: var(--folha); border-radius: 8px; padding: 6px 11px; font-size: 0.9rem; font-weight: 600; }
 .botao:hover { border-color: var(--apagado); }
-.botao.primario { background: var(--acento); border-color: var(--acento); color: var(--folha); }
-.botao[aria-pressed="true"] { background: var(--acento-suave); border-color: var(--acento); color: var(--acento); }
+.botao.primario { background: var(--acento); border-color: var(--acento); color: var(--sobre-acento); }
 select.botao { padding-right: 6px; max-width: 100%; }
 #exemplos { width: 8.5em; }
-textarea { width: 100%; min-height: 190px; resize: vertical; border: 1px solid var(--linha); border-radius: 8px; background: var(--papel); padding: 10px 12px; font: 14px/1.6 var(--f-mono); white-space: pre; overflow-x: auto; tab-size: 4; }
-.erro-leitura { margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--erro-fundo); color: var(--erro); font-size: 0.92rem; }
-.dica { margin: 8px 0 0; color: var(--apagado); font-size: 0.85rem; }
-.dica code { font-family: var(--f-mono); font-size: 0.82rem; background: var(--papel); padding: 1px 4px; border-radius: 4px; }
-
-.teclado { margin-top: 10px; display: grid; gap: 6px; }
-.fileira { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
-.fileira.seis { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-.tecla { border: 1px solid var(--linha); background: var(--papel); border-radius: 7px; min-height: 42px; font: 600 1rem var(--f-mono); padding: 0; }
-.tecla.letra { background: var(--folha); font-size: 1.1rem; }
-.tecla:active { background: var(--acento-suave); }
-.tecla small { display: block; font: 600 0.62rem var(--f-texto); color: var(--apagado); letter-spacing: 0.03em; }
-
+.titulo-ex { margin: 8px 0 0; color: var(--apagado); font-size: 0.92rem; }
 .novo { margin-top: 10px; padding: 12px; border-radius: 8px; background: var(--papel); display: grid; gap: 10px; }
 .novo-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
 .novo label { display: grid; gap: 3px; font-size: 0.8rem; color: var(--apagado); font-weight: 600; }
 .novo select { border: 1px solid var(--linha); border-radius: 7px; background: var(--folha); padding: 6px 8px; font-size: 0.95rem; color: var(--tinta); }
+details.texto { margin-top: 10px; }
+details.texto summary { cursor: pointer; font-size: 0.88rem; font-weight: 600; color: var(--apagado); }
+textarea { margin-top: 8px; width: 100%; min-height: 170px; resize: vertical; border: 1px solid var(--linha); border-radius: 8px; background: var(--papel); padding: 10px 12px; font: 13px/1.6 var(--f-mono); white-space: pre; overflow-x: auto; }
+.erro-leitura { margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--erro-fundo); color: var(--erro); font-size: 0.92rem; }
+.dica { margin: 8px 0 0; color: var(--apagado); font-size: 0.85rem; }
+.dica code { font-family: var(--f-mono); font-size: 0.8rem; background: var(--papel); padding: 1px 4px; border-radius: 4px; }
 
 /* correção */
 .veredito { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.selo { font-family: var(--f-titulo); font-size: 1.35rem; }
-.selo.aprovado { color: var(--ok); } .selo.reprovado { color: var(--erro); } .selo.neutro { color: var(--apagado); }
+.selo { font-family: var(--f-titulo); font-size: 1.3rem; white-space: nowrap; }
+.selo.aprovado { color: var(--ok); } .selo.reprovado { color: var(--erro); } .selo.neutro { color: var(--apagado); } .selo.andamento { color: var(--acento); }
 .contagens { display: flex; gap: 6px; flex-wrap: wrap; }
 .chip { white-space: nowrap; font-size: 0.8rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums; }
 .chip.erro { background: var(--erro-fundo); color: var(--erro); }
 .chip.aviso { background: var(--aviso-fundo); color: var(--aviso); }
 .chip.info { background: var(--info-fundo); color: var(--info); }
 .chip.zero { opacity: 0.45; }
+.progresso { margin: 8px 0 0; font-size: 0.88rem; color: var(--apagado); }
 .achados { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
 .achado { display: grid; grid-template-columns: 4px 44px minmax(0, 1fr); gap: 0 10px; align-items: start; border-radius: 8px; padding: 8px 10px 8px 0; background: var(--papel); border: 1px solid transparent; text-align: left; width: 100%; }
 .achado:hover { border-color: var(--linha); }
@@ -145,9 +159,9 @@ textarea { width: 100%; min-height: 190px; resize: vertical; border: 1px solid v
 .achado .c { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 0.88rem; color: var(--apagado); padding-top: 1px; }
 .achado .msg { font-size: 0.93rem; line-height: 1.4; min-width: 0; overflow-wrap: anywhere; }
 .achado .qual { display: block; font-size: 0.76rem; color: var(--sev); font-weight: 700; margin-top: 2px; }
+.achado .explica { margin-top: 8px; }
 .nada { margin: 12px 0 0; color: var(--apagado); }
 .aviso-tom { margin: 10px 0 0; font-size: 0.85rem; color: var(--apagado); }
-
 details.regras summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 8px; }
 details.regras summary::-webkit-details-marker { display: none; }
 details.regras summary::after { content: "+"; color: var(--apagado); font-weight: 400; }
@@ -161,17 +175,41 @@ details.regras[open] summary::after { content: "–"; }
 .pilula.aviso { background: var(--aviso-fundo); color: var(--aviso); }
 .pilula.info { background: var(--info-fundo); color: var(--info); }
 
-/* barra fixa */
-.barra-fixa { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; background: var(--folha); border-top: 1px solid var(--linha); padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); }
-.barra-fixa .dentro { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
-.barra-fixa .resumo { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; border: 0; background: none; padding: 0; text-align: left; }
-.barra-fixa .resumo .selo { font-size: 1.1rem; white-space: nowrap; }
-.barra-fixa .contagens { flex-wrap: nowrap; overflow: hidden; }
-.barra-fixa .chip.zero { display: none; }
-.andamento { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--apagado); font-variant-numeric: tabular-nums; }
-.andamento input { width: 84px; accent-color: var(--acento); }
-@media (max-width: 480px) { .andamento input { width: 64px; } .andamento .rot { display: none; } }
-.tocar { border: 0; background: var(--acento); color: var(--folha); border-radius: 999px; padding: 9px 16px; font-weight: 700; white-space: nowrap; }
+/* doca: piano e ferramentas */
+.doca { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; background: var(--folha); border-top: 1px solid var(--linha); box-shadow: 0 -6px 18px rgb(0 0 0 / 0.06); padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)); }
+.doca .dentro { max-width: 1180px; margin: 0 auto; display: grid; gap: 7px; }
+.linha-doca { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.resumo { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; border: 0; background: none; padding: 0; text-align: left; overflow: hidden; }
+.resumo .selo { font-size: 1.05rem; }
+.resumo .contagens { flex-wrap: nowrap; overflow: hidden; }
+.resumo .chip.zero { display: none; }
+.andamento { display: flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--apagado); font-variant-numeric: tabular-nums; }
+.andamento input { width: 90px; accent-color: var(--acento); }
+.tocar { border: 0; background: var(--acento); color: var(--sobre-acento); border-radius: 999px; padding: 7px 14px; font-weight: 700; white-space: nowrap; }
+.recolher { border: 1px solid var(--linha); background: var(--folha); border-radius: 8px; width: 34px; height: 32px; padding: 0; color: var(--apagado); }
+.ferramentas { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 4px; }
+.ferr { flex: 0 0 auto; min-width: 36px; height: 40px; border: 1px solid var(--linha); background: var(--papel); border-radius: 8px; display: grid; place-items: center; padding: 0 8px; font-weight: 700; font-size: 0.85rem; line-height: 1; }
+.ferramentas .ferr { min-width: 0; padding: 0; }
+.ferr .fig { font-family: var(--f-musica); font-size: 1.45rem; font-weight: 400; line-height: 1; }
+.ferr[aria-pressed="true"] { background: var(--acento); border-color: var(--acento); color: var(--sobre-acento); }
+.ferr:disabled { opacity: 0.4; }
+.sep { flex: 0 0 1px; background: var(--linha); margin: 4px 2px; }
+.vozes { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
+.vozes::-webkit-scrollbar { display: none; }
+.chip-voz { flex: 0 0 auto; border: 1px solid var(--linha); background: var(--papel); border-radius: 999px; padding: 4px 11px; font-size: 0.82rem; font-weight: 600; }
+.chip-voz[aria-pressed="true"] { border-color: var(--acento); background: var(--acento-suave); color: var(--acento); }
+.chip-voz .fixo { font-weight: 400; color: var(--apagado); }
+.piano-rolo { overflow-x: auto; overscroll-behavior-x: contain; border-radius: 6px; scrollbar-width: thin; }
+.piano { position: relative; height: 112px; }
+.tecla { position: absolute; top: 0; border: 1px solid var(--tecla-borda); padding: 0; touch-action: manipulation; }
+.tecla.branca { width: 40px; height: 112px; background: var(--tecla-branca); border-radius: 0 0 6px 6px; z-index: 1; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; font: 600 10px var(--f-texto); color: #6a7480; }
+.tecla.preta { width: 26px; height: 70px; background: var(--tecla-preta); border-color: var(--tecla-preta); border-radius: 0 0 4px 4px; z-index: 2; }
+.tecla.branca.c4 { color: var(--acento); }
+.tecla:active, .tecla.tocada { filter: brightness(0.86); }
+.tecla.ativa.branca { background: var(--acento-suave); box-shadow: inset 0 -5px 0 var(--acento); }
+.tecla.ativa.preta { background: var(--acento); border-color: var(--acento); }
+.aviso-doca { font-size: 0.82rem; color: var(--apagado); min-height: 1.2em; }
+.doca.recolhida .so-aberta { display: none !important; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 </style>
 
@@ -179,7 +217,7 @@ details.regras[open] summary::after { content: "–"; }
   <header>
     <div class="rotulo">Curso de composição · verificador</div>
     <h1>Da regra à <em>liberdade</em></h1>
-    <p class="sub">Escreva o exercício, escolha o nível e veja a correção na hora. No nível 1 tudo é erro; a cada nível as regras afrouxam, até virarem só informação no nível 10.</p>
+    <p class="sub">Escreva no piano, escolha o nível e veja a correção compasso a compasso. No nível 1 tudo é erro; a cada nível as regras afrouxam, até virarem só informação no nível 10.</p>
   </header>
 
   <section class="cartao" aria-labelledby="t-nivel">
@@ -196,24 +234,26 @@ details.regras[open] summary::after { content: "–"; }
         <div class="partitura-topo">
           <h2 id="t-partitura">Partitura</h2>
           <span class="rotulo" id="info-partitura"></span>
+          <label class="andamento" for="bpm"><span>andamento ♩ =</span><input type="range" id="bpm" min="40" max="200" step="4" value="112"><span id="bpm-valor">112</span></label>
         </div>
         <div id="partitura"></div>
+        <div class="detalhe" id="detalhe" hidden></div>
       </section>
 
       <section class="cartao" aria-labelledby="t-editor">
         <div class="editor-topo">
           <h2 id="t-editor">Exercício</h2>
           <div class="acoes">
+            <button class="botao primario" id="bt-sortear">Sortear cantus firmus</button>
+            <button class="botao" id="bt-novo" aria-expanded="false">Opções</button>
             <select class="botao" id="exemplos" aria-label="Carregar exemplo"><option value="">Exemplos…</option></select>
-            <button class="botao" id="bt-novo" aria-expanded="false">Novo</button>
-            <button class="botao" id="bt-teclado" aria-pressed="false">Teclado de notas</button>
-            <button class="botao" id="bt-desfazer" hidden>Desfazer</button>
           </div>
         </div>
+        <p class="titulo-ex" id="titulo-ex"></p>
         <div class="novo" id="novo" hidden>
           <div class="novo-campos">
             <label for="novo-cf">Cantus firmus
-              <select id="novo-cf"></select></label>
+              <select id="novo-cf"><option value="sortear">Sortear um novo</option></select></label>
             <label for="novo-especie">Espécie
               <select id="novo-especie">
                 <option value="1">1ª — nota contra nota</option>
@@ -227,23 +267,12 @@ details.regras[open] summary::after { content: "–"; }
           </div>
           <div><button class="botao primario" id="bt-criar">Criar exercício</button></div>
         </div>
-        <textarea id="texto" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Texto do exercício"></textarea>
-        <div class="erro-leitura" id="erro-leitura" role="alert" hidden></div>
-        <div class="teclado" id="teclado" hidden aria-label="Teclado de notas">
-          <div class="fileira">
-            <button class="tecla letra" data-ins="C">C<small>dó</small></button><button class="tecla letra" data-ins="D">D<small>ré</small></button><button class="tecla letra" data-ins="E">E<small>mi</small></button><button class="tecla letra" data-ins="F">F<small>fá</small></button><button class="tecla letra" data-ins="G">G<small>sol</small></button><button class="tecla letra" data-ins="A">A<small>lá</small></button><button class="tecla letra" data-ins="B">B<small>si</small></button>
-          </div>
-          <div class="fileira">
-            <button class="tecla" data-ins="#">#<small>sust.</small></button><button class="tecla" data-ins="b">b<small>bemol</small></button><button class="tecla" data-ins="2">2</button><button class="tecla" data-ins="3">3</button><button class="tecla" data-ins="4">4</button><button class="tecla" data-ins="5">5</button><button class="tecla" data-ins="6">6</button>
-          </div>
-          <div class="fileira">
-            <button class="tecla" data-ins="/4">/4<small>semibr.</small></button><button class="tecla" data-ins="/2">/2<small>mínima</small></button><button class="tecla" data-ins="/1">/1<small>semín.</small></button><button class="tecla" data-ins="/0.5">/½<small>colch.</small></button><button class="tecla" data-ins="~">~<small>ligar</small></button><button class="tecla" data-ins="P">P<small>pausa</small></button><button class="tecla" data-ins="&#10;">↵<small>linha</small></button>
-          </div>
-          <div class="fileira seis">
-            <button class="tecla" data-mover="-1">←</button><button class="tecla" data-mover="1">→</button><button class="tecla" data-ins=" " style="grid-column: span 2">espaço</button><button class="tecla" data-apagar="1" style="grid-column: span 2">⌫ apagar</button>
-          </div>
-        </div>
-        <p class="dica">Uma voz por linha, da mais aguda para a mais grave. <code>D5/4</code> é ré5 durando 4 semínimas (semibreve); sem <code>/</code> repete a duração anterior. <code>~</code> liga à próxima nota, <code>P/2</code> é pausa de mínima. Cabeçalhos: <code>compasso: 2/2</code>, <code>tom: D dorico</code>, <code>cf: cantus</code>.</p>
+        <details class="texto" id="det-texto">
+          <summary>Editar como texto</summary>
+          <textarea id="texto" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Texto do exercício"></textarea>
+          <div class="erro-leitura" id="erro-leitura" role="alert" hidden></div>
+          <p class="dica">Uma voz por linha, da mais aguda para a mais grave. <code>D5/4</code> é ré5 durando 4 semínimas; sem <code>/</code> repete a duração anterior. <code>~</code> liga à próxima nota, <code>P/2</code> é pausa de mínima. Cabeçalhos: <code>compasso: 2/2</code>, <code>tom: D dorico</code>, <code>cf: cantus</code>.</p>
+        </details>
       </section>
     </div>
 
@@ -251,6 +280,7 @@ details.regras[open] summary::after { content: "–"; }
       <section class="cartao" id="correcao" aria-labelledby="t-correcao" aria-live="polite">
         <div class="rotulo" id="t-correcao">Correção</div>
         <div class="veredito"><span class="selo neutro" id="selo">—</span><div class="contagens" id="contagens"></div></div>
+        <p class="progresso" id="progresso" hidden></p>
         <ul class="achados" id="achados"></ul>
         <p class="nada" id="nada" hidden></p>
         <p class="aviso-tom" id="aviso-tom" hidden></p>
@@ -265,205 +295,276 @@ details.regras[open] summary::after { content: "–"; }
   </div>
 </div>
 
-<div class="barra-fixa">
+<div class="doca" id="doca">
   <div class="dentro">
-    <button class="resumo" id="resumo" aria-label="Ir para a correção"><span class="selo neutro" id="selo-mini">—</span><span class="contagens" id="contagens-mini"></span></button>
-    <label class="andamento" for="bpm"><span class="rot">♩ =</span><input type="range" id="bpm" min="40" max="200" step="4" value="112"><span id="bpm-valor">112</span></label>
-    <button class="tocar" id="tocar">▶ Ouvir</button>
+    <div class="linha-doca">
+      <button class="resumo" id="resumo" aria-label="Ir para a correção"><span class="selo neutro" id="selo-mini">—</span><span class="contagens" id="contagens-mini"></span></button>
+      <button class="tocar" id="tocar">▶ Ouvir</button>
+      <button class="recolher" id="recolher" aria-expanded="true" aria-label="Recolher o piano">▾</button>
+    </div>
+    <div class="linha-doca so-aberta">
+      <div class="vozes" id="vozes" role="group" aria-label="Voz que está sendo escrita"></div>
+      <button class="ferr" id="f-esq" aria-label="Nota anterior">◀</button>
+      <button class="ferr" id="f-dir" aria-label="Próxima nota">▶</button>
+      <button class="ferr" id="f-apagar" aria-label="Apagar nota">⌫</button>
+      <button class="ferr" id="f-desfazer" aria-label="Desfazer">↶</button>
+    </div>
+    <div class="ferramentas so-aberta" id="ferramentas" role="toolbar" aria-label="Duração e símbolos">
+      <button class="ferr" data-dur="4" aria-label="Semibreve"><span class="fig">𝅝</span></button>
+      <button class="ferr" data-dur="2" aria-label="Mínima"><span class="fig">𝅗𝅥</span></button>
+      <button class="ferr" data-dur="1" aria-label="Semínima"><span class="fig">𝅘𝅥</span></button>
+      <button class="ferr" data-dur="0.5" aria-label="Colcheia"><span class="fig">𝅘𝅥𝅮</span></button>
+      <button class="ferr" data-dur="0.25" aria-label="Semicolcheia"><span class="fig">𝅘𝅥𝅯</span></button>
+      <button class="ferr" id="f-ponto" aria-pressed="false" aria-label="Ponto de aumento">•</button>
+      <button class="ferr" id="f-pausa" aria-label="Pausa" title="Pausa"><span class="fig">𝄽</span></button>
+      <button class="ferr" id="f-liga" aria-pressed="false" aria-label="Ligar à próxima nota" title="Ligadura"><span class="fig">⁀</span></button>
+      <button class="ferr" id="f-enarm" aria-label="Trocar a grafia (dó♯ ↔ ré♭)" title="Enarmonia">♯♭</button>
+    </div>
+    <div class="piano-rolo so-aberta" id="piano-rolo"><div class="piano" id="piano" aria-label="Piano"></div></div>
+    <div class="aviso-doca so-aberta" id="aviso-doca" aria-live="polite"></div>
   </div>
 </div>
 
 <script src="motor.js"></script>
+<script src="cantus.js"></script>
+<script src="editor.js"></script>
 <script src="exemplos.js"></script>
 <script>
 "use strict";
-const M = window.Motor, T = M.T;
+const M = window.Motor, Cn = window.Cantus, Ed = window.Editor, T = M.T;
 const $ = (id) => document.getElementById(id);
 const guardar = (k, v) => { try { localStorage.setItem("drl:" + k, v); } catch (e) {} };
 const ler = (k) => { try { return localStorage.getItem("drl:" + k); } catch (e) { return null; } };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const nomeBonito = (s) => s.replace(/\b([A-G])(##|#|--|-|bb|b)?(-?\d)?\b/g, (m, l, a = "", o = "") =>
+  l + a.replace(/##/, "𝄪").replace(/#/, "♯").replace(/--|bb/, "𝄫").replace(/-|b/, "♭") + o);
 
 const CANTUS = [
-  { nome: "1 · ré dórico (Fux)", tom: "D dorico", notas: "D4 F4 E4 D4 G4 F4 A4 G4 F4 E4 D4" },
-  { nome: "2 · dó maior", tom: "C maior", notas: "C4 D4 F4 E4 D4 G4 F4 E4 D4 C4" },
-  { nome: "3 · lá eólio", tom: "A eolio", notas: "A3 C4 B3 D4 C4 E4 D4 C4 B3 A3" },
-  { nome: "4 · fá maior", tom: "F maior", notas: "F4 G4 A4 F4 D4 E4 F4 C5 A4 F4 G4 F4" },
-  { nome: "5 · sol mixolídio", tom: "G mixolidio", notas: "G3 C4 B3 G3 A3 C4 B3 D4 C4 B3 A3 G3" },
-  { nome: "6 · mi frígio", tom: "E frigio", notas: "E4 C4 D4 E4 G4 F4 E4 D4 F4 E4" },
+  { nome: "ré dórico (Fux)", tom: "D dorico", notas: "D4 F4 E4 D4 G4 F4 A4 G4 F4 E4 D4" },
+  { nome: "dó maior", tom: "C maior", notas: "C4 D4 F4 E4 D4 G4 F4 E4 D4 C4" },
+  { nome: "lá eólio", tom: "A eolio", notas: "A3 C4 B3 D4 C4 E4 D4 C4 B3 A3" },
+  { nome: "fá maior", tom: "F maior", notas: "F4 G4 A4 F4 D4 E4 F4 C5 A4 F4 G4 F4" },
+  { nome: "sol mixolídio", tom: "G mixolidio", notas: "G3 C4 B3 G3 A3 C4 B3 D4 C4 B3 A3 G3" },
+  { nome: "mi frígio", tom: "E frigio", notas: "E4 C4 D4 E4 G4 F4 E4 D4 F4 E4" },
 ];
+const DUR_ESPECIE = { 1: 4, 2: 2, 3: 1, 4: 2, 5: 2 };
+const NOTA_NIVEL = {
+  erro: "Neste nível isto é erro: o exercício não passa enquanto não for corrigido.",
+  aviso: "Neste nível isto é aviso: evite, mas não reprova o exercício.",
+  info: "Neste nível isto é só informação: a quebra é permitida. Confira se foi de propósito.",
+};
 
-const estado = { nivel: 1, ex: null, resultado: null, selecionado: null, layout: null, vazias: [] };
+const est = {
+  nivel: 1, modelo: null, ex: null, resultado: null, visao: null, fins: [],
+  sel: { voz: 0, pos: 0 }, dur: 4 * T, ponto: false, historico: [], selecionado: null, layout: null,
+};
 
-// ------------------------------------------------------------------ níveis
+// ------------------------------------------------------------------ níveis e regras
 function montarNiveis() {
-  const caixa = $("niveis");
+  const ids = Object.keys(M.TABELA);
   for (const n of M.NIVEIS) {
-    const ids = Object.keys(M.TABELA);
     const conta = (s) => ids.filter((r) => M.severidade(r, n.numero) === s).length;
-    const total = ids.length;
     const b = document.createElement("button");
     b.className = "nivel";
     b.dataset.nivel = n.numero;
     b.setAttribute("aria-label", `Nível ${n.numero}: ${n.nome}`);
     b.innerHTML = `<span class="barras" aria-hidden="true">
-        <i class="e" style="height:${(conta("erro") / total) * 100}%"></i>
-        <i class="a" style="height:${(conta("aviso") / total) * 100}%"></i>
-        <i class="i" style="height:${(conta("info") / total) * 100}%"></i></span>
-      <span class="num">${n.numero}</span>`;
+        <i class="e" style="height:${(conta("erro") / ids.length) * 100}%"></i>
+        <i class="a" style="height:${(conta("aviso") / ids.length) * 100}%"></i>
+        <i class="i" style="height:${(conta("info") / ids.length) * 100}%"></i></span><span class="num">${n.numero}</span>`;
     b.addEventListener("click", () => mudarNivel(n.numero));
-    caixa.appendChild(b);
+    $("niveis").appendChild(b);
   }
 }
 
-function mudarNivel(n) {
-  estado.nivel = n;
+function mudarNivel(n, semAnalise) {
+  est.nivel = n;
   guardar("nivel", String(n));
   for (const b of document.querySelectorAll(".nivel")) b.setAttribute("aria-pressed", String(+b.dataset.nivel === n));
   $("nome-nivel").textContent = M.NIVEIS[n - 1].nome;
-  montarRegras();
-  analisar();
-}
-
-function montarRegras() {
-  const n = estado.nivel;
+  if (n <= 5) $("novo-especie").value = String(n);
   const ativas = M.regrasAtivas(n);
   const conta = (s) => ativas.filter((r) => M.severidade(r, n) === s).length;
   $("regras-titulo").textContent = `Regras do nível ${n} · ${conta("erro")} erro · ${conta("aviso")} aviso · ${conta("info")} info`;
   const ordem = { erro: 0, aviso: 1, info: 2 };
-  $("lista-regras").innerHTML = ativas
-    .sort((a, b) => ordem[M.severidade(a, n)] - ordem[M.severidade(b, n)])
-    .map((id) => {
-      const r = M.REGRAS[id], s = M.severidade(id, n);
-      return `<li><b><span class="pilula ${s}">${s}</span>${esc(r.titulo)}</b><p>${esc(r.explicacao)}</p></li>`;
-    }).join("");
+  $("lista-regras").innerHTML = ativas.sort((a, b) => ordem[M.severidade(a, n)] - ordem[M.severidade(b, n)]).map((id) => {
+    const r = M.REGRAS[id], s = M.severidade(id, n);
+    return `<li><b><span class="pilula ${s}">${s}</span>${esc(r.titulo)}</b><p>${esc(r.explicacao)}</p></li>`;
+  }).join("");
+  if (!semAnalise && est.modelo) analisar();
+}
+
+// ------------------------------------------------------------------ modelo
+const cfIndice = () => {
+  const cf = est.modelo && est.modelo.cab.cf;
+  if (!cf) return -1;
+  const i = est.modelo.vozes.findIndex((v) => v.nome.toLowerCase() === cf.trim().toLowerCase());
+  return i >= 0 ? i : /^\d+$/.test(cf) ? +cf - 1 : -1;
+};
+const travada = (i) => i === cfIndice();
+const vozSel = () => (est.modelo ? est.modelo.vozes[est.sel.voz] : null);
+const durAtual = () => est.dur * (est.ponto ? 1.5 : 1);
+
+function registrar() {
+  est.historico.push(Ed.escrever(est.modelo));
+  if (est.historico.length > 200) est.historico.shift();
+}
+
+function aplicar(modelo, opcoes = {}) {
+  est.modelo = modelo;
+  const texto = Ed.escrever(modelo);
+  if (!opcoes.doTexto) $("texto").value = texto;
+  guardar("texto", texto);
+  corrigirSelecao();
+  analisar();
+}
+
+function corrigirSelecao() {
+  const vozes = est.modelo.vozes;
+  if (!vozes.length) { est.sel = { voz: 0, pos: 0 }; return; }
+  if (est.sel.voz >= vozes.length) est.sel.voz = 0;
+  if (travada(est.sel.voz)) {
+    const livre = vozes.findIndex((_, i) => !travada(i));
+    if (livre >= 0) est.sel.voz = livre;
+  }
+  est.sel.pos = Math.max(0, Math.min(est.sel.pos, vozSel().eventos.length));
+}
+
+function carregarTexto(texto, nivel) {
+  let modelo;
+  try { modelo = Ed.ler(texto); M.lerTexto(texto); } catch (e) { return false; }
+  if (est.modelo) registrar();
+  est.modelo = modelo;
+  est.sel = { voz: 0, pos: 0 };
+  corrigirSelecao();
+  est.sel.pos = vozSel() ? vozSel().eventos.length : 0;
+  if (nivel) mudarNivel(nivel, true);
+  aplicar(modelo);
+  return true;
 }
 
 // ------------------------------------------------------------------ análise
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const nomeBonito = (s) => s.replace(/([A-G])(#{1,2}|-{1,2})?(-?\d)?/g, (m, l, a = "", o = "") =>
-  l + a.replace(/##/, "𝄪").replace(/#/, "♯").replace(/--/, "𝄫").replace(/-/, "♭") + o);
-
-let temporizador = null;
-function agendarAnalise() { clearTimeout(temporizador); temporizador = setTimeout(analisar, 220); }
-
 function analisar() {
-  const texto = $("texto").value;
-  guardar("texto", texto);
-  const caixaErro = $("erro-leitura");
-  try {
-    estado.ex = M.lerTexto(texto);
-    caixaErro.hidden = true;
-  } catch (e) {
-    if (!(e instanceof M.ErroDeLeitura)) console.error(e);
-    caixaErro.textContent = e.message;
-    caixaErro.hidden = false;
-    estado.ex = null;
-  }
-  if (estado.ex) {
-    estado.vazias = estado.ex.vozes.filter((v) => !v.notas.length).map((v) => v.nome);
-    estado.resultado = M.verificar(estado.ex, estado.nivel);
+  try { est.ex = M.lerTexto(Ed.escrever(est.modelo)); } catch (e) { est.ex = null; }
+  est.fins = est.modelo.vozes.map((v) => Ed.inicios(v).fim);
+  if (est.ex) {
+    est.resultado = M.verificar(est.ex, est.nivel);
+    est.visao = M.concluidos(est.ex, est.resultado, est.fins);
   } else {
-    estado.resultado = null;
-    estado.vazias = [];
+    est.resultado = est.visao = null;
   }
-  estado.selecionado = null;
+  est.selecionado = null;
+  $("detalhe").hidden = true;
+  $("titulo-ex").textContent = est.modelo.cab.titulo || "";
   mostrarResultado();
   desenhar();
+  atualizarDoca();
 }
 
 function mostrarResultado() {
-  const r = estado.resultado;
-  const lista = $("achados"), nada = $("nada"), avisoTom = $("aviso-tom");
+  const v = est.visao, r = est.resultado;
+  const lista = $("achados"), nada = $("nada"), prog = $("progresso"), avisoTom = $("aviso-tom");
   lista.innerHTML = "";
-  nada.hidden = true;
-  avisoTom.hidden = true;
+  nada.hidden = prog.hidden = avisoTom.hidden = true;
   let selo = "—", classe = "neutro", chips = "";
-  if (r) {
-    const [e, a, i] = ["erro", "aviso", "info"].map((s) => r.contar(s));
-    chips = [["erro", e], ["aviso", a], ["info", i]].map(([s, n]) => `<span class="chip ${s}${n ? "" : " zero"}">${n} ${s}</span>`).join("");
-    if (estado.vazias.length) {
-      selo = "Incompleto";
-      nada.textContent = `Escreva as notas de: ${estado.vazias.join(", ")}.`;
-      nada.hidden = false;
+  if (v) {
+    chips = ["erro", "aviso", "info"].map((s) => { const n = v.contar(s); return `<span class="chip ${s}${n ? "" : " zero"}">${n} ${s}</span>`; }).join("");
+    const C = est.ex.duracaoCompasso;
+    const alvo = cfIndice() >= 0 ? est.fins[cfIndice()] : Math.max(0, ...est.fins);
+    const total = Math.max(1, Math.ceil(alvo / C));
+    if (v.completo) {
+      selo = v.aprovado ? "Aprovado" : "Reprovado";
+      classe = v.aprovado ? "aprovado" : "reprovado";
+      if (!v.visiveis.length) { nada.textContent = "Nenhuma regra quebrada neste nível."; nada.hidden = false; }
     } else {
-      selo = r.aprovado ? "Aprovado" : "Reprovado";
-      classe = r.aprovado ? "aprovado" : "reprovado";
-      if (!r.achados.length) { nada.textContent = "Nenhuma regra quebrada neste nível."; nada.hidden = false; }
+      selo = "Em andamento";
+      classe = "andamento";
+      prog.textContent = v.compassosCompletos === 0
+        ? "A correção começa quando o primeiro compasso estiver completo em todas as vozes."
+        : `Compassos 1–${v.compassosCompletos} de ${total} verificados. O resto aparece quando você completar os próximos compassos.`;
+      prog.hidden = false;
+      if (!v.visiveis.length && v.compassosCompletos > 0) { nada.textContent = "Nada de errado até aqui."; nada.hidden = false; }
     }
-    r.achados.forEach((a, k) => {
+    v.visiveis.forEach((a, k) => {
       const li = document.createElement("li");
       const b = document.createElement("button");
       b.className = `achado sev-${a.severidade}`;
       b.setAttribute("aria-pressed", "false");
       b.dataset.k = k;
       b.innerHTML = `<span class="tarja"></span><span class="c">c. ${a.compasso}</span>
-        <span class="msg">${esc(nomeBonito(a.mensagem))}<span class="qual">${a.severidade} · ${esc(M.REGRAS[a.regra].titulo)}</span></span>`;
-      b.addEventListener("click", () => selecionar(estado.selecionado === k ? null : k, false));
+        <span class="msg">${esc(nomeBonito(a.mensagem))}<span class="qual">${a.severidade} · ${esc(M.REGRAS[a.regra].titulo)}</span>
+        <span class="explica" hidden>${explicacao(a)}</span></span>`;
+      b.addEventListener("click", () => selecionar(est.selecionado === k ? null : k, "lista"));
       li.appendChild(b);
       lista.appendChild(li);
     });
     if (r.naoVerificadas.length) {
-      avisoTom.textContent = `Sem tonalidade: acrescente uma linha "tom: C maior" para verificar ${r.naoVerificadas.map((id) => M.REGRAS[id].titulo.toLowerCase()).join(", ")}.`;
+      avisoTom.textContent = `Sem tonalidade: acrescente "tom: C maior" no texto para verificar ${r.naoVerificadas.map((id) => M.REGRAS[id].titulo.toLowerCase()).join(", ")}.`;
       avisoTom.hidden = false;
     }
-  } else {
-    nada.textContent = "Corrija o texto do exercício para ver a correção.";
-    nada.hidden = false;
   }
   for (const [s, c] of [[$("selo"), $("contagens")], [$("selo-mini"), $("contagens-mini")]]) {
-    s.textContent = selo;
+    s.textContent = s.id === "selo-mini" && classe === "andamento" ? "Escrevendo" : selo;
     s.className = "selo " + classe;
     c.innerHTML = chips;
   }
 }
 
-function selecionar(k, rolarLista) {
-  estado.selecionado = k;
-  document.querySelectorAll(".achado").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.k === k)));
+function explicacao(a) {
+  const r = M.REGRAS[a.regra];
+  return `<p><span class="t">Por que é um problema</span>${esc(r.porque)}</p>
+    <p><span class="t">Como corrigir</span>${esc(r.corrigir)}</p>
+    <p class="nivel-nota">${NOTA_NIVEL[a.severidade]}</p>`;
+}
+
+function selecionar(k, origem) {
+  est.selecionado = k;
+  document.querySelectorAll(".achado").forEach((b) => {
+    const ativo = +b.dataset.k === k;
+    b.setAttribute("aria-pressed", String(ativo));
+    b.querySelector(".explica").hidden = !ativo;
+  });
+  const det = $("detalhe");
+  if (k === null) { det.hidden = true; desenhar(); return; }
+  const a = est.visao.visiveis[k];
+  det.className = `detalhe sev-${a.severidade}`;
+  det.innerHTML = `<div class="cab"><b><span class="pilula ${a.severidade}">${a.severidade}</span>c. ${a.compasso} · ${esc(M.REGRAS[a.regra].titulo)}</b>
+      <button class="fechar" aria-label="Fechar explicação">✕</button></div>
+    <div>${esc(nomeBonito(a.mensagem))}</div><div class="explica">${explicacao(a)}</div>`;
+  det.querySelector(".fechar").addEventListener("click", () => selecionar(null));
+  det.hidden = false;
   desenhar();
-  if (k === null) return;
-  if (rolarLista) document.querySelector(`.achado[data-k="${k}"]`)?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-  else rolarAteCompasso(estado.resultado.achados[k].compasso);
+  if (origem === "lista") rolarAteCompasso(a.compasso);
 }
 
 function rolarAteCompasso(c) {
-  const L = estado.layout;
+  const L = est.layout;
   if (!L || !L.compassos[c - 1]) return;
-  const caixa = $("partitura");
   const m = L.compassos[c - 1];
-  const topo = caixa.getBoundingClientRect().top + window.scrollY + L.sistemas[m.sistema].y;
-  const visivel = topo > window.scrollY + 60 && topo < window.scrollY + window.innerHeight - 200;
-  if (!visivel) window.scrollTo({ top: topo - 80, behavior: "smooth" });
+  const topo = $("partitura").getBoundingClientRect().top + window.scrollY + L.sistemas[m.sistema].y;
+  const util = window.innerHeight - $("doca").offsetHeight;
+  if (topo < window.scrollY + 40 || topo > window.scrollY + util - 160) window.scrollTo({ top: topo - 60, behavior: "smooth" });
 }
 
 // ------------------------------------------------------------------ partitura
-const S = 8;                 // espaço entre linhas da pauta
-const ALT_PAUTA = 4 * S;
-const MARGEM_SUP = 34, MARGEM_INF = 26;
-const FAIXA = MARGEM_SUP + ALT_PAUTA + MARGEM_INF;
-const ESQ = 50;              // clave e nome da voz
-const DURS = [16, 12, 8, 6, 4, 3, 2, 1].map((x) => (x * T) / 4); // semibreve … semicolcheia
+const S = 8, ALT_PAUTA = 4 * S, MARGEM_SUP = 34, MARGEM_INF = 26, FAIXA = MARGEM_SUP + ALT_PAUTA + MARGEM_INF, ESQ = 50;
+const DURS = [16, 12, 8, 6, 4, 3, 2, 1].map((x) => (x * T) / 4);
 
 function partir(dur) {
   const r = [];
   let resto = dur;
-  while (resto > 0) {
-    const d = DURS.find((x) => x <= resto) || resto;
-    r.push(d);
-    resto -= d;
-  }
+  while (resto > 0) { const d = DURS.find((x) => x <= resto) || resto; r.push(d); resto -= d; }
   return r;
 }
 
-function segmentos(ex, voz, C, fim) {
-  // notas e pausas cortadas nas barras de compasso e em durações que existem na escrita
+function segmentos(voz, C, fimEscrito) {
   const segs = [];
   let t = 0;
   const pedacos = (inicio, dur, nota) => {
     let a = inicio;
     const fimP = inicio + dur;
     while (a < fimP) {
-      const barra = (Math.floor(a / C) + 1) * C;
-      const b = Math.min(fimP, barra);
+      const b = Math.min(fimP, (Math.floor(a / C) + 1) * C);
       for (const d of partir(b - a)) { segs.push({ nota, inicio: a, dur: d }); a += d; }
     }
   };
@@ -472,106 +573,87 @@ function segmentos(ex, voz, C, fim) {
     pedacos(n.inicio, n.duracao, n);
     t = n.fim;
   }
-  if (fim > t) pedacos(t, fim - t, null);
-  // pausa que ocupa um compasso inteiro vira pausa de semibreve
-  const out = [];
-  for (const s of segs) {
-    const ult = out[out.length - 1];
-    if (!s.nota && ult && !ult.nota && Math.floor(ult.inicio / C) === Math.floor(s.inicio / C) && ult.inicio % C === 0 && s.inicio + s.dur === ult.inicio + C) {
-      ult.dur = C; ult.cheia = true;
-    } else out.push({ ...s });
-  }
-  for (const s of out) if (!s.nota && s.inicio % C === 0 && s.dur === C) s.cheia = true;
-  return out;
+  if (fimEscrito > t) pedacos(t, fimEscrito - t, null);
+  for (const s of segs) if (!s.nota && s.inicio % C === 0 && s.dur === C) s.cheia = true;
+  return segs;
 }
 
 function claveDe(voz) {
-  if (!voz.notas.length) return "sol";
+  if (!voz.notas.length) return null;
   const ps = voz.notas.map((n) => n.ps).sort((a, b) => a - b);
   return ps[Math.floor(ps.length / 2)] >= 59 ? "sol" : "fa";
 }
-const BASE_CLAVE = { sol: 2 + 7 * 4, fa: 4 + 7 * 2 }; // linha de baixo: mi4 / sol2
-
-function passo(nota, clave) { return nota.altura.letra + 7 * nota.altura.oitava - BASE_CLAVE[clave]; }
+const BASE_CLAVE = { sol: 2 + 7 * 4, fa: 4 + 7 * 2 };
+const passo = (alt, clave) => alt.letra + 7 * alt.oitava - BASE_CLAVE[clave];
 
 function desenhar() {
-  const caixa = $("partitura");
-  const ex = estado.ex;
+  const caixa = $("partitura"), ex = est.ex;
   const largura = Math.max(300, caixa.clientWidth || 600);
   if (!ex || !ex.vozes.length) {
-    caixa.innerHTML = `<div class="vazio">A partitura aparece aqui quando o texto do exercício estiver correto.</div>`;
-    estado.layout = null;
+    caixa.innerHTML = `<div class="vazio">Sorteie um cantus firmus ou carregue um exemplo para começar.</div>`;
+    est.layout = null;
     $("info-partitura").textContent = "";
     return;
   }
   const C = ex.duracaoCompasso;
-  const fim = Math.max(ex.fim, C);
+  const sel = est.sel;
+  const vS = vozSel();
+  const fimSel = est.fins[sel.voz] || 0;
+  const extra = vS && sel.pos >= vS.eventos.length ? fimSel + durAtual() : 0;
+  const fim = Math.max(ex.fim, ...est.fins, extra, C);
   const nCompassos = Math.ceil(fim / C);
-  const vozes = ex.vozes.map((v) => ({ voz: v, clave: claveDe(v), segs: segmentos(ex, v, C, nCompassos * C) }));
-  $("info-partitura").textContent = `${ex.formula.join("/")}${ex.tonalidade ? " · " + nomeBonito(ex.tonalidade.tonica.nome) + " " + M.MODOS_PT[ex.tonalidade.modo] : ""} · ${nCompassos} compasso${nCompassos > 1 ? "s" : ""}`;
+  // clave pela tessitura; voz vazia: em cima → sol, embaixo → fá
+  const claves = ex.vozes.map(claveDe);
+  const ultima = ex.vozes.length - 1;
+  claves.forEach((c, i) => { if (!c) claves[i] = i === ultima && ultima > 0 ? "fa" : "sol"; });
+  const vozes = ex.vozes.map((v, i) => ({ voz: v, clave: claves[i], segs: segmentos(v, C, est.fins[i] || 0) }));
+  const tom = ex.tonalidade ? ` · ${nomeBonito(ex.tonalidade.tonica.nome)} ${M.MODOS_PT[ex.tonalidade.modo]}` : "";
+  $("info-partitura").textContent = `${ex.formula.join("/")}${tom}`;
 
-  // acidentes: mostrados sempre que a nota é alterada, e bequadro quando cancela uma alteração no mesmo compasso
   for (const V of vozes) {
     let comp = -1, vistos = {};
     for (const s of V.segs) {
       if (!s.nota) continue;
       const c = Math.floor(s.inicio / C);
       if (c !== comp) { comp = c; vistos = {}; }
-      const chave = s.nota.altura.letra + 7 * s.nota.altura.oitava;
-      const alt = s.nota.altura.alter;
-      const continuaLigada = s.inicio !== s.nota.inicio && Math.floor(s.nota.inicio / C) === c;
-      if (continuaLigada) { s.acid = null; continue; }
+      const chave = s.nota.altura.letra + 7 * s.nota.altura.oitava, alt = s.nota.altura.alter;
       if (s.inicio !== s.nota.inicio) { s.acid = null; vistos[chave] = alt; continue; }
-      if (alt !== 0 && vistos[chave] !== alt) s.acid = alt;
-      else if (alt === 0 && vistos[chave] !== undefined && vistos[chave] !== 0) s.acid = 0;
-      else s.acid = null;
+      s.acid = alt !== 0 && vistos[chave] !== alt ? alt : alt === 0 && vistos[chave] !== undefined && vistos[chave] !== 0 ? 0 : null;
       vistos[chave] = alt;
     }
   }
 
-  // colunas: cada ataque (de qualquer voz) ganha uma posição horizontal comum
   const PXQ = 15, MINW = 24;
   const compassos = [];
   for (let c = 0; c < nCompassos; c++) {
     const ini = c * C, fimC = ini + C;
-    const ts = new Set();
-    let temAcid = new Set();
-    for (const V of vozes) for (const s of V.segs) if (s.inicio >= ini && s.inicio < fimC) { ts.add(s.inicio); if (s.acid !== null && s.acid !== undefined) temAcid.add(s.inicio); }
+    const ts = new Set(), comAcid = new Set();
+    for (const V of vozes) for (const s of V.segs) if (s.inicio >= ini && s.inicio < fimC) { ts.add(s.inicio); if (s.acid !== null && s.acid !== undefined) comAcid.add(s.inicio); }
     const lista = [...ts].sort((a, b) => a - b);
     const cols = lista.map((t, k) => {
       const prox = k + 1 < lista.length ? lista[k + 1] : fimC;
-      return { t, w: Math.max(MINW, ((prox - t) / T) * PXQ) + (temAcid.has(t) ? 9 : 0), acid: temAcid.has(t) };
+      return { t, w: Math.max(MINW, ((prox - t) / T) * PXQ) + (comAcid.has(t) ? 9 : 0), acid: comAcid.has(t) };
     });
-    const larg = 10 + cols.reduce((a, c2) => a + c2.w, 0) + 4;
+    const larg = Math.max(64, 10 + cols.reduce((a, x) => a + x.w, 0) + 4);
     compassos.push({ cols, larg, ini });
   }
-
-  // sistemas: quantos compassos cabem por linha
   const sistemas = [];
   let atual = null;
   for (let c = 0; c < nCompassos; c++) {
-    const m = compassos[c];
-    if (!atual || atual.larg + m.larg > largura - ESQ - 2) {
-      atual = { compassos: [], larg: 0 };
-      sistemas.push(atual);
-    }
+    if (!atual || atual.larg + compassos[c].larg > largura - ESQ - 2) { atual = { compassos: [], larg: 0 }; sistemas.push(atual); }
     atual.compassos.push(c);
-    atual.larg += m.larg;
+    atual.larg += compassos[c].larg;
   }
-  const altSistema = vozes.length * FAIXA;
-  const GAP_SIS = 14;
+  const altSistema = vozes.length * FAIXA, GAP = 14;
   sistemas.forEach((sis, k) => {
-    sis.y = k * (altSistema + GAP_SIS);
-    const util = largura - ESQ - 2;
-    const ultimo = k === sistemas.length - 1;
-    let fator = util / sis.larg;
-    if (ultimo) fator = Math.min(fator, 1.35);
+    sis.y = k * (altSistema + GAP);
+    let fator = (largura - ESQ - 2) / sis.larg;
+    if (k === sistemas.length - 1) fator = Math.min(fator, 1.35);
     fator = Math.max(1, fator);
     let x = ESQ;
     for (const c of sis.compassos) {
       const m = compassos[c];
-      m.sistema = k;
-      m.x0 = x;
+      m.sistema = k; m.x0 = x;
       let cx = x + 10 * fator;
       for (const col of m.cols) { col.x = cx + (col.acid ? 9 : 0) + 6; cx += col.w * fator; }
       m.x1 = x + m.larg * fator;
@@ -579,42 +661,47 @@ function desenhar() {
     }
     sis.x1 = x;
   });
-  const alturaTotal = sistemas.length * (altSistema + GAP_SIS);
+  const alturaTotal = sistemas.length * (altSistema + GAP);
   const larguraTotal = Math.max(largura, ...sistemas.map((s) => s.x1 + 2));
 
-  // severidade mais grave de cada nota envolvida em algum achado
+  const xDoTempo = (t) => {
+    const c = Math.min(nCompassos - 1, Math.floor(t / C));
+    const m = compassos[c];
+    if (t >= (c + 1) * C) return m.x1 - 7;
+    const exato = m.cols.find((x) => x.t === t);
+    if (exato) return exato.x;
+    let a = { t: m.ini, x: m.x0 + 16 }, b = { t: m.ini + C, x: m.x1 - 7 };
+    for (const col of m.cols) { if (col.t < t) a = col; else { b = col; break; } }
+    return a.x + ((t - a.t) / (b.t - a.t)) * (b.x - a.x);
+  };
+
   const peso = { erro: 3, aviso: 2, info: 1 };
+  const visiveis = est.visao ? est.visao.visiveis : [];
   const marca = new Map();
-  const achados = estado.resultado ? estado.resultado.achados : [];
-  for (const a of achados) for (const n of a.notas) if (!marca.has(n) || peso[a.severidade] > peso[marca.get(n)]) marca.set(n, a.severidade);
-  const sel = estado.selecionado !== null ? achados[estado.selecionado] : null;
-  const notasSel = new Set(sel ? sel.notas : []);
-  const piorCompasso = {};
-  for (const a of achados) if (!piorCompasso[a.compasso] || peso[a.severidade] > peso[piorCompasso[a.compasso]]) piorCompasso[a.compasso] = a.severidade;
+  for (const a of visiveis) for (const n of a.notas) if (!marca.has(n) || peso[a.severidade] > peso[marca.get(n)]) marca.set(n, a.severidade);
+  const achSel = est.selecionado !== null ? visiveis[est.selecionado] : null;
+  const notasSel = new Set(achSel ? achSel.notas : []);
+  const pior = {};
+  for (const a of visiveis) if (!pior[a.compasso] || peso[a.severidade] > peso[pior[a.compasso]]) pior[a.compasso] = a.severidade;
 
-  const fundo = [], corpo = [], topo = [];
-  const cabecas = [];
-  const xCol = (m, t) => m.cols.find((c) => c.t === t).x;
-
-  // faixas: compasso selecionado e riscos de severidade embaixo de cada compasso
+  const fundo = [], corpo = [], topo = [], cabecas = [];
   compassos.forEach((m, c) => {
     const sis = sistemas[m.sistema];
-    if (sel && sel.compasso === c + 1) fundo.push(`<rect class="faixa sev-${sel.severidade}" x="${m.x0}" y="${sis.y + 6}" width="${m.x1 - m.x0}" height="${altSistema - 10}" rx="4"/>`);
-    const pior = piorCompasso[c + 1];
-    if (pior) fundo.push(`<rect class="risco sev-${pior}" x="${m.x0 + 3}" y="${sis.y + altSistema - 7}" width="${m.x1 - m.x0 - 6}" height="3" rx="1.5"/>`);
+    if (achSel && achSel.compasso === c + 1) fundo.push(`<rect class="faixa sev-${achSel.severidade}" x="${m.x0}" y="${sis.y + 6}" width="${m.x1 - m.x0}" height="${altSistema - 10}" rx="4"/>`);
+    if (pior[c + 1]) fundo.push(`<rect class="risco sev-${pior[c + 1]}" x="${m.x0 + 3}" y="${sis.y + altSistema - 7}" width="${m.x1 - m.x0 - 6}" height="3" rx="1.5"/>`);
   });
 
   sistemas.forEach((sis, k) => {
     vozes.forEach((V, vi) => {
       const yTopo = sis.y + vi * FAIXA + MARGEM_SUP;
       for (let l = 0; l < 5; l++) corpo.push(`<line class="pauta-linha" x1="${ESQ - 40}" x2="${sis.x1}" y1="${yTopo + l * S}" y2="${yTopo + l * S}"/>`);
-      // clave
-      if (V.clave === "sol") corpo.push(`<text class="glifo" x="${ESQ - 38}" y="${yTopo + 3 * S}" font-size="${4.6 * S}">𝄞</text>`);
-      else corpo.push(`<text class="glifo" x="${ESQ - 38}" y="${yTopo + 1 * S}" font-size="${4.1 * S}">𝄢</text>`);
-      if (k === 0) corpo.push(`<text class="nome-voz" x="${ESQ - 40}" y="${yTopo - 19}">${esc(V.voz.nome)}</text>`);
+      corpo.push(V.clave === "sol"
+        ? `<text class="glifo" x="${ESQ - 38}" y="${yTopo + 3 * S}" font-size="${4.6 * S}">𝄞</text>`
+        : `<text class="glifo" x="${ESQ - 38}" y="${yTopo + S}" font-size="${4.1 * S}">𝄢</text>`);
+      const rot = V.voz.nome + (travada(vi) ? " · fixo" : "");
+      if (k === 0) corpo.push(`<text class="nome-voz${vi === sel.voz ? " ativa" : ""}" x="${ESQ - 40}" y="${yTopo - 19}">${esc(rot)}</text>`);
       for (const c of sis.compassos) {
-        const m = compassos[c];
-        const final = c === nCompassos - 1;
+        const m = compassos[c], final = c === nCompassos - 1;
         corpo.push(`<line class="barra${final ? " barra-final" : ""}" x1="${m.x1 - (final ? 4 : 0)}" x2="${m.x1 - (final ? 4 : 0)}" y1="${yTopo}" y2="${yTopo + ALT_PAUTA}"/>`);
         if (final) corpo.push(`<rect class="tinta" x="${m.x1 - 2.5}" y="${yTopo}" width="3" height="${ALT_PAUTA}"/>`);
       }
@@ -623,80 +710,68 @@ function desenhar() {
     if (k > 0) corpo.push(`<text class="num-compasso" x="${ESQ + 2}" y="${sis.y + MARGEM_SUP - 16}">${sis.compassos[0] + 1}</text>`);
   });
 
-  // notas e pausas
+  // edição: nota selecionada, ou cursor no fim da voz
+  if (vS && vozes[sel.voz] && !travada(sel.voz)) {
+    const { inicios, fim: fimV } = Ed.inicios(vS);
+    const t = sel.pos < vS.eventos.length ? inicios[sel.pos] : fimV;
+    const c = Math.min(nCompassos - 1, Math.floor(t / C));
+    const sis = sistemas[compassos[c].sistema];
+    const yTopo = sis.y + sel.voz * FAIXA + MARGEM_SUP;
+    const x = xDoTempo(t);
+    if (sel.pos < vS.eventos.length) fundo.push(`<rect class="selecao" x="${x - 12}" y="${yTopo - 12}" width="24" height="${ALT_PAUTA + 24}" rx="6"/>`);
+    else {
+      topo.push(`<line class="caret" x1="${x}" x2="${x}" y1="${yTopo - 8}" y2="${yTopo + ALT_PAUTA + 8}"/>`);
+      topo.push(`<path class="caret-alvo" d="M${x - 5} ${yTopo - 14} h10 l-5 6 z"/>`);
+    }
+  }
+
   vozes.forEach((V, vi) => {
     let anterior = null;
     for (const s of V.segs) {
-      const c = Math.floor(s.inicio / C);
-      const m = compassos[c];
-      const sis = sistemas[m.sistema];
-      const yTopo = sis.y + vi * FAIXA + MARGEM_SUP;
-      const yBase = yTopo + ALT_PAUTA;
-      const x = xCol(m, s.inicio);
+      const c = Math.floor(s.inicio / C), m = compassos[c], sis = sistemas[m.sistema];
+      const yTopo = sis.y + vi * FAIXA + MARGEM_SUP, yBase = yTopo + ALT_PAUTA;
+      const x = m.cols.find((col) => col.t === s.inicio).x;
       const q = s.dur / T;
-      if (!s.nota) {
-        desenharPausa(corpo, s.cheia ? (m.x0 + m.x1) / 2 - 4 : x, yTopo, s.cheia ? 4 : q);
-        anterior = null;
-        continue;
-      }
-      const p = passo(s.nota, V.clave);
-      const y = yBase - p * (S / 2);
-      const sev = marca.get(s.nota);
-      const g = [];
+      if (!s.nota) { desenharPausa(corpo, s.cheia ? (m.x0 + m.x1) / 2 - 4 : x, yTopo, s.cheia ? 4 : q); anterior = null; continue; }
+      const p = passo(s.nota.altura, V.clave), y = yBase - p * (S / 2);
+      const sev = marca.get(s.nota), g = [];
       if (notasSel.has(s.nota)) {
-        fundo.push(`<circle class="halo sev-${sel.severidade}" cx="${x}" cy="${y}" r="11"/>`);
-        topo.push(`<circle class="halo-anel sev-${sel.severidade}" cx="${x}" cy="${y}" r="10.5"/>`);
+        fundo.push(`<circle class="halo sev-${achSel.severidade}" cx="${x}" cy="${y}" r="11"/>`);
+        topo.push(`<circle class="halo-anel sev-${achSel.severidade}" cx="${x}" cy="${y}" r="10.5"/>`);
       }
-      // linhas suplementares
       for (let l = -2; l >= p; l -= 2) g.push(`<line class="suplementar" x1="${x - 8.5}" x2="${x + 8.5}" y1="${yBase - l * (S / 2)}" y2="${yBase - l * (S / 2)}"/>`);
       for (let l = 10; l <= p; l += 2) g.push(`<line class="suplementar" x1="${x - 8.5}" x2="${x + 8.5}" y1="${yBase - l * (S / 2)}" y2="${yBase - l * (S / 2)}"/>`);
       const base = [4, 2, 1, 0.5, 0.25].find((b) => q >= b) || 0.25;
-      const pontuada = q !== base;
-      const aberta = base >= 2;
-      if (base === 4) {
-        g.push(`<ellipse class="contorno" cx="${x}" cy="${y}" rx="6.3" ry="4.2" stroke-width="2.2"/>`);
-      } else {
-        g.push(aberta
+      if (base === 4) g.push(`<ellipse class="contorno" cx="${x}" cy="${y}" rx="6.3" ry="4.2" stroke-width="2.2"/>`);
+      else {
+        g.push(base >= 2
           ? `<ellipse class="contorno" cx="${x}" cy="${y}" rx="5.2" ry="3.6" transform="rotate(-20 ${x} ${y})"/>`
           : `<ellipse class="tinta" cx="${x}" cy="${y}" rx="5.4" ry="3.9" transform="rotate(-20 ${x} ${y})"/>`);
-        const acima = p < 4;
-        const hx = acima ? x + 4.9 : x - 4.9;
-        const hy = acima ? y - 3.5 * S : y + 3.5 * S;
+        const acima = p < 4, hx = acima ? x + 4.9 : x - 4.9, hy = acima ? y - 3.5 * S : y + 3.5 * S;
         g.push(`<line class="haste" x1="${hx}" x2="${hx}" y1="${y + (acima ? -1 : 1)}" y2="${hy}"/>`);
-        const bandeiras = base === 0.5 ? 1 : base === 0.25 ? 2 : 0;
-        for (let f = 0; f < bandeiras; f++) {
+        const band = base === 0.5 ? 1 : base === 0.25 ? 2 : 0;
+        for (let f = 0; f < band; f++) {
           const fy = hy + (acima ? f * 7 : -f * 7);
-          g.push(acima
-            ? `<path class="tinta" d="M${hx} ${fy} c 1 5 8 7 6 14 c 0 -5 -3 -8 -6 -9 z"/>`
-            : `<path class="tinta" d="M${hx} ${fy} c 1 -5 8 -7 6 -14 c 0 5 -3 8 -6 9 z"/>`);
+          g.push(acima ? `<path class="tinta" d="M${hx} ${fy} c 1 5 8 7 6 14 c 0 -5 -3 -8 -6 -9 z"/>` : `<path class="tinta" d="M${hx} ${fy} c 1 -5 8 -7 6 -14 c 0 5 -3 8 -6 9 z"/>`);
         }
       }
-      if (pontuada) {
-        const dy = p % 2 === 0 ? -S / 2 : 0;
-        g.push(`<circle class="tinta" cx="${x + 10}" cy="${y + dy}" r="1.8"/>`);
-      }
+      if (q !== base) g.push(`<circle class="tinta" cx="${x + 10}" cy="${y + (p % 2 === 0 ? -S / 2 : 0)}" r="1.8"/>`);
       if (s.acid !== null && s.acid !== undefined) {
-        const glifo = { 0: "♮", 1: "♯", 2: "𝄪", "-1": "♭", "-2": "𝄫" }[s.acid];
-        g.push(`<text class="glifo" x="${x - 17}" y="${y + 4.5}" font-size="17">${glifo}</text>`);
+        g.push(`<text class="glifo" x="${x - 17}" y="${y + 4.5}" font-size="17">${{ 0: "♮", 1: "♯", 2: "𝄪", "-1": "♭", "-2": "𝄫" }[s.acid]}</text>`);
       }
       corpo.push(`<g class="${sev ? `marcada sev-${sev}` : ""}">${g.join("")}</g>`);
-      cabecas.push({ x, y, nota: s.nota, sistema: m.sistema });
-      // ligadura com o pedaço anterior da mesma nota
+      cabecas.push({ x, y, nota: s.nota, voz: vi });
       if (anterior && anterior.nota === s.nota) {
-        const abaixo = p >= 4 ? false : true;
-        const ya = anterior.y + (abaixo ? 6 : -6), yb = y + (abaixo ? 6 : -6);
-        if (anterior.sistema === m.sistema) {
-          const mx = (anterior.x + x) / 2, curva = abaixo ? 7 : -7;
-          corpo.push(`<path class="ligadura" d="M${anterior.x + 5} ${ya} Q ${mx} ${ya + curva} ${x - 5} ${yb}"/>`);
-        } else {
-          corpo.push(`<path class="ligadura" d="M${anterior.x + 5} ${ya} q 10 ${abaixo ? 6 : -6} 20 0"/>`);
-        }
+        const abaixo = p < 4, ya = anterior.y + (abaixo ? 6 : -6), yb = y + (abaixo ? 6 : -6);
+        corpo.push(anterior.sistema === m.sistema
+          ? `<path class="ligadura" d="M${anterior.x + 5} ${ya} Q ${(anterior.x + x) / 2} ${ya + (abaixo ? 7 : -7)} ${x - 5} ${yb}"/>`
+          : `<path class="ligadura" d="M${anterior.x + 5} ${ya} q 10 ${abaixo ? 6 : -6} 20 0"/>`);
       }
       anterior = { nota: s.nota, x, y, sistema: m.sistema };
     }
   });
 
-  estado.layout = { compassos, sistemas, altSistema, cabecas, C, nCompassos };
+  est.layout = { compassos, sistemas, altSistema, cabecas, C, nCompassos };
   caixa.innerHTML = `<svg width="${larguraTotal}" height="${alturaTotal}" viewBox="0 0 ${larguraTotal} ${alturaTotal}" role="img" aria-label="Partitura do exercício">
     <g>${fundo.join("")}</g><g>${corpo.join("")}</g><g>${topo.join("")}</g><line id="cursor" class="cursor" x1="0" x2="0" y1="0" y2="0" visibility="hidden"/></svg>`;
 }
@@ -704,104 +779,304 @@ function desenhar() {
 function desenharPausa(saida, x, yTopo, q) {
   if (q >= 4) { saida.push(`<rect class="tinta" x="${x - 1}" y="${yTopo + S}" width="10" height="${S / 2}"/>`); return; }
   if (q >= 2) { saida.push(`<rect class="tinta" x="${x - 5}" y="${yTopo + 1.5 * S}" width="10" height="${S / 2}"/>`); return; }
-  const glifo = q >= 1 ? "𝄽" : q >= 0.5 ? "𝄾" : "𝄿";
-  saida.push(`<text class="glifo" x="${x - 5}" y="${yTopo + 2.6 * S}" font-size="${3.6 * S}">${glifo}</text>`);
+  saida.push(`<text class="glifo" x="${x - 5}" y="${yTopo + 2.6 * S}" font-size="${3.6 * S}">${q >= 1 ? "𝄽" : q >= 0.5 ? "𝄾" : "𝄿"}</text>`);
 }
 
+// toque na partitura: escolhe a voz e a nota a editar, e mostra o erro daquela nota
 $("partitura").addEventListener("click", (ev) => {
-  const L = estado.layout, r = estado.resultado;
-  if (!L || !r) return;
-  const svg = ev.currentTarget.querySelector("svg");
-  const box = svg.getBoundingClientRect();
+  const L = est.layout;
+  if (!L) return;
+  const box = ev.currentTarget.querySelector("svg").getBoundingClientRect();
   const px = ev.clientX - box.left, py = ev.clientY - box.top;
+  const sisIdx = L.sistemas.findIndex((s) => py >= s.y && py < s.y + L.altSistema);
+  if (sisIdx < 0) return;
+  const vi = Math.max(0, Math.min(est.modelo.vozes.length - 1, Math.floor((py - L.sistemas[sisIdx].y) / FAIXA)));
   let perto = null, dist = 16;
-  for (const c of L.cabecas) {
-    const d = Math.hypot(c.x - px, c.y - py);
-    if (d < dist) { dist = d; perto = c; }
+  for (const c of L.cabecas) { const d = Math.hypot(c.x - px, c.y - py); if (d < dist) { dist = d; perto = c; } }
+  const vis = est.visao ? est.visao.visiveis : [];
+  const cand = perto ? vis.map((a, k) => [a, k]).filter(([a]) => a.notas.includes(perto.nota)) : [];
+  const m = L.compassos.find((mm) => mm.sistema === sisIdx && px >= mm.x0 && px < mm.x1) || L.compassos.filter((mm) => mm.sistema === sisIdx).pop();
+  if (!travada(vi) && m) {
+    let t;
+    if (perto && perto.voz === vi) t = perto.nota.inicio;
+    else {
+      let melhor = null;
+      for (const col of m.cols) if (!melhor || Math.abs(col.x - px) < Math.abs(melhor.x - px)) melhor = col;
+      t = melhor && Math.abs(melhor.x - px) < 30 ? melhor.t : m.ini + ((px - m.x0) / (m.x1 - m.x0)) * L.C;
+    }
+    const v = est.modelo.vozes[vi];
+    const { inicios, fim } = Ed.inicios(v);
+    let pos = v.eventos.length;
+    if (t < fim) { pos = inicios.length - 1; while (pos > 0 && inicios[pos] > t) pos--; }
+    est.sel = { voz: vi, pos };
+    sincronizarDuracao();
+    avisar("");
   }
-  let candidatos;
-  if (perto) candidatos = r.achados.map((a, k) => [a, k]).filter(([a]) => a.notas.includes(perto.nota));
-  else {
-    const m = L.compassos.find((m) => px >= m.x0 && px < m.x1 && py >= L.sistemas[m.sistema].y && py < L.sistemas[m.sistema].y + L.altSistema);
-    if (!m) { selecionar(null); return; }
-    const num = L.compassos.indexOf(m) + 1;
-    candidatos = r.achados.map((a, k) => [a, k]).filter(([a]) => a.compasso === num);
-  }
-  if (!candidatos.length) { selecionar(null); return; }
-  const pos = candidatos.findIndex(([, k]) => k === estado.selecionado);
-  selecionar(candidatos[(pos + 1) % candidatos.length][1], true);
+  if (cand.length) {
+    const i = cand.findIndex(([, k]) => k === est.selecionado);
+    selecionar(cand[(i + 1) % cand.length][1]);
+  } else if (est.selecionado !== null) selecionar(null);
+  else desenhar();
+  atualizarDoca();
 });
 
-// ------------------------------------------------------------------ som
-let audio = null, tocando = null;
+// ------------------------------------------------------------------ edição (piano e ferramentas)
+function avisar(msg) { $("aviso-doca").textContent = msg; }
 
+function podeEditar() {
+  if (!est.modelo || !vozSel()) { avisar("Sorteie um cantus firmus ou carregue um exemplo primeiro."); return false; }
+  if (travada(est.sel.voz)) { avisar("O cantus firmus é fixo. Escolha a voz do contraponto."); return false; }
+  return true;
+}
+
+function inserir(alt) {
+  if (!podeEditar()) return;
+  registrar();
+  const v = vozSel();
+  if (est.sel.pos < v.eventos.length) {
+    v.eventos[est.sel.pos].alt = alt;
+    if (alt === null) v.eventos[est.sel.pos].liga = false;
+    est.sel.pos++;
+  } else {
+    v.eventos.push({ alt, dur: durAtual(), liga: false });
+    est.sel.pos = v.eventos.length;
+  }
+  avisar("");
+  aplicar(est.modelo);
+}
+
+function eventoAlvo() {
+  const v = vozSel();
+  if (!v) return null;
+  if (est.sel.pos < v.eventos.length) return v.eventos[est.sel.pos];
+  return v.eventos[v.eventos.length - 1] || null;
+}
+
+function sincronizarDuracao() {
+  const v = vozSel();
+  if (v && est.sel.pos < v.eventos.length) {
+    const d = v.eventos[est.sel.pos].dur;
+    const base = [4, 2, 1, 0.5, 0.25].map((x) => x * T).find((b) => d === b || d === b * 1.5);
+    if (base) { est.dur = base; est.ponto = d !== base; }
+  }
+}
+
+function atualizarDoca() {
+  const caixa = $("vozes");
+  caixa.innerHTML = "";
+  if (est.modelo) est.modelo.vozes.forEach((v, i) => {
+    const b = document.createElement("button");
+    b.className = "chip-voz";
+    b.setAttribute("aria-pressed", String(i === est.sel.voz && !travada(i)));
+    b.innerHTML = esc(v.nome) + (travada(i) ? ' <span class="fixo">· fixo</span>' : "");
+    b.addEventListener("click", () => {
+      if (travada(i)) { avisar("O cantus firmus é fixo. Para mudar, use Editar como texto."); return; }
+      est.sel = { voz: i, pos: v.eventos.length };
+      avisar("");
+      desenhar(); atualizarDoca(); centralizarPiano();
+    });
+    caixa.appendChild(b);
+  });
+  for (const b of document.querySelectorAll("[data-dur]")) b.setAttribute("aria-pressed", String(+b.dataset.dur * T === est.dur));
+  $("f-ponto").setAttribute("aria-pressed", String(est.ponto));
+  const alvo = eventoAlvo();
+  $("f-liga").setAttribute("aria-pressed", String(!!(alvo && alvo.liga)));
+  $("f-desfazer").disabled = !est.historico.length;
+  $("f-enarm").disabled = !(alvo && alvo.alt && /[#b]/.test(alvo.alt.slice(1, -1)));
+  for (const k of document.querySelectorAll(".tecla.ativa")) k.classList.remove("ativa");
+  const v = vozSel();
+  if (v && est.sel.pos < v.eventos.length && v.eventos[est.sel.pos].alt) {
+    const ps = M.lerAltura(v.eventos[est.sel.pos].alt).ps;
+    document.querySelector(`.tecla[data-midi="${ps}"]`)?.classList.add("ativa");
+  }
+}
+
+function mudarDuracao(q) {
+  est.dur = q * T;
+  const v = vozSel();
+  if (v && est.sel.pos < v.eventos.length && !travada(est.sel.voz)) {
+    registrar();
+    v.eventos[est.sel.pos].dur = durAtual();
+    aplicar(est.modelo);
+  } else { desenhar(); atualizarDoca(); }
+}
+
+for (const b of document.querySelectorAll("[data-dur]")) b.addEventListener("click", () => { est.ponto = false; mudarDuracao(+b.dataset.dur); });
+$("f-ponto").addEventListener("click", () => { est.ponto = !est.ponto; mudarDuracao(est.dur / T); });
+$("f-pausa").addEventListener("click", () => inserir(null));
+$("f-liga").addEventListener("click", () => {
+  if (!podeEditar()) return;
+  const alvo = eventoAlvo();
+  if (!alvo || !alvo.alt) { avisar("Escreva uma nota antes de ligar."); return; }
+  registrar();
+  alvo.liga = !alvo.liga;
+  aplicar(est.modelo);
+  avisar(alvo.liga ? "Ligada: toque a mesma nota para continuar o som." : "");
+});
+$("f-enarm").addEventListener("click", () => {
+  if (!podeEditar()) return;
+  const alvo = eventoAlvo();
+  if (!alvo || !alvo.alt) return;
+  const a = M.lerAltura(alvo.alt);
+  if (!a.alter) return;
+  const outra = a.alter > 0 ? M.transpor(a, 1, 0) : M.transpor(a, -1, 0);
+  registrar();
+  alvo.alt = Ed.normalizarAltura(outra.nome + outra.oitava);
+  aplicar(est.modelo);
+});
+$("f-esq").addEventListener("click", () => { if (!vozSel()) return; est.sel.pos = Math.max(0, est.sel.pos - 1); sincronizarDuracao(); desenhar(); atualizarDoca(); });
+$("f-dir").addEventListener("click", () => { if (!vozSel()) return; est.sel.pos = Math.min(vozSel().eventos.length, est.sel.pos + 1); sincronizarDuracao(); desenhar(); atualizarDoca(); });
+$("f-apagar").addEventListener("click", () => {
+  if (!podeEditar()) return;
+  const v = vozSel();
+  if (!v.eventos.length) return;
+  registrar();
+  if (est.sel.pos < v.eventos.length) v.eventos.splice(est.sel.pos, 1);
+  else { v.eventos.pop(); est.sel.pos = v.eventos.length; }
+  aplicar(est.modelo);
+});
+$("f-desfazer").addEventListener("click", () => {
+  const anterior = est.historico.pop();
+  if (anterior === undefined) return;
+  aplicar(Ed.ler(anterior));
+});
+
+// grafia das teclas pretas conforme a tonalidade
+function grafia(midi) {
+  const pc = midi % 12, oit = Math.floor(midi / 12) - 1;
+  const SUST = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const BEM = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
+  const NEUTRO = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"];
+  let tabela = NEUTRO, tom = null;
+  try { tom = est.modelo && est.modelo.cab.tom ? M.interpretarTom(est.modelo.cab.tom) : null; } catch (e) {}
+  if (tom) {
+    const escala = Cn.ESCALAS[tom.modo] || Cn.ESCALAS.major;
+    const notas = escala.map((s, g) => M.transpor(tom.tonica, g, s));
+    const sens = M.transpor(tom.tonica, -1, -1);
+    for (const n of [sens, ...notas]) if (((n.ps % 12) + 12) % 12 === pc && Math.abs(n.alter) <= 1) {
+      // corrige a oitava quando a grafia atravessa o dó (si♯, dó♭)
+      const o = oit + Math.round((midi - (12 * (oit + 1) + [0, 2, 4, 5, 7, 9, 11][n.letra] + n.alter)) / 12);
+      return n.nome.replace("-", "b") + o;
+    }
+    if (notas.some((n) => n.alter < 0)) tabela = BEM;
+    else if (notas.some((n) => n.alter > 0)) tabela = SUST;
+  }
+  return tabela[pc] + oit;
+}
+
+let audio = null;
+function contextoAudio() {
+  try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+  if (audio.state === "suspended") audio.resume();
+  return audio;
+}
+
+function som(ctx, destino, ps, ini, dur, forte = 0.9) {
+  const f = 440 * Math.pow(2, (ps - 69) / 12);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0, ini);
+  g.gain.linearRampToValueAtTime(forte, ini + 0.012);
+  g.gain.exponentialRampToValueAtTime(forte * 0.4, ini + 0.35);
+  g.gain.setTargetAtTime(forte * 0.2, ini + 0.35, Math.max(0.3, dur * 0.8));
+  g.gain.setTargetAtTime(0.0001, ini + dur - 0.02, 0.04);
+  g.connect(destino);
+  const osc = [];
+  for (const [tipo, mult, vol] of [["triangle", 1, 0.8], ["sine", 2, 0.18]]) {
+    const o = ctx.createOscillator(), gv = ctx.createGain();
+    gv.gain.value = vol; o.type = tipo; o.frequency.value = f * mult;
+    o.connect(gv); gv.connect(g);
+    o.start(ini); o.stop(ini + dur + 0.3);
+    osc.push(o);
+  }
+  return osc;
+}
+
+function montarPiano() {
+  const piano = $("piano");
+  const W = 40, PRETAS = new Set([1, 3, 6, 8, 10]);
+  let brancas = 0;
+  for (let midi = 36; midi <= 84; midi++) {
+    const pc = midi % 12;
+    const b = document.createElement("button");
+    b.dataset.midi = midi;
+    if (PRETAS.has(pc)) {
+      b.className = "tecla preta";
+      b.style.left = `${brancas * W - 13}px`;
+    } else {
+      b.className = "tecla branca" + (midi === 60 ? " c4" : "");
+      b.style.left = `${brancas * W}px`;
+      if (pc === 0) b.textContent = "C" + (midi / 12 - 1);
+      brancas++;
+    }
+    b.setAttribute("aria-label", nomeBonito(grafia(midi)));
+    b.addEventListener("click", () => {
+      const ctx = contextoAudio();
+      if (ctx) som(ctx, ctx.destination, midi, ctx.currentTime + 0.01, 0.6, 0.35);
+      b.classList.add("tocada");
+      setTimeout(() => b.classList.remove("tocada"), 140);
+      inserir(grafia(midi));
+    });
+    piano.appendChild(b);
+  }
+  piano.style.width = `${brancas * W}px`;
+}
+
+function centralizarPiano() {
+  const rolo = $("piano-rolo");
+  let ps = null;
+  const alvo = eventoAlvo();
+  if (alvo && alvo.alt) ps = M.lerAltura(alvo.alt).ps;
+  else if (est.ex) {
+    const outra = est.ex.vozes.find((x) => x.notas.length);
+    if (outra) ps = outra.notas[0].ps + (est.sel.voz === 0 ? 7 : -9);
+  }
+  if (ps === null) ps = 60;
+  const k = document.querySelector(`.tecla[data-midi="${Math.round(ps)}"]`);
+  if (k) rolo.scrollLeft = k.offsetLeft - rolo.clientWidth / 2 + 20;
+}
+
+// ------------------------------------------------------------------ som do exercício
+let tocando = null;
 function parar() {
   if (!tocando) return;
   for (const o of tocando.osc) { try { o.stop(); } catch (e) {} }
   cancelAnimationFrame(tocando.raf);
   tocando = null;
   $("tocar").textContent = "▶ Ouvir";
-  const cur = document.getElementById("cursor");
-  if (cur) cur.setAttribute("visibility", "hidden");
+  document.getElementById("cursor")?.setAttribute("visibility", "hidden");
 }
 
 function tocar() {
   if (tocando) { parar(); return; }
-  const ex = estado.ex;
-  if (!ex) return;
-  try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
-  if (audio.state === "suspended") audio.resume();
-  const bpm = +$("bpm").value;
-  const seg = (ticks) => (ticks / T) * (60 / bpm);
-  const t0 = audio.currentTime + 0.12;
-  const mestre = audio.createGain();
+  const ex = est.ex, ctx = contextoAudio();
+  if (!ex || !ctx) return;
+  const bpm = +$("bpm").value, seg = (ticks) => (ticks / T) * (60 / bpm);
+  const t0 = ctx.currentTime + 0.12;
+  const mestre = ctx.createGain();
   mestre.gain.value = 0.9 / Math.max(2, ex.vozes.length);
-  mestre.connect(audio.destination);
+  mestre.connect(ctx.destination);
   const osc = [];
-  for (const v of ex.vozes) for (const n of v.notas) {
-    const ini = t0 + seg(n.inicio), dur = seg(n.duracao);
-    const f = 440 * Math.pow(2, (n.ps - 69) / 12);
-    const g = audio.createGain();
-    g.gain.setValueAtTime(0, ini);
-    g.gain.linearRampToValueAtTime(0.9, ini + 0.012);
-    g.gain.exponentialRampToValueAtTime(0.35, ini + 0.35);
-    g.gain.setTargetAtTime(0.18, ini + 0.35, Math.max(0.3, dur * 0.8));
-    g.gain.setTargetAtTime(0.0001, ini + dur - 0.02, 0.04);
-    g.connect(mestre);
-    for (const [tipo, mult, vol] of [["triangle", 1, 0.8], ["sine", 2, 0.18]]) {
-      const o = audio.createOscillator();
-      const gv = audio.createGain();
-      gv.gain.value = vol;
-      o.type = tipo;
-      o.frequency.value = f * mult;
-      o.connect(gv); gv.connect(g);
-      o.start(ini); o.stop(ini + dur + 0.3);
-      osc.push(o);
-    }
-  }
+  for (const v of ex.vozes) for (const n of v.notas) osc.push(...som(ctx, mestre, n.ps, t0 + seg(n.inicio), seg(n.duracao)));
   const total = seg(ex.fim);
-  tocando = { osc, t0, raf: 0 };
+  tocando = { osc, raf: 0 };
   $("tocar").textContent = "■ Parar";
-  const passoCursor = () => {
+  const quadro = () => {
     if (!tocando) return;
-    const agora = audio.currentTime - t0;
+    const agora = ctx.currentTime - t0;
     if (agora > total + 0.25) { parar(); return; }
     moverCursor(Math.max(0, agora) * (bpm / 60) * T);
-    tocando.raf = requestAnimationFrame(passoCursor);
+    tocando.raf = requestAnimationFrame(quadro);
   };
-  tocando.raf = requestAnimationFrame(passoCursor);
+  tocando.raf = requestAnimationFrame(quadro);
 }
 
 function moverCursor(t) {
-  const L = estado.layout, cur = document.getElementById("cursor");
+  const L = est.layout, cur = document.getElementById("cursor");
   if (!L || !cur) return;
-  const c = Math.min(L.nCompassos - 1, Math.floor(t / L.C));
-  const m = L.compassos[c];
-  if (!m) return;
+  const m = L.compassos[Math.min(L.nCompassos - 1, Math.floor(t / L.C))];
   let x = m.x1;
-  const cols = m.cols;
-  for (let k = 0; k < cols.length; k++) {
-    const a = cols[k], prox = cols[k + 1];
+  for (let k = 0; k < m.cols.length; k++) {
+    const a = m.cols[k], prox = m.cols[k + 1];
     const tFim = prox ? prox.t : m.ini + L.C, xFim = prox ? prox.x : m.x1 - 4;
     if (t >= a.t && t < tFim) { x = a.x + ((t - a.t) / (tFim - a.t)) * (xFim - a.x); break; }
   }
@@ -811,96 +1086,77 @@ function moverCursor(t) {
   cur.setAttribute("visibility", "visible");
 }
 
-// ------------------------------------------------------------------ editor
-const ta = $("texto");
-let textoAnterior = null;
-
-function trocarTexto(novo, nivel) {
-  textoAnterior = ta.value;
-  ta.value = novo;
-  $("bt-desfazer").hidden = false;
-  if (nivel) mudarNivel(nivel); else analisar();
+// ------------------------------------------------------------------ novos exercícios
+function criarExercicio(cf, especie, posicao) {
+  const compasso = especie === 2 || especie === 4 ? "2/2" : "4/4";
+  const cantus = { nome: "cantus", eventos: cf.notas.split(" ").map((alt) => ({ alt: Ed.normalizarAltura(alt), dur: 4 * T, liga: false })) };
+  const cp = { nome: "contraponto", eventos: [] };
+  const modelo = {
+    comentarios: [],
+    cab: { titulo: `${especie}ª espécie · cantus firmus em ${cf.nome} · contraponto ${posicao}`, compasso, tom: cf.tom, cf: "cantus" },
+    vozes: posicao === "acima" ? [cp, cantus] : [cantus, cp],
+  };
+  if (est.modelo) registrar();
+  est.sel = { voz: posicao === "acima" ? 0 : 1, pos: 0 };
+  est.dur = DUR_ESPECIE[especie] * T;
+  est.ponto = false;
+  mudarNivel(especie, true);
+  aplicar(modelo);
+  avisar(especie === 2 || especie === 4 ? "Dica: pode começar com uma pausa de mínima (botão pausa)." : "Toque as notas do contraponto no piano.");
+  centralizarPiano();
 }
 
-function montarEditor() {
+function sortearECriar() {
+  const cf = Cn.sortear();
+  if (!cf) { avisar("Não consegui sortear agora; tente de novo."); return; }
+  criarExercicio(cf, +$("novo-especie").value, $("novo-posicao").value);
+}
+
+function montarExercicios() {
   const sel = $("exemplos");
   (window.EXEMPLOS || []).forEach((e, k) => {
     const o = document.createElement("option");
-    o.value = k;
-    o.textContent = `Nível ${e.nivel} · ${e.titulo}`;
+    o.value = k; o.textContent = `Nível ${e.nivel} · ${e.titulo}`;
     sel.appendChild(o);
   });
   sel.addEventListener("change", () => {
     if (sel.value === "") return;
     const e = window.EXEMPLOS[+sel.value];
-    trocarTexto(e.texto, e.nivel);
+    carregarTexto(e.texto, e.nivel);
     sel.value = "";
+    centralizarPiano();
   });
-  $("bt-desfazer").addEventListener("click", () => {
-    if (textoAnterior === null) return;
-    const agora = ta.value;
-    ta.value = textoAnterior;
-    textoAnterior = agora;
-    analisar();
-  });
-  const cf = $("novo-cf");
-  CANTUS.forEach((c, k) => { const o = document.createElement("option"); o.value = k; o.textContent = c.nome; cf.appendChild(o); });
+  CANTUS.forEach((c, k) => { const o = document.createElement("option"); o.value = k; o.textContent = c.nome; $("novo-cf").appendChild(o); });
+  $("bt-sortear").addEventListener("click", sortearECriar);
   $("bt-novo").addEventListener("click", () => {
-    const painel = $("novo");
-    painel.hidden = !painel.hidden;
-    $("bt-novo").setAttribute("aria-expanded", String(!painel.hidden));
+    const p = $("novo");
+    p.hidden = !p.hidden;
+    $("bt-novo").setAttribute("aria-expanded", String(!p.hidden));
   });
   $("bt-criar").addEventListener("click", () => {
-    const c = CANTUS[+cf.value], esp = +$("novo-especie").value, pos = $("novo-posicao").value;
-    const compasso = esp === 2 || esp === 4 ? "2/2" : "4/4";
-    const exemplo = { 1: "A4/4 …", 2: "P/2 A4/2 …", 3: "A4/1 B4 C5 A4 …", 4: "P/2 A4/2~ A4 …", 5: "A4/2 B4/1 C5 …" }[esp];
-    const linhaCp = `contraponto:   # escreva aqui, por exemplo: ${exemplo}`;
-    const notasCf = c.notas.split(" ");
-    const linhaCf = `cantus:        ${notasCf[0]}/4 ${notasCf.slice(1).join(" ")}`;
-    const texto = [
-      `titulo: ${esp}ª espécie, cantus firmus ${c.nome.split(" · ")[1]}, contraponto ${pos}`,
-      `compasso: ${compasso}`, `tom: ${c.tom}`, "cf: cantus", "",
-      ...(pos === "acima" ? [linhaCp, linhaCf] : [linhaCf, linhaCp]),
-    ].join("\n") + "\n";
-    trocarTexto(texto, esp);
+    const v = $("novo-cf").value;
     $("novo").hidden = true;
     $("bt-novo").setAttribute("aria-expanded", "false");
-    const alvo = ta.value.indexOf("contraponto:") + "contraponto:".length;
-    ta.focus();
-    ta.setSelectionRange(alvo + 1, alvo + 1);
+    if (v === "sortear") sortearECriar();
+    else criarExercicio(CANTUS[+v], +$("novo-especie").value, $("novo-posicao").value);
   });
 
-  ta.addEventListener("input", agendarAnalise);
-
-  const botaoTeclado = $("bt-teclado");
-  const ligarTeclado = (on) => {
-    $("teclado").hidden = !on;
-    botaoTeclado.setAttribute("aria-pressed", String(on));
-    ta.setAttribute("inputmode", on ? "none" : "text");
-    guardar("teclado", on ? "1" : "0");
-  };
-  botaoTeclado.addEventListener("click", () => ligarTeclado($("teclado").hidden));
-  ligarTeclado(ler("teclado") === "1");
-
-  $("teclado").addEventListener("pointerdown", (ev) => { if (ev.target.closest(".tecla")) ev.preventDefault(); });
-  $("teclado").addEventListener("click", (ev) => {
-    const b = ev.target.closest(".tecla");
-    if (!b) return;
-    let s = ta.selectionStart, e = ta.selectionEnd;
-    if (b.dataset.mover) {
-      const p = Math.max(0, Math.min(ta.value.length, s + +b.dataset.mover));
-      ta.setSelectionRange(p, p);
-    } else if (b.dataset.apagar) {
-      if (s === e && s > 0) s -= 1;
-      ta.setRangeText("", s, e, "end");
-    } else {
-      let ins = b.dataset.ins;
-      const antes = ta.value.slice(0, s);
-      if ((b.classList.contains("letra") || ins === "P") && antes && !/[\s:]$/.test(antes)) ins = " " + ins;
-      ta.setRangeText(ins, s, e, "end");
-    }
-    ta.focus({ preventScroll: true });
-    agendarAnalise();
+  let temp = null;
+  $("texto").addEventListener("input", () => {
+    clearTimeout(temp);
+    temp = setTimeout(() => {
+      const texto = $("texto").value, caixa = $("erro-leitura");
+      try {
+        const modelo = Ed.ler(texto);
+        M.lerTexto(texto);
+        caixa.hidden = true;
+        registrar();
+        aplicar(modelo, { doTexto: true });
+      } catch (e) {
+        caixa.textContent = e.message;
+        caixa.hidden = false;
+      }
+    }, 300);
   });
 }
 
@@ -908,19 +1164,35 @@ function montarEditor() {
 $("tocar").addEventListener("click", tocar);
 $("bpm").addEventListener("input", () => { $("bpm-valor").textContent = $("bpm").value; guardar("bpm", $("bpm").value); });
 $("resumo").addEventListener("click", () => $("correcao").scrollIntoView({ behavior: "smooth", block: "start" }));
+$("recolher").addEventListener("click", () => {
+  const doca = $("doca"), fechada = doca.classList.toggle("recolhida");
+  $("recolher").textContent = fechada ? "▴" : "▾";
+  $("recolher").setAttribute("aria-expanded", String(!fechada));
+  $("recolher").setAttribute("aria-label", fechada ? "Mostrar o piano" : "Recolher o piano");
+  guardar("recolhida", fechada ? "1" : "0");
+});
+new ResizeObserver(() => document.documentElement.style.setProperty("--doca", $("doca").offsetHeight + "px")).observe($("doca"));
 let largAnterior = 0;
 new ResizeObserver(() => {
   const w = $("partitura").clientWidth;
-  if (Math.abs(w - largAnterior) > 8) { largAnterior = w; desenhar(); }
+  if (Math.abs(w - largAnterior) > 8) { largAnterior = w; if (est.modelo) desenhar(); }
 }).observe($("partitura"));
 
 montarNiveis();
-montarEditor();
+montarExercicios();
+montarPiano();
+if (ler("recolhida") === "1") $("recolher").click();
 const bpmSalvo = ler("bpm");
 if (bpmSalvo) { $("bpm").value = bpmSalvo; $("bpm-valor").textContent = bpmSalvo; }
-const salvo = ler("texto");
-ta.value = salvo && salvo.trim() ? salvo : (window.EXEMPLOS && window.EXEMPLOS[1] ? window.EXEMPLOS[1].texto : "");
 const nivelSalvo = +ler("nivel");
-mudarNivel(nivelSalvo >= 1 && nivelSalvo <= 10 ? nivelSalvo : 2);
+mudarNivel(nivelSalvo >= 1 && nivelSalvo <= 10 ? nivelSalvo : 2, true);
+const salvo = ler("texto");
+if (!(salvo && salvo.trim() && carregarTexto(salvo))) {
+  const e = window.EXEMPLOS && window.EXEMPLOS[1];
+  if (e) carregarTexto(e.texto, e.nivel);
+}
+est.historico = [];
+atualizarDoca();
+centralizarPiano();
 if (document.fonts) document.fonts.ready.then(() => desenhar());
 </script>

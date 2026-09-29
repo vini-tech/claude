@@ -883,8 +883,106 @@
     return { nivel, achados, naoVerificadas, contar, aprovado: contar("erro") === 0 };
   }
 
+  // ------------------------------------------------------------ explicações (só na versão web)
+
+  const DETALHES = {
+    ritmo_da_especie: ["Cada espécie isola um problema: a 1ª treina os intervalos, a 2ª a nota de passagem, a 3ª o movimento contínuo, a 4ª o retardo. Com outro ritmo, o exercício deixa de treinar o que deveria.",
+      "Use a duração da espécie: semibreves na 1ª; mínimas na 2ª (pode começar com pausa de mínima); semínimas na 3ª; mínimas ligadas por cima da barra na 4ª. A última nota é sempre uma semibreve."],
+    dissonancia_proibida: ["Na 1ª espécie cada nota dura o compasso inteiro contra uma única nota do cantus firmus. Não há como preparar nem resolver uma dissonância, então ela soa como um choque sem explicação.",
+      "Troque a nota por uma que forme 3ª, 5ª, 6ª ou 8ª com o cantus firmus. A 4ª justa conta como dissonância."],
+    dissonancia_tempo_forte: ["O tempo forte é onde o ouvido mede a harmonia. Uma dissonância ali, sem preparação, soa como nota errada, e não como passagem.",
+      "Ponha uma consonância no tempo forte e deixe a dissonância para o tempo fraco, entre duas notas por grau conjunto."],
+    retardo_nao_permitido: ["Nesta espécie o contraponto se move no tempo forte, que deve ser consonante. A nota sustentada que vira dissonância (retardo) é o assunto da 4ª espécie.",
+      "Mude de nota no tempo forte em vez de sustentar a anterior, ou escolha uma nota que continue consonante."],
+    bordadura_na_2a_especie: ["Com só duas notas por compasso, uma bordadura dissonante sai e volta para a mesma nota e soa como um tropeço. A nota de passagem, que liga duas notas diferentes, dá direção à linha.",
+      "Faça a dissonância continuar na mesma direção em que chegou (por exemplo lá–sol–fá, descendo), ou use uma consonância no tempo fraco."],
+    dissonancia_aproximacao: ["Uma dissonância se justifica pelo movimento: a voz passa por ela a caminho de outra nota. Chegando por salto, ela aparece solta, sem essa lógica.",
+      "Chegue à dissonância por grau conjunto (a nota anterior a um tom ou meio tom dela), ou troque-a por uma consonância."],
+    dissonancia_resolucao: ["A dissonância cria uma tensão que o ouvido espera ver resolvida na nota vizinha. Se a voz salta, a tensão fica no ar.",
+      "Depois da dissonância, vá por grau conjunto, de preferência na mesma direção. A partir da 3ª espécie vale a cambiata: desce por grau, salta uma 3ª para baixo e sobe por grau."],
+    retardo_resolve_descendo: ["O retardo é uma nota que chegou atrasada: ela pertence à harmonia anterior e desce para a nota que a harmonia nova pede. Resolvendo para cima ou por salto, o gesto perde o sentido.",
+      "Depois da nota sustentada, desça um grau. Se a resolução não couber, prepare outra nota antes da barra."],
+    quintas_paralelas: ["A 5ª justa funde tanto as duas notas que duas vozes em 5ªs seguidas soam como uma voz só, dobrada. A independência das linhas desaparece.",
+      "Mude uma das vozes: use movimento contrário ou oblíquo, ou troque a segunda 5ª por uma 3ª ou 6ª."],
+    oitavas_paralelas: ["Oitavas ou uníssonos seguidos fazem as duas vozes virarem uma só, e o contraponto perde uma linha.",
+      "Troque a segunda 8ª por uma 3ª, 5ª ou 6ª, ou deixe uma das vozes parada ou indo na direção contrária."],
+    quintas_oitavas_ocultas: ["Chegando a uma 5ª ou 8ª com as duas vozes na mesma direção, o ouvido completa a paralela escondida entre as notas. É um defeito menor que a paralela, mas enfraquece a independência.",
+      "Chegue à consonância perfeita por movimento contrário ou oblíquo. A partir da harmonia, basta que a voz superior chegue por grau."],
+    quintas_tempo_forte: ["Mesmo com uma nota no meio, 5ªs ou 8ªs em tempos fortes seguidos soam como paralelas, porque é nos tempos fortes que o ouvido acompanha a harmonia.",
+      "Troque o intervalo de um dos tempos fortes por uma 3ª ou 6ª."],
+    paralelas_imperfeitas_excessivas: ["3ªs e 6ªs paralelas soam bem, mas muitas seguidas fazem uma voz virar a sombra da outra.",
+      "Depois de três, quebre a sequência com movimento contrário ou oblíquo."],
+    unissono_interno: ["No uníssono as duas vozes se fundem numa nota só; no meio do exercício isso apaga uma das linhas por um instante.",
+      "Afaste as vozes: troque a nota por uma que forme 3ª ou 6ª."],
+    cruzamento_de_vozes: ["Quando as vozes se cruzam, o ouvido tende a seguir a nota mais aguda, e as linhas se misturam.",
+      "Mantenha cada voz no seu registro: a de cima sempre acima (ou em uníssono) da de baixo."],
+    sobreposicao_de_vozes: ["Se uma voz passa da nota que a vizinha acabou de tocar, o ouvido pode ligar as notas erradas e perder as linhas.",
+      "Não ultrapasse a nota anterior da voz vizinha; mude a direção ou a oitava."],
+    espacamento: ["Vozes muito distantes deixam um buraco no meio da textura e deixam de soar como conjunto.",
+      "Aproxime as vozes: no máximo uma 10ª a duas vozes, e uma 8ª entre vozes superiores vizinhas no coral."],
+    extensao_da_voz: ["Fora da extensão a voz fica forçada ou sem som, e o equilíbrio do coral se perde.",
+      "Traga a nota para dentro da extensão trocando de oitava, ou redistribua as notas do acorde entre as vozes."],
+    salto_maior_que_oitava: ["Saltos maiores que uma oitava são difíceis de cantar e quebram a continuidade da linha.",
+      "Troque a nota de oitava, ou chegue a ela em dois movimentos."],
+    intervalo_melodico_aumentado_diminuto: ["Intervalos aumentados e diminutos, como o trítono, são difíceis de entoar e soam instáveis numa linha diatônica.",
+      "Escolha outra nota, ou chegue à mesma nota passando por uma intermediária."],
+    salto_de_sexta_ou_setima: ["No estilo estrito, 7ªs e 6ªs maiores são difíceis de cantar e chamam atenção demais. Só a 6ª menor ascendente é aceita.",
+      "Troque o salto por um menor (3ª, 4ª ou 5ª) ou por uma 8ª."],
+    salto_nao_compensado: ["Um salto grande abre um espaço que o ouvido quer ver preenchido. Continuar na mesma direção deixa a linha desequilibrada.",
+      "Depois de um salto maior que uma 4ª, mude de direção, de preferência por grau conjunto."],
+    saltos_consecutivos: ["Vários saltos na mesma direção viram um arpejo sem rumo e esticam demais o âmbito.",
+      "Depois de um salto, mude de direção ou siga por grau. Dois saltos seguidos só se formarem um acorde dentro de uma 8ª."],
+    nota_repetida: ["Repetir a nota interrompe o movimento da linha, que é justamente o que o exercício quer treinar.",
+      "Vá para uma nota vizinha ou para outra consonância."],
+    ponto_culminante: ["Uma linha com um único ponto mais agudo tem forma: sobe até ele e volta. Repetir o clímax dilui essa curva.",
+      "Deixe a nota mais aguda aparecer uma vez só: baixe uma das repetições ou crie um clímax novo."],
+    ambito_melodico: ["Uma voz que passa de uma 10ª fica difícil de cantar e perde unidade.",
+      "Aproxime os extremos: baixe o ponto mais agudo ou suba o mais grave."],
+    inicio_perfeito: ["A consonância perfeita no início afirma o modo logo de cara. Com o contraponto embaixo, uma 5ª poria o baixo numa nota que não é a final do modo.",
+      "Comece em uníssono, 5ª ou 8ª com o cantus firmus; se o contraponto estiver embaixo, só uníssono ou 8ª."],
+    final_perfeito: ["O uníssono ou a 8ª no fim dão repouso completo; qualquer outro intervalo deixa a música em suspenso.",
+      "Termine na mesma nota do cantus firmus, em uníssono ou em oitava."],
+    cadencia_contraponto: ["A cadência é a fórmula que soa como fim: as vozes convergem por grau, e uma delas chega pela sensível, meio tom abaixo da final.",
+      "No penúltimo compasso use a 6ª maior (contraponto em cima) ou a 3ª menor (contraponto embaixo), e vá por grau em movimento contrário para a 8ª ou o uníssono. Nos modos sem sensível, eleve a nota: dó♯ em ré dórico, fá♯ em sol mixolídio, sol♯ em lá eólio."],
+    sensivel_resolve: ["A sensível fica meio tom abaixo da tônica e puxa para ela. Na voz superior, não resolver é ouvido claramente como frustração.",
+      "Leve a sensível para a tônica, meio tom acima."],
+    sensivel_dobrada: ["A sensível precisa resolver na tônica. Dobrada, as duas vozes iriam juntas para a tônica, em oitavas paralelas.",
+      "Deixe a sensível numa voz só e dobre a fundamental ou a quinta do acorde."],
+    cadencia_autentica: ["Frases tonais terminam numa cadência: o baixo vai da dominante (ou da subdominante) para a tônica e fecha a ideia.",
+      "Termine com o baixo em V–I (cadência autêntica) ou IV–I (plagal)."],
+  };
+  for (const [id, [porque, corrigir]] of Object.entries(DETALHES)) Object.assign(REGRAS[id], { porque, corrigir });
+
+  // ------------------------------------------------------------ exercício em andamento
+
+  // regras que só fazem sentido com o exercício inteiro escrito
+  const PRECISA_FIM = new Set(["final_perfeito", "cadencia_contraponto", "cadencia_autentica", "ponto_culminante"]);
+  // regras que olham a nota seguinte: esperam a próxima nota ser escrita
+  const OLHA_ADIANTE = new Set(["dissonancia_resolucao", "retardo_resolve_descendo", "ritmo_da_especie", "bordadura_na_2a_especie"]);
+
+  /* Separa o que já pode ser mostrado: um achado só aparece quando todas as vozes
+   * completaram o compasso dele. `fins` é até onde cada voz foi escrita (em ticks,
+   * contando pausas); sem ele, usa o fim da última nota. */
+  function concluidos(ex, resultado, fins) {
+    fins = fins || ex.vozes.map((v) => (v.notas.length ? v.notas[v.notas.length - 1].fim : 0));
+    const alvo = ex.cantusFirmus !== null && fins[ex.cantusFirmus] > 0 ? fins[ex.cantusFirmus] : Math.max(0, ...fins);
+    const completo = alvo > 0 && fins.every((f) => f >= alvo);
+    const compassosCompletos = completo ? ex.compassoDe(alvo - 1) : Math.floor(Math.min(...fins) / ex.duracaoCompasso);
+    const ultimas = new Set();
+    ex.vozes.forEach((v, i) => { if (fins[i] < alvo && v.notas.length) ultimas.add(v.notas[v.notas.length - 1]); });
+    const visiveis = resultado.achados.filter((a) => completo || (
+      a.compasso <= compassosCompletos && !PRECISA_FIM.has(a.regra)
+      && !(OLHA_ADIANTE.has(a.regra) && a.notas.some((n) => ultimas.has(n)))));
+    const conta = (s) => visiveis.filter((a) => a.severidade === s).length;
+    return {
+      completo, compassosCompletos, visiveis, pendentes: resultado.achados.length - visiveis.length,
+      contar: conta, aprovado: completo && conta("erro") === 0,
+    };
+  }
+
   return {
-    T, lerTexto, verificar, REGRAS, TABELA, NIVEIS, severidade, regrasAtivas,
-    ErroDeLeitura, MODOS_PT, lerAltura, interpretarTom,
+    T, lerTexto, verificar, concluidos, REGRAS, TABELA, NIVEIS, severidade, regrasAtivas,
+    ErroDeLeitura, MODOS_PT, lerAltura, interpretarTom, altura, transpor, intervaloAlturas,
+    ehConsonante, classePerfeita, criarVoz, criarExercicio, nota,
   };
 });
