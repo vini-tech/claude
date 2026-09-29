@@ -1,0 +1,11 @@
+# Nível 6 — harmonia a 4 vozes. I IV V I | vi ii6 V I em dó maior.
+# Repare: no último V a sensível (B3) está no tenor e desce para G3, o que é
+# aceito numa voz interna; na voz superior ela teria que subir para a tônica.
+titulo: Coral em dó maior
+compasso: 4/4
+tom: C maior
+
+soprano:   G4/1 A4 B4 C5  C5 D5 D5 C5
+contralto: E4/1 F4 D4 E4  E4 F4 D4 E4
+tenor:     C4/1 C4 G3 G3  A3 A3 B3 G3
+baixo:     C3/1 F2 G2 C3  A2 F2 G2 C3

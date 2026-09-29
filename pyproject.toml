@@ -1,0 +1,19 @@
+[project]
+name = "verificador"
+version = "0.1.0"
+description = "Verificador de exercícios de contraponto e harmonia, com regras que afrouxam a cada nível"
+requires-python = ">=3.10"
+dependencies = ["music21>=9"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+verificador = "verificador.__main__:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["verificador"]

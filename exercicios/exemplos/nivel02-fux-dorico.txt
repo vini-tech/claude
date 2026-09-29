@@ -1,0 +1,9 @@
+# Nível 2 — 2ª espécie. Mesmo cantus firmus, agora duas mínimas contra cada semibreve.
+# Dissonâncias só no tempo fraco, e sempre como nota de passagem (c. 5).
+titulo: 2ª espécie sobre o cantus firmus de Fux
+compasso: 2/2
+tom: D dorico
+cf: cantus
+
+contraponto: P/2 D5/2  C5 A4  G4 C5  B4 A4  B4 C5  D5 F5  E5 C5  B4 D5  A4 D5  E5 C#5  D5/4
+cantus:      D4/4      F4     E4     D4     G4     F4     A4     G4     F4     E4      D4
