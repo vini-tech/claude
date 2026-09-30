@@ -11,6 +11,8 @@
  *   rotulos     nome mostrado para cada voz; ativa: índice da voz em destaque
  *   largura     largura disponível (padrão: a do elemento)
  *   compacta    menos margem, para exemplos pequenos nas aulas
+ *   cifras      [{ t, texto }] rótulos acima da pauta de cima (acordes)
+ *   anotacoes   [{ nota, texto, sev }] rótulos embaixo de uma nota (intervalos, graus)
  */
 (function (raiz, fabrica) {
   if (typeof module === "object" && module.exports) module.exports = fabrica(require("./motor.js"));
@@ -153,6 +155,7 @@
     for (const a of marcas) if (a.compasso && a.sev !== "ok" && (!pior[a.compasso] || PESO[a.sev] > PESO[pior[a.compasso]])) pior[a.compasso] = a.sev;
 
     const fundo = [], corpo = [], topo = [], cabecas = [];
+    const L0 = { sistemas };
     compassos.forEach((m, c) => {
       const sis = sistemas[m.sistema];
       if (foco && foco.compasso === c + 1) fundo.push(`<rect class="faixa sev-${foco.sev}" x="${m.x0}" y="${sis.y + 6}" width="${m.x1 - m.x0}" height="${altSistema - 10}" rx="4"/>`);
@@ -236,6 +239,18 @@
         anterior = { nota: s.nota, x, y, sistema: m.sistema };
       }
     });
+
+    for (const c of o.cifras || []) {
+      const cc = Math.min(nCompassos - 1, Math.floor(c.t / C));
+      const sis = sistemas[compassos[cc].sistema];
+      topo.push(`<text class="cifra" x="${xDoTempo(c.t) - 4}" y="${sis.y + MARGEM_SUP - 10}">${esc(c.texto)}</text>`);
+    }
+    for (const an of o.anotacoes || []) {
+      const cab = cabecas.find((x) => x.nota === an.nota);
+      if (!cab) continue;
+      const yBase = L0.sistemas[cab.sistema].y + cab.voz * FAIXA + MARGEM_SUP + ALT_PAUTA;
+      topo.push(`<text class="anotacao${an.sev ? " sev-" + an.sev : ""}" x="${cab.x}" y="${Math.max(yBase + 15, cab.y + 18)}" text-anchor="middle">${esc(an.texto)}</text>`);
+    }
 
     caixa.innerHTML = `<svg width="${larguraTotal}" height="${alturaTotal}" viewBox="0 0 ${larguraTotal} ${alturaTotal}" role="img" aria-label="${esc(o.descricao || "Partitura")}">
       <g>${fundo.join("")}</g><g>${corpo.join("")}</g><g>${topo.join("")}</g><line class="cursor" x1="0" x2="0" y1="0" y2="0" visibility="hidden"/></svg>`;

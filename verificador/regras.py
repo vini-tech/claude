@@ -145,10 +145,28 @@ def dissonancia_aproximacao(ex, ctx):
         if d.tipo != "ataque":
             continue
         ant = ex.vozes[d.voz].anterior(d.nota)
+        if ctx.nivel >= 3 and _bordadura_dupla(ex, d.voz, d.nota):
+            continue
         if ant is None or not (a.eh_grau(ant, d.nota) or ant.ps == d.nota.ps):
             como = "sem nota anterior" if ant is None else f"por salto de {ant.nome}"
             yield ex.compasso_de(d.t), (f"{_v(ex, d.voz)}: dissonância {d.nota.nome} "
                                         f"({a.nome_intervalo(d.intervalo)}) atingida {como}")
+
+
+def _bordadura_dupla(ex: Exercicio, voz: int, nota: Nota) -> bool:
+    """A nota é a 2ª ou a 3ª de uma bordadura dupla (dó–ré–si–dó ou dó–si–ré–dó)?"""
+    v = ex.vozes[voz]
+    i = v.notas.index(nota)
+    for ini in (i - 1, i - 2):
+        if ini < 0 or ini + 3 >= len(v.notas):
+            continue
+        n1, n2, n3, n4 = v.notas[ini:ini + 4]
+        if not (n1.fim == n2.inicio and n2.fim == n3.inicio and n3.fim == n4.inicio):
+            continue
+        if (n1.ps == n4.ps and a.eh_grau(n1, n2) and a.eh_grau(n1, n3)
+                and a.direcao(n1, n2) == -a.direcao(n1, n3) != 0):
+            return True
+    return False
 
 
 def _cambiata(ex: Exercicio, voz: int, nota: Nota) -> bool:
@@ -165,7 +183,8 @@ def _cambiata(ex: Exercicio, voz: int, nota: Nota) -> bool:
 
 @regra("dissonancia_resolucao", "Dissonância sai por grau",
        "Uma nota dissonante deve seguir por grau conjunto. A partir da 3ª espécie "
-       "a nota cambiata (desce por grau, salta uma 3ª para baixo e sobe por grau) é aceita.")
+       "a nota cambiata (desce por grau, salta uma 3ª para baixo e sobe por grau) e a bordadura "
+       "dupla (dó–ré–si–dó) são aceitas.")
 def dissonancia_resolucao(ex, ctx):
     for d in a.dissonancias(ex):
         if d.tipo != "ataque":
@@ -173,7 +192,7 @@ def dissonancia_resolucao(ex, ctx):
         prox = ex.vozes[d.voz].seguinte(d.nota)
         if prox is not None and a.eh_grau(d.nota, prox):
             continue
-        if ctx.nivel >= 3 and _cambiata(ex, d.voz, d.nota):
+        if ctx.nivel >= 3 and (_cambiata(ex, d.voz, d.nota) or _bordadura_dupla(ex, d.voz, d.nota)):
             continue
         como = "e a música termina" if prox is None else f"mas salta para {prox.nome}"
         yield ex.compasso_de(d.t), (f"{_v(ex, d.voz)}: dissonância {d.nota.nome} precisa resolver "

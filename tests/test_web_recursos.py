@@ -104,3 +104,9 @@ def test_editor_ida_e_volta():
       console.log(JSON.stringify([t, E.escrever(E.ler(t)), notas(orig), notas(t)]));""")
     assert r[0] == r[1]  # escrever é estável
     assert r[2] == r[3]  # e não muda nenhuma nota
+
+
+def test_conteudo_do_curso_e_valido():
+    """Partituras, alvos das perguntas 'ache o erro', soluções das práticas e geradores."""
+    r = subprocess.run(["node", str(RAIZ / "tests" / "validar_curso.js")], capture_output=True, text=True, check=True)
+    assert json.loads(r.stdout) == []

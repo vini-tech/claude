@@ -172,3 +172,10 @@ def test_cambiata_da_terceira_especie():
     txt = duas_vozes("D5/1 C5 A4 B4 A4/4", "D4/4 F4")
     assert "dissonancia_resolucao" not in regras_violadas(txt, 3)
     assert "dissonancia_resolucao" in regras_violadas(txt, 2)
+
+
+def test_bordadura_dupla_da_terceira_especie():
+    # sobre A3: C4 D4 B3 C4 | D4 — D4 é 4ª contra A3 (dissonante), sai por salto de 3ª para B3
+    txt = duas_vozes("C4/1 D4 B3 C4 D4/4", "A3/4 B3")
+    assert not {"dissonancia_resolucao", "dissonancia_aproximacao"} & regras_violadas(txt, 3)
+    assert "dissonancia_resolucao" in regras_violadas(txt, 2)

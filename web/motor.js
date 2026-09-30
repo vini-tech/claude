@@ -424,16 +424,30 @@
 
   regra("dissonancia_aproximacao", "Dissonância chega por grau",
     "Uma nota dissonante deve chegar por grau conjunto (ou ser preparada pela mesma nota). Chegar a ela por salto é uma apojatura, que só entra no estilo livre.",
-    function* (ex) {
+    function* (ex, ctx) {
       for (const d of dissonancias(ex)) {
         if (d.tipo !== "ataque") continue;
         const ant = ex.vozes[d.voz].anterior(d.nota);
+        if (ctx.nivel >= 3 && bordaduraDupla(ex, d.voz, d.nota)) continue;
         if (ant === null || !(ehGrau(ant, d.nota) || ant.ps === d.nota.ps)) {
           const como = ant === null ? "sem nota anterior" : `por salto de ${ant.nome}`;
           yield [ex.compassoDe(d.t), `${nv(ex, d.voz)}: dissonância ${d.nota.nome} (${nomeIntervalo(d.iv)}) atingida ${como}`, [d.nota]];
         }
       }
     });
+
+  // a nota é a 2ª ou a 3ª de uma bordadura dupla (dó–ré–si–dó ou dó–si–ré–dó)?
+  function bordaduraDupla(ex, voz, n) {
+    const ns = ex.vozes[voz].notas, i = ns.indexOf(n);
+    for (const ini of [i - 1, i - 2]) {
+      if (ini < 0 || ini + 3 >= ns.length) continue;
+      const [n1, n2, n3, n4] = ns.slice(ini, ini + 4);
+      if (!(n1.fim === n2.inicio && n2.fim === n3.inicio && n3.fim === n4.inicio)) continue;
+      const d2 = direcao(n1, n2);
+      if (n1.ps === n4.ps && ehGrau(n1, n2) && ehGrau(n1, n3) && d2 === -direcao(n1, n3) && d2 !== 0) return true;
+    }
+    return false;
+  }
 
   function cambiata(ex, voz, n) {
     const v = ex.vozes[voz];
@@ -445,13 +459,13 @@
   }
 
   regra("dissonancia_resolucao", "Dissonância sai por grau",
-    "Uma nota dissonante deve seguir por grau conjunto. A partir da 3ª espécie a nota cambiata (desce por grau, salta uma 3ª para baixo e sobe por grau) é aceita.",
+    "Uma nota dissonante deve seguir por grau conjunto. A partir da 3ª espécie a nota cambiata (desce por grau, salta uma 3ª para baixo e sobe por grau) e a bordadura dupla (dó–ré–si–dó) são aceitas.",
     function* (ex, ctx) {
       for (const d of dissonancias(ex)) {
         if (d.tipo !== "ataque") continue;
         const prox = ex.vozes[d.voz].seguinte(d.nota);
         if (prox !== null && ehGrau(d.nota, prox)) continue;
-        if (ctx.nivel >= 3 && cambiata(ex, d.voz, d.nota)) continue;
+        if (ctx.nivel >= 3 && (cambiata(ex, d.voz, d.nota) || bordaduraDupla(ex, d.voz, d.nota))) continue;
         const como = prox === null ? "e a música termina" : `mas salta para ${prox.nome}`;
         yield [ex.compassoDe(d.t), `${nv(ex, d.voz)}: dissonância ${d.nota.nome} precisa resolver por grau, ${como}`, [d.nota]];
       }
@@ -963,11 +977,12 @@
   /* Separa o que já pode ser mostrado: um achado só aparece quando todas as vozes
    * completaram o compasso dele. `fins` é até onde cada voz foi escrita (em ticks,
    * contando pausas); sem ele, usa o fim da última nota. */
-  function concluidos(ex, resultado, fins) {
+  function concluidos(ex, resultado, fins, opcoes = {}) {
     fins = fins || ex.vozes.map((v) => (v.notas.length ? v.notas[v.notas.length - 1].fim : 0));
-    const alvo = ex.cantusFirmus !== null && fins[ex.cantusFirmus] > 0 ? fins[ex.cantusFirmus] : Math.max(0, ...fins);
-    const completo = alvo > 0 && fins.every((f) => f >= alvo);
-    const compassosCompletos = completo ? ex.compassoDe(alvo - 1) : Math.floor(Math.min(...fins) / ex.duracaoCompasso);
+    // alvo: tamanho do exercício (padrão: o do cantus firmus). terminado: o aluno disse que acabou.
+    const alvo = opcoes.alvo || (ex.cantusFirmus !== null && fins[ex.cantusFirmus] > 0 ? fins[ex.cantusFirmus] : Math.max(0, ...fins));
+    const completo = opcoes.terminado ? alvo > 0 : alvo > 0 && fins.every((f) => f >= alvo) && !opcoes.semFimAutomatico;
+    const compassosCompletos = completo ? ex.compassoDe(Math.max(alvo, ...fins) - 1) : Math.floor(Math.min(...fins) / ex.duracaoCompasso);
     const ultimas = new Set();
     ex.vozes.forEach((v, i) => { if (fins[i] < alvo && v.notas.length) ultimas.add(v.notas[v.notas.length - 1]); });
     const visiveis = resultado.achados.filter((a) => completo || (
@@ -983,7 +998,7 @@
   /* Verifica com um perfil próprio em vez da tabela de níveis: { regra: "erro"|"aviso"|"info" }.
    * contexto.nivel decide detalhes de estilo (ex.: a cambiata vale a partir do 3). */
   function verificarPerfil(ex, perfil, contexto = {}) {
-    const ctx = { nivel: contexto.nivel || 1, soExternas: !!contexto.soExternas };
+    const ctx = { ...contexto, nivel: contexto.nivel || 1, soExternas: !!contexto.soExternas };
     const achados = [], naoVerificadas = [];
     for (const [id, sev] of Object.entries(perfil)) {
       const r = REGRAS[id];
@@ -1003,7 +1018,18 @@
     return p;
   }
 
+  // para módulos que acrescentam regras (web/regras2.js)
+  function definirRegra(id, titulo, explicacao, verificarFn, { precisaTom = false, porque = "", corrigir = "" } = {}) {
+    regra(id, titulo, explicacao, verificarFn, precisaTom);
+    Object.assign(REGRAS[id], { porque, corrigir });
+  }
+  const ferramentas = {
+    momentos, sucessoes, dissonancias, harmonico, intervalo, intervaloAlturas, ehConsonante, classePerfeita,
+    nomeIntervalo, ehGrau, ehSalto, direcao, sensivel, tonica, transpor, parExterno, paresDeVozes,
+  };
+
   return {
+    definirRegra, ferramentas, PRECISA_FIM, OLHA_ADIANTE,
     T, lerTexto, verificar, verificarPerfil, perfilDoNivel, concluidos, REGRAS, TABELA, NIVEIS, severidade, regrasAtivas,
     ErroDeLeitura, MODOS_PT, lerAltura, interpretarTom, altura, transpor, intervaloAlturas,
     ehConsonante, classePerfeita, criarVoz, criarExercicio, nota,
