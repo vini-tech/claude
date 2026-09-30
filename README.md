@@ -13,30 +13,32 @@ nível  8  estilo clássico ao piano    █████░░░░░░░
 nível 10  escrita livre               █░░░░░░░░░░░  quase tudo é info
 ```
 
-## Versão 2: o curso (níveis 1–3, com aulas)
+## Versão 3: o ateliê de composição (níveis 1–3)
 
-`web/curso.html` é um curso no estilo Duolingo, montado a partir da pesquisa em
-[`pesquisa/`](pesquisa/) (contraponto, harmonia, melodia e design de aulas; o plano está em
-[`pesquisa/05-plano-da-versao-2.md`](pesquisa/05-plano-da-versao-2.md)).
+`web/curso.html` ensina **ofício de composição**, não teoria, a quem já sabe a teoria. O desenho
+vem de [`pesquisa/06`](pesquisa/06-ensinar-composicao-a-avancados.md) (como ensinar quem já sabe) e
+[`pesquisa/07`](pesquisa/07-oficio-de-composicao.md) (o conteúdo). A versão 2, com perguntas
+fechadas, foi retirada.
 
-- **Três níveis** que misturam contraponto, melodia e harmonia: *A linha e o intervalo*,
-  *Passagem e frase* e *Movimento e harmonia*. São 27 lições e 9 práticas de composição.
-- **Lições de 3 a 5 minutos:** um conceito curto com partitura e som, depois perguntas de vários
-  tipos (escolha, verdadeiro ou falso, tocar a nota no piano, achar o erro na partitura, ouvir e
-  escolher). Toda resposta mostra o porquê; a pergunta errada volta no fim da lição.
-- **Revisão espaçada:** cada assunto volta em 1, 3, 7, 16 e 35 dias, sempre com uma pergunta nova.
-- **Práticas:** compor um cantus firmus, 1ª a 3ª espécie, motivo em sequência, completar um
-  período, escrever o baixo de uma melodia e um período sobre um baixo dado. A correção é feita
-  compasso a compasso, e cada erro tem um botão para rever a lição que ensina a regra.
-- O progresso fica no navegador; dá para copiar um código e levá-lo para outro aparelho.
+- **Nível 1 · A linha a duas vozes:** arquitetura da linha, elaborar um esqueleto (2ª espécie), linha contínua (3ª espécie).
+- **Nível 2 · Das vozes à harmonia:** o baixo gera a harmonia (inversões e cifras), ritmo harmônico, esquemas galantes.
+- **Nível 3 · A frase e o tema:** esqueleto e superfície da melodia, sentença, período.
+
+Cada tema tem: um **esboço** antes da aula (sem correção); uma aula curta e técnica; um **exemplo
+em camadas** escrito como diário de decisões (decisão, alternativa descartada, checagem) com uma
+pausa para você responder; um **contraste** entre duas versões corretas; e **exercícios** em ordem
+(completar → menos apoio → restrição → livre → variante). Cada exercício tem um plano antes, correção
+compasso a compasso, relatório de estilo e reflexão; só depois da reflexão aparece a versão do
+professor (nos cantus sorteados ela é composta na hora pelo buscador).
 
 | arquivo | o que tem |
 |---------|-----------|
-| `web/licoes.js` | todo o conteúdo: lições, perguntas e práticas |
-| `web/geradores.js` | perguntas criadas na hora (intervalos, consonância, acordes...) |
-| `web/regras2.js` | regras novas: cantus firmus, melodia tonal, período, baixo |
-| `web/oficina.js` | o editor com piano usado nas práticas |
-| `tests/validar_curso.js` | confere cada partitura, cada pergunta "ache o erro" e cada solução |
+| `web/temas.js` | todo o conteúdo: aulas, exemplos, contrastes e exercícios com soluções |
+| `web/regras3.js` | cifras (I6, V43, ii6, I64…) e restrições dos exercícios |
+| `web/buscador.js` | acha soluções de 1ª a 3ª espécie com o próprio verificador |
+| `web/estilo.js` | o relatório de estilo (descritivo, não corrige) |
+| `web/oficina.js` | o editor com piano usado nos exercícios |
+| `tests/validar_temas.js` | confere cada exemplo, contraste e solução no verificador |
 
 ## Versão web (celular)
 

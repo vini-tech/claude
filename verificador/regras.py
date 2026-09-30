@@ -101,6 +101,8 @@ def ritmo_da_especie(ex, ctx):
                               f"e se liga ao seguinte ({n.nome})")
                 continue
             dur = compasso / especie
+            if especie == 2 and k == len(notas) - 2 and pos == 0 and n.duracao == compasso:
+                continue  # licença cadencial: penúltimo compasso em semibreve
             primeira_com_pausa = k == 0 and especie > 1 and pos == dur
             if n.duracao != dur or (pos % dur != 0) or (pos != 0 and k == 0 and not primeira_com_pausa):
                 yield c, (f"{_v(ex, i)}: esperava {especie} nota(s) por compasso, "

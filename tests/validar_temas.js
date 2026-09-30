@@ -1,0 +1,131 @@
+// Valida o conteúdo do ateliê (web/temas.js). Imprime JSON com a lista de problemas.
+const M = require("../web/motor.js");
+require("../web/regras2.js");
+const R3 = require("../web/regras3.js");
+const G = require("../web/geradores.js");
+const Ed = require("../web/editor.js");
+const Bu = require("../web/buscador.js");
+const { niveis } = require("../web/temas.js").TEMAS;
+
+const problemas = [];
+const erro = (onde, msg) => problemas.push(`${onde}: ${msg}`);
+const ids = new Set();
+const T = M.T;
+
+// regras que são restrições de um exercício, não do estilo: não valem para os exemplos da aula
+const SO_DO_EXERCICIO = ["climax_no_lugar", "perfeitas_no_meio", "esqueleto_preservado", "figuras_obrigatorias", "dissonancias_minimas",
+  "sequencia_do_motivo", "esquema", "ideia_repetida", "baixo_por_grau", "ritmo_harmonico", "semicadencia", "cadencia_final"];
+const CTX_DO_EXERCICIO = ["esqueleto", "climax", "maxPerfeitas", "figuras", "minDissonancias", "motivo", "esquemas", "repete", "maxSaltosBaixo"];
+
+function lerOk(onde, texto) {
+  try { return M.lerTexto(texto); } catch (e) { erro(onde, "partitura inválida: " + e.message); return null; }
+}
+
+function contextoBase(p, modelo) {
+  const ctx = { ...G.contextoDaPratica(p) };
+  const cf = modelo.cab.cf ? modelo.vozes.findIndex((v) => v.nome === modelo.cab.cf) : -1;
+  if (ctx.alvo === undefined) ctx.alvo = modelo.vozes.findIndex((_, i) => i !== cf);
+  if (cf >= 0) ctx.cf = cf;
+  return ctx;
+}
+
+function comCifras(ctx, ex, cifras) {
+  if (!cifras) return ctx;
+  const c = { ...ctx, cifras };
+  if (ex.tonalidade) c.harmonia = R3.harmoniaDasCifras(ex, c);
+  return c;
+}
+
+const resumo = (r) => r.achados.filter((a) => a.severidade === "erro").map((a) => `${a.regra} c.${a.compasso} ${a.mensagem}`).join(" | ");
+
+// cifras de um exemplo ([[tempo em semínimas, símbolo]]) → uma por nota do baixo
+function cifrasPorNota(onde, ex, pares) {
+  const baixo = ex.vozes[ex.vozes.length - 1];
+  const mapa = new Map(pares.map(([t, s]) => [Math.round(t * T), s]));
+  for (const t of mapa.keys()) if (!baixo.notas.some((n) => n.inicio === t)) erro(onde, `cifra no tempo ${t / T} sem nota do baixo`);
+  return baixo.notas.map((n) => mapa.get(n.inicio) || "");
+}
+
+function validarPartitura(onde, obj, perfilEx, ctxEx) {
+  const ex = lerOk(onde, obj.partitura);
+  if (!ex) return;
+  for (const [v, i] of obj.anotacoes || []) if (!ex.vozes[v] || !ex.vozes[v].notas[i]) erro(onde, `anotação fora do lugar [${v},${i}]`);
+  if (obj.rotulos && obj.rotulos.length !== ex.vozes.length) erro(onde, "rótulos não batem com as vozes");
+  // camadas parciais (com pausas ou uma voz só sem cifras) não são verificadas
+  const parcial = /(^|\s)P\//.test(obj.partitura) || ex.vozes.length < 2;
+  if (parcial || obj.semVerificar) return;
+  const modelo = Ed.ler(obj.partitura);
+  // camada de esqueleto: vale o perfil da espécie indicada
+  if (obj.especie) { perfilEx = { ...M.perfilDoNivel(obj.especie), climax_coincidente: "aviso" }; ctxEx = { ...ctxEx, nivel: obj.especie }; }
+  let ctx = contextoBase({ nivel: ctxEx.nivel, contexto: ctxEx }, modelo);
+  if (obj.cifras) ctx = comCifras(ctx, ex, cifrasPorNota(onde, ex, obj.cifras));
+  else if (!modelo.cab.cf) return;  // sem cantus firmus nem cifras, não há o que verificar
+  const perfil = { ...perfilEx };
+  if (!obj.cifras) for (const k of ["cifras_coerentes", "retrogressao_cifrada", "seis_quatro", "notas_do_acorde"]) delete perfil[k];
+  const r = M.verificarPerfil(ex, perfil, ctx);
+  const e = resumo(r);
+  if (e) erro(onde, "erros: " + e);
+}
+
+function validarExercicio(onde, p) {
+  if (ids.has(p.id)) erro(onde, "id repetido");
+  ids.add(p.id);
+  const perfil = G.perfilDaPratica(p);
+  for (const id of Object.keys(perfil)) if (!M.REGRAS[id]) erro(onde, "regra desconhecida no perfil " + id);
+  if (!p.perfilVariante && !Object.keys(perfil).length) erro(onde, "perfil vazio");
+  const ini = lerOk(onde + " (início)", p.texto);
+  try { Ed.ler(p.texto); } catch (e) { erro(onde, "editor não lê o início: " + e.message); }
+  if (!p.instrucoes) erro(onde, "sem instruções");
+  if (p.cifrasIniciais && !p.cifrasAluno) erro(onde, "cifrasIniciais sem cifrasAluno");
+  if (p.cifrasAluno && !p.solucaoCifras && p.solucao) erro(onde, "solução sem cifras");
+  // cantus sorteado: a versão do professor é procurada na hora; tem de existir para o cantus inicial
+  if (p.sortear) {
+    const sol = Bu.solucao({ texto: p.texto, especie: p.duracao >= 4 ? 1 : p.duracao >= 2 ? 2 : 3, perfil, ctx: G.contextoDaPratica(p) });
+    if (!sol) erro(onde, "o buscador não acha solução para o cantus inicial");
+    else if (!p.solucao) p = { ...p, solucao: sol };
+  }
+  if (!p.solucao) return;
+  const ex = lerOk(onde + " (solução)", p.solucao);
+  if (!ex) return;
+  const modelo = Ed.ler(p.solucao);
+  const ctx = comCifras(contextoBase(p, modelo), ex, p.solucaoCifras ? p.solucaoCifras.split(/\s+/) : p.cifras);
+  const r = M.verificarPerfil(ex, perfil, ctx);
+  const fins = modelo.vozes.map((v) => Ed.inicios(v).fim);
+  const alvo = p.alvoCompassos ? p.alvoCompassos * ex.duracaoCompasso : undefined;
+  const vis = M.concluidos(ex, r, fins, { alvo, terminado: !!p.fimLivre });
+  if (!vis.completo) erro(onde, "a solução não fica completa");
+  const e = resumo(r);
+  if (e) erro(onde, "a solução tem erros: " + e);
+  // o início não pode estar aprovado antes do aluno escrever
+  if (ini && !p.fimLivre && ini.vozes.every((v) => v.notas.length)) {
+    const mi = Ed.ler(p.texto);
+    const fi = mi.vozes.map((v) => Ed.inicios(v).fim);
+    const ci = comCifras(contextoBase(p, mi), ini, p.cifrasIniciais ? p.cifrasIniciais.split(/\s+/) : p.cifras);
+    if (M.concluidos(ini, M.verificarPerfil(ini, perfil, ci), fi, { alvo }).completo) erro(onde, "o exercício já começa completo");
+  }
+}
+
+for (const n of niveis) {
+  for (const t of n.temas) {
+    const onde = `${n.numero}/${t.id}`;
+    for (const campo of ["titulo", "objetivo", "esboco"]) if (!t[campo]) erro(onde, "sem " + campo);
+    if (!t.exercicios || t.exercicios.length < 2) erro(onde, "poucos exercícios");
+    const ref = t.exercicios.find((p) => p.solucao) || t.exercicios[0];
+    const perfilEx = { ...G.perfilDaPratica(ref) };
+    for (const k of SO_DO_EXERCICIO) delete perfilEx[k];
+    const ctxEx = { ...G.contextoDaPratica(ref) };
+    for (const k of CTX_DO_EXERCICIO) delete ctxEx[k];
+    (t.secoes || []).forEach((s, k) => {
+      const os = `${onde}#${k + 1}`;
+      if (s.tipo === "exemplo") s.camadas.forEach((c, j) => { if (c.partitura) validarPartitura(`${os}.${j + 1}`, c, perfilEx, ctxEx); });
+      if (s.tipo === "contraste") {
+        validarPartitura(os + "a", s.a, perfilEx, ctxEx);
+        validarPartitura(os + "b", s.b, perfilEx, ctxEx);
+        if (!s.pergunta || !s.comentario) erro(os, "contraste sem pergunta ou comentário");
+      }
+    });
+    t.exercicios.forEach((p) => validarExercicio(`${onde}/${p.id}`, p));
+  }
+}
+
+console.log(JSON.stringify(problemas, null, 1));

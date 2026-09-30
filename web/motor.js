@@ -394,6 +394,7 @@
             continue;
           }
           const dur = C / especie;
+          if (especie === 2 && k === notas.length - 2 && pos === 0 && n.duracao === C) continue; // licença cadencial
           const primeiraComPausa = k === 0 && especie > 1 && pos === dur;
           if (n.duracao !== dur || pos % dur !== 0 || (pos !== 0 && k === 0 && !primeiraComPausa)) {
             yield [c, `${nv(ex, i)}: esperava ${especie} nota(s) por compasso, mas ${n.nome} dura ${q(n.duracao)} semínima(s)`, [n]];

@@ -1,10 +1,10 @@
-<title>Da Regra à Liberdade · Curso</title>
+<title>Ateliê de Composição</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500&family=Source+Sans+3:wght@400;600;700&family=Noto+Music&display=swap">
 <style>
-/* Layout: trilha vertical de nós (lições e práticas) agrupados por nível e unidade, como um caminho;
-   lição e prática abrem em tela cheia por cima da trilha. Papel pautado frio, tinta azul-da-prússia. */
+/* Layout: página de leitura (temas com aula e exemplos comentados); o exercício abre em tela cheia
+   com a oficina (partitura + piano). Papel pautado frio, tinta azul-da-prússia. */
 :root {
   --papel: #eef1f4; --folha: #ffffff; --tinta: #17202a; --apagado: #5a6573; --pauta: #b9c2cc; --linha: #d6dce3;
   --acento: #1d4f91; --acento-suave: #dfe8f5; --sobre-acento: #ffffff;
@@ -43,69 +43,15 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 500; margin: 0; text-wra
 .botao.primario { background: var(--acento); border-color: var(--acento); color: var(--sobre-acento); }
 .botao.grande { width: 100%; padding: 13px 16px; font-size: 1.05rem; border-radius: 12px; }
 .botao:disabled { opacity: 0.45; }
-
-/* ---------------------------------------------------------------- trilha */
-.trilha { max-width: 640px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 60px; display: grid; gap: 18px; }
-.topo { display: grid; gap: 10px; }
-.topo h1 { font-size: clamp(1.7rem, 7vw, 2.3rem); line-height: 1.05; }
-.topo h1 em { font-style: italic; color: var(--acento); }
-.placar { display: flex; gap: 8px; flex-wrap: wrap; }
-.dado { background: var(--folha); border: 1px solid var(--linha); border-radius: 999px; padding: 4px 12px; font-size: 0.85rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-.dado span { color: var(--apagado); font-weight: 600; }
-.continuar { display: grid; gap: 4px; background: var(--acento); color: var(--sobre-acento); border: 0; border-radius: var(--raio); padding: 14px 16px; text-align: left; }
-.continuar .rotulo { color: inherit; opacity: 0.8; }
-.continuar b { font-size: 1.1rem; }
-.revisao { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-.revisao p { margin: 2px 0 0; color: var(--apagado); font-size: 0.9rem; }
-.nivel-cab { display: grid; gap: 4px; margin-top: 8px; }
-.nivel-cab h2 { font-size: 1.45rem; }
-.nivel-cab p { margin: 0; color: var(--apagado); font-size: 0.93rem; }
-.barra-prog { height: 6px; background: var(--linha); border-radius: 3px; overflow: hidden; margin-top: 4px; }
-.barra-prog i { display: block; height: 100%; background: var(--ok); }
-.unidade { display: grid; gap: 10px; }
-.unidade h3 { font-size: 1.05rem; font-family: var(--f-texto); font-weight: 700; }
-.caminho { position: relative; display: grid; gap: 8px; padding-left: 8px; }
-.caminho::before { content: ""; position: absolute; left: 35px; top: 18px; bottom: 18px; width: 3px; background: var(--linha); border-radius: 2px; }
-.no { position: relative; display: flex; align-items: center; gap: 12px; border: 0; background: none; padding: 4px 0; text-align: left; }
-.no .bola { flex: 0 0 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--folha); border: 3px solid var(--linha); font-weight: 700; font-size: 1.1rem; color: var(--apagado); z-index: 1; }
-.no.pratica .bola { border-radius: 14px; font-family: var(--f-musica); font-size: 1.5rem; font-weight: 400; }
-.no.feito .bola { background: var(--ok); border-color: var(--ok); color: var(--sobre-acento); }
-.no.atual .bola { background: var(--acento); border-color: var(--acento); color: var(--sobre-acento); box-shadow: 0 0 0 5px var(--acento-suave); }
-.no.bloqueado .bola { opacity: 0.55; }
-.no .txt { display: grid; min-width: 0; }
-.no .txt b { font-size: 1rem; }
-.no .txt small { color: var(--apagado); font-size: 0.82rem; }
-.no.bloqueado .txt { opacity: 0.6; }
-.rodape { color: var(--apagado); font-size: 0.85rem; display: grid; gap: 8px; }
-.rodape a { color: var(--acento); }
-details.config summary { cursor: pointer; font-weight: 700; }
-details.config textarea { width: 100%; min-height: 80px; border: 1px solid var(--linha); border-radius: 8px; background: var(--papel); padding: 8px; font-size: 0.8rem; }
 .linha-botoes { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-
 /* ---------------------------------------------------------------- telas cheias */
 .tela { position: fixed; inset: 0; z-index: 10; background: var(--papel); overflow-y: auto; }
 .tela-cab { position: sticky; top: 0; z-index: 2; background: var(--papel); display: flex; align-items: center; gap: 12px; padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px; max-width: 640px; margin: 0 auto; }
 .fechar-tela { border: 0; background: none; font-size: 1.5rem; line-height: 1; color: var(--apagado); padding: 4px 6px; }
-.prog-licao { flex: 1; height: 12px; background: var(--linha); border-radius: 6px; overflow: hidden; }
-.prog-licao i { display: block; height: 100%; background: var(--ok); border-radius: 6px; transition: width 0.3s; }
-.tela-corpo { max-width: 640px; margin: 0 auto; padding-inline: 16px; padding-block: 8px calc(170px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 14px; }
-.cartao-licao { display: grid; gap: 12px; }
-.cartao-licao h2 { font-size: 1.5rem; }
-.cartao-licao .texto { font-size: 1.08rem; line-height: 1.55; margin: 0; }
-.pergunta { font-size: 1.2rem; font-weight: 700; margin: 0; line-height: 1.35; }
 .mini-partitura { background: var(--folha); border: 1px solid var(--linha); border-radius: var(--raio); padding: 10px 8px 4px; overflow-x: auto; }
 .mini-partitura svg { display: block; margin: 0 auto; touch-action: manipulation; }
 .ouvir { justify-self: start; border: 1px solid var(--acento); color: var(--acento); background: var(--folha); border-radius: 999px; padding: 7px 16px; font-weight: 700; }
 .ouvir.grande { justify-self: stretch; padding: 18px; font-size: 1.15rem; border-radius: var(--raio); }
-.opcoes { display: grid; gap: 8px; }
-.opcao { text-align: left; border: 2px solid var(--linha); background: var(--folha); border-radius: 12px; padding: 12px 14px; font-size: 1.02rem; font-weight: 600; }
-.opcao[aria-pressed="true"] { border-color: var(--acento); background: var(--acento-suave); }
-.opcao.certa { border-color: var(--ok); background: var(--ok-fundo); }
-.opcao.errada { border-color: var(--erro); background: var(--erro-fundo); }
-.vf { grid-template-columns: 1fr 1fr; }
-.vf .opcao { text-align: center; }
-.tocado { font-size: 0.95rem; color: var(--apagado); min-height: 1.5em; }
-.tocado b { color: var(--tinta); font-size: 1.1rem; }
 .piano-rolo { overflow-x: auto; overscroll-behavior-x: contain; border-radius: 8px; }
 .piano { position: relative; height: 120px; }
 .tecla { position: absolute; top: 0; border: 1px solid var(--tecla-borda); padding: 0; touch-action: manipulation; }
@@ -116,18 +62,78 @@ details.config textarea { width: 100%; min-height: 80px; border: 1px solid var(-
 .tecla.ativa.branca { background: var(--acento-suave); box-shadow: inset 0 -5px 0 var(--acento); }
 .tecla.ativa.preta { background: var(--acento); border-color: var(--acento); }
 
-.rodape-licao { position: fixed; left: 0; right: 0; bottom: 0; z-index: 11; background: var(--folha); border-top: 1px solid var(--linha); padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); }
-.rodape-licao .dentro { max-width: 640px; margin: 0 auto; display: grid; gap: 10px; }
-.rodape-licao.certo { background: var(--ok-fundo); border-color: var(--ok); }
-.rodape-licao.errado { background: var(--erro-fundo); border-color: var(--erro); }
-.retorno b { font-size: 1.15rem; display: block; }
-.rodape-licao.certo .retorno b { color: var(--ok); }
-.rodape-licao.errado .retorno b { color: var(--erro); }
-.retorno p { margin: 4px 0 0; font-size: 0.97rem; }
-.fim-licao { text-align: center; display: grid; gap: 12px; justify-items: center; padding-top: 30px; }
-.fim-licao .grande-num { font-family: var(--f-titulo); font-size: 3.4rem; line-height: 1; color: var(--ok); }
-.fim-licao ul { text-align: left; margin: 0; padding-left: 18px; color: var(--apagado); }
 
+/* ---------------------------------------------------------------- página de leitura */
+.pagina { max-width: 720px; margin: 0 auto; padding-inline: 16px; padding-block: calc(20px + env(safe-area-inset-top, 0px)) 80px; display: grid; gap: 26px; }
+.lead { color: var(--apagado); font-size: 1.05rem; margin: 0; line-height: 1.5; }
+.topo { display: grid; gap: 10px; }
+.topo h1 { font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1.05; }
+.topo h1 em { font-style: italic; color: var(--acento); }
+.nivel { display: grid; gap: 10px; }
+.nivel h2 { font-size: 1.55rem; }
+.lista-temas { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.tema-link { display: grid; gap: 3px; padding: 14px 16px; background: var(--folha); border: 1px solid var(--linha); border-radius: var(--raio); color: inherit; text-decoration: none; }
+.tema-link:hover { border-color: var(--acento); }
+.tema-link .t { font-weight: 700; font-size: 1.08rem; }
+.tema-link .d { color: var(--apagado); font-size: 0.93rem; }
+.tema-link .p { font-size: 0.78rem; font-weight: 700; color: var(--acento); font-variant-numeric: tabular-nums; }
+.migalha { font-size: 0.85rem; color: var(--apagado); }
+.migalha a, .rodape a { color: var(--acento); }
+.cab-tema { display: grid; gap: 10px; }
+.cab-tema h1 { font-size: clamp(1.8rem, 6.5vw, 2.5rem); line-height: 1.08; }
+.ouvir-lista ul { margin: 4px 0 0; padding-left: 18px; color: var(--apagado); font-size: 0.93rem; display: grid; gap: 2px; }
+.bloco { display: grid; gap: 12px; padding-top: 22px; border-top: 1px solid var(--linha); min-width: 0; }
+.bloco h2 { font-size: 1.45rem; line-height: 1.15; }
+.bloco h3 { font-family: var(--f-texto); font-weight: 700; font-size: 1rem; margin-top: 4px; }
+.bloco p { margin: 0; line-height: 1.6; }
+.bloco ol, .bloco ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; line-height: 1.55; }
+.bloco.esboco { background: var(--acento-suave); border: 0; border-radius: var(--raio); padding: 16px; }
+.camada { display: grid; gap: 10px; padding-left: 14px; border-left: 3px solid var(--linha); min-width: 0; }
+.camada-cab { display: flex; gap: 10px; align-items: center; }
+.camada-cab .num { flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--acento); color: var(--sobre-acento); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
+.nota-decisao { padding: 9px 12px; border-radius: 8px; background: var(--folha); border: 1px solid var(--linha); font-size: 0.98rem; }
+.nota-decisao .tag { display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 8px; padding: 1px 8px; border-radius: 999px; vertical-align: 1px; }
+.nota-decisao.decisao .tag { background: var(--acento-suave); color: var(--acento); }
+.nota-decisao.rejeitada .tag { background: var(--erro-fundo); color: var(--erro); }
+.nota-decisao.checagem .tag { background: var(--ok-fundo); color: var(--ok); }
+.pausa { background: var(--aviso-fundo); border-radius: var(--raio); padding: 12px 14px; display: grid; gap: 10px; }
+.revelar { justify-self: start; }
+.comentario { background: var(--folha); border-left: 3px solid var(--acento); padding: 10px 12px; border-radius: 0 8px 8px 0; display: grid; gap: 8px; }
+.par { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+figure.exemplo { margin: 0; display: grid; gap: 6px; min-width: 0; }
+figure.exemplo figcaption { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 0.92rem; }
+.campo { display: grid; gap: 4px; }
+.rotulo-campo { font-size: 0.85rem; font-weight: 700; color: var(--apagado); }
+.rotulo-campo + textarea, .campo textarea { width: 100%; min-height: 72px; border: 1px solid var(--linha); border-radius: 8px; background: var(--folha); padding: 8px 10px; resize: vertical; line-height: 1.45; }
+.bloco.esboco .campo textarea { background: var(--folha); }
+.plano { margin-top: 12px; border: 1px solid var(--linha); border-radius: var(--raio); padding: 10px 12px; background: var(--papel); }
+.plano[open] { display: grid; gap: 10px; }
+.plano summary { font-weight: 700; cursor: pointer; }
+.lista-ex { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.ex-link { width: 100%; display: flex; gap: 12px; align-items: center; text-align: left; background: var(--folha); border: 1px solid var(--linha); border-radius: var(--raio); padding: 12px 14px; }
+.ex-link:hover { border-color: var(--acento); }
+.ex-link .n { flex: 0 0 32px; height: 32px; border-radius: 50%; border: 2px solid var(--linha); display: grid; place-items: center; font-weight: 700; }
+.ex-link.feito .n { background: var(--ok); border-color: var(--ok); color: var(--sobre-acento); }
+.ex-link .t { display: grid; }
+.ex-link small { color: var(--apagado); }
+.rodape-tema { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--linha); }
+.rodape-tema a { color: var(--acento); font-weight: 700; text-decoration: none; }
+.rodape { color: var(--apagado); font-size: 0.88rem; display: grid; gap: 10px; }
+.rodape summary { cursor: pointer; font-weight: 700; color: var(--tinta); }
+.rodape textarea { width: 100%; min-height: 80px; border: 1px solid var(--linha); border-radius: 8px; background: var(--papel); padding: 8px; font-size: 0.8rem; }
+.depois { display: grid; gap: 10px; }
+.lead-p { margin: 0; color: var(--apagado); font-size: 0.93rem; }
+.relatorio { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.relatorio li { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 8px 10px; border-radius: 8px; background: var(--papel); }
+.relatorio li.atencao { background: var(--aviso-fundo); }
+.relatorio .v { font-weight: 700; font-variant-numeric: tabular-nums; }
+.relatorio small { grid-column: 1 / -1; color: var(--apagado); }
+.of-cifras-rot { display: grid; gap: 4px; font-size: 0.85rem; font-weight: 700; color: var(--apagado); }
+.of-cifras { width: 100%; padding: 8px 10px; border: 1px solid var(--linha); border-radius: 8px; background: var(--folha); font-size: 1rem; font-weight: 400; }
+.tela .tela-cab { max-width: 1000px; }
+
+
+/* ---------------------------------------------------------------- partitura e oficina (compartilhado com oficina.js) */
 /* ---------------------------------------------------------------- partitura e oficina (compartilhado com oficina.js) */
 .pauta-linha { stroke: var(--pauta); stroke-width: 1; }
 .barra { stroke: var(--apagado); stroke-width: 1; }
@@ -221,19 +227,10 @@ details.config textarea { width: 100%; min-height: 80px; border: 1px solid var(-
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 
-<main class="trilha" id="trilha"></main>
+<main class="pagina" id="pagina"></main>
 
-<div class="tela" id="tela-licao" hidden>
-  <div class="tela-cab"><button class="fechar-tela" id="fechar-licao" aria-label="Sair da lição">✕</button><div class="prog-licao"><i id="prog-licao"></i></div></div>
-  <div class="tela-corpo" id="corpo-licao"></div>
-  <div class="rodape-licao" id="rodape-licao"><div class="dentro">
-    <div class="retorno" id="retorno" hidden></div>
-    <button class="botao primario grande" id="acao-licao">Continuar</button>
-  </div></div>
-</div>
-
-<div class="tela" id="tela-pratica" hidden>
-  <div class="tela-cab"><button class="fechar-tela" id="fechar-pratica" aria-label="Sair da prática">✕</button><b id="titulo-pratica"></b></div>
+<div class="tela" id="tela-ex" hidden>
+  <div class="tela-cab"><button class="fechar-tela" id="fechar-ex" aria-label="Voltar ao tema">✕</button><b id="titulo-ex"></b></div>
   <div class="oficina" id="oficina"></div>
 </div>
 
@@ -244,492 +241,275 @@ details.config textarea { width: 100%; min-height: 80px; border: 1px solid var(-
 <script src="cantus.js"></script>
 <script src="editor.js"></script>
 <script src="regras2.js"></script>
+<script src="regras3.js"></script>
+<script src="buscador.js"></script>
 <script src="partitura.js"></script>
 <script src="som.js"></script>
 <script src="geradores.js"></script>
+<script src="estilo.js"></script>
 <script src="oficina.js"></script>
-<script src="licoes.js"></script>
+<script src="temas.js"></script>
 <script>
 "use strict";
-const M = window.Motor, P = window.Partitura, Som = window.Som, G = window.Geradores, Of = window.Oficina, Cn = window.Cantus, T = M.T;
-const { niveis, regraParaLicao, conceitos } = window.CURSO;
+const M = window.Motor, P = window.Partitura, Som = window.Som, G = window.Geradores, Of = window.Oficina, Cn = window.Cantus, Est = window.Estilo, Bu = window.Buscador, T = M.T;
+const { niveis } = window.TEMAS;
 const $ = (id) => document.getElementById(id);
 const esc = Of.esc, bonito = Of.bonito;
+const bonitoTexto = (s) => String(s).replace(/\b([A-G])(#|b)(\d)\b/g, (m, l, a, o) => l + (a === "#" ? "♯" : "♭") + o);
 
-// ---------------------------------------------------------------- progresso (localStorage)
-const CHAVE = "drl-curso:v1";
-const CAIXAS = [0, 1, 3, 7, 16, 35]; // dias até a próxima revisão
-const hoje = () => new Date().toISOString().slice(0, 10);
-const somarDias = (d, n) => { const x = new Date(d + "T12:00:00"); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10); };
-const novoEstado = () => ({ v: 1, licoes: {}, praticas: {}, revisao: {}, xp: 0, dias: { ultimo: null, seguidos: 0 } });
-let est = novoEstado();
-try { const s = JSON.parse(localStorage.getItem(CHAVE)); if (s && s.v === 1) est = { ...novoEstado(), ...s }; } catch (e) {}
-function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify(est)); } catch (e) {} }
+// ---------------------------------------------------------------- progresso e anotações (localStorage)
+const CHAVE = "drl-atelie:v1";
+const novo = () => ({ v: 1, notas: {}, exercicios: {} });
+let est = novo();
+try { const s = JSON.parse(localStorage.getItem(CHAVE)); if (s && s.v === 1) est = { ...novo(), ...s }; } catch (e) {}
+const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify(est)); } catch (e) {} };
+const nota = (k) => est.notas[k] || "";
+const guardarNota = (k, v) => { est.notas[k] = v; salvar(); };
 
-function marcarDia() {
-  const h = hoje();
-  if (est.dias.ultimo === h) return;
-  est.dias.seguidos = est.dias.ultimo === somarDias(h, -1) ? est.dias.seguidos + 1 : 1;
-  est.dias.ultimo = h;
-}
-
-function registrarResposta(conceito, certo) {
-  if (!conceito) return;
-  const r = est.revisao[conceito] || { caixa: 0, vence: hoje(), vistos: 0, erros: 0 };
-  r.vistos++;
-  if (certo) r.caixa = Math.min(CAIXAS.length - 1, r.caixa + 1);
-  else { r.caixa = 1; r.erros++; }
-  r.vence = somarDias(hoje(), CAIXAS[r.caixa]);
-  est.revisao[conceito] = r;
-}
-const vencidos = () => Object.entries(est.revisao).filter(([, r]) => r.vence <= hoje()).sort((a, b) => (a[1].vence < b[1].vence ? -1 : 1) || b[1].erros - a[1].erros).map(([c]) => c);
-
-// ---------------------------------------------------------------- ordem da trilha
-const itens = [];
-for (const n of niveis) for (const u of n.unidades) {
-  for (const l of u.licoes) itens.push({ tipo: "licao", id: l.id, dado: l, unidade: u, nivel: n });
-  for (const p of u.praticas || []) itens.push({ tipo: "pratica", id: p.id, dado: p, unidade: u, nivel: n });
-}
-const feito = (it) => (it.tipo === "licao" ? est.licoes[it.id] && est.licoes[it.id].feita : est.praticas[it.id] && est.praticas[it.id].aprovada);
-const indiceAtual = () => { const i = itens.findIndex((it) => !feito(it)); return i < 0 ? itens.length : i; };
-const licaoPorId = (id) => itens.find((it) => it.tipo === "licao" && it.id === id);
-
-// ---------------------------------------------------------------- trilha
-function desenharTrilha() {
-  const atual = indiceAtual();
-  const prox = itens[atual];
-  const nVenc = vencidos().length;
-  let html = `<header class="topo">
-    <div class="rotulo">Curso de composição · níveis 1 a 3</div>
-    <h1>Da regra à <em>liberdade</em></h1>
-    <div class="placar"><span class="dado">${est.dias.seguidos} <span>${est.dias.seguidos === 1 ? "dia seguido" : "dias seguidos"}</span></span>
-      <span class="dado">${est.xp} <span>XP</span></span>
-      <span class="dado">${itens.filter(feito).length}/${itens.length} <span>etapas</span></span></div>
-  </header>`;
-  if (prox) html += `<button class="continuar" data-ir="${atual}"><span class="rotulo">${atual === 0 ? "Começar" : "Continuar"} · nível ${prox.nivel.id.slice(1)}</span><b>${esc(prox.dado.titulo)}</b><span>${prox.tipo === "licao" ? "Lição de 3 a 5 minutos" : "Prática de composição"}</span></button>`;
-  else html += `<div class="cartao"><b>Você terminou os três níveis.</b> Continue com a revisão do dia e refaça as práticas com outros cantus firmi.</div>`;
-  if (Object.keys(est.revisao).length) html += `<div class="cartao revisao"><div><b>Revisão do dia</b><p>${nVenc ? `${nVenc} ${nVenc === 1 ? "assunto pede" : "assuntos pedem"} revisão hoje.` : "Nada vencido hoje. Volte amanhã."}</p></div>
-    <button class="botao ${nVenc ? "primario" : ""}" id="bt-revisao" ${nVenc ? "" : "disabled"}>Revisar</button></div>`;
-  let k = 0;
-  for (const n of niveis) {
-    const doNivel = itens.filter((it) => it.nivel === n);
-    const pct = Math.round((doNivel.filter(feito).length / doNivel.length) * 100);
-    html += `<section class="nivel-cab"><div class="rotulo">Nível ${n.id.slice(1)}</div><h2>${esc(n.titulo)}</h2><p>${esc(n.resumo)}</p>
-      <div class="barra-prog" aria-label="${pct}% concluído"><i style="width:${pct}%"></i></div></section>`;
-    for (const u of n.unidades) {
-      html += `<section class="cartao unidade"><h3>${esc(u.titulo)}</h3><div class="caminho">`;
-      const daUnidade = itens.filter((it) => it.unidade === u);
-      daUnidade.forEach((it) => {
-        const idx = itens.indexOf(it);
-        const estado = feito(it) ? "feito" : idx === atual ? "atual" : idx > atual ? "bloqueado" : "";
-        const num = it.tipo === "licao" ? u.licoes.indexOf(it.dado) + 1 : "✎";
-        const melhor = it.tipo === "licao" && est.licoes[it.id] ? ` · ${Math.round(est.licoes[it.id].melhor * 100)}% de acerto` : "";
-        const sub = it.tipo === "licao" ? `Lição${melhor}` : feito(it) ? "Prática aprovada" : "Prática de composição";
-        html += `<button class="no ${it.tipo} ${estado}" data-ir="${idx}"><span class="bola">${feito(it) && it.tipo === "licao" ? "✓" : num}</span>
-          <span class="txt"><b>${esc(it.dado.titulo)}</b><small>${sub}</small></span></button>`;
-        k++;
-      });
-      html += `</div></section>`;
-    }
-  }
-  html += `<footer class="rodape">
-    <details class="config cartao"><summary>Guardar o progresso</summary>
-      <p>O progresso fica só neste navegador. Para não perder (ou levar para outro aparelho), copie o código abaixo e cole-o lá.</p>
-      <textarea id="codigo" readonly aria-label="Código do progresso"></textarea>
-      <div class="linha-botoes"><button class="botao" id="bt-copiar">Copiar código</button><button class="botao" id="bt-colar">Usar um código</button><button class="botao" id="bt-zerar">Recomeçar do zero</button></div>
-    </details>
-    <p>Quer escrever livremente, nos 10 níveis? Use a <a href="https://claude.ai/artifact/WhPHE6UFcSnxz6QiTVXYjB" target="_blank" rel="noopener">oficina (versão 1)</a>.</p>
-  </footer>`;
-  $("trilha").innerHTML = html;
-  for (const b of document.querySelectorAll("[data-ir]")) b.addEventListener("click", () => abrirItem(+b.dataset.ir));
-  $("bt-revisao")?.addEventListener("click", abrirRevisao);
-  $("codigo").value = btoa(unescape(encodeURIComponent(JSON.stringify(est))));
-  $("bt-copiar").addEventListener("click", () => {
-    const t = $("codigo");
-    navigator.clipboard?.writeText(t.value).then(() => brinde("Código copiado"), () => { t.select(); brinde("Selecione e copie o código"); }) ?? t.select();
-  });
-  $("bt-colar").addEventListener("click", () => {
-    folha(`<p><b>Cole o código do progresso</b></p><textarea id="codigo-novo" style="width:100%;min-height:90px" aria-label="Código"></textarea>
-      <div class="linha-botoes"><button class="botao primario" id="usar">Usar este código</button><button class="botao" id="cancelar">Cancelar</button></div>`);
-    $("usar").addEventListener("click", () => {
-      try { const s = JSON.parse(decodeURIComponent(escape(atob($("codigo-novo").value.trim())))); if (s.v !== 1) throw 0; est = { ...novoEstado(), ...s }; salvar(); fecharFolha(); desenharTrilha(); brinde("Progresso carregado"); }
-      catch (e) { brinde("Esse código não é válido"); }
-    });
-    $("cancelar").addEventListener("click", fecharFolha);
-  });
-  $("bt-zerar").addEventListener("click", () => {
-    folha(`<p><b>Apagar todo o progresso?</b> Lições, práticas, XP e revisões voltam ao começo.</p>
-      <div class="linha-botoes"><button class="botao" id="sim" style="border-color:var(--erro);color:var(--erro)">Apagar</button><button class="botao" id="nao">Cancelar</button></div>`);
-    $("sim").addEventListener("click", () => { est = novoEstado(); salvar(); fecharFolha(); desenharTrilha(); });
-    $("nao").addEventListener("click", fecharFolha);
-  });
-}
+const temasEmOrdem = niveis.flatMap((n) => n.temas.map((t) => ({ ...t, nivel: n })));
+const temaPorId = (id) => temasEmOrdem.find((t) => t.id === id);
+const exFeito = (id) => est.exercicios[id] && est.exercicios[id].aprovado;
 
 function folha(html) { $("folha-dentro").innerHTML = html; $("folha").hidden = false; }
 function fecharFolha() { $("folha").hidden = true; }
 let tBrinde = null;
-function brinde(msg) { const b = $("brinde"); b.textContent = msg; b.hidden = false; clearTimeout(tBrinde); tBrinde = setTimeout(() => (b.hidden = true), 2200); }
+function brinde(msg) { const b = $("brinde"); b.textContent = msg; b.hidden = false; clearTimeout(tBrinde); tBrinde = setTimeout(() => (b.hidden = true), 2400); }
 
-function abrirItem(idx) {
-  const it = itens[idx];
-  const atual = indiceAtual();
-  const abrir = () => (it.tipo === "licao" ? abrirLicao(it.dado, { aoFim: desenharTrilha }) : abrirPratica(it.dado));
-  if (idx <= atual || feito(it)) return abrir();
-  const antes = itens[atual];
-  folha(`<p><b>${esc(it.dado.titulo)}</b> vem depois de <b>${esc(antes.dado.titulo)}</b>. Recomendo seguir a ordem, mas você pode abrir agora.</p>
-    <div class="linha-botoes"><button class="botao primario" id="ir-antes">Ir para ${esc(antes.dado.titulo)}</button><button class="botao" id="ir-mesmo">Abrir mesmo assim</button></div>`);
-  $("ir-antes").addEventListener("click", () => { fecharFolha(); abrirItem(atual); });
-  $("ir-mesmo").addEventListener("click", () => { fecharFolha(); abrir(); });
+// ---------------------------------------------------------------- navegação (#tema-id)
+function rota() {
+  const id = location.hash.replace(/^#/, "");
+  const t = temaPorId(id);
+  if (t) desenharTema(t); else desenharInicio();
+  window.scrollTo(0, 0);
 }
+window.addEventListener("hashchange", rota);
 
-// ---------------------------------------------------------------- lição
-let L = null; // lição em andamento
-
-function expandir(cartoes) {
-  const r = [];
-  for (const c of cartoes) {
-    if (c.tipo === "gerado") for (let i = 0; i < (c.quantos || 1); i++) r.push(G.gerar(c.gerador));
-    else r.push(c);
+// ---------------------------------------------------------------- início
+function desenharInicio() {
+  let h = `<header class="topo">
+    <div class="rotulo">Ateliê de composição · níveis 1 a 3</div>
+    <h1>Da regra à <em>liberdade</em></h1>
+    <p class="lead">Cada tema tem uma aula curta e técnica, com exemplos comentados na ordem em que foram decididos, e depois uma série de exercícios de composição, do completar ao livre.</p>
+  </header>`;
+  for (const n of niveis) {
+    h += `<section class="nivel"><div class="rotulo">Nível ${n.numero}</div><h2>${esc(n.titulo)}</h2><p class="lead">${esc(n.resumo)}</p><ol class="lista-temas">`;
+    for (const t of n.temas) {
+      const feitos = t.exercicios.filter((e) => exFeito(e.id)).length;
+      h += `<li><a class="tema-link" href="#${t.id}"><span class="t">${esc(t.titulo)}</span><span class="d">${esc(t.objetivo)}</span>
+        <span class="p">${feitos}/${t.exercicios.length} exercícios</span></a></li>`;
+    }
+    h += `</ol></section>`;
   }
-  return r;
-}
-const ehPergunta = (c) => c.tipo !== "conceito";
-
-function abrirLicao(licao, { aoFim, revisao = false, cartoes } = {}) {
-  const fila = cartoes || expandir(licao.cartoes);
-  // 1 ou 2 revisões vencidas misturadas nas lições novas
-  if (!revisao && !cartoes) {
-    const venc = vencidos().slice(0, 2);
-    for (const c of venc) if (conceitos[c]) fila.splice(Math.max(2, fila.length - 1), 0, { ...G.gerar(conceitos[c].gerador), revisao: true });
-  }
-  L = { licao, fila, i: 0, respondida: false, resposta: null, acertos: 0, total: fila.filter(ehPergunta).length, erros: [], refeitos: new Set(), aoFim, revisao };
-  marcarDia();
-  $("tela-licao").hidden = false;
-  document.body.style.overflow = "hidden";
-  mostrarCartao();
-}
-
-function fecharLicao() {
-  Som.parar();
-  $("tela-licao").hidden = true;
-  document.body.style.overflow = "";
-  const fim = L && L.aoFim;
-  L = null;
-  if (fim) fim();
-}
-
-function atualizarProgresso() {
-  $("prog-licao").style.width = `${Math.min(100, (L.i / L.fila.length) * 100)}%`;
-}
-
-// desenha um exemplo pequeno; aceita o texto ou um exercício já lido (para manter as mesmas notas)
-function desenharMini(caixa, fonte, opcoes = {}) {
-  let ex = fonte;
-  if (typeof fonte === "string") { try { ex = M.lerTexto(fonte); } catch (e) { caixa.textContent = "(partitura inválida)"; return null; } }
-  const anotacoes = (opcoes.anotacoes || []).map(([v, i, t, sev]) => ({ nota: ex.vozes[v] && ex.vozes[v].notas[i], texto: t, sev })).filter((a) => a.nota);
-  const cifras = (opcoes.cifras || []).map(([t, texto]) => ({ t: t * T, texto }));
-  const larg = Math.min(caixa.clientWidth || 600, 640) - 4;
-  const layout = P.desenhar(caixa, ex, { compacta: true, largura: Math.max(260, larg), anotacoes, cifras, marcas: opcoes.marcas, foco: opcoes.foco, rotulos: ex.vozes.map(() => "") });
-  return { ex, layout };
-}
-
-function botaoOuvir(ex, grande) {
-  const b = document.createElement("button");
-  b.className = "ouvir" + (grande ? " grande" : "");
-  b.textContent = grande ? "▶ Ouvir" : "▶ Ouvir";
-  b.addEventListener("click", () => {
-    if (Som.tocando()) { Som.parar(); return; }
-    Som.tocar(ex.ex, { bpm: 96, T, aoTick: (t) => P.moverCursor(ex.layout, t), aoFim: () => { P.moverCursor(ex.layout, null); b.textContent = "▶ Ouvir"; } });
-    b.textContent = "■ Parar";
+  h += `<footer class="rodape"><details class="cartao"><summary>Guardar o progresso</summary>
+      <p>Seu progresso e suas anotações ficam neste navegador. Copie o código para guardar ou levar para outro aparelho.</p>
+      <textarea id="codigo" readonly aria-label="Código do progresso"></textarea>
+      <div class="linha-botoes"><button class="botao" id="bt-copiar">Copiar</button><button class="botao" id="bt-colar">Usar um código</button></div></details>
+    <p>Para escrever livremente nos 10 níveis, use a <a href="https://claude.ai/artifact/WhPHE6UFcSnxz6QiTVXYjB" target="_blank" rel="noopener">oficina</a>.</p></footer>`;
+  $("pagina").innerHTML = h;
+  $("codigo").value = btoa(unescape(encodeURIComponent(JSON.stringify(est))));
+  $("bt-copiar").addEventListener("click", () => { const t = $("codigo"); (navigator.clipboard ? navigator.clipboard.writeText(t.value) : Promise.reject()).then(() => brinde("Código copiado"), () => { t.select(); brinde("Selecione e copie"); }); });
+  $("bt-colar").addEventListener("click", () => {
+    folha(`<p><b>Cole o código</b></p><textarea id="codigo-novo" style="width:100%;min-height:90px" aria-label="Código"></textarea>
+      <div class="linha-botoes"><button class="botao primario" id="usar">Usar</button><button class="botao" id="cancelar">Cancelar</button></div>`);
+    $("usar").addEventListener("click", () => { try { const s = JSON.parse(decodeURIComponent(escape(atob($("codigo-novo").value.trim())))); if (s.v !== 1) throw 0; est = { ...novo(), ...s }; salvar(); fecharFolha(); rota(); brinde("Progresso carregado"); } catch (e) { brinde("Código inválido"); } });
+    $("cancelar").addEventListener("click", fecharFolha);
   });
-  return b;
 }
 
-function mostrarCartao() {
-  if (L.i >= L.fila.length) return fimLicao();
-  atualizarProgresso();
-  const c = L.fila[L.i];
-  L.respondida = false; L.resposta = null;
-  const corpo = $("corpo-licao");
-  corpo.innerHTML = "";
-  const caixa = document.createElement("div");
-  caixa.className = "cartao-licao";
-  corpo.appendChild(caixa);
-  const rod = $("rodape-licao"), ret = $("retorno"), acao = $("acao-licao");
-  rod.className = "rodape-licao"; ret.hidden = true;
-  const add = (html) => { const d = document.createElement("div"); d.innerHTML = html; caixa.appendChild(d.firstElementChild); return caixa.lastElementChild; };
-  let mini = null;
-  const partitura = (texto, op) => {
-    const m = document.createElement("div");
-    m.className = "mini-partitura";
-    caixa.appendChild(m);
-    mini = desenharMini(m, texto, op);
-    m.addEventListener("click", (ev) => aoTocarPartitura(ev, m));
-    return mini;
-  };
-  if (c.revisao) add(`<div class="rotulo">Revisão · ${esc((conceitos[c.conceito] || {}).titulo || "")}</div>`);
+// ---------------------------------------------------------------- exemplos com partitura e som
+function exemploHTML(ex, chave) {
+  return `<figure class="exemplo" data-ex="${chave}"><div class="mini-partitura"></div>
+    <figcaption>${ex.rotulo ? `<b>${esc(ex.rotulo)}</b> ` : ""}<button class="ouvir" type="button">▶ Ouvir</button></figcaption></figure>`;
+}
 
-  if (c.tipo === "conceito") {
-    add(`<h2>${esc(c.titulo)}</h2>`);
-    add(`<p class="texto">${c.texto}</p>`);
-    if (c.partitura) { partitura(c.partitura, c); caixa.appendChild(botaoOuvir(mini)); }
-    acao.textContent = "Continuar"; acao.disabled = false;
-    acao.onclick = () => { L.i++; mostrarCartao(); };
-    return;
-  }
-
-  add(`<p class="pergunta">${bonitoTexto(c.pergunta)}</p>`);
-  L.revelar = null;
-  if (c.tipo === "ouvir") {
-    const ex = M.lerTexto(c.partitura);
-    const b = botaoOuvir({ ex, layout: null }, true);
-    caixa.appendChild(b);
-    L.revelar = () => {
-      const m = document.createElement("div");
-      m.className = "mini-partitura";
-      b.after(m);
-      desenharMini(m, ex);
+const exemplosDaPagina = new Map();
+function montarExemplos(raiz) {
+  for (const fig of raiz.querySelectorAll("figure.exemplo")) {
+    const ex = exemplosDaPagina.get(fig.dataset.ex);
+    const caixa = fig.querySelector(".mini-partitura");
+    let lido;
+    try { lido = M.lerTexto(ex.partitura); } catch (e) { caixa.textContent = "(exemplo inválido: " + e.message + ")"; continue; }
+    const desenhar = () => {
+      const anotacoes = (ex.anotacoes || []).map(([v, i, t, sev]) => ({ nota: lido.vozes[v] && lido.vozes[v].notas[i], texto: t, sev })).filter((a) => a.nota);
+      const cifras = (ex.cifras || []).map(([t, tx]) => ({ t: t * T, texto: tx }));
+      const marcas = (ex.marcas || []).map(([v, i, sev]) => ({ notas: [lido.vozes[v].notas[i]], sev: sev || "erro" }));
+      fig._layout = P.desenhar(caixa, lido, { compacta: true, largura: Math.max(260, Math.min(caixa.clientWidth || 600, 900) - 4), anotacoes, cifras, marcas, rotulos: ex.rotulos || lido.vozes.map((v) => (lido.vozes.length > 1 ? v.nome : "")) });
     };
-  } else if (c.partitura) {
-    partitura(c.partitura, c);
-    if (c.tipo !== "erro") caixa.appendChild(botaoOuvir(mini));
-    L.mini = mini;
-  }
-
-  acao.textContent = "Verificar"; acao.disabled = true;
-  if (c.tipo === "escolha" || c.tipo === "ouvir" || c.tipo === "vf") {
-    const opcoes = c.tipo === "vf" ? ["Verdadeiro", "Falso"] : c.opcoes;
-    const lista = add(`<div class="opcoes ${c.tipo === "vf" ? "vf" : ""}"></div>`);
-    opcoes.forEach((o, k) => {
-      const b = document.createElement("button");
-      b.className = "opcao"; b.setAttribute("aria-pressed", "false"); b.innerHTML = bonitoTexto(esc(o));
-      b.addEventListener("click", () => {
-        if (L.respondida) return;
-        L.resposta = k;
-        for (const x of lista.children) x.setAttribute("aria-pressed", String(x === b));
-        acao.disabled = false;
-      });
-      lista.appendChild(b);
+    desenhar();
+    fig._redesenhar = desenhar;
+    const b = fig.querySelector(".ouvir");
+    b.addEventListener("click", () => {
+      if (Som.tocando()) { Som.parar(); return; }
+      if (Som.tocar(lido, { bpm: ex.bpm || 88, T, aoTick: (t) => P.moverCursor(fig._layout, t), aoFim: () => { P.moverCursor(fig._layout, null); b.textContent = "▶ Ouvir"; } })) b.textContent = "■ Parar";
     });
-    L.opcoesEl = lista;
-  } else if (c.tipo === "tocar") {
-    const tocado = add(`<div class="tocado">Toque uma tecla.</div>`);
-    const rolo = add(`<div class="piano-rolo"><div class="piano"></div></div>`);
-    Piano.montar(rolo.firstElementChild, (midi, tecla) => {
-      if (L.respondida) return;
-      Som.nota(midi);
-      L.resposta = midi;
-      for (const k of rolo.querySelectorAll(".tecla.ativa")) k.classList.remove("ativa");
-      tecla.classList.add("ativa");
-      tocado.innerHTML = `Você tocou: <b>${nomeDoMidi(midi, c.aceita)}</b>`;
-      acao.disabled = false;
-    }, (m) => nomeDoMidi(m));
-    const alvo = M.lerAltura(c.aceita[0]).ps;
-    requestAnimationFrame(() => Piano.centralizar(rolo, alvo + (Math.random() < 0.5 ? 5 : -4)));
-  } else if (c.tipo === "erro") {
-    add(`<div class="tocado" id="erro-dica">Toque numa nota da partitura.</div>`);
   }
-  acao.onclick = () => verificar(c);
 }
 
-// nome de uma tecla, preferindo a grafia das respostas aceitas (C#5 em vez de Db5)
-function nomeDoMidi(midi, aceitas = []) {
-  for (const a of aceitas) { const p = M.lerAltura(a); if (p.ps === midi) return bonito(a); }
-  const N = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "G♯", "A", "B♭", "B"];
-  return N[midi % 12] + (Math.floor(midi / 12) - 1);
-}
-function bonitoTexto(s) { return String(s).replace(/\b([A-G])(#|b)(\d)\b/g, (m, l, a, o) => l + (a === "#" ? "♯" : "♭") + o); }
-
-function aoTocarPartitura(ev, caixa) {
-  const c = L && L.fila[L.i];
-  if (!c || c.tipo !== "erro" || L.respondida || !L.mini) return;
-  const box = L.mini.layout.svg.getBoundingClientRect();
-  const onde = P.localizar(L.mini.layout, ev.clientX - box.left, ev.clientY - box.top, 22);
-  if (!onde || !onde.perto) return;
-  const nota = onde.perto.nota, v = onde.perto.voz;
-  L.resposta = [v, L.mini.ex.vozes[v].notas.indexOf(nota)];
-  L.mini = desenharMini(caixa, L.mini.ex, { ...c, foco: { notas: [nota], sev: "foco" } });
-  $("erro-dica").innerHTML = `Nota escolhida: <b>${bonito(nota.nome)}</b>`;
-  $("acao-licao").disabled = false;
+// ---------------------------------------------------------------- página de tema
+function campoAberto(chave, rotulo, dica = "") {
+  return `<label class="campo"><span class="rotulo-campo">${rotulo}</span>
+    <textarea data-nota="${chave}" rows="3" placeholder="${esc(dica)}">${esc(nota(chave))}</textarea></label>`;
 }
 
-function verificar(c) {
-  let certo = false, resposta = "";
-  if (c.tipo === "escolha" || c.tipo === "ouvir") {
-    const certas = [].concat(c.certa);
-    certo = certas.includes(L.resposta);
-    resposta = certas.map((k) => c.opcoes[k]).join(" ou ");
-    [...L.opcoesEl.children].forEach((b, k) => { if (certas.includes(k)) b.classList.add("certa"); else if (k === L.resposta) b.classList.add("errada"); });
-    if (c.tipo === "ouvir" && L.revelar) L.revelar();
-  } else if (c.tipo === "vf") {
-    const k = c.certa ? 0 : 1;
-    certo = L.resposta === k;
-    resposta = c.certa ? "Verdadeiro" : "Falso";
-    [...L.opcoesEl.children].forEach((b, j) => { if (j === k) b.classList.add("certa"); else if (j === L.resposta) b.classList.add("errada"); });
-  } else if (c.tipo === "tocar") {
-    const alvos = c.aceita.map((a) => M.lerAltura(a).ps);
-    certo = alvos.includes(L.resposta);
-    resposta = c.aceita.map(bonito).join(" ou ");
-    if (!certo) Som.nota(alvos[0], 0.8);
-  } else if (c.tipo === "erro") {
-    certo = c.alvo.some(([v, i]) => v === L.resposta[0] && i === L.resposta[1]);
-    const caixa = document.querySelector(".mini-partitura");
-    const ex = L.mini.ex;
-    const certas = c.alvo.map(([v, i]) => ex.vozes[v].notas[i]);
-    desenharMini(caixa, ex, { ...c, marcas: [{ notas: certas, sev: "erro" }], foco: { notas: certas, sev: certo ? "ok" : "erro" } });
-    resposta = "a nota marcada em vermelho";
-  }
-  L.respondida = true;
-  const primeira = !L.refeitos.has(L.i);
-  if (primeira) { if (certo) L.acertos++; else L.erros.push(c); }
-  registrarResposta(c.conceito, certo);
-  if (certo && L.revisao) est.xp += 2;
-  salvar();
-  // errou: a pergunta volta no fim da lição (uma vez)
-  if (!certo && primeira && !c.gerado) { L.fila.push(c); L.refeitos.add(L.fila.length - 1); }
-  else if (!certo && primeira && c.gerado) { L.fila.push(G.gerar(c.gerado)); L.refeitos.add(L.fila.length - 1); }
-  const rod = $("rodape-licao"), ret = $("retorno"), acao = $("acao-licao");
-  rod.className = "rodape-licao " + (certo ? "certo" : "errado");
-  ret.innerHTML = certo ? `<b>Isso!</b><p>${bonitoTexto(esc(c.explica || ""))}</p>`
-    : `<b>Não é bem isso.</b><p>Resposta: <b>${bonitoTexto(esc(resposta))}</b>. ${bonitoTexto(esc(c.explica || ""))}</p>`;
-  ret.hidden = false;
-  acao.textContent = "Continuar"; acao.disabled = false;
-  acao.onclick = () => { L.i++; mostrarCartao(); };
-}
-
-function fimLicao() {
-  $("prog-licao").style.width = "100%";
-  const pct = L.total ? L.acertos / L.total : 1;
-  let xp = 0;
-  if (!L.revisao) {
-    const antes = est.licoes[L.licao.id];
-    if (!antes || !antes.feita) xp = 10;
-    est.licoes[L.licao.id] = { feita: true, melhor: Math.max(pct, antes ? antes.melhor : 0) };
-  }
-  est.xp += xp;
-  salvar();
-  const conceitosErrados = [...new Set(L.erros.map((c) => (conceitos[c.conceito] || {}).titulo || c.conceito).filter(Boolean))];
-  $("corpo-licao").innerHTML = `<div class="fim-licao">
-    <div class="rotulo">${L.revisao ? "Revisão concluída" : "Lição concluída"}</div>
-    <div class="grande-num">${L.acertos}/${L.total}</div>
-    <p>${L.total ? "acertos na primeira tentativa" : ""}${xp ? ` · +${xp} XP` : ""}</p>
-    ${conceitosErrados.length ? `<div class="cartao" style="text-align:left"><b>Vale revisar</b><ul>${conceitosErrados.map((x) => `<li>${esc(x)}</li>`).join("")}</ul><p style="margin:6px 0 0;color:var(--apagado)">Esses assuntos voltam na revisão de amanhã.</p></div>` : `<p>Sem erros. Esses assuntos voltam na revisão daqui a alguns dias.</p>`}
-  </div>`;
-  $("rodape-licao").className = "rodape-licao";
-  $("retorno").hidden = true;
-  const acao = $("acao-licao");
-  acao.textContent = "Voltar"; acao.disabled = false;
-  acao.onclick = fecharLicao;
-}
-
-function abrirRevisao() {
-  const venc = vencidos().slice(0, 8);
-  const cartoes = [];
-  for (const c of venc) {
-    if (conceitos[c]) cartoes.push({ ...G.gerar(conceitos[c].gerador), revisao: true });
-    else {
-      // conceito sem gerador: uma pergunta escrita de uma lição já feita
-      const pool = itens.filter((it) => it.tipo === "licao" && feito(it)).flatMap((it) => it.dado.cartoes.filter((x) => x.conceito === c && x.tipo !== "conceito"));
-      if (pool.length) cartoes.push({ ...pool[Math.floor(Math.random() * pool.length)], revisao: true });
+function desenharTema(t) {
+  exemplosDaPagina.clear();
+  let n = 0;
+  const reg = (ex) => { const k = `${t.id}-${n++}`; exemplosDaPagina.set(k, ex); return exemploHTML(ex, k); };
+  const idx = temasEmOrdem.findIndex((x) => x.id === t.id);
+  const ant = temasEmOrdem[idx - 1], prox = temasEmOrdem[idx + 1];
+  let h = `<nav class="migalha"><a href="#">Ateliê</a> · Nível ${t.nivel.numero} · ${esc(t.nivel.titulo)}</nav>
+    <header class="cab-tema"><h1>${esc(t.titulo)}</h1><p class="lead">${esc(t.objetivo)}</p>
+    ${t.ouvir && t.ouvir.length ? `<div class="ouvir-lista"><span class="rotulo">Para ouvir e estudar</span><ul>${t.ouvir.map((o) => `<li>${esc(o)}</li>`).join("")}</ul></div>` : ""}</header>`;
+  if (t.esboco) h += `<section class="bloco esboco"><div class="rotulo">Antes da aula · esboço</div><p>${t.esboco}</p>${campoAberto(t.id + ":esboco", "Seu esboço ou sua primeira decisão", "Sem correção: escreva o que faria antes de ler.")}</section>`;
+  for (const s of t.secoes) {
+    if (s.tipo === "texto") h += `<section class="bloco texto">${s.titulo ? `<h2>${esc(s.titulo)}</h2>` : ""}${s.html}</section>`;
+    else if (s.tipo === "exemplo") {
+      h += `<section class="bloco exemplo-camadas"><div class="rotulo">Exemplo resolvido</div><h2>${esc(s.titulo)}</h2>${s.intro ? `<p>${s.intro}</p>` : ""}`;
+      s.camadas.forEach((c, k) => {
+        h += `<div class="camada"><div class="camada-cab"><span class="num">${k + 1}</span><b>${esc(c.titulo)}</b></div>${c.texto ? `<p>${c.texto}</p>` : ""}
+          ${c.partitura ? reg(c) : ""}
+          ${(c.notas || []).map((x) => `<p class="nota-decisao ${x[0]}"><span class="tag">${{ decisao: "decisão", rejeitada: "alternativa descartada", checagem: "checagem" }[x[0]]}</span>${bonitoTexto(x[1])}</p>`).join("")}
+          ${c.pausa ? `<div class="pausa"><p><b>Pausa:</b> ${c.pausa[0]}</p>${campoAberto(`${t.id}:pausa${k}`, "Sua resposta", "")}
+            <button class="botao revelar" type="button">Ver o comentário</button><p class="comentario" hidden>${c.pausa[1]}</p></div>` : ""}</div>`;
+      });
+      h += `</section>`;
+    } else if (s.tipo === "contraste") {
+      h += `<section class="bloco contraste"><div class="rotulo">Contraste</div><h2>${esc(s.titulo)}</h2>${s.intro ? `<p>${s.intro}</p>` : ""}
+        <div class="par">${reg({ ...s.a, rotulo: s.a.rotulo || "A" })}${reg({ ...s.b, rotulo: s.b.rotulo || "B" })}</div>
+        <p><b>${s.pergunta}</b></p>${campoAberto(`${t.id}:contraste:${s.titulo}`, "O que muda?", "")}
+        <button class="botao revelar" type="button">Ver o comentário</button><div class="comentario" hidden>${s.comentario}</div></section>`;
     }
   }
-  if (!cartoes.length) { brinde("Nada para revisar hoje"); return; }
-  abrirLicao({ id: "revisao", titulo: "Revisão do dia" }, { revisao: true, cartoes, aoFim: desenharTrilha });
-}
-
-$("fechar-licao").addEventListener("click", () => {
-  if (!L || L.i === 0 || L.i >= L.fila.length) return fecharLicao();
-  folha(`<p><b>Sair da lição?</b> O que você respondeu até aqui já conta para a revisão.</p>
-    <div class="linha-botoes"><button class="botao primario" id="ficar">Continuar a lição</button><button class="botao" id="sair">Sair</button></div>`);
-  $("ficar").addEventListener("click", fecharFolha);
-  $("sair").addEventListener("click", () => { fecharFolha(); fecharLicao(); });
-});
-
-// ---------------------------------------------------------------- prática
-let oficina = null, praticaAtual = null;
-
-function abrirPratica(p, textoInicial) {
-  praticaAtual = p;
-  marcarDia(); salvar();
-  $("tela-pratica").hidden = false;
-  document.body.style.overflow = "hidden";
-  $("titulo-pratica").textContent = p.titulo;
-  if (oficina) oficina.destruir();
-  const salvoP = est.praticas[p.id] || {};
-  const texto = textoInicial || salvoP.rascunho || p.texto;
-  const caixa = $("oficina");
-  oficina = Of.criar(caixa, {
-    titulo: p.titulo, instrucoes: p.instrucoes + acoesPratica(p), texto,
-    perfil: G.perfilDaPratica(p), contexto: G.contextoDaPratica(p), acordes: p.acordes,
-    duracao: p.duracao, alvoCompassos: p.alvoCompassos, fimLivre: p.fimLivre, autoavaliacao: p.autoavaliacao,
-    licaoDaRegra: (regra) => {
-      const it = licaoPorId(regraParaLicao[regra]);
-      return it && { titulo: it.dado.titulo, abrir: () => abrirLicao(it.dado, { aoFim: () => {} }) };
-    },
-    aoMudar: (t) => { est.praticas[p.id] = { ...(est.praticas[p.id] || {}), rascunho: t }; salvar(); },
-    aoAprovar: (t) => {
-      const antes = est.praticas[p.id] || {};
-      if (!antes.aprovada) { est.xp += 30; brinde("Prática aprovada · +30 XP"); }
-      est.praticas[p.id] = { ...antes, aprovada: true, rascunho: t };
-      salvar();
-    },
-    aoErro: (regras) => { for (const r of regras) { const lic = regraParaLicao[r]; if (lic) registrarResposta(regraConceito(r), false); } salvar(); },
+  if (t.esboco) h += `<section class="bloco"><div class="rotulo">Volta ao esboço</div><p>Releia o que você escreveu antes da aula. O que mudaria agora?</p>${campoAberto(t.id + ":revisao-esboco", "O que mudaria", "")}</section>`;
+  h += `<section class="bloco exercicios"><div class="rotulo">Compor</div><h2>Exercícios</h2>
+    <p class="lead">Em ordem: completar, com menos apoio, com restrição, livre e uma variante sua. Se o primeiro sair limpo, pule para o livre.</p><ol class="lista-ex">`;
+  t.exercicios.forEach((e, k) => {
+    const st = est.exercicios[e.id];
+    h += `<li><button class="ex-link ${st && st.aprovado ? "feito" : ""}" data-ex="${k}"><span class="n">${k + 1}</span><span class="t"><b>${esc(e.titulo)}</b><small>${esc(e.modo || "")}${st && st.aprovado ? " · aprovado" : st && st.rascunho ? " · em andamento" : ""}</small></span></button></li>`;
   });
-  ligarAcoesPratica(p);
-  window.scrollTo(0, 0);
-  $("tela-pratica").scrollTop = 0;
+  h += `</ol></section><nav class="rodape-tema">${ant ? `<a href="#${ant.id}">← ${esc(ant.titulo)}</a>` : `<a href="#">← Ateliê</a>`}${prox ? `<a href="#${prox.id}">${esc(prox.titulo)} →</a>` : ""}</nav>`;
+  $("pagina").innerHTML = h;
+  montarExemplos($("pagina"));
+  for (const ta of document.querySelectorAll("textarea[data-nota]")) ta.addEventListener("input", () => guardarNota(ta.dataset.nota, ta.value));
+  for (const b of document.querySelectorAll(".revelar")) b.addEventListener("click", () => { b.nextElementSibling.hidden = false; b.hidden = true; });
+  for (const b of document.querySelectorAll(".ex-link")) b.addEventListener("click", () => abrirExercicio(t, t.exercicios[+b.dataset.ex]));
 }
 
-// conceito da fila de revisão ligado a uma regra quebrada na prática
-function regraConceito(r) {
-  if (/paralel|oculta|tempo_forte/.test(r)) return "paralelas";
-  if (/dissonancia|consonan/.test(r)) return "consonancia";
-  if (/salto|intervalo_melodico|contorno/.test(r)) return "intervalos";
-  if (/baixo|acorde|retrogressao|notas_do_acorde/.test(r)) return "acordes";
-  if (/cadencia/.test(r)) return "cadencias";
-  return null;
+// ---------------------------------------------------------------- exercício
+let oficina = null;
+
+function perfilDe(e) { return G.perfilDaPratica(e); }
+
+function abrirExercicio(t, e, textoInicial) {
+  $("tela-ex").hidden = false;
+  document.body.style.overflow = "hidden";
+  $("titulo-ex").textContent = e.titulo;
+  if (oficina) oficina.destruir();
+  const st = est.exercicios[e.id] || {};
+  const texto = textoInicial || st.rascunho || e.texto;
+  const caixa = $("oficina");
+  const planoHTML = e.plano && e.plano.length ? `<details class="plano" ${st.rascunho ? "" : "open"}><summary>Plano antes de compor</summary>
+      ${e.plano.map((p, k) => campoAberto(`${e.id}:plano${k}`, p[0], p[1] || "")).join("")}</details>` : "";
+  oficina = Of.criar(caixa, {
+    titulo: e.titulo, instrucoes: e.instrucoes + planoHTML + acoes(e), texto,
+    perfil: perfilDe(e), contexto: G.contextoDaPratica(e),
+    cifras: e.cifras, cifrasAluno: e.cifrasAluno, cifrasIniciais: st.cifras != null && !textoInicial ? st.cifras : e.cifrasIniciais,
+    duracao: e.duracao, alvoCompassos: e.alvoCompassos, fimLivre: e.fimLivre,
+    aoMudar: (tx) => { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), rascunho: tx }; salvar(); },
+    aoMudarCifras: (c) => { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), cifras: c }; salvar(); },
+    aoAprovar: (tx) => {
+      const antes = est.exercicios[e.id] || {};
+      if (!antes.aprovado) brinde("Exercício aprovado");
+      est.exercicios[e.id] = { ...antes, aprovado: true, rascunho: tx };
+      salvar();
+      mostrarDepois(t, e, tx);
+    },
+  });
+  for (const ta of caixa.querySelectorAll("textarea[data-nota]")) ta.addEventListener("input", () => guardarNota(ta.dataset.nota, ta.value));
+  ligarAcoes(t, e);
+  $("tela-ex").scrollTop = 0;
 }
 
-function acoesPratica(p) {
+function acoes(e) {
   const b = [];
-  if (p.sortear) b.push(`<button class="botao" data-acao="sortear">Outro cantus firmus</button>`);
-  if (p.solucao) b.push(`<button class="botao" data-acao="solucao">Ver uma solução</button>`);
+  if (e.sortear) b.push(`<button class="botao" data-acao="sortear">Outro cantus firmus</button>`);
   b.push(`<button class="botao" data-acao="recomecar">Recomeçar</button>`);
   return `<div class="acoes-pratica" style="margin-top:10px">${b.join("")}</div>`;
 }
 
-function ligarAcoesPratica(p) {
+function ligarAcoes(t, e) {
   for (const b of $("oficina").querySelectorAll("[data-acao]")) b.addEventListener("click", () => {
-    const a = b.dataset.acao;
-    if (a === "recomecar") { est.praticas[p.id] = { ...(est.praticas[p.id] || {}), rascunho: null }; salvar(); abrirPratica(p, p.texto); }
-    if (a === "sortear") {
-      const tom = /^tom:\s*(.+)$/m.exec(p.texto);
+    if (b.dataset.acao === "recomecar") { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), rascunho: null, cifras: null }; salvar(); abrirExercicio(t, e, e.texto); }
+    if (b.dataset.acao === "sortear") {
       const cf = Cn.sortear();
       if (!cf) return brinde("Tente de novo");
-      const cant = "cantus: " + cf.notas.split(" ").map((n, k) => (k ? n : n + "/4")).join(" ");
-      let t = p.texto.replace(/^tom:.*$/m, "tom: " + cf.tom).replace(/^cantus:.*$/m, cant).replace(/^contraponto:.*$/m, "contraponto:");
-      if (!tom) t = "tom: " + cf.tom + "\n" + t;
-      abrirPratica({ ...p, solucao: null }, t);
-    }
-    if (a === "solucao") {
-      folha(`<p><b>Ver uma solução?</b> Tentar antes ensina mais: compare depois com a sua. A solução abre no lugar do seu rascunho (o rascunho fica guardado até você mudar algo).</p>
-        <div class="linha-botoes"><button class="botao primario" id="ver">Ver a solução</button><button class="botao" id="nao">Continuar tentando</button></div>`);
-      $("ver").addEventListener("click", () => { fecharFolha(); const rasc = (est.praticas[p.id] || {}).rascunho; abrirPratica({ ...p }, p.solucao); est.praticas[p.id] = { ...(est.praticas[p.id] || {}), rascunho: rasc }; salvar(); });
-      $("nao").addEventListener("click", fecharFolha);
+      const cant = "cantus: " + cf.notas.split(" ").map((x, k) => (k ? x : x + "/4")).join(" ");
+      let tx = e.texto.replace(/^tom:.*$/m, "tom: " + cf.tom).replace(/^cantus:.*$/m, cant).replace(/^contraponto:.*$/m, "contraponto:");
+      if (!/^tom:/m.test(tx)) tx = "tom: " + cf.tom + "\n" + tx;
+      abrirExercicio(t, { ...e, solucao: null }, tx);
     }
   });
 }
 
-$("fechar-pratica").addEventListener("click", () => {
+// depois da aprovação: relatório de estilo, reflexão e (só então) a versão do professor
+function mostrarDepois(t, e, tx) {
+  const caixa = $("oficina");
+  caixa.querySelector(".depois")?.remove();
+  let ex;
+  try { ex = M.lerTexto(tx); } catch (err) { return; }
+  const nomeCf = (tx.match(/^cf:\s*(\S+)/m) || [])[1];
+  const itens = Est.relatorio(ex, { cf: nomeCf ? ex.vozes.findIndex((v) => v.nome === nomeCf) : -1 });
+  const prior = [...itens.filter((i) => i.nivel === "atencao"), ...itens.filter((i) => i.nivel === "ok")];
+  const s = document.createElement("section");
+  s.className = "cartao depois";
+  s.innerHTML = `<div class="rotulo">Relatório de estilo</div>
+    <p class="lead-p">Descrição do que você escreveu, comparada a referências do estilo. Fora da faixa não é erro: é informação para decidir.</p>
+    <ul class="relatorio">${prior.map((i) => `<li class="${i.nivel}"><b>${esc(i.titulo)}</b><span class="v">${esc(i.valor)}</span><small>Referência: ${esc(i.referencia)}. ${esc(i.nota)}</small></li>`).join("")}</ul>
+    ${campoAberto(`${e.id}:reflexao`, "Reflexão: o que funcionou? o que você mudaria?", "Duas ou três frases.")}
+    ${e.solucao || e.sortear ? `<button class="botao" id="ver-prof" ${nota(e.id + ":reflexao").trim() ? "" : "disabled"}>Ver a versão do professor</button><div id="prof" hidden></div>` : ""}`;
+  caixa.appendChild(s);
+  const ta = s.querySelector("textarea");
+  ta.addEventListener("input", () => { guardarNota(ta.dataset.nota, ta.value); const b = $("ver-prof"); if (b) b.disabled = !ta.value.trim(); });
+  $("ver-prof")?.addEventListener("click", () => {
+    const d = $("prof");
+    const b = $("ver-prof");
+    b.disabled = true; b.textContent = "Procurando uma solução…";
+    // exercícios com cantus sorteado: a solução é procurada na hora pelo próprio verificador
+    setTimeout(() => {
+      const sol = e.solucao || solucaoGerada(e, tx);
+      if (!sol) { b.textContent = "Não achei uma solução a tempo"; return; }
+      exemplosDaPagina.set("prof", { partitura: sol, cifras: cifrasDaSolucao(sol, e) });
+      d.innerHTML = `<p class="rotulo" style="margin-top:12px">Versão do professor</p>${exemploHTML({ rotulo: "" }, "prof")}${e.comentarioSolucao && e.solucao ? `<p>${e.comentarioSolucao}</p>` : e.solucao ? "" : "<p>Solução encontrada agora pelo verificador para o seu cantus firmus: correta, não necessariamente bonita. Compare o contorno e as escolhas de consonância com as suas.</p>"}`;
+      d.hidden = false;
+      montarExemplos(d);
+      b.hidden = true;
+    }, 30);
+  });
+}
+
+// cifras da versão do professor, alinhadas às notas do baixo
+function cifrasDaSolucao(sol, e) {
+  const lista = e.solucaoCifras ? e.solucaoCifras.split(/\s+/) : e.cifras;
+  if (!lista) return [];
+  let ex;
+  try { ex = M.lerTexto(sol); } catch (err) { return []; }
+  const baixo = ex.vozes[ex.vozes.length - 1];
+  return baixo.notas.map((n, i) => lista[i] && [n.inicio / T, lista[i]]).filter(Boolean);
+}
+
+function solucaoGerada(e, tx) {
+  const especie = e.duracao >= 4 ? 1 : e.duracao >= 2 ? 2 : 3;
+  return Bu.solucao({ texto: tx, especie, perfil: perfilDe(e), ctx: G.contextoDaPratica(e) });
+}
+
+$("fechar-ex").addEventListener("click", () => {
   if (oficina) { oficina.destruir(); oficina = null; }
-  $("tela-pratica").hidden = true;
+  $("tela-ex").hidden = true;
   document.body.style.overflow = "";
-  desenharTrilha();
+  rota();
 });
 
-// ---------------------------------------------------------------- início
-// iOS: o Web Audio só toca no modo silencioso se a sessão de áudio for "playback"
 document.addEventListener("pointerdown", () => { try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {} }, { once: true });
-desenharTrilha();
-if (document.fonts) document.fonts.ready.then(() => { if (L) { const c = L.fila[L.i]; if (c && c.partitura && !L.respondida) mostrarCartao(); } });
+rota();
+if (document.fonts) document.fonts.ready.then(() => document.querySelectorAll("figure.exemplo").forEach((f) => f._redesenhar && f._redesenhar()));
 </script>
