@@ -11,6 +11,7 @@
  *     alvoCompassos,                 // tamanho do exercício; sem ele vale o do cantus firmus
  *     fimLivre,                      // o aluno toca em "Terminei" para a correção final
  *     autoavaliacao,                 // perguntas que o aluno responde sozinho
+ *     cifras | cifrasAluno           // cifras fixas (uma por nota do baixo) ou um campo para o aluno escrever
  *     licaoDaRegra(id),              // → { titulo, abrir } para o link "rever a lição"
  *     aoMudar(texto), aoAprovar(texto), aoErro(regras)
  *   })
@@ -18,7 +19,7 @@
  */
 (function (raiz) {
   "use strict";
-  const M = raiz.Motor, Ed = raiz.Editor, P = raiz.Partitura, Som = raiz.Som, Cn = raiz.Cantus, R2 = raiz.Regras2;
+  const M = raiz.Motor, Ed = raiz.Editor, P = raiz.Partitura, Som = raiz.Som, Cn = raiz.Cantus, R2 = raiz.Regras2, R3 = raiz.Regras3;
   const T = M.T;
 
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -48,6 +49,8 @@
         <div class="of-topo"><span class="rotulo of-info"></span>
           <label class="andamento">♩ = <input type="range" class="of-bpm" min="40" max="200" step="4" value="96"><span class="of-bpm-v">96</span></label></div>
         <div class="of-partitura"></div>
+        ${cfg.cifrasAluno ? `<label class="of-cifras-rot">Cifras, uma por nota do baixo (ex.: I V43 I6 ii6 I64 V I)
+          <input class="of-cifras" type="text" autocapitalize="off" autocomplete="off" spellcheck="false" value="${esc(cfg.cifrasIniciais || "")}"></label>` : ""}
         <div class="detalhe of-detalhe" hidden></div>
       </section>
       <section class="cartao of-correcao" aria-live="polite">
@@ -130,11 +133,18 @@
     }
 
     // ---------------------------------------------------------------- análise
+    const cifrasAtuais = () => {
+      if (cfg.cifrasAluno) { const i = el.querySelector(".of-cifras"); return i ? i.value.trim().split(/\s+/).filter(Boolean) : []; }
+      return cfg.cifras || null;
+    };
     function contextoRegras() {
       const ctx = { ...(cfg.contexto || {}) };
+      const cf = cifrasAtuais();
+      if (cf) ctx.cifras = cf;
       if (ctx.alvo === undefined) ctx.alvo = est.modelo.vozes.findIndex((_, i) => !travada(i));
       if (ctx.cf === undefined && cfIndice() >= 0) ctx.cf = cfIndice();
       if (cfg.acordes && est.ex && est.ex.tonalidade) ctx.harmonia = R2.harmoniaDe(cfg.acordes, est.ex.tonalidade, est.ex.duracaoCompasso);
+      else if (ctx.cifras && est.ex && est.ex.tonalidade && R3) ctx.harmonia = R3.harmoniaDasCifras(est.ex, ctx);
       return ctx;
     }
 
@@ -162,7 +172,12 @@
       let selo = "—", classe = "neutro", chips = "";
       if (v) {
         chips = ["erro", "aviso", "info"].map((s) => { const n = v.contar(s); return `<span class="chip ${s}${n ? "" : " zero"}">${n} ${s}</span>`; }).join("");
-        const ter = $(".of-terminei");
+        const campoCifras = el.querySelector(".of-cifras");
+    if (campoCifras) {
+      let tc = null;
+      campoCifras.addEventListener("input", () => { clearTimeout(tc); tc = setTimeout(() => { if (cfg.aoMudarCifras) cfg.aoMudarCifras(campoCifras.value); analisar(); }, 350); });
+    }
+    const ter = $(".of-terminei");
         if (v.completo) {
           selo = v.aprovado ? "Aprovado" : "Reprovado";
           classe = v.aprovado ? "aprovado" : "reprovado";
@@ -276,6 +291,11 @@
       const marcas = (est.visao ? est.visao.visiveis : []).map((a) => ({ notas: a.notas, sev: a.severidade, compasso: a.compasso }));
       let cifras = [];
       if (cfg.acordes && t) cifras = R2.harmoniaDe(cfg.acordes, t, ex.duracaoCompasso).map((a) => ({ t: a.inicio, texto: a.simbolo }));
+      else {
+        const cf = cifrasAtuais();
+        const baixo = ex.vozes[ex.vozes.length - 1];
+        if (cf && baixo) cifras = baixo.notas.map((n, i) => cf[i] && { t: n.inicio, texto: cf[i] }).filter(Boolean);
+      }
       est.layout = P.desenhar(caixa, ex, {
         fins: est.fins, extraFim, marcas, selecao, ativa: sel.voz, cifras,
         foco: est.selecionado !== null ? marcas[est.selecionado] : null,
@@ -475,6 +495,7 @@
 
     return {
       texto: () => Ed.escrever(est.modelo),
+      cifras: () => cifrasAtuais(),
       destruir() { Som.parar(); ro.disconnect(); ro2.disconnect(); doca.remove(); el.innerHTML = ""; document.documentElement.style.setProperty("--doca", "0px"); },
     };
   }
