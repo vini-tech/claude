@@ -980,8 +980,31 @@
     };
   }
 
+  /* Verifica com um perfil próprio em vez da tabela de níveis: { regra: "erro"|"aviso"|"info" }.
+   * contexto.nivel decide detalhes de estilo (ex.: a cambiata vale a partir do 3). */
+  function verificarPerfil(ex, perfil, contexto = {}) {
+    const ctx = { nivel: contexto.nivel || 1, soExternas: !!contexto.soExternas };
+    const achados = [], naoVerificadas = [];
+    for (const [id, sev] of Object.entries(perfil)) {
+      const r = REGRAS[id];
+      if (!r || !sev) continue;
+      if (r.precisaTom && !ex.tonalidade) { naoVerificadas.push(id); continue; }
+      for (const [compasso, mensagem, notas] of r.verificar(ex, ctx)) achados.push({ regra: id, severidade: sev, compasso, mensagem, notas: notas || [] });
+    }
+    achados.sort((a, b) => a.compasso - b.compasso || ORDEM[a.severidade] - ORDEM[b.severidade]);
+    const contar = (s) => achados.filter((a) => a.severidade === s).length;
+    return { nivel: ctx.nivel, achados, naoVerificadas, contar, aprovado: contar("erro") === 0 };
+  }
+
+  // perfil equivalente a um nível da tabela
+  function perfilDoNivel(nivel) {
+    const p = {};
+    for (const id of regrasAtivas(nivel)) p[id] = severidade(id, nivel);
+    return p;
+  }
+
   return {
-    T, lerTexto, verificar, concluidos, REGRAS, TABELA, NIVEIS, severidade, regrasAtivas,
+    T, lerTexto, verificar, verificarPerfil, perfilDoNivel, concluidos, REGRAS, TABELA, NIVEIS, severidade, regrasAtivas,
     ErroDeLeitura, MODOS_PT, lerAltura, interpretarTom, altura, transpor, intervaloAlturas,
     ehConsonante, classePerfeita, criarVoz, criarExercicio, nota,
   };
