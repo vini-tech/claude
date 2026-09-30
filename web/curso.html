@@ -1,0 +1,735 @@
+<title>Da Regra à Liberdade · Curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500&family=Source+Sans+3:wght@400;600;700&family=Noto+Music&display=swap">
+<style>
+/* Layout: trilha vertical de nós (lições e práticas) agrupados por nível e unidade, como um caminho;
+   lição e prática abrem em tela cheia por cima da trilha. Papel pautado frio, tinta azul-da-prússia. */
+:root {
+  --papel: #eef1f4; --folha: #ffffff; --tinta: #17202a; --apagado: #5a6573; --pauta: #b9c2cc; --linha: #d6dce3;
+  --acento: #1d4f91; --acento-suave: #dfe8f5; --sobre-acento: #ffffff;
+  --erro: #b93a2e; --aviso: #a86c12; --info: #6452b0; --ok: #2f7a4d;
+  --erro-fundo: #f7e3e0; --aviso-fundo: #f6ecd9; --info-fundo: #ebe7f7; --ok-fundo: #e1f0e6;
+  --tecla-branca: #fbfcfd; --tecla-preta: #1f2833; --tecla-borda: #aeb8c3;
+  --f-titulo: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --f-texto: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-musica: "Noto Music", "Bravura Text", "Apple Symbols", serif;
+  --raio: 12px; --doca: 0px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --papel: #0f141a; --folha: #161d25; --tinta: #e4e9ef; --apagado: #93a0ae; --pauta: #4a5664; --linha: #2a3440;
+    --acento: #86ade6; --acento-suave: #1d2b3e; --sobre-acento: #0f141a; --erro: #f07b6b; --aviso: #e3b05a; --info: #ab9df2; --ok: #6cc28f;
+    --erro-fundo: #3a1f1c; --aviso-fundo: #372a14; --info-fundo: #262040; --ok-fundo: #1a3325;
+    --tecla-branca: #d9dfe6; --tecla-preta: #0b0f14; --tecla-borda: #3a4553; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --papel: #0f141a; --folha: #161d25; --tinta: #e4e9ef; --apagado: #93a0ae; --pauta: #4a5664; --linha: #2a3440;
+  --acento: #86ade6; --acento-suave: #1d2b3e; --sobre-acento: #0f141a; --erro: #f07b6b; --aviso: #e3b05a; --info: #ab9df2; --ok: #6cc28f;
+  --erro-fundo: #3a1f1c; --aviso-fundo: #372a14; --info-fundo: #262040; --ok-fundo: #1a3325;
+  --tecla-branca: #d9dfe6; --tecla-preta: #0b0f14; --tecla-borda: #3a4553; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--papel); color: var(--tinta); font: 16px/1.5 var(--f-texto); margin: 0; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--f-titulo); font-weight: 500; margin: 0; text-wrap: balance; }
+.rotulo { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--apagado); }
+.cartao { background: var(--folha); border: 1px solid var(--linha); border-radius: var(--raio); padding: 14px; min-width: 0; }
+.botao { border: 1px solid var(--linha); background: var(--folha); border-radius: 10px; padding: 8px 14px; font-weight: 700; font-size: 0.95rem; }
+.botao.primario { background: var(--acento); border-color: var(--acento); color: var(--sobre-acento); }
+.botao.grande { width: 100%; padding: 13px 16px; font-size: 1.05rem; border-radius: 12px; }
+.botao:disabled { opacity: 0.45; }
+
+/* ---------------------------------------------------------------- trilha */
+.trilha { max-width: 640px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 60px; display: grid; gap: 18px; }
+.topo { display: grid; gap: 10px; }
+.topo h1 { font-size: clamp(1.7rem, 7vw, 2.3rem); line-height: 1.05; }
+.topo h1 em { font-style: italic; color: var(--acento); }
+.placar { display: flex; gap: 8px; flex-wrap: wrap; }
+.dado { background: var(--folha); border: 1px solid var(--linha); border-radius: 999px; padding: 4px 12px; font-size: 0.85rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dado span { color: var(--apagado); font-weight: 600; }
+.continuar { display: grid; gap: 4px; background: var(--acento); color: var(--sobre-acento); border: 0; border-radius: var(--raio); padding: 14px 16px; text-align: left; }
+.continuar .rotulo { color: inherit; opacity: 0.8; }
+.continuar b { font-size: 1.1rem; }
+.revisao { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.revisao p { margin: 2px 0 0; color: var(--apagado); font-size: 0.9rem; }
+.nivel-cab { display: grid; gap: 4px; margin-top: 8px; }
+.nivel-cab h2 { font-size: 1.45rem; }
+.nivel-cab p { margin: 0; color: var(--apagado); font-size: 0.93rem; }
+.barra-prog { height: 6px; background: var(--linha); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+.barra-prog i { display: block; height: 100%; background: var(--ok); }
+.unidade { display: grid; gap: 10px; }
+.unidade h3 { font-size: 1.05rem; font-family: var(--f-texto); font-weight: 700; }
+.caminho { position: relative; display: grid; gap: 8px; padding-left: 8px; }
+.caminho::before { content: ""; position: absolute; left: 35px; top: 18px; bottom: 18px; width: 3px; background: var(--linha); border-radius: 2px; }
+.no { position: relative; display: flex; align-items: center; gap: 12px; border: 0; background: none; padding: 4px 0; text-align: left; }
+.no .bola { flex: 0 0 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--folha); border: 3px solid var(--linha); font-weight: 700; font-size: 1.1rem; color: var(--apagado); z-index: 1; }
+.no.pratica .bola { border-radius: 14px; font-family: var(--f-musica); font-size: 1.5rem; font-weight: 400; }
+.no.feito .bola { background: var(--ok); border-color: var(--ok); color: var(--sobre-acento); }
+.no.atual .bola { background: var(--acento); border-color: var(--acento); color: var(--sobre-acento); box-shadow: 0 0 0 5px var(--acento-suave); }
+.no.bloqueado .bola { opacity: 0.55; }
+.no .txt { display: grid; min-width: 0; }
+.no .txt b { font-size: 1rem; }
+.no .txt small { color: var(--apagado); font-size: 0.82rem; }
+.no.bloqueado .txt { opacity: 0.6; }
+.rodape { color: var(--apagado); font-size: 0.85rem; display: grid; gap: 8px; }
+.rodape a { color: var(--acento); }
+details.config summary { cursor: pointer; font-weight: 700; }
+details.config textarea { width: 100%; min-height: 80px; border: 1px solid var(--linha); border-radius: 8px; background: var(--papel); padding: 8px; font-size: 0.8rem; }
+.linha-botoes { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+/* ---------------------------------------------------------------- telas cheias */
+.tela { position: fixed; inset: 0; z-index: 10; background: var(--papel); overflow-y: auto; }
+.tela-cab { position: sticky; top: 0; z-index: 2; background: var(--papel); display: flex; align-items: center; gap: 12px; padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px; max-width: 640px; margin: 0 auto; }
+.fechar-tela { border: 0; background: none; font-size: 1.5rem; line-height: 1; color: var(--apagado); padding: 4px 6px; }
+.prog-licao { flex: 1; height: 12px; background: var(--linha); border-radius: 6px; overflow: hidden; }
+.prog-licao i { display: block; height: 100%; background: var(--ok); border-radius: 6px; transition: width 0.3s; }
+.tela-corpo { max-width: 640px; margin: 0 auto; padding-inline: 16px; padding-block: 8px calc(170px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 14px; }
+.cartao-licao { display: grid; gap: 12px; }
+.cartao-licao h2 { font-size: 1.5rem; }
+.cartao-licao .texto { font-size: 1.08rem; line-height: 1.55; margin: 0; }
+.pergunta { font-size: 1.2rem; font-weight: 700; margin: 0; line-height: 1.35; }
+.mini-partitura { background: var(--folha); border: 1px solid var(--linha); border-radius: var(--raio); padding: 10px 8px 4px; overflow-x: auto; }
+.mini-partitura svg { display: block; margin: 0 auto; touch-action: manipulation; }
+.ouvir { justify-self: start; border: 1px solid var(--acento); color: var(--acento); background: var(--folha); border-radius: 999px; padding: 7px 16px; font-weight: 700; }
+.ouvir.grande { justify-self: stretch; padding: 18px; font-size: 1.15rem; border-radius: var(--raio); }
+.opcoes { display: grid; gap: 8px; }
+.opcao { text-align: left; border: 2px solid var(--linha); background: var(--folha); border-radius: 12px; padding: 12px 14px; font-size: 1.02rem; font-weight: 600; }
+.opcao[aria-pressed="true"] { border-color: var(--acento); background: var(--acento-suave); }
+.opcao.certa { border-color: var(--ok); background: var(--ok-fundo); }
+.opcao.errada { border-color: var(--erro); background: var(--erro-fundo); }
+.vf { grid-template-columns: 1fr 1fr; }
+.vf .opcao { text-align: center; }
+.tocado { font-size: 0.95rem; color: var(--apagado); min-height: 1.5em; }
+.tocado b { color: var(--tinta); font-size: 1.1rem; }
+.piano-rolo { overflow-x: auto; overscroll-behavior-x: contain; border-radius: 8px; }
+.piano { position: relative; height: 120px; }
+.tecla { position: absolute; top: 0; border: 1px solid var(--tecla-borda); padding: 0; touch-action: manipulation; }
+.tecla.branca { width: 40px; height: 120px; background: var(--tecla-branca); border-radius: 0 0 6px 6px; z-index: 1; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; font: 600 10px var(--f-texto); color: #6a7480; }
+.tecla.preta { width: 26px; height: 74px; background: var(--tecla-preta); border-color: var(--tecla-preta); border-radius: 0 0 4px 4px; z-index: 2; }
+.tecla.branca.c4 { color: var(--acento); }
+.tecla:active, .tecla.tocada { filter: brightness(0.86); }
+.tecla.ativa.branca { background: var(--acento-suave); box-shadow: inset 0 -5px 0 var(--acento); }
+.tecla.ativa.preta { background: var(--acento); border-color: var(--acento); }
+
+.rodape-licao { position: fixed; left: 0; right: 0; bottom: 0; z-index: 11; background: var(--folha); border-top: 1px solid var(--linha); padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); }
+.rodape-licao .dentro { max-width: 640px; margin: 0 auto; display: grid; gap: 10px; }
+.rodape-licao.certo { background: var(--ok-fundo); border-color: var(--ok); }
+.rodape-licao.errado { background: var(--erro-fundo); border-color: var(--erro); }
+.retorno b { font-size: 1.15rem; display: block; }
+.rodape-licao.certo .retorno b { color: var(--ok); }
+.rodape-licao.errado .retorno b { color: var(--erro); }
+.retorno p { margin: 4px 0 0; font-size: 0.97rem; }
+.fim-licao { text-align: center; display: grid; gap: 12px; justify-items: center; padding-top: 30px; }
+.fim-licao .grande-num { font-family: var(--f-titulo); font-size: 3.4rem; line-height: 1; color: var(--ok); }
+.fim-licao ul { text-align: left; margin: 0; padding-left: 18px; color: var(--apagado); }
+
+/* ---------------------------------------------------------------- partitura e oficina (compartilhado com oficina.js) */
+.pauta-linha { stroke: var(--pauta); stroke-width: 1; }
+.barra { stroke: var(--apagado); stroke-width: 1; }
+.barra-final { stroke: var(--tinta); }
+.tinta { fill: var(--tinta); }
+.contorno { fill: none; stroke: var(--tinta); stroke-width: 1.6; }
+.haste { stroke: var(--tinta); stroke-width: 1.2; }
+.ligadura { fill: none; stroke: var(--tinta); stroke-width: 1.2; }
+.suplementar { stroke: var(--tinta); stroke-width: 1.1; }
+.glifo { font-family: var(--f-musica); fill: var(--tinta); }
+.nome-voz { font: 600 10px var(--f-texto); fill: var(--apagado); letter-spacing: 0.04em; text-transform: uppercase; }
+.nome-voz.ativa { fill: var(--acento); }
+.num-compasso { font: 10px var(--f-texto); fill: var(--apagado); }
+.cifra { font: 700 11px var(--f-texto); fill: var(--acento); }
+.anotacao { font: 700 11px var(--f-texto); fill: var(--apagado); }
+.sev-erro { --sev: var(--erro); } .sev-aviso { --sev: var(--aviso); } .sev-info { --sev: var(--info); } .sev-ok { --sev: var(--ok); } .sev-foco { --sev: var(--acento); }
+.marcada .tinta { fill: var(--sev); } .marcada .contorno { stroke: var(--sev); } .marcada .haste { stroke: var(--sev); }
+.anotacao.sev-erro, .anotacao.sev-ok { fill: var(--sev); }
+.halo { fill: var(--sev); opacity: 0.22; } .halo-anel { fill: none; stroke: var(--sev); stroke-width: 1.6; }
+.faixa { fill: var(--sev); opacity: 0.07; } .risco { fill: var(--sev); }
+.selecao { fill: var(--acento); opacity: 0.16; }
+.caret { stroke: var(--acento); stroke-width: 2.2; stroke-linecap: round; } .caret-alvo { fill: var(--acento); }
+.cursor { stroke: var(--acento); stroke-width: 2; }
+.vazio { padding: 26px 8px; text-align: center; color: var(--apagado); }
+
+.oficina { max-width: 1000px; margin: 0 auto; padding-inline: 16px; padding-block: 4px calc(var(--doca) + 24px); display: grid; gap: 14px; }
+.of-enunciado h2 { font-size: 1.35rem; margin-top: 2px; }
+.of-instrucoes p { margin: 8px 0 0; }
+.of-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.of-partitura { width: 100%; overflow-x: auto; }
+.of-partitura svg { display: block; touch-action: manipulation; }
+.andamento { display: flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--apagado); font-variant-numeric: tabular-nums; }
+.andamento input { width: 90px; accent-color: var(--acento); }
+.acoes-pratica { display: flex; gap: 8px; flex-wrap: wrap; }
+.detalhe { margin-top: 10px; border-radius: 8px; border: 1px solid var(--sev); background: var(--papel); padding: 10px 12px; display: grid; gap: 6px; }
+.detalhe .cab { display: flex; justify-content: space-between; gap: 8px; align-items: start; }
+.detalhe .fechar { border: 0; background: none; color: var(--apagado); font-size: 1.1rem; line-height: 1; padding: 2px 4px; }
+.explica { display: grid; gap: 6px; font-size: 0.9rem; line-height: 1.45; }
+.explica p { margin: 0; }
+.explica .t { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--apagado); }
+.explica .nivel-nota { color: var(--sev); font-weight: 600; font-size: 0.84rem; }
+.explica .rever { justify-self: start; }
+.veredito { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.selo { font-family: var(--f-titulo); font-size: 1.3rem; white-space: nowrap; }
+.selo.aprovado { color: var(--ok); } .selo.reprovado { color: var(--erro); } .selo.neutro { color: var(--apagado); } .selo.andamento { color: var(--acento); }
+.contagens { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { white-space: nowrap; font-size: 0.8rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.chip.erro { background: var(--erro-fundo); color: var(--erro); } .chip.aviso { background: var(--aviso-fundo); color: var(--aviso); } .chip.info { background: var(--info-fundo); color: var(--info); }
+.chip.zero { opacity: 0.45; }
+.progresso { margin: 8px 0 0; font-size: 0.88rem; color: var(--apagado); }
+.of-terminei { margin-top: 10px; }
+.achados { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
+.achado { display: grid; grid-template-columns: 4px 44px minmax(0, 1fr); gap: 0 10px; align-items: start; border-radius: 8px; padding: 8px 10px 8px 0; background: var(--papel); border: 1px solid transparent; text-align: left; width: 100%; }
+.achado[aria-pressed="true"] { border-color: var(--sev); background: var(--folha); }
+.achado .tarja { align-self: stretch; border-radius: 0 3px 3px 0; background: var(--sev); }
+.achado .c { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 0.88rem; color: var(--apagado); }
+.achado .msg { font-size: 0.93rem; line-height: 1.4; min-width: 0; overflow-wrap: anywhere; }
+.achado .qual { display: block; font-size: 0.76rem; color: var(--sev); font-weight: 700; margin-top: 2px; }
+.achado .explica { margin-top: 8px; }
+.nada { margin: 12px 0 0; color: var(--apagado); }
+.pilula { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 1px 7px; border-radius: 999px; margin-right: 6px; }
+.pilula.erro { background: var(--erro-fundo); color: var(--erro); } .pilula.aviso { background: var(--aviso-fundo); color: var(--aviso); } .pilula.info { background: var(--info-fundo); color: var(--info); }
+.of-auto { margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: var(--ok-fundo); }
+.auto-lista { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px; }
+.doca { position: fixed; left: 0; right: 0; bottom: 0; z-index: 12; background: var(--folha); border-top: 1px solid var(--linha); box-shadow: 0 -6px 18px rgb(0 0 0 / 0.06); padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)); }
+.doca .dentro { max-width: 1000px; margin: 0 auto; display: grid; gap: 7px; }
+.linha-doca { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.resumo { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; border: 0; background: none; padding: 0; text-align: left; overflow: hidden; }
+.resumo .selo { font-size: 1.05rem; }
+.resumo .contagens { flex-wrap: nowrap; overflow: hidden; }
+.resumo .chip.zero { display: none; }
+.tocar { border: 0; background: var(--acento); color: var(--sobre-acento); border-radius: 999px; padding: 7px 14px; font-weight: 700; white-space: nowrap; }
+.recolher { border: 1px solid var(--linha); background: var(--folha); border-radius: 8px; width: 34px; height: 32px; padding: 0; color: var(--apagado); }
+.ferramentas { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 4px; }
+.ferr { min-width: 36px; height: 40px; border: 1px solid var(--linha); background: var(--papel); border-radius: 8px; display: grid; place-items: center; padding: 0 8px; font-weight: 700; font-size: 0.85rem; line-height: 1; }
+.ferramentas .ferr { min-width: 0; padding: 0; }
+.ferr .fig { font-family: var(--f-musica); font-size: 1.45rem; font-weight: 400; line-height: 1; }
+.ferr[aria-pressed="true"] { background: var(--acento); border-color: var(--acento); color: var(--sobre-acento); }
+.ferr:disabled { opacity: 0.4; }
+.vozes { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
+.chip-voz { flex: 0 0 auto; border: 1px solid var(--linha); background: var(--papel); border-radius: 999px; padding: 4px 11px; font-size: 0.82rem; font-weight: 600; }
+.chip-voz[aria-pressed="true"] { border-color: var(--acento); background: var(--acento-suave); color: var(--acento); }
+.doca .piano { height: 108px; } .doca .tecla.branca { height: 108px; } .doca .tecla.preta { height: 66px; }
+.aviso-doca { font-size: 0.82rem; color: var(--apagado); min-height: 1.2em; }
+.doca.recolhida .so-aberta { display: none !important; }
+
+.folha-aviso { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: var(--folha); border-top: 1px solid var(--linha); box-shadow: 0 -8px 30px rgb(0 0 0 / 0.15); padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
+.folha-aviso .dentro { max-width: 640px; margin: 0 auto; display: grid; gap: 10px; }
+.folha-aviso p { margin: 0; }
+.brinde { position: fixed; left: 50%; top: calc(16px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); z-index: 40; background: var(--ok); color: var(--sobre-acento); padding: 8px 16px; border-radius: 999px; font-weight: 700; box-shadow: 0 6px 20px rgb(0 0 0 / 0.2); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<main class="trilha" id="trilha"></main>
+
+<div class="tela" id="tela-licao" hidden>
+  <div class="tela-cab"><button class="fechar-tela" id="fechar-licao" aria-label="Sair da lição">✕</button><div class="prog-licao"><i id="prog-licao"></i></div></div>
+  <div class="tela-corpo" id="corpo-licao"></div>
+  <div class="rodape-licao" id="rodape-licao"><div class="dentro">
+    <div class="retorno" id="retorno" hidden></div>
+    <button class="botao primario grande" id="acao-licao">Continuar</button>
+  </div></div>
+</div>
+
+<div class="tela" id="tela-pratica" hidden>
+  <div class="tela-cab"><button class="fechar-tela" id="fechar-pratica" aria-label="Sair da prática">✕</button><b id="titulo-pratica"></b></div>
+  <div class="oficina" id="oficina"></div>
+</div>
+
+<div class="folha-aviso" id="folha" hidden><div class="dentro" id="folha-dentro"></div></div>
+<div class="brinde" id="brinde" hidden></div>
+
+<script src="motor.js"></script>
+<script src="cantus.js"></script>
+<script src="editor.js"></script>
+<script src="regras2.js"></script>
+<script src="partitura.js"></script>
+<script src="som.js"></script>
+<script src="geradores.js"></script>
+<script src="oficina.js"></script>
+<script src="licoes.js"></script>
+<script>
+"use strict";
+const M = window.Motor, P = window.Partitura, Som = window.Som, G = window.Geradores, Of = window.Oficina, Cn = window.Cantus, T = M.T;
+const { niveis, regraParaLicao, conceitos } = window.CURSO;
+const $ = (id) => document.getElementById(id);
+const esc = Of.esc, bonito = Of.bonito;
+
+// ---------------------------------------------------------------- progresso (localStorage)
+const CHAVE = "drl-curso:v1";
+const CAIXAS = [0, 1, 3, 7, 16, 35]; // dias até a próxima revisão
+const hoje = () => new Date().toISOString().slice(0, 10);
+const somarDias = (d, n) => { const x = new Date(d + "T12:00:00"); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10); };
+const novoEstado = () => ({ v: 1, licoes: {}, praticas: {}, revisao: {}, xp: 0, dias: { ultimo: null, seguidos: 0 } });
+let est = novoEstado();
+try { const s = JSON.parse(localStorage.getItem(CHAVE)); if (s && s.v === 1) est = { ...novoEstado(), ...s }; } catch (e) {}
+function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify(est)); } catch (e) {} }
+
+function marcarDia() {
+  const h = hoje();
+  if (est.dias.ultimo === h) return;
+  est.dias.seguidos = est.dias.ultimo === somarDias(h, -1) ? est.dias.seguidos + 1 : 1;
+  est.dias.ultimo = h;
+}
+
+function registrarResposta(conceito, certo) {
+  if (!conceito) return;
+  const r = est.revisao[conceito] || { caixa: 0, vence: hoje(), vistos: 0, erros: 0 };
+  r.vistos++;
+  if (certo) r.caixa = Math.min(CAIXAS.length - 1, r.caixa + 1);
+  else { r.caixa = 1; r.erros++; }
+  r.vence = somarDias(hoje(), CAIXAS[r.caixa]);
+  est.revisao[conceito] = r;
+}
+const vencidos = () => Object.entries(est.revisao).filter(([, r]) => r.vence <= hoje()).sort((a, b) => (a[1].vence < b[1].vence ? -1 : 1) || b[1].erros - a[1].erros).map(([c]) => c);
+
+// ---------------------------------------------------------------- ordem da trilha
+const itens = [];
+for (const n of niveis) for (const u of n.unidades) {
+  for (const l of u.licoes) itens.push({ tipo: "licao", id: l.id, dado: l, unidade: u, nivel: n });
+  for (const p of u.praticas || []) itens.push({ tipo: "pratica", id: p.id, dado: p, unidade: u, nivel: n });
+}
+const feito = (it) => (it.tipo === "licao" ? est.licoes[it.id] && est.licoes[it.id].feita : est.praticas[it.id] && est.praticas[it.id].aprovada);
+const indiceAtual = () => { const i = itens.findIndex((it) => !feito(it)); return i < 0 ? itens.length : i; };
+const licaoPorId = (id) => itens.find((it) => it.tipo === "licao" && it.id === id);
+
+// ---------------------------------------------------------------- trilha
+function desenharTrilha() {
+  const atual = indiceAtual();
+  const prox = itens[atual];
+  const nVenc = vencidos().length;
+  let html = `<header class="topo">
+    <div class="rotulo">Curso de composição · níveis 1 a 3</div>
+    <h1>Da regra à <em>liberdade</em></h1>
+    <div class="placar"><span class="dado">${est.dias.seguidos} <span>${est.dias.seguidos === 1 ? "dia seguido" : "dias seguidos"}</span></span>
+      <span class="dado">${est.xp} <span>XP</span></span>
+      <span class="dado">${itens.filter(feito).length}/${itens.length} <span>etapas</span></span></div>
+  </header>`;
+  if (prox) html += `<button class="continuar" data-ir="${atual}"><span class="rotulo">${atual === 0 ? "Começar" : "Continuar"} · nível ${prox.nivel.id.slice(1)}</span><b>${esc(prox.dado.titulo)}</b><span>${prox.tipo === "licao" ? "Lição de 3 a 5 minutos" : "Prática de composição"}</span></button>`;
+  else html += `<div class="cartao"><b>Você terminou os três níveis.</b> Continue com a revisão do dia e refaça as práticas com outros cantus firmi.</div>`;
+  if (Object.keys(est.revisao).length) html += `<div class="cartao revisao"><div><b>Revisão do dia</b><p>${nVenc ? `${nVenc} ${nVenc === 1 ? "assunto pede" : "assuntos pedem"} revisão hoje.` : "Nada vencido hoje. Volte amanhã."}</p></div>
+    <button class="botao ${nVenc ? "primario" : ""}" id="bt-revisao" ${nVenc ? "" : "disabled"}>Revisar</button></div>`;
+  let k = 0;
+  for (const n of niveis) {
+    const doNivel = itens.filter((it) => it.nivel === n);
+    const pct = Math.round((doNivel.filter(feito).length / doNivel.length) * 100);
+    html += `<section class="nivel-cab"><div class="rotulo">Nível ${n.id.slice(1)}</div><h2>${esc(n.titulo)}</h2><p>${esc(n.resumo)}</p>
+      <div class="barra-prog" aria-label="${pct}% concluído"><i style="width:${pct}%"></i></div></section>`;
+    for (const u of n.unidades) {
+      html += `<section class="cartao unidade"><h3>${esc(u.titulo)}</h3><div class="caminho">`;
+      const daUnidade = itens.filter((it) => it.unidade === u);
+      daUnidade.forEach((it) => {
+        const idx = itens.indexOf(it);
+        const estado = feito(it) ? "feito" : idx === atual ? "atual" : idx > atual ? "bloqueado" : "";
+        const num = it.tipo === "licao" ? u.licoes.indexOf(it.dado) + 1 : "✎";
+        const melhor = it.tipo === "licao" && est.licoes[it.id] ? ` · ${Math.round(est.licoes[it.id].melhor * 100)}% de acerto` : "";
+        const sub = it.tipo === "licao" ? `Lição${melhor}` : feito(it) ? "Prática aprovada" : "Prática de composição";
+        html += `<button class="no ${it.tipo} ${estado}" data-ir="${idx}"><span class="bola">${feito(it) && it.tipo === "licao" ? "✓" : num}</span>
+          <span class="txt"><b>${esc(it.dado.titulo)}</b><small>${sub}</small></span></button>`;
+        k++;
+      });
+      html += `</div></section>`;
+    }
+  }
+  html += `<footer class="rodape">
+    <details class="config cartao"><summary>Guardar o progresso</summary>
+      <p>O progresso fica só neste navegador. Para não perder (ou levar para outro aparelho), copie o código abaixo e cole-o lá.</p>
+      <textarea id="codigo" readonly aria-label="Código do progresso"></textarea>
+      <div class="linha-botoes"><button class="botao" id="bt-copiar">Copiar código</button><button class="botao" id="bt-colar">Usar um código</button><button class="botao" id="bt-zerar">Recomeçar do zero</button></div>
+    </details>
+    <p>Quer escrever livremente, nos 10 níveis? Use a <a href="https://claude.ai/artifact/WhPHE6UFcSnxz6QiTVXYjB" target="_blank" rel="noopener">oficina (versão 1)</a>.</p>
+  </footer>`;
+  $("trilha").innerHTML = html;
+  for (const b of document.querySelectorAll("[data-ir]")) b.addEventListener("click", () => abrirItem(+b.dataset.ir));
+  $("bt-revisao")?.addEventListener("click", abrirRevisao);
+  $("codigo").value = btoa(unescape(encodeURIComponent(JSON.stringify(est))));
+  $("bt-copiar").addEventListener("click", () => {
+    const t = $("codigo");
+    navigator.clipboard?.writeText(t.value).then(() => brinde("Código copiado"), () => { t.select(); brinde("Selecione e copie o código"); }) ?? t.select();
+  });
+  $("bt-colar").addEventListener("click", () => {
+    folha(`<p><b>Cole o código do progresso</b></p><textarea id="codigo-novo" style="width:100%;min-height:90px" aria-label="Código"></textarea>
+      <div class="linha-botoes"><button class="botao primario" id="usar">Usar este código</button><button class="botao" id="cancelar">Cancelar</button></div>`);
+    $("usar").addEventListener("click", () => {
+      try { const s = JSON.parse(decodeURIComponent(escape(atob($("codigo-novo").value.trim())))); if (s.v !== 1) throw 0; est = { ...novoEstado(), ...s }; salvar(); fecharFolha(); desenharTrilha(); brinde("Progresso carregado"); }
+      catch (e) { brinde("Esse código não é válido"); }
+    });
+    $("cancelar").addEventListener("click", fecharFolha);
+  });
+  $("bt-zerar").addEventListener("click", () => {
+    folha(`<p><b>Apagar todo o progresso?</b> Lições, práticas, XP e revisões voltam ao começo.</p>
+      <div class="linha-botoes"><button class="botao" id="sim" style="border-color:var(--erro);color:var(--erro)">Apagar</button><button class="botao" id="nao">Cancelar</button></div>`);
+    $("sim").addEventListener("click", () => { est = novoEstado(); salvar(); fecharFolha(); desenharTrilha(); });
+    $("nao").addEventListener("click", fecharFolha);
+  });
+}
+
+function folha(html) { $("folha-dentro").innerHTML = html; $("folha").hidden = false; }
+function fecharFolha() { $("folha").hidden = true; }
+let tBrinde = null;
+function brinde(msg) { const b = $("brinde"); b.textContent = msg; b.hidden = false; clearTimeout(tBrinde); tBrinde = setTimeout(() => (b.hidden = true), 2200); }
+
+function abrirItem(idx) {
+  const it = itens[idx];
+  const atual = indiceAtual();
+  const abrir = () => (it.tipo === "licao" ? abrirLicao(it.dado, { aoFim: desenharTrilha }) : abrirPratica(it.dado));
+  if (idx <= atual || feito(it)) return abrir();
+  const antes = itens[atual];
+  folha(`<p><b>${esc(it.dado.titulo)}</b> vem depois de <b>${esc(antes.dado.titulo)}</b>. Recomendo seguir a ordem, mas você pode abrir agora.</p>
+    <div class="linha-botoes"><button class="botao primario" id="ir-antes">Ir para ${esc(antes.dado.titulo)}</button><button class="botao" id="ir-mesmo">Abrir mesmo assim</button></div>`);
+  $("ir-antes").addEventListener("click", () => { fecharFolha(); abrirItem(atual); });
+  $("ir-mesmo").addEventListener("click", () => { fecharFolha(); abrir(); });
+}
+
+// ---------------------------------------------------------------- lição
+let L = null; // lição em andamento
+
+function expandir(cartoes) {
+  const r = [];
+  for (const c of cartoes) {
+    if (c.tipo === "gerado") for (let i = 0; i < (c.quantos || 1); i++) r.push(G.gerar(c.gerador));
+    else r.push(c);
+  }
+  return r;
+}
+const ehPergunta = (c) => c.tipo !== "conceito";
+
+function abrirLicao(licao, { aoFim, revisao = false, cartoes } = {}) {
+  const fila = cartoes || expandir(licao.cartoes);
+  // 1 ou 2 revisões vencidas misturadas nas lições novas
+  if (!revisao && !cartoes) {
+    const venc = vencidos().slice(0, 2);
+    for (const c of venc) if (conceitos[c]) fila.splice(Math.max(2, fila.length - 1), 0, { ...G.gerar(conceitos[c].gerador), revisao: true });
+  }
+  L = { licao, fila, i: 0, respondida: false, resposta: null, acertos: 0, total: fila.filter(ehPergunta).length, erros: [], refeitos: new Set(), aoFim, revisao };
+  marcarDia();
+  $("tela-licao").hidden = false;
+  document.body.style.overflow = "hidden";
+  mostrarCartao();
+}
+
+function fecharLicao() {
+  Som.parar();
+  $("tela-licao").hidden = true;
+  document.body.style.overflow = "";
+  const fim = L && L.aoFim;
+  L = null;
+  if (fim) fim();
+}
+
+function atualizarProgresso() {
+  $("prog-licao").style.width = `${Math.min(100, (L.i / L.fila.length) * 100)}%`;
+}
+
+// desenha um exemplo pequeno; aceita o texto ou um exercício já lido (para manter as mesmas notas)
+function desenharMini(caixa, fonte, opcoes = {}) {
+  let ex = fonte;
+  if (typeof fonte === "string") { try { ex = M.lerTexto(fonte); } catch (e) { caixa.textContent = "(partitura inválida)"; return null; } }
+  const anotacoes = (opcoes.anotacoes || []).map(([v, i, t, sev]) => ({ nota: ex.vozes[v] && ex.vozes[v].notas[i], texto: t, sev })).filter((a) => a.nota);
+  const cifras = (opcoes.cifras || []).map(([t, texto]) => ({ t: t * T, texto }));
+  const larg = Math.min(caixa.clientWidth || 600, 640) - 4;
+  const layout = P.desenhar(caixa, ex, { compacta: true, largura: Math.max(260, larg), anotacoes, cifras, marcas: opcoes.marcas, foco: opcoes.foco, rotulos: ex.vozes.map(() => "") });
+  return { ex, layout };
+}
+
+function botaoOuvir(ex, grande) {
+  const b = document.createElement("button");
+  b.className = "ouvir" + (grande ? " grande" : "");
+  b.textContent = grande ? "▶ Ouvir" : "▶ Ouvir";
+  b.addEventListener("click", () => {
+    if (Som.tocando()) { Som.parar(); return; }
+    Som.tocar(ex.ex, { bpm: 96, T, aoTick: (t) => P.moverCursor(ex.layout, t), aoFim: () => { P.moverCursor(ex.layout, null); b.textContent = "▶ Ouvir"; } });
+    b.textContent = "■ Parar";
+  });
+  return b;
+}
+
+function mostrarCartao() {
+  if (L.i >= L.fila.length) return fimLicao();
+  atualizarProgresso();
+  const c = L.fila[L.i];
+  L.respondida = false; L.resposta = null;
+  const corpo = $("corpo-licao");
+  corpo.innerHTML = "";
+  const caixa = document.createElement("div");
+  caixa.className = "cartao-licao";
+  corpo.appendChild(caixa);
+  const rod = $("rodape-licao"), ret = $("retorno"), acao = $("acao-licao");
+  rod.className = "rodape-licao"; ret.hidden = true;
+  const add = (html) => { const d = document.createElement("div"); d.innerHTML = html; caixa.appendChild(d.firstElementChild); return caixa.lastElementChild; };
+  let mini = null;
+  const partitura = (texto, op) => {
+    const m = document.createElement("div");
+    m.className = "mini-partitura";
+    caixa.appendChild(m);
+    mini = desenharMini(m, texto, op);
+    m.addEventListener("click", (ev) => aoTocarPartitura(ev, m));
+    return mini;
+  };
+  if (c.revisao) add(`<div class="rotulo">Revisão · ${esc((conceitos[c.conceito] || {}).titulo || "")}</div>`);
+
+  if (c.tipo === "conceito") {
+    add(`<h2>${esc(c.titulo)}</h2>`);
+    add(`<p class="texto">${c.texto}</p>`);
+    if (c.partitura) { partitura(c.partitura, c); caixa.appendChild(botaoOuvir(mini)); }
+    acao.textContent = "Continuar"; acao.disabled = false;
+    acao.onclick = () => { L.i++; mostrarCartao(); };
+    return;
+  }
+
+  add(`<p class="pergunta">${bonitoTexto(c.pergunta)}</p>`);
+  L.revelar = null;
+  if (c.tipo === "ouvir") {
+    const ex = M.lerTexto(c.partitura);
+    const b = botaoOuvir({ ex, layout: null }, true);
+    caixa.appendChild(b);
+    L.revelar = () => {
+      const m = document.createElement("div");
+      m.className = "mini-partitura";
+      b.after(m);
+      desenharMini(m, ex);
+    };
+  } else if (c.partitura) {
+    partitura(c.partitura, c);
+    if (c.tipo !== "erro") caixa.appendChild(botaoOuvir(mini));
+    L.mini = mini;
+  }
+
+  acao.textContent = "Verificar"; acao.disabled = true;
+  if (c.tipo === "escolha" || c.tipo === "ouvir" || c.tipo === "vf") {
+    const opcoes = c.tipo === "vf" ? ["Verdadeiro", "Falso"] : c.opcoes;
+    const lista = add(`<div class="opcoes ${c.tipo === "vf" ? "vf" : ""}"></div>`);
+    opcoes.forEach((o, k) => {
+      const b = document.createElement("button");
+      b.className = "opcao"; b.setAttribute("aria-pressed", "false"); b.innerHTML = bonitoTexto(esc(o));
+      b.addEventListener("click", () => {
+        if (L.respondida) return;
+        L.resposta = k;
+        for (const x of lista.children) x.setAttribute("aria-pressed", String(x === b));
+        acao.disabled = false;
+      });
+      lista.appendChild(b);
+    });
+    L.opcoesEl = lista;
+  } else if (c.tipo === "tocar") {
+    const tocado = add(`<div class="tocado">Toque uma tecla.</div>`);
+    const rolo = add(`<div class="piano-rolo"><div class="piano"></div></div>`);
+    Piano.montar(rolo.firstElementChild, (midi, tecla) => {
+      if (L.respondida) return;
+      Som.nota(midi);
+      L.resposta = midi;
+      for (const k of rolo.querySelectorAll(".tecla.ativa")) k.classList.remove("ativa");
+      tecla.classList.add("ativa");
+      tocado.innerHTML = `Você tocou: <b>${nomeDoMidi(midi, c.aceita)}</b>`;
+      acao.disabled = false;
+    }, (m) => nomeDoMidi(m));
+    const alvo = M.lerAltura(c.aceita[0]).ps;
+    requestAnimationFrame(() => Piano.centralizar(rolo, alvo + (Math.random() < 0.5 ? 5 : -4)));
+  } else if (c.tipo === "erro") {
+    add(`<div class="tocado" id="erro-dica">Toque numa nota da partitura.</div>`);
+  }
+  acao.onclick = () => verificar(c);
+}
+
+// nome de uma tecla, preferindo a grafia das respostas aceitas (C#5 em vez de Db5)
+function nomeDoMidi(midi, aceitas = []) {
+  for (const a of aceitas) { const p = M.lerAltura(a); if (p.ps === midi) return bonito(a); }
+  const N = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "G♯", "A", "B♭", "B"];
+  return N[midi % 12] + (Math.floor(midi / 12) - 1);
+}
+function bonitoTexto(s) { return String(s).replace(/\b([A-G])(#|b)(\d)\b/g, (m, l, a, o) => l + (a === "#" ? "♯" : "♭") + o); }
+
+function aoTocarPartitura(ev, caixa) {
+  const c = L && L.fila[L.i];
+  if (!c || c.tipo !== "erro" || L.respondida || !L.mini) return;
+  const box = L.mini.layout.svg.getBoundingClientRect();
+  const onde = P.localizar(L.mini.layout, ev.clientX - box.left, ev.clientY - box.top, 22);
+  if (!onde || !onde.perto) return;
+  const nota = onde.perto.nota, v = onde.perto.voz;
+  L.resposta = [v, L.mini.ex.vozes[v].notas.indexOf(nota)];
+  L.mini = desenharMini(caixa, L.mini.ex, { ...c, foco: { notas: [nota], sev: "foco" } });
+  $("erro-dica").innerHTML = `Nota escolhida: <b>${bonito(nota.nome)}</b>`;
+  $("acao-licao").disabled = false;
+}
+
+function verificar(c) {
+  let certo = false, resposta = "";
+  if (c.tipo === "escolha" || c.tipo === "ouvir") {
+    const certas = [].concat(c.certa);
+    certo = certas.includes(L.resposta);
+    resposta = certas.map((k) => c.opcoes[k]).join(" ou ");
+    [...L.opcoesEl.children].forEach((b, k) => { if (certas.includes(k)) b.classList.add("certa"); else if (k === L.resposta) b.classList.add("errada"); });
+    if (c.tipo === "ouvir" && L.revelar) L.revelar();
+  } else if (c.tipo === "vf") {
+    const k = c.certa ? 0 : 1;
+    certo = L.resposta === k;
+    resposta = c.certa ? "Verdadeiro" : "Falso";
+    [...L.opcoesEl.children].forEach((b, j) => { if (j === k) b.classList.add("certa"); else if (j === L.resposta) b.classList.add("errada"); });
+  } else if (c.tipo === "tocar") {
+    const alvos = c.aceita.map((a) => M.lerAltura(a).ps);
+    certo = alvos.includes(L.resposta);
+    resposta = c.aceita.map(bonito).join(" ou ");
+    if (!certo) Som.nota(alvos[0], 0.8);
+  } else if (c.tipo === "erro") {
+    certo = c.alvo.some(([v, i]) => v === L.resposta[0] && i === L.resposta[1]);
+    const caixa = document.querySelector(".mini-partitura");
+    const ex = L.mini.ex;
+    const certas = c.alvo.map(([v, i]) => ex.vozes[v].notas[i]);
+    desenharMini(caixa, ex, { ...c, marcas: [{ notas: certas, sev: "erro" }], foco: { notas: certas, sev: certo ? "ok" : "erro" } });
+    resposta = "a nota marcada em vermelho";
+  }
+  L.respondida = true;
+  const primeira = !L.refeitos.has(L.i);
+  if (primeira) { if (certo) L.acertos++; else L.erros.push(c); }
+  registrarResposta(c.conceito, certo);
+  if (certo && L.revisao) est.xp += 2;
+  salvar();
+  // errou: a pergunta volta no fim da lição (uma vez)
+  if (!certo && primeira && !c.gerado) { L.fila.push(c); L.refeitos.add(L.fila.length - 1); }
+  else if (!certo && primeira && c.gerado) { L.fila.push(G.gerar(c.gerado)); L.refeitos.add(L.fila.length - 1); }
+  const rod = $("rodape-licao"), ret = $("retorno"), acao = $("acao-licao");
+  rod.className = "rodape-licao " + (certo ? "certo" : "errado");
+  ret.innerHTML = certo ? `<b>Isso!</b><p>${bonitoTexto(esc(c.explica || ""))}</p>`
+    : `<b>Não é bem isso.</b><p>Resposta: <b>${bonitoTexto(esc(resposta))}</b>. ${bonitoTexto(esc(c.explica || ""))}</p>`;
+  ret.hidden = false;
+  acao.textContent = "Continuar"; acao.disabled = false;
+  acao.onclick = () => { L.i++; mostrarCartao(); };
+}
+
+function fimLicao() {
+  $("prog-licao").style.width = "100%";
+  const pct = L.total ? L.acertos / L.total : 1;
+  let xp = 0;
+  if (!L.revisao) {
+    const antes = est.licoes[L.licao.id];
+    if (!antes || !antes.feita) xp = 10;
+    est.licoes[L.licao.id] = { feita: true, melhor: Math.max(pct, antes ? antes.melhor : 0) };
+  }
+  est.xp += xp;
+  salvar();
+  const conceitosErrados = [...new Set(L.erros.map((c) => (conceitos[c.conceito] || {}).titulo || c.conceito).filter(Boolean))];
+  $("corpo-licao").innerHTML = `<div class="fim-licao">
+    <div class="rotulo">${L.revisao ? "Revisão concluída" : "Lição concluída"}</div>
+    <div class="grande-num">${L.acertos}/${L.total}</div>
+    <p>${L.total ? "acertos na primeira tentativa" : ""}${xp ? ` · +${xp} XP` : ""}</p>
+    ${conceitosErrados.length ? `<div class="cartao" style="text-align:left"><b>Vale revisar</b><ul>${conceitosErrados.map((x) => `<li>${esc(x)}</li>`).join("")}</ul><p style="margin:6px 0 0;color:var(--apagado)">Esses assuntos voltam na revisão de amanhã.</p></div>` : `<p>Sem erros. Esses assuntos voltam na revisão daqui a alguns dias.</p>`}
+  </div>`;
+  $("rodape-licao").className = "rodape-licao";
+  $("retorno").hidden = true;
+  const acao = $("acao-licao");
+  acao.textContent = "Voltar"; acao.disabled = false;
+  acao.onclick = fecharLicao;
+}
+
+function abrirRevisao() {
+  const venc = vencidos().slice(0, 8);
+  const cartoes = [];
+  for (const c of venc) {
+    if (conceitos[c]) cartoes.push({ ...G.gerar(conceitos[c].gerador), revisao: true });
+    else {
+      // conceito sem gerador: uma pergunta escrita de uma lição já feita
+      const pool = itens.filter((it) => it.tipo === "licao" && feito(it)).flatMap((it) => it.dado.cartoes.filter((x) => x.conceito === c && x.tipo !== "conceito"));
+      if (pool.length) cartoes.push({ ...pool[Math.floor(Math.random() * pool.length)], revisao: true });
+    }
+  }
+  if (!cartoes.length) { brinde("Nada para revisar hoje"); return; }
+  abrirLicao({ id: "revisao", titulo: "Revisão do dia" }, { revisao: true, cartoes, aoFim: desenharTrilha });
+}
+
+$("fechar-licao").addEventListener("click", () => {
+  if (!L || L.i === 0 || L.i >= L.fila.length) return fecharLicao();
+  folha(`<p><b>Sair da lição?</b> O que você respondeu até aqui já conta para a revisão.</p>
+    <div class="linha-botoes"><button class="botao primario" id="ficar">Continuar a lição</button><button class="botao" id="sair">Sair</button></div>`);
+  $("ficar").addEventListener("click", fecharFolha);
+  $("sair").addEventListener("click", () => { fecharFolha(); fecharLicao(); });
+});
+
+// ---------------------------------------------------------------- prática
+let oficina = null, praticaAtual = null;
+
+function abrirPratica(p, textoInicial) {
+  praticaAtual = p;
+  marcarDia(); salvar();
+  $("tela-pratica").hidden = false;
+  document.body.style.overflow = "hidden";
+  $("titulo-pratica").textContent = p.titulo;
+  if (oficina) oficina.destruir();
+  const salvoP = est.praticas[p.id] || {};
+  const texto = textoInicial || salvoP.rascunho || p.texto;
+  const caixa = $("oficina");
+  oficina = Of.criar(caixa, {
+    titulo: p.titulo, instrucoes: p.instrucoes + acoesPratica(p), texto,
+    perfil: G.perfilDaPratica(p), contexto: G.contextoDaPratica(p), acordes: p.acordes,
+    duracao: p.duracao, alvoCompassos: p.alvoCompassos, fimLivre: p.fimLivre, autoavaliacao: p.autoavaliacao,
+    licaoDaRegra: (regra) => {
+      const it = licaoPorId(regraParaLicao[regra]);
+      return it && { titulo: it.dado.titulo, abrir: () => abrirLicao(it.dado, { aoFim: () => {} }) };
+    },
+    aoMudar: (t) => { est.praticas[p.id] = { ...(est.praticas[p.id] || {}), rascunho: t }; salvar(); },
+    aoAprovar: (t) => {
+      const antes = est.praticas[p.id] || {};
+      if (!antes.aprovada) { est.xp += 30; brinde("Prática aprovada · +30 XP"); }
+      est.praticas[p.id] = { ...antes, aprovada: true, rascunho: t };
+      salvar();
+    },
+    aoErro: (regras) => { for (const r of regras) { const lic = regraParaLicao[r]; if (lic) registrarResposta(regraConceito(r), false); } salvar(); },
+  });
+  ligarAcoesPratica(p);
+  window.scrollTo(0, 0);
+  $("tela-pratica").scrollTop = 0;
+}
+
+// conceito da fila de revisão ligado a uma regra quebrada na prática
+function regraConceito(r) {
+  if (/paralel|oculta|tempo_forte/.test(r)) return "paralelas";
+  if (/dissonancia|consonan/.test(r)) return "consonancia";
+  if (/salto|intervalo_melodico|contorno/.test(r)) return "intervalos";
+  if (/baixo|acorde|retrogressao|notas_do_acorde/.test(r)) return "acordes";
+  if (/cadencia/.test(r)) return "cadencias";
+  return null;
+}
+
+function acoesPratica(p) {
+  const b = [];
+  if (p.sortear) b.push(`<button class="botao" data-acao="sortear">Outro cantus firmus</button>`);
+  if (p.solucao) b.push(`<button class="botao" data-acao="solucao">Ver uma solução</button>`);
+  b.push(`<button class="botao" data-acao="recomecar">Recomeçar</button>`);
+  return `<div class="acoes-pratica" style="margin-top:10px">${b.join("")}</div>`;
+}
+
+function ligarAcoesPratica(p) {
+  for (const b of $("oficina").querySelectorAll("[data-acao]")) b.addEventListener("click", () => {
+    const a = b.dataset.acao;
+    if (a === "recomecar") { est.praticas[p.id] = { ...(est.praticas[p.id] || {}), rascunho: null }; salvar(); abrirPratica(p, p.texto); }
+    if (a === "sortear") {
+      const tom = /^tom:\s*(.+)$/m.exec(p.texto);
+      const cf = Cn.sortear();
+      if (!cf) return brinde("Tente de novo");
+      const cant = "cantus: " + cf.notas.split(" ").map((n, k) => (k ? n : n + "/4")).join(" ");
+      let t = p.texto.replace(/^tom:.*$/m, "tom: " + cf.tom).replace(/^cantus:.*$/m, cant).replace(/^contraponto:.*$/m, "contraponto:");
+      if (!tom) t = "tom: " + cf.tom + "\n" + t;
+      abrirPratica({ ...p, solucao: null }, t);
+    }
+    if (a === "solucao") {
+      folha(`<p><b>Ver uma solução?</b> Tentar antes ensina mais: compare depois com a sua. A solução abre no lugar do seu rascunho (o rascunho fica guardado até você mudar algo).</p>
+        <div class="linha-botoes"><button class="botao primario" id="ver">Ver a solução</button><button class="botao" id="nao">Continuar tentando</button></div>`);
+      $("ver").addEventListener("click", () => { fecharFolha(); const rasc = (est.praticas[p.id] || {}).rascunho; abrirPratica({ ...p }, p.solucao); est.praticas[p.id] = { ...(est.praticas[p.id] || {}), rascunho: rasc }; salvar(); });
+      $("nao").addEventListener("click", fecharFolha);
+    }
+  });
+}
+
+$("fechar-pratica").addEventListener("click", () => {
+  if (oficina) { oficina.destruir(); oficina = null; }
+  $("tela-pratica").hidden = true;
+  document.body.style.overflow = "";
+  desenharTrilha();
+});
+
+// ---------------------------------------------------------------- início
+// iOS: o Web Audio só toca no modo silencioso se a sessão de áudio for "playback"
+document.addEventListener("pointerdown", () => { try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {} }, { once: true });
+desenharTrilha();
+if (document.fonts) document.fonts.ready.then(() => { if (L) { const c = L.fila[L.i]; if (c && c.partitura && !L.respondida) mostrarCartao(); } });
+</script>

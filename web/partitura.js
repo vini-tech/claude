@@ -132,7 +132,7 @@
       }
       sis.x1 = x;
     });
-    const alturaTotal = sistemas.length * (altSistema + GAP) - GAP + 4;
+    const alturaTotal = sistemas.length * (altSistema + GAP) - GAP + 4 + ((o.anotacoes || []).length ? 22 : 0);
     const larguraTotal = Math.max(o.compacta ? 0 : largura, ...sistemas.map((s) => s.x1 + 2));
 
     const xDoTempo = (t) => {
@@ -249,7 +249,10 @@
       const cab = cabecas.find((x) => x.nota === an.nota);
       if (!cab) continue;
       const yBase = L0.sistemas[cab.sistema].y + cab.voz * FAIXA + MARGEM_SUP + ALT_PAUTA;
-      topo.push(`<text class="anotacao${an.sev ? " sev-" + an.sev : ""}" x="${cab.x}" y="${Math.max(yBase + 15, cab.y + 18)}" text-anchor="middle">${esc(an.texto)}</text>`);
+      // abaixo da pauta, e abaixo da haste quando ela desce
+      const hasteDesce = cab.y <= yBase - 2 * S && an.nota.duracao < 4 * T;
+      const y = Math.max(yBase + 15, cab.y + (hasteDesce ? 3.5 * S + 12 : 18));
+      topo.push(`<text class="anotacao${an.sev ? " sev-" + an.sev : ""}" x="${cab.x}" y="${y}" text-anchor="middle">${esc(an.texto)}</text>`);
     }
 
     caixa.innerHTML = `<svg width="${larguraTotal}" height="${alturaTotal}" viewBox="0 0 ${larguraTotal} ${alturaTotal}" role="img" aria-label="${esc(o.descricao || "Partitura")}">

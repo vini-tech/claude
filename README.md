@@ -13,6 +13,31 @@ nível  8  estilo clássico ao piano    █████░░░░░░░
 nível 10  escrita livre               █░░░░░░░░░░░  quase tudo é info
 ```
 
+## Versão 2: o curso (níveis 1–3, com aulas)
+
+`web/curso.html` é um curso no estilo Duolingo, montado a partir da pesquisa em
+[`pesquisa/`](pesquisa/) (contraponto, harmonia, melodia e design de aulas; o plano está em
+[`pesquisa/05-plano-da-versao-2.md`](pesquisa/05-plano-da-versao-2.md)).
+
+- **Três níveis** que misturam contraponto, melodia e harmonia: *A linha e o intervalo*,
+  *Passagem e frase* e *Movimento e harmonia*. São 27 lições e 9 práticas de composição.
+- **Lições de 3 a 5 minutos:** um conceito curto com partitura e som, depois perguntas de vários
+  tipos (escolha, verdadeiro ou falso, tocar a nota no piano, achar o erro na partitura, ouvir e
+  escolher). Toda resposta mostra o porquê; a pergunta errada volta no fim da lição.
+- **Revisão espaçada:** cada assunto volta em 1, 3, 7, 16 e 35 dias, sempre com uma pergunta nova.
+- **Práticas:** compor um cantus firmus, 1ª a 3ª espécie, motivo em sequência, completar um
+  período, escrever o baixo de uma melodia e um período sobre um baixo dado. A correção é feita
+  compasso a compasso, e cada erro tem um botão para rever a lição que ensina a regra.
+- O progresso fica no navegador; dá para copiar um código e levá-lo para outro aparelho.
+
+| arquivo | o que tem |
+|---------|-----------|
+| `web/licoes.js` | todo o conteúdo: lições, perguntas e práticas |
+| `web/geradores.js` | perguntas criadas na hora (intervalos, consonância, acordes...) |
+| `web/regras2.js` | regras novas: cantus firmus, melodia tonal, período, baixo |
+| `web/oficina.js` | o editor com piano usado nas práticas |
+| `tests/validar_curso.js` | confere cada partitura, cada pergunta "ache o erro" e cada solução |
+
 ## Versão web (celular)
 
 A pasta [`web/`](web/) tem o mesmo verificador em JavaScript, numa página que funciona no
