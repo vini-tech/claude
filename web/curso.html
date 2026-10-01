@@ -131,6 +131,24 @@ figure.exemplo figcaption { display: flex; gap: 10px; align-items: center; flex-
 .of-cifras-rot { display: grid; gap: 4px; font-size: 0.85rem; font-weight: 700; color: var(--apagado); }
 .of-cifras { width: 100%; padding: 8px 10px; border: 1px solid var(--linha); border-radius: 8px; background: var(--folha); font-size: 1rem; font-weight: 400; }
 .tela .tela-cab { max-width: 1000px; }
+.antes-ex { display: grid; gap: 12px; max-width: 720px; margin: 0 auto; width: 100%; }
+.antes-ex h2 { font-size: 1.4rem; }
+.quiz { display: grid; gap: 16px; }
+.questao { display: grid; gap: 8px; }
+.questao .q { margin: 0; font-weight: 700; line-height: 1.4; display: flex; gap: 10px; }
+.questao .q .num { flex: 0 0 24px; height: 24px; border-radius: 50%; background: var(--acento-suave); color: var(--acento); display: grid; place-items: center; font-size: 0.8rem; }
+.questao.feita .q .num { background: var(--ok); color: var(--sobre-acento); }
+.opcoes { display: grid; gap: 6px; }
+.opcao { text-align: left; border: 2px solid var(--linha); background: var(--folha); border-radius: 10px; padding: 10px 12px; font-size: 0.98rem; line-height: 1.35; }
+.opcao:disabled { cursor: default; }
+.opcao.certa { border-color: var(--ok); background: var(--ok-fundo); opacity: 1; }
+.opcao.errada { border-color: var(--erro); background: var(--erro-fundo); text-decoration: line-through; opacity: 0.8; }
+.questao.feita .opcao:not(.certa):not(.errada) { opacity: 0.5; }
+.retorno { margin: 0; font-size: 0.95rem; line-height: 1.5; padding: 8px 12px; border-radius: 8px; }
+.retorno.sim { background: var(--ok-fundo); }
+.retorno.nao { background: var(--erro-fundo); color: var(--erro); }
+.pos-quiz { display: grid; gap: 10px; }
+.relatorio-det summary { cursor: pointer; font-weight: 700; margin-bottom: 8px; }
 
 
 /* ---------------------------------------------------------------- partitura e oficina (compartilhado com oficina.js) */
@@ -242,6 +260,7 @@ figure.exemplo figcaption { display: flex; gap: 10px; align-items: center; flex-
 <script src="editor.js"></script>
 <script src="regras2.js"></script>
 <script src="regras3.js"></script>
+<script src="questoes.js"></script>
 <script src="buscador.js"></script>
 <script src="partitura.js"></script>
 <script src="som.js"></script>
@@ -251,7 +270,7 @@ figure.exemplo figcaption { display: flex; gap: 10px; align-items: center; flex-
 <script src="temas.js"></script>
 <script>
 "use strict";
-const M = window.Motor, P = window.Partitura, Som = window.Som, G = window.Geradores, Of = window.Oficina, Cn = window.Cantus, Est = window.Estilo, Bu = window.Buscador, T = M.T;
+const M = window.Motor, P = window.Partitura, Som = window.Som, G = window.Geradores, Of = window.Oficina, Cn = window.Cantus, Est = window.Estilo, Bu = window.Buscador, Qs = window.Questoes, T = M.T;
 const { niveis } = window.TEMAS;
 const $ = (id) => document.getElementById(id);
 const esc = Of.esc, bonito = Of.bonito;
@@ -259,7 +278,7 @@ const bonitoTexto = (s) => String(s).replace(/\b([A-G])(#|b)(\d)\b/g, (m, l, a, 
 
 // ---------------------------------------------------------------- progresso e anotações (localStorage)
 const CHAVE = "drl-atelie:v1";
-const novo = () => ({ v: 1, notas: {}, exercicios: {} });
+const novo = () => ({ v: 1, notas: {}, exercicios: {}, antes: {} });
 let est = novo();
 try { const s = JSON.parse(localStorage.getItem(CHAVE)); if (s && s.v === 1) est = { ...novo(), ...s }; } catch (e) {}
 const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify(est)); } catch (e) {} };
@@ -408,10 +427,20 @@ function abrirExercicio(t, e, textoInicial) {
   const st = est.exercicios[e.id] || {};
   const texto = textoInicial || st.rascunho || e.texto;
   const caixa = $("oficina");
-  const planoHTML = e.plano && e.plano.length ? `<details class="plano" ${st.rascunho ? "" : "open"}><summary>Plano antes de compor</summary>
-      ${e.plano.map((p, k) => campoAberto(`${e.id}:plano${k}`, p[0], p[1] || "")).join("")}</details>` : "";
+  // antes do primeiro exercício de cada tema: perguntas obrigatórias sobre o que decidir antes de compor
+  if (t.antes && t.antes.length && !(est.antes || {})[t.id]) {
+    oficina = null;
+    caixa.innerHTML = `<section class="cartao antes-ex"><div class="rotulo">Antes de compor</div>
+      <h2>${esc(e.titulo)}</h2><div class="of-instrucoes">${e.instrucoes}</div>
+      <p class="lead-p">Responda às perguntas sobre as decisões deste tema. Elas valem para todos os exercícios dele; a partitura abre quando todas estiverem certas.</p>
+      <div class="quiz"></div><button class="botao primario grande" id="compor" disabled>Compor</button></section>`;
+    montarQuiz(caixa.querySelector(".quiz"), t.antes.map((q) => ({ ...q, certas: [0] })), true, () => { $("compor").disabled = false; });
+    $("compor").addEventListener("click", () => { est.antes = { ...(est.antes || {}), [t.id]: true }; salvar(); abrirExercicio(t, e, textoInicial); });
+    $("tela-ex").scrollTop = 0;
+    return;
+  }
   oficina = Of.criar(caixa, {
-    titulo: e.titulo, instrucoes: e.instrucoes + planoHTML + acoes(e), texto,
+    titulo: e.titulo, instrucoes: e.instrucoes + acoes(e), texto,
     perfil: perfilDe(e), contexto: G.contextoDaPratica(e),
     cifras: e.cifras, cifrasAluno: e.cifrasAluno, cifrasIniciais: st.cifras != null && !textoInicial ? st.cifras : e.cifrasIniciais,
     duracao: e.duracao, alvoCompassos: e.alvoCompassos, fimLivre: e.fimLivre,
@@ -422,12 +451,36 @@ function abrirExercicio(t, e, textoInicial) {
       if (!antes.aprovado) brinde("Exercício aprovado");
       est.exercicios[e.id] = { ...antes, aprovado: true, rascunho: tx };
       salvar();
-      mostrarDepois(t, e, tx);
+      mostrarDepois(t, e, tx, (oficina && oficina.cifras()) || e.cifras || (antes.cifras || e.cifrasIniciais || "").split(/\s+/).filter(Boolean));
     },
   });
   for (const ta of caixa.querySelectorAll("textarea[data-nota]")) ta.addEventListener("input", () => guardarNota(ta.dataset.nota, ta.value));
   ligarAcoes(t, e);
   $("tela-ex").scrollTop = 0;
+}
+
+// perguntas de múltipla escolha obrigatórias: só a certa conclui; a errada fica marcada
+function montarQuiz(raiz, perguntas, embaralhar, aoConcluir) {
+  if (!perguntas.length) { aoConcluir(); return; }
+  let feitas = 0;
+  perguntas.forEach((q, k) => {
+    const ordem = q.o.map((_, i) => i);
+    if (embaralhar) for (let i = ordem.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [ordem[i], ordem[j]] = [ordem[j], ordem[i]]; }
+    const d = document.createElement("div");
+    d.className = "questao";
+    d.innerHTML = `<p class="q"><span class="num">${k + 1}</span>${bonitoTexto(q.p)}</p><div class="opcoes">${ordem.map((i) => `<button class="opcao" type="button" data-i="${i}">${bonitoTexto(q.o[i])}</button>`).join("")}</div><p class="retorno" hidden></p>`;
+    raiz.appendChild(d);
+    const ret = d.querySelector(".retorno");
+    for (const b of d.querySelectorAll(".opcao")) b.addEventListener("click", () => {
+      const certa = q.certas.includes(+b.dataset.i);
+      if (!certa) { b.classList.add("errada"); b.disabled = true; ret.hidden = false; ret.className = "retorno nao"; ret.textContent = "Não é essa. Pense de novo" + (embaralhar ? "." : " olhando a partitura."); return; }
+      b.classList.add("certa");
+      for (const o of d.querySelectorAll(".opcao")) o.disabled = true;
+      ret.hidden = false; ret.className = "retorno sim"; ret.innerHTML = "<b>Isso.</b> " + bonitoTexto(q.e);
+      d.classList.add("feita");
+      if (++feitas === perguntas.length) aoConcluir();
+    });
+  });
 }
 
 function acoes(e) {
@@ -452,24 +505,28 @@ function ligarAcoes(t, e) {
 }
 
 // depois da aprovação: relatório de estilo, reflexão e (só então) a versão do professor
-function mostrarDepois(t, e, tx) {
+function mostrarDepois(t, e, tx, cifras) {
   const caixa = $("oficina");
   caixa.querySelector(".depois")?.remove();
   let ex;
   try { ex = M.lerTexto(tx); } catch (err) { return; }
   const nomeCf = (tx.match(/^cf:\s*(\S+)/m) || [])[1];
-  const itens = Est.relatorio(ex, { cf: nomeCf ? ex.vozes.findIndex((v) => v.nome === nomeCf) : -1 });
+  const cf = nomeCf ? ex.vozes.findIndex((v) => v.nome === nomeCf) : -1;
+  const itens = Est.relatorio(ex, { cf });
   const prior = [...itens.filter((i) => i.nivel === "atencao"), ...itens.filter((i) => i.nivel === "ok")];
+  const perguntas = Qs.depois(ex, { cf, cifras: cifras && cifras.length ? cifras : null });
   const s = document.createElement("section");
   s.className = "cartao depois";
-  s.innerHTML = `<div class="rotulo">Relatório de estilo</div>
-    <p class="lead-p">Descrição do que você escreveu, comparada a referências do estilo. Fora da faixa não é erro: é informação para decidir.</p>
-    <ul class="relatorio">${prior.map((i) => `<li class="${i.nivel}"><b>${esc(i.titulo)}</b><span class="v">${esc(i.valor)}</span><small>Referência: ${esc(i.referencia)}. ${esc(i.nota)}</small></li>`).join("")}</ul>
-    ${campoAberto(`${e.id}:reflexao`, "Reflexão: o que funcionou? o que você mudaria?", "Duas ou três frases.")}
-    ${e.solucao || e.sortear ? `<button class="botao" id="ver-prof" ${nota(e.id + ":reflexao").trim() ? "" : "disabled"}>Ver a versão do professor</button><div id="prof" hidden></div>` : ""}`;
+  s.innerHTML = `<div class="rotulo">Releia o que você escreveu</div>
+    <p class="lead-p">As respostas estão na sua partitura: olhe para ela antes de escolher. A versão do professor aparece quando todas estiverem certas.</p>
+    <div class="quiz"></div>
+    <div class="pos-quiz" hidden>
+      <details class="relatorio-det"><summary>Relatório de estilo completo</summary>
+      <ul class="relatorio">${prior.map((i) => `<li class="${i.nivel}"><b>${esc(i.titulo)}</b><span class="v">${esc(i.valor)}</span><small>Referência: ${esc(i.referencia)}. ${esc(i.nota)}</small></li>`).join("")}</ul></details>
+      ${e.solucao || e.sortear ? `<button class="botao primario" id="ver-prof">Ver a versão do professor</button><div id="prof" hidden></div>` : ""}
+    </div>`;
   caixa.appendChild(s);
-  const ta = s.querySelector("textarea");
-  ta.addEventListener("input", () => { guardarNota(ta.dataset.nota, ta.value); const b = $("ver-prof"); if (b) b.disabled = !ta.value.trim(); });
+  montarQuiz(s.querySelector(".quiz"), perguntas, false, () => { s.querySelector(".pos-quiz").hidden = false; });
   $("ver-prof")?.addEventListener("click", () => {
     const d = $("prof");
     const b = $("ver-prof");

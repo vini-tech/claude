@@ -27,9 +27,12 @@ fechadas, foi retirada.
 Cada tema tem: um **esboço** antes da aula (sem correção); uma aula curta e técnica; um **exemplo
 em camadas** escrito como diário de decisões (decisão, alternativa descartada, checagem) com uma
 pausa para você responder; um **contraste** entre duas versões corretas; e **exercícios** em ordem
-(completar → menos apoio → restrição → livre → variante). Cada exercício tem um plano antes, correção
-compasso a compasso, relatório de estilo e reflexão; só depois da reflexão aparece a versão do
-professor (nos cantus sorteados ela é composta na hora pelo buscador).
+(completar → menos apoio → restrição → livre → variante). Antes do primeiro exercício de cada tema há
+três perguntas obrigatórias de múltipla escolha sobre as decisões do tema; a correção é compasso a
+compasso; depois da aprovação, três perguntas calculadas da sua própria partitura (clímax,
+consonâncias, movimento, inversões, ritmo harmônico) obrigam a relê-la, e só então aparecem o
+relatório de estilo e a versão do professor (nos cantus sorteados ela é composta na hora pelo
+buscador). Apagar uma nota no meio da voz a troca por uma pausa de mesmo valor.
 
 | arquivo | o que tem |
 |---------|-----------|
@@ -37,6 +40,7 @@ professor (nos cantus sorteados ela é composta na hora pelo buscador).
 | `web/regras3.js` | cifras (I6, V43, ii6, I64…) e restrições dos exercícios |
 | `web/buscador.js` | acha soluções de 1ª a 3ª espécie com o próprio verificador |
 | `web/estilo.js` | o relatório de estilo (descritivo, não corrige) |
+| `web/questoes.js` | as perguntas de depois, calculadas da partitura do aluno |
 | `web/oficina.js` | o editor com piano usado nos exercícios |
 | `tests/validar_temas.js` | confere cada exemplo, contraste e solução no verificador |
 

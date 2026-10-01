@@ -45,6 +45,12 @@
       temas: [
         {
           id: "arquitetura", titulo: "Arquitetura da linha",
+          // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)
+          antes: [
+            { p: "Contraponto em cima; o cantus termina ré–dó (2̂–1̂). Quais são as duas últimas notas do contraponto?", o: ["si–dó (6ª maior → 8ª)", "sol–dó (5ª → 8ª)", "ré–dó (8ª → 8ª)", "fá–mi (3ª → 3ª)"], e: "A cadência converge por grau em movimento contrário: 6ª maior → 8ª com o contraponto em cima (3ª menor → uníssono embaixo). Sol–dó chega à 8ª por salto em movimento direto; ré–dó são 8ªs paralelas." },
+            { p: "Onde planejar o clímax do contraponto?", o: ["Num ponto único, entre a metade e dois terços da linha, fora do compasso do clímax do cantus", "No primeiro terço, para ter tempo de descer até a cadência", "No mesmo compasso do clímax do cantus, para reforçá-lo", "Em dois pontos de mesma altura, para equilibrar a linha"], e: "Um único ponto culminante organiza a linha: antes dele ela ganha registro, depois gasta. Cedo demais, a linha só desce; repetido, perde força; junto com o do cantus, as vozes soam como bloco." },
+            { p: "O que deve formar o 'tecido' do meio da linha?", o: ["3ªs e 6ªs, sem passar de três paralelas seguidas", "5ªs e 8ªs alternadas com 3ªs", "6ªs paralelas do começo ao fim, que são as mais suaves", "Qualquer consonância, desde que não haja paralelas proibidas"], e: "As imperfeitas mantêm o movimento; as perfeitas soam como chegadas e ficam nas pontas e nas articulações. Uma fila longa de 3ªs ou 6ªs paralelas soa como uma voz dobrada, não como duas linhas." },
+          ],
           objetivo: "Compor uma 1ª espécie de trás para frente: cadência, clímax, contorno e só então o preenchimento.",
           ouvir: ["Palestrina, Missa Papae Marcelli, Kyrie (linhas vocais em arco)", "Fux, Gradus ad Parnassum, exemplos de 1ª espécie", "Bach, corais: o par soprano–baixo reduzido a uma nota por tempo"],
           esboco: "Sobre o cantus firmus C4 D4 F4 E4 G4 A4 F4 E4 D4 C4, qual seria a sua primeira decisão? Escreva as duas últimas notas do contraponto e onde ficaria o clímax.",
@@ -106,6 +112,12 @@
         },
         {
           id: "elaborar", titulo: "Elaborar um esqueleto: a 2ª espécie",
+          // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)
+          antes: [
+            { p: "Duas notas do esqueleto a uma 3ª de distância (dó → lá) em tempos fortes seguidos. Qual a diminuição mais natural no tempo fraco?", o: ["Nota de passagem (si), consonante ou dissonante", "Bordadura dissonante (ré)", "Repetir o dó", "Salto de 5ª para baixo e volta"], e: "A 3ª pede preenchimento: a passagem liga as duas notas estruturais por grau. A bordadura dissonante só entra na 3ª espécie; a repetição é proibida; o salto esconde o esqueleto." },
+            { p: "Na 2ª espécie, onde as paralelas costumam passar despercebidas?", o: ["Do tempo fraco ao forte seguinte, e entre tempos fortes consecutivos", "Só entre as duas notas do mesmo compasso", "Só no primeiro e no último compasso", "Em lugar nenhum: a nota fraca sempre desfaz as paralelas"], e: "A nota fraca forma um intervalo com o próximo tempo forte (5ª → 5ª é paralela), e 5ªs ou 8ªs em tempos fortes seguidos continuam audíveis através de uma única nota fraca." },
+            { p: "Que nota pode ser dissonante na 2ª espécie?", o: ["A do tempo fraco, só como passagem entre duas consonâncias", "A do tempo forte, se resolver por grau", "Qualquer uma que chegue por grau", "A do tempo fraco atingida por salto, se a seguinte for consonante"], e: "Na 2ª espécie a dissonância é só de passagem: chega e sai por grau, na mesma direção, no tempo fraco. Dissonância no tempo forte (retardo) é assunto da 4ª espécie." },
+          ],
           objetivo: "Tratar a 2ª espécie como diminuição de uma 1ª espécie: cada nota fraca tem uma razão.",
           ouvir: ["Bach, Invenção nº 1 (BWV 772): reduza os compassos 1–2 a uma nota por tempo", "Corais de Bach: passagens em colcheia no baixo são 2ª espécie"],
           esboco: "O esqueleto G4 → C5 (sobre C4 → E4) está a uma 4ª. Que nota você poria no tempo fraco entre eles, e por quê?",
@@ -160,6 +172,12 @@
         },
         {
           id: "continua", titulo: "Linha contínua: a 3ª espécie",
+          // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)
+          antes: [
+            { p: "Na 3ª espécie, o que é a nota do tempo 1 de cada compasso?", o: ["Uma consonância: a nota do esqueleto", "Uma dissonância, para dar impulso", "A mesma nota do último tempo do compasso anterior", "Qualquer nota, desde que resolva no tempo 3"], e: "O tempo 1 carrega o esqueleto de 1ª espécie; as outras três semínimas são a célula que liga uma nota estrutural à seguinte." },
+            { p: "Qual é o desenho da cambiata (contraponto em cima)?", o: ["Desce por grau a uma dissonância, salta uma 3ª para baixo e sobe por grau", "Sobe por grau, salta uma 4ª e volta", "Bordadura superior e inferior em volta da mesma nota", "Desce por grau quatro vezes seguidas"], e: "A cambiata é a exceção consagrada: a dissonância (2º tempo) sai por salto de 3ª e a linha volta por grau, preenchendo o espaço. É a fórmula clássica da cadência em 3ª espécie." },
+            { p: "Uma 5ª no tempo 3 e outra 5ª no tempo 1 do compasso seguinte, com uma semínima no meio:", o: ["Soam como 5ªs paralelas: evite", "São aceitáveis porque não são notas vizinhas", "Só são problema se as duas vozes saltarem", "São aceitáveis se a nota do meio for dissonante"], e: "Uma única semínima entre duas 5ªs (ou 8ªs) não basta para separá-las: o ouvido liga as duas consonâncias perfeitas, sobretudo quando a segunda cai no tempo forte." },
+          ],
           objetivo: "Escrever quatro notas por tempo sem perder o esqueleto: células que saem de uma nota estrutural e chegam na próxima.",
           ouvir: ["Bach, Invenções nº 4 (ré menor) e nº 8 (fá maior): a voz em semicolcheias contra a voz mais lenta", "Mozart, sonatas: o soprano ornamentado sobre um esqueleto de 10ªs"],
           esboco: "Entre C5 (sobre D4) e A4 (sobre F4, no compasso seguinte), escreva quatro semínimas que saiam do C5 e cheguem ao A4.",
@@ -213,6 +231,12 @@
       temas: [
         {
           id: "baixo", titulo: "O baixo gera a harmonia",
+          // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)
+          antes: [
+            { p: "A melodia faz mi–ré–dó (3̂–2̂–1̂) sobre uma tônica prolongada. Que baixo cria movimento contrário e mantém a tônica?", o: ["dó–ré–mi (I – V4/3 – I6)", "dó–sol–dó (I – V – I)", "dó–si–dó (I – V6 – I)", "mi–ré–dó (I6 – ii – I)"], e: "É a troca de vozes: o baixo sobe 1–2–3 enquanto o soprano desce 3–2–1, com o V4/3 de passagem. Dó–si–dó começa em 10ªs paralelas com a melodia; dó–sol–dó salta em todos os tempos; mi–ré–dó anda paralelo ao soprano (8ªs/10ªs) e põe um ii onde a função é de dominante." },
+            { p: "O 6/4 cadencial:", o: ["Cai no tempo forte, sobre o 5º grau, e resolve 6–5 e 4–3 sobre o mesmo baixo", "Cai no tempo fraco, logo antes do V", "É um I em 2ª inversão que pode aparecer em qualquer ponto da frase", "Resolve no IV"], e: "É uma dupla apojatura do V: por isso precisa de apoio métrico (tempo mais forte que o V) e do mesmo baixo na resolução. Fora disso, o 6/4 só aparece de passagem ou de bordadura." },
+            { p: "Na Regra da Oitava (escala no baixo), que graus recebem acorde de 5/3?", o: ["O 1 e o 5", "O 1, o 4 e o 5", "Todos os graus", "Só o 1"], e: "Só os pontos estáveis (1 e 5) levam 5/3; os outros graus levam 6 (ou 6/5, 4/3, 4/2), o que faz o baixo andar por grau sem perder a tonalidade." },
+          ],
           objetivo: "Escrever o baixo de uma melodia como contraponto, com inversões, e só depois nomear os acordes.",
           ouvir: ["Corais de Bach: cante o baixo sozinho", "Mozart, Sonata K. 545, 1º mov., c. 1–4", "Partimenti de Fenaroli (Regra da Oitava)"],
           esboco: "A melodia G4 A4 B4 C5 (semínimas) fecha em dó. Escreva dois baixos diferentes para ela e diga qual prefere.",
@@ -265,6 +289,12 @@
         },
         {
           id: "ritmo", titulo: "Ritmo harmônico e cadência",
+          // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)
+          antes: [
+            { p: "Frase de 8 compassos com cadência perfeita no fim. Como deve ser o ritmo harmônico?", o: ["Lento no começo, acelerando nos compassos antes da cadência", "Rápido no começo e lento no fim", "Constante, um acorde por tempo", "Constante, um acorde por compasso"], e: "A aceleração é o que faz a cadência 'chegar'. Com ritmo uniforme desde o início não sobra espaço para acelerar, e o fim soa como mais um compasso." },
+            { p: "Num compasso de 4/4 com 6/4 cadencial e V em mínimas, onde fica cada um?", o: ["6/4 no 1º tempo, V no 3º", "V no 1º tempo, 6/4 no 3º", "Os dois no mesmo tempo", "Tanto faz a ordem"], e: "O 6/4 cadencial é a dissonância (apojatura) e precisa do tempo mais forte; o V é a resolução e vem depois. Invertido, soa como erro métrico." },
+            { p: "Que acorde encerra uma semicadência?", o: ["V em estado fundamental, sem 7ª", "V7", "I6", "IV"], e: "A semicadência para no V estável (fundamental, sem 7ª). Com a 7ª o acorde pede resolução imediata e deixa de ser ponto de repouso." },
+          ],
           objetivo: "Controlar quando os acordes mudam: começo lento, aceleração, cadência que chega.",
           ouvir: ["Mozart, K. 331, tema: 1 acorde por compasso no começo, 2 perto da cadência", "Beethoven, op. 2 nº 1, c. 1–8"],
           esboco: "Numa frase de 8 compassos com semicadência no 4 e cadência perfeita no 8, quantos acordes por compasso você usaria em cada trecho?",
@@ -301,6 +331,12 @@
         },
         {
           id: "esquemas", titulo: "Esquemas galantes",
+          // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)
+          antes: [
+            { p: "Como é o Prinner?", o: ["Soprano 6–5–4–3 sobre baixo 4–3–2–1, em 10ªs", "Soprano 1–2–3 sobre baixo 1–7–1", "Soprano 3–2–1 sobre baixo 1–5–1", "Soprano 1–7–6–5 sobre baixo 1–7–6–5"], e: "Duas descidas paralelas em 10ªs, do IV ao I. O segundo é o Do-Re-Mi; o terceiro, uma cadência simples; o último daria 8ªs paralelas." },
+            { p: "Onde o Prinner costuma aparecer na frase?", o: ["Como resposta, depois de uma abertura (Do-Re-Mi, Romanesca)", "Como abertura da peça", "Só na cadência final", "Depois da barra dupla, para modular"], e: "A gramática galante típica é abertura → Prinner → (continuação) → cadência. Depois da barra dupla aparecem Monte, Fonte e Ponte." },
+            { p: "Qual é o baixo da Romanesca 'saltada'?", o: ["1–5–6–3 (fundamentais, por saltos de 4ª e 5ª)", "1–7–6–5 (por graus)", "4–3–2–1", "1–2–7–1"], e: "A Romanesca tem duas formas de baixo: por graus (1–7–6–3, com 6/3) ou saltada (1–5–6–3, como no Cânone de Pachelbel). 4–3–2–1 é o baixo do Prinner; 1–2–7–1, o do Meyer." },
+          ],
           objetivo: "Compor frases encadeando moldes de soprano e baixo (Do-Re-Mi, Romanesca, Prinner, cadência composta).",
           ouvir: ["Pachelbel, Cânone em ré (Romanesca)", "Mozart, Sonata K. 545, 1º mov. (Prinners)", "Minuetos de Haydn e Mozart depois da barra dupla (Monte, Fonte, Ponte)", "Corelli, Sonatas op. 5"],
           esboco: "Escreva só os graus (soprano/baixo) de uma frase de 4 compassos: uma abertura, uma resposta e uma cadência.",
@@ -356,6 +392,12 @@
       temas: [
         {
           id: "superficie", titulo: "Esqueleto e superfície da melodia",
+          // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)
+          antes: [
+            { p: "Qual nota da melodia tende a ser estrutural?", o: ["A consonante com o baixo, forte ou longa, que se liga por grau à próxima estrutural", "A mais aguda de cada compasso", "A primeira de cada compasso, sempre", "A de menor duração"], e: "Estrutura é consonância + peso métrico ou duração + condução por grau. A primeira do compasso pode ser uma apojatura (ornamento): nesse caso a estrutural é a sua resolução." },
+            { p: "Qual a ordem de trabalho para compor a melodia em dois níveis?", o: ["Esqueleto (uma nota por harmonia) → conferir como 1ª espécie contra o baixo → diminuir → reduzir de novo", "Superfície primeiro, depois procurar o esqueleto", "Escolher a figura rítmica, depois as harmonias", "Diminuir compasso a compasso, decidindo na hora"], e: "Compor é o caminho inverso da análise: primeiro a linha estrutural, conferida contra o baixo; a diminuição vem depois e é conferida reduzindo de novo." },
+            { p: "O que dá unidade à superfície?", o: ["Uma figura rítmico-melódica consistente, transportada com a harmonia", "Uma figura nova a cada compasso, para variar", "Só semínimas", "Ritmos diferentes em cada voz"], e: "A variedade vem do esqueleto (que sobe e desce); a superfície repete um gesto reconhecível. Só assim a liquidação perto da cadência é percebida." },
+          ],
           objetivo: "Compor a melodia em dois níveis: uma linha estrutural (uma nota por harmonia) e a sua diminuição com uma figura consistente.",
           ouvir: ["Mozart, K. 545, 1º mov.: reduza o soprano a uma nota por acorde", "Bach, Prelúdio em dó maior BWV 846: a melodia composta dentro do arpejo"],
           esboco: "Sobre I | V6 | I (uma semibreve por compasso), escreva a linha estrutural (3 notas) e depois uma versão em semínimas.",
@@ -408,6 +450,12 @@
         },
         {
           id: "sentenca", titulo: "A sentença",
+          // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)
+          antes: [
+            { p: "O que forma a apresentação de uma sentença?", o: ["Ideia básica de 2 compassos + repetição (exata ou tônica–dominante), prolongando o I", "Ideia básica + ideia contrastante terminando em semicadência", "Quatro compassos de sequência", "Ideia básica + cadência perfeita"], e: "A apresentação expõe e repete a ideia sobre a tônica. Ideia básica + contrastante com cadência fraca é o antecedente de um período." },
+            { p: "O que é fragmentação?", o: ["Reduzir o tamanho das unidades (de 2 compassos para 1 ou menos)", "Retirar os traços característicos do motivo", "Repetir a ideia em outra tonalidade", "Dividir a melodia entre as vozes"], e: "Fragmentação é tamanho; liquidação é conteúdo. As duas costumam vir juntas na continuação, com aceleração harmônica." },
+            { p: "O que é liquidação?", o: ["Eliminar aos poucos os traços do motivo até restar a fórmula cadencial", "Encurtar as unidades", "Acelerar o ritmo harmônico", "Repetir a cadência"], e: "A liquidação tira do motivo o que o torna reconhecível (ritmo característico, intervalos), e o que sobra é material cadencial convencional." },
+          ],
           objetivo: "Compor uma sentença de 8 compassos: apresentação que prolonga a tônica, continuação que fragmenta, acelera e liquida.",
           ouvir: ["Beethoven, Sonata op. 2 nº 1, 1º mov., c. 1–8 (o modelo de Schoenberg)", "Mozart, Sinfonia nº 40, 1º mov., tema"],
           esboco: "Escreva só a ideia básica (2 compassos) e decida: a repetição será exata ou em tônica–dominante?",
@@ -451,6 +499,12 @@
         },
         {
           id: "periodo", titulo: "O período",
+          // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)
+          antes: [
+            { p: "Em que cadência termina o antecedente?", o: ["Numa cadência fraca (semicadência ou autêntica imperfeita)", "Numa cadência autêntica perfeita", "Sempre numa cadência de engano", "Sem cadência"], e: "O antecedente faz a pergunta: termina aberto. Com cadência perfeita já no c. 4, o consequente não tem o que responder." },
+            { p: "O que faz o consequente?", o: ["Retoma a ideia básica e refaz a contrastante para chegar à cadência perfeita", "Começa com material novo", "Repete o antecedente inteiro, idêntico", "Termina em semicadência"], e: "A volta da ideia básica cria a simetria; a mudança está no fim, que agora fecha. Terminar de novo em semicadência faz um período de duas perguntas." },
+            { p: "Para Caplin, em que diferem a ideia básica e a contrastante?", o: ["Na função harmônica: a básica prolonga a tônica, a contrastante leva à cadência", "No registro", "Só no ritmo", "No modo (maior ou menor)"], e: "O contraste de superfície (ritmo, contorno) ajuda, mas a diferença que define as duas ideias é harmônica." },
+          ],
           objetivo: "Compor antecedente e consequente com a mesma ideia básica e cadências de força diferente.",
           ouvir: ["Mozart, Sonata K. 331, 1º mov., tema (semicadência no c. 4, cadência perfeita no c. 8)", "Beethoven, 9ª Sinfonia, 'Hino à Alegria'"],
           esboco: "Com a ideia básica da sentença (C5–E5–G5 | F5–E5–D5), como seria uma ideia contrastante que termina em semicadência?",

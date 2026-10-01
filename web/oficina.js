@@ -427,9 +427,12 @@
       if (!podeEditar()) return;
       const v = vozSel();
       if (!v.eventos.length) return;
-      registrar();
-      if (est.sel.pos < v.eventos.length) v.eventos.splice(est.sel.pos, 1);
-      else { v.eventos.pop(); est.sel.pos = v.eventos.length; }
+      // no meio da voz a nota vira pausa de mesmo valor (nada se desloca); no fim, o último evento sai
+      const ev = v.eventos[est.sel.pos];
+      if (ev && ev.alt) { registrar(); ev.alt = null; ev.liga = false; }
+      else if (ev && est.sel.pos === v.eventos.length - 1) { registrar(); v.eventos.pop(); }
+      else if (!ev) { registrar(); v.eventos.pop(); est.sel.pos = v.eventos.length; }
+      else return;
       aplicar();
     });
     $(".of-desfazer").addEventListener("click", () => {
