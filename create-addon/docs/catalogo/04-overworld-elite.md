@@ -1,6 +1,6 @@
 # Catálogo 04: Overworld, máquina e itens T4/T5
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 Nomes de itens novos em inglês. Tiers conforme `DESIGN.md`.
 As categorias mais simples do Overworld (minérios, mobs comuns, oceano, tesouros, flora)
