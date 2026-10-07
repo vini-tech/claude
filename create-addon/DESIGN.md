@@ -121,6 +121,19 @@ Rules for every special machine:
 - Lighter gate (diamond) because no Deep Dark item reaches T4/T5; used for
   ancient-city-only items (echo shard, shrieker, Silence template).
 
+### Overworld: Solar Crucible (gate ore: Sunstone, diamond pickaxe)
+
+- Sunstone generates on high mountain peaks.
+- Resource: **sunlight**. A lens focuses the sun into a crucible; needs open
+  sky and daytime. Rotation turns the lens to track the sun.
+- Speed follows the sun's height (fastest near noon, stops at night); rain
+  slows it, thunderstorms stop it. No recipe needs a specific time of day.
+- Same catalyst slot; goggles show sun intensity and current recipe.
+
+Summary of the four: Soul Forge = what you **collect** (souls); Rift Chamber =
+**where** it is (over the void); Echo Chamber = **how you insulate** it
+(silence); Solar Crucible = **when** it runs (day cycle).
+
 ### Attachments for existing Create machines
 
 For easy but variant-heavy families:

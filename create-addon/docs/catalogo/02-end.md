@@ -1,6 +1,6 @@
 # Catálogo 02: End
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 Nomes de itens novos em inglês. Tiers conforme `DESIGN.md`.
 

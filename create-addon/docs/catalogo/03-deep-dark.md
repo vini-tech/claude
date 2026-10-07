@@ -1,6 +1,6 @@
 # Catálogo 03: Deep Dark e Cidade Ancestral
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 Nomes de itens novos em inglês. Tiers conforme `DESIGN.md`.
 
