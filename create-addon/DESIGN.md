@@ -70,6 +70,43 @@ Every T4/T5 route requires the player to already be at that item's level:
   the item (or what it unlocks) as a non-consumed catalyst: you must have
   obtained it once by hand before you can automate it.
 
+## Dimension machines
+
+One special machine per dimension unlocks that dimension's T4/T5 items.
+Rules for every special machine:
+
+- **No GUI, no electricity.** Rotation, blocks in the world, item
+  interactions (right-click, funnels, belts) and Engineer's Goggles info only.
+- Each one has a **distinctive mechanic** not found in Create, tied to a
+  resource drawn from the world around the player, themed on its dimension.
+- Built from that dimension's gated ore (mined only with the tool tier the
+  gate requires).
+
+### Nether: Soul Forge (gate ore: Cinnabar, netherite pickaxe)
+
+- Infernal Casing furnace with a window showing blue flames; needs rotation
+  (speed = processing speed, high stress).
+- Fuel is **souls**, carried in a **Soul Sack** item: killing any mob
+  (hostile or passive) anywhere while carrying the sack stores its soul.
+  Soul value scales with the mob's max health (chicken 1, zombie 2,
+  ravager 10, Wither 30). The sack is emptied into the forge by right-click
+  or by funnels/belts.
+- Items enter from the top and leave below/sideways, like a basin. Each recipe
+  costs souls; if souls run out the forge pauses (nothing lost).
+- Catalyst slot: right-click with an item (e.g. a Nether Star) to place it,
+  floating and visible inside the forge; not consumed; removed by empty hand.
+- Goggles show the stored souls.
+
+### Attachments for existing Create machines
+
+For easy but variant-heavy families:
+
+- **Press dies** (stamped items): clicked into a Mechanical Press and
+  rendered on it. E.g. Engraving Die (music discs), Sherd Stamp (pottery
+  sherds), Template Die (smithing templates).
+- **Deployer tips** (carved/applied items): held by a Deployer.
+  E.g. Carving Chisel (mob heads), Coral Graft (corals).
+
 ## New content
 
 - New intermediate materials (and possibly fluids) are welcome.
