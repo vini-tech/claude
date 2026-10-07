@@ -23,15 +23,12 @@ de Mobs do Overworld.
   - Recurso do mundo: **o vazio**. A câmara só funciona se não houver **nenhum bloco embaixo dela**
     até o fundo do mundo. Na prática, só no End, construída na beira das ilhas ou pendurada sobre
     o vazio.
-  - **Profundidade do vazio** = distância livre entre a câmara e o fundo do mundo. Cada receita exige
-    uma profundidade mínima: itens mais poderosos pedem câmaras mais altas, sobre torres ou pontes
-    acima do vazio.
   - Precisa de rotação (velocidade = rapidez). Os itens "caem" no rift (redemoinho roxo visível
     embaixo da câmara) e voltam transformados.
   - Catalisador: clicar com um item o deixa flutuando dentro da câmara, sem ser consumido.
-  - Os óculos do engenheiro mostram a profundidade do vazio e a receita em andamento.
+  - Os óculos do engenheiro mostram se a câmara está sobre o vazio e a receita em andamento.
 - Diferença em relação à Soul Forge: lá o recurso é **coletado** (almas); aqui é **posição**
-  (onde e quão alto você constrói). Nada de combustível.
+  (onde você constrói). Nada de combustível.
 
 ## Receitas
 
@@ -63,25 +60,27 @@ de Mobs do Overworld.
    2. Implantador: Ender Pearl
    3. Implantador: Popped Chorus Fruit
    - Resultado: **Unformed Shell** (item novo) · 85% de sucesso. Sucata: Purpur Block.
-2. **Rift Chamber**, profundidade mínima **32**: Unformed Shell → Shulker Shell
+2. **Rift Chamber:** Unformed Shell → Shulker Shell
 - História: o purpur das cidades ganha a "memória" de teletransporte e se fecha no vazio.
 - Portão: Rift Chamber (nível netherita + estar no End).
 
 ### Elytra (Élitro) · T5
 *Navios das cidades do End. Lendário.*
-1. **Crafter mecânico** em forma de asas: 6 Phantom Membrane + 2 Shulker Shell + 2 Precision Mechanism
-   + 1 Popped Chorus Fruit → **Wing Frame** (item novo)
-2. **Montagem sequencial** (base: Wing Frame, 4 loops):
-   1. Implantador: Phantom Membrane (a lona das asas)
-   2. Implantador: Ender Pearl
-   3. Prensa
+1. **Rift Chamber:** Phantom Membrane → **Void-Touched Membrane** (item novo)
+2. **Crafter mecânico** em forma de asas: 6 Void-Touched Membrane + 2 Shulker Shell
+   + 2 Precision Mechanism + 1 Popped Chorus Fruit → **Wing Frame** (item novo)
+3. **Montagem sequencial** (base: Wing Frame, 5 loops):
+   1. Implantador: Void-Touched Membrane
+   2. Implantador: Dragon's Breath
+   3. Implantador: Ender Pearl
+   4. Prensa
    - Resultado: **Unbound Elytra** (item novo) · 100%
-3. **Rift Chamber**, profundidade mínima **64**, com um **Elytra como catalisador** (não é consumido):
-   Unbound Elytra → Elytra
-- Portão triplo: a Rift Chamber (netherita + End), uma élitra achada pelo menos uma vez num navio,
-  e uma câmara construída bem alto acima do vazio.
-- História: a estrutura das asas é "ensinada" a voar pelos ventos do vazio, copiando a élitra original.
-- Depende de: Phantom Membrane (Mobs do Overworld), Shulker Shell (acima).
+4. **Rift Chamber** com um **Elytra como catalisador** (não é consumido): Unbound Elytra → Elytra
+- Custo por élitra: 11 Phantom Membrane, 5 Dragon's Breath, 5 Ender Pearl, 2 Shulker Shell,
+  2 Precision Mechanism. Exige as linhas de membrana, carapaça, bafo (superaquecido) e pérola,
+  e duas passagens pela Rift Chamber.
+- Portão: Rift Chamber (netherita + End) e uma élitra achada pelo menos uma vez.
+- História: a membrana aprende o vazio, vira a lona das asas, e a estrutura copia a élitra original.
 
 ### Dragon Head (Cabeça de Dragão) · T2
 - Família das cabeças (ponteira **Carving Chisel** no implantador), detalhada em Mobs do Overworld.
@@ -100,4 +99,4 @@ de Mobs do Overworld.
 | Rift Casing | carcaça das máquinas do End |
 | Rift Chamber | máquina especial do End |
 | Unformed Shell | intermediário da Shulker Shell |
-| Wing Frame, Unbound Elytra | intermediários do Elytra |
+| Void-Touched Membrane, Wing Frame, Unbound Elytra | intermediários do Elytra |
