@@ -10,9 +10,9 @@
   const CF2 = "C4/4 D4 F4 E4 D4 G4 F4 E4 D4 C4";
 
   // perfis
-  const N1 = { perfilNivel: 1, nivel: 1, extras: { climax_coincidente: "aviso" } };
-  const N2 = { perfilNivel: 2, nivel: 2, extras: { climax_coincidente: "aviso" } };
-  const N3 = { perfilNivel: 3, nivel: 3, extras: { climax_coincidente: "aviso", paralelas_entre_tempos: "erro" } };
+  const N1 = { perfilNivel: 1, nivel: 1, extras: { climax_coincidente: "aviso", notas_do_modo: "erro" } };
+  const N2 = { perfilNivel: 2, nivel: 2, extras: { climax_coincidente: "aviso", notas_do_modo: "erro" } };
+  const N3 = { perfilNivel: 3, nivel: 3, extras: { climax_coincidente: "aviso", notas_do_modo: "erro", paralelas_entre_tempos: "erro" } };
   const TONAL = {
     quintas_paralelas: "erro", oitavas_paralelas: "erro", quintas_oitavas_ocultas: "erro", cruzamento_de_vozes: "erro",
     dissonancia_aproximacao: "aviso", dissonancia_resolucao: "erro", cifras_coerentes: "erro", retrogressao_cifrada: "erro",
@@ -20,6 +20,11 @@
     salto_nao_compensado: "aviso",
   };
   const MELODIA = { ...TONAL, notas_do_acorde: "erro", cadencia_final: "erro" };
+  const CANTUS = {
+    cf_final: "erro", cf_chegada: "erro", cf_tamanho: "erro", so_semibreves: "erro", cf_saltos_seguidos: "erro", cf_salto_recuperado: "erro",
+    contorno_tritono: "erro", notas_do_modo: "erro", intervalo_melodico_aumentado_diminuto: "erro", salto_maior_que_oitava: "erro",
+    salto_de_sexta_ou_setima: "erro", nota_repetida: "erro", ponto_culminante: "aviso", ambito_melodico: "aviso",
+  };
 
   const PLANO_CP = [
     ["Cadência", "Quais as duas últimas notas do contraponto, e que intervalos formam?"],
@@ -41,8 +46,71 @@
     // ================================================================== NÍVEL 1
     {
       numero: 1, titulo: "A linha a duas vozes",
-      resumo: "Contraponto estrito como disciplina de composição: arquitetura da linha, textura das consonâncias e elaboração de um esqueleto.",
+      resumo: "Os modos e o contraponto estrito como disciplina de composição: arquitetura da linha, textura das consonâncias e elaboração de um esqueleto.",
       temas: [
+        {
+          id: "modos", titulo: "Os modos",
+          antes: [
+            { p: "Quais são as notas de ré dórico?", o: ["D E F G A B C", "D E F G A B♭ C", "D E F♯ G A B C♯", "D E♭ F G A B♭ C"], e: "Dórico é a escala das teclas brancas a partir de ré: D E F G A B C. Com B♭ seria ré eólio; com F♯ e C♯, ré maior; com E♭, ré frígio." },
+            { p: "O que distingue o dórico do eólio (menor natural)?", o: ["A 6ª maior acima da final", "A 3ª maior", "A 7ª maior", "A 4ª aumentada"], e: "Os dois têm 3ª menor e 7ª menor; o dórico tem a 6ª maior (si em ré dórico), o eólio a 6ª menor (si♭ em ré eólio). Essa 6ª é a cor do dórico." },
+            { p: "Na cadência de ré dórico, a penúltima nota do contraponto em cima (sobre o mi do cantus) é:", o: ["dó♯ (sensível alterada)", "dó natural", "si", "mi"], e: "A cadência pede um semitom subindo para a final: dó vira dó♯ só ali (musica ficta). No resto da linha, dó natural." },
+          ],
+          objetivo: "Saber as notas de cada modo, a sua cor característica e como ele cadencia — o que está por trás de 'ré dórico', 'mi frígio' ou 'lá eólio' nos exercícios.",
+          ouvir: ["Canto gregoriano: 'Veni Creator Spiritus' (mixolídio) e 'Dies irae' (dórico)", "Palestrina, Missa Papae Marcelli (vários modos)", "Scarborough Fair (dórico) e Greensleeves (dórico/eólio)", "Debussy, 'La cathédrale engloutie' (modal)"],
+          esboco: "Sem consultar nada: quais notas você usaria em ré dórico, e onde acha que fica o semitom que leva à final?",
+          secoes: [
+            { tipo: "texto", titulo: "O modo é a posição dos semitons", html: `
+              <p>Um modo é uma escala diatônica (cinco tons e dois semitons) vista a partir de uma nota chamada <b>final</b>. Nas teclas brancas, cada modo começa numa nota diferente:</p>
+              <table class="tabela-modos"><thead><tr><th>Modo</th><th>Teclas brancas</th><th>Tons (T) e semitons (S)</th><th>Cor característica</th><th>Cadência</th></tr></thead><tbody>
+              <tr><td><b>Dórico</b></td><td>D E F G A B C</td><td>T S T T T S T</td><td>menor com <b>6ª maior</b></td><td>7º elevado (C♯)</td></tr>
+              <tr><td><b>Frígio</b></td><td>E F G A B C D</td><td>S T T T S T T</td><td>menor com <b>2ª menor</b></td><td>sem sensível: F → E desce</td></tr>
+              <tr><td><b>Lídio</b></td><td>F G A B C D E</td><td>T T T S T T S</td><td>maior com <b>4ª aumentada</b></td><td>já tem semitom E → F</td></tr>
+              <tr><td><b>Mixolídio</b></td><td>G A B C D E F</td><td>T T S T T S T</td><td>maior com <b>7ª menor</b></td><td>7º elevado (F♯)</td></tr>
+              <tr><td><b>Eólio</b></td><td>A B C D E F G</td><td>T S T T S T T</td><td>menor natural (<b>6ª e 7ª menores</b>)</td><td>7º elevado (G♯) e, subindo, 6º (F♯)</td></tr>
+              <tr><td><b>Jônio</b></td><td>C D E F G A B</td><td>T T S T T T S</td><td>o nosso maior</td><td>já tem sensível</td></tr>
+              </tbody></table>
+              <h3>Transpor um modo</h3>
+              <p>O modo não são as notas, é a sequência de tons e semitons. Ré dórico usa as teclas brancas; <b>dó dórico</b> precisa da mesma sequência a partir de dó: C D E♭ F G A B♭. <b>Mi eólio</b>: E F♯ G A B C D. Para achar as notas, escreva a escala maior da final e altere: dórico = maior com 3ª e 7ª abaixadas; frígio = 2ª, 3ª, 6ª e 7ª abaixadas; lídio = 4ª elevada; mixolídio = 7ª abaixada; eólio = 3ª, 6ª e 7ª abaixadas.</p>
+              <h3>A cadência e a <i>musica ficta</i></h3>
+              <p>No contraponto as linhas cadenciam por semitom para a final, em movimento contrário. Onde o modo não tem esse semitom abaixo da final (dórico, mixolídio, eólio), a <b>sensível é elevada só na cadência</b>; no eólio, quando a linha sobe 6–7–1, o 6º também sobe (F♯–G♯–A) para evitar a 2ª aumentada. No frígio o semitom já existe acima da final (F → E): a voz que tem o 2º grau desce, e a outra chega por tom (D → E), sem alteração.</p>
+              <p>Nos exercícios, a linha acima da partitura mostra as notas do modo e a alteração permitida; a regra <b>Notas do modo</b> marca qualquer nota de fora, e a sensível alterada fora dos dois últimos compassos.</p>` },
+            { tipo: "exemplo", titulo: "Quatro modos sobre a mesma final", intro: "Todas as escalas começam em ré, para a cor de cada modo ficar evidente. O número embaixo é o grau; a estrela marca a nota característica.",
+              camadas: [
+                { titulo: "Ré dórico", partitura: "tom: D dorico\nescala: D4/1 E4 F4 G4 A4 B4 C5 D5/4", anotacoes: [[0, 0, "1"], [0, 1, "2"], [0, 2, "3"], [0, 3, "4"], [0, 4, "5"], [0, 5, "6 ★"], [0, 6, "7"], [0, 7, "8"]],
+                  notas: [["decisao", "D E F G A B C: 3ª menor (F) e 7ª menor (C), mas 6ª maior (B). É o si natural que torna o dórico menos sombrio que o menor."]] },
+                { titulo: "Ré eólio", partitura: "tom: D eolio\nescala: D4/1 E4 F4 G4 A4 Bb4 C5 D5/4", anotacoes: [[0, 0, "1"], [0, 1, "2"], [0, 2, "3"], [0, 3, "4"], [0, 4, "5"], [0, 5, "6 ★"], [0, 6, "7"], [0, 7, "8"]],
+                  notas: [["checagem", "Só o 6º grau muda: B♭ em vez de B. Compare ouvindo as duas."]] },
+                { titulo: "Ré frígio", partitura: "tom: D frigio\nescala: D4/1 Eb4 F4 G4 A4 Bb4 C5 D5/4", anotacoes: [[0, 0, "1"], [0, 1, "2 ★"], [0, 2, "3"], [0, 3, "4"], [0, 4, "5"], [0, 5, "6"], [0, 6, "7"], [0, 7, "8"]],
+                  notas: [["decisao", "A 2ª menor (E♭) logo acima da final é a assinatura do frígio: a cadência desce E♭ → D."]] },
+                { titulo: "Ré mixolídio", partitura: "tom: D mixolidio\nescala: D4/1 E4 F#4 G4 A4 B4 C5 D5/4", anotacoes: [[0, 0, "1"], [0, 1, "2"], [0, 2, "3"], [0, 3, "4"], [0, 4, "5"], [0, 5, "6"], [0, 6, "7 ★"], [0, 7, "8"]],
+                  notas: [["decisao", "Maior com 7ª menor (C natural). Na cadência o C vira C♯; no meio da linha, o C natural dá a cor."]] },
+              ] },
+            { tipo: "contraste", titulo: "Dórico × eólio na mesma melodia",
+              a: { rotulo: "A — ré dórico (si natural)", partitura: "tom: D dorico\ncantus: D4/4 F4 G4 A4 B4 A4 G4 F4 E4 D4" },
+              b: { rotulo: "B — ré eólio (si bemol)", partitura: "tom: D eolio\ncantus: D4/4 F4 G4 A4 Bb4 A4 G4 F4 E4 D4" },
+              pergunta: "Só uma nota muda. O que muda no caráter da linha, e em que ponto?",
+              comentario: "<p>O clímax é justamente o 6º grau. Em A, o si natural forma uma 6ª maior com a final e abre o arco: a linha soa luminosa no ponto mais alto, e o caminho de volta tem um semitom a menos. Em B, o si♭ é um semitom acima do lá — o clímax 'pesa' e cai de volta, e a linha soa mais sombria. A cor do modo está nas notas que ele não divide com os vizinhos.</p>" },
+          ],
+          exercicios: [
+            { id: "mod1", titulo: "Cantus firmus em ré dórico", modo: "completar", perfil: CANTUS, nivel: 1, fimLivre: true,
+              instrucoes: "<p>As três primeiras notas estão escritas. Complete um cantus firmus em ré dórico (8 a 14 semibreves) que termine em ré, chegando por grau. Use o si natural ao menos uma vez: é ele que faz o modo soar dórico. Toque em <b>Terminei</b> quando acabar.</p>",
+              texto: "tom: D dorico\ncantus: D4/4 F4 E4", duracao: 4,
+              solucao: "tom: D dorico\ncantus: D4/4 F4 E4 D4 G4 F4 A4 G4 F4 E4 D4", comentarioSolucao: "O cantus firmus dórico do Gradus ad Parnassum de Fux." },
+            { id: "mod2", titulo: "Cantus firmus em mi frígio", modo: "restrição", perfil: CANTUS, nivel: 1, fimLivre: true,
+              instrucoes: "<p>Escreva um cantus firmus em mi frígio. <b>Restrição:</b> termine descendo fá → mi (o semitom frígio) e use o fá também no meio da linha, para a cor do modo aparecer antes da cadência.</p>",
+              texto: "tom: E frigio\ncantus:", duracao: 4,
+              solucao: "tom: E frigio\ncantus: E4/4 C4 D4 C4 A3 A4 G4 E4 F4 E4", comentarioSolucao: "O cantus firmus frígio de Fux: repare que o salto de 8ª (A3–A4) é recuperado por grau e que o fá só aparece na cadência — uma solução mais contida que a pedida." },
+            { id: "mod3", titulo: "Cantus firmus em sol mixolídio", modo: "livre", perfil: CANTUS, nivel: 1, fimLivre: true,
+              instrucoes: "<p>Escreva um cantus firmus em sol mixolídio. A 7ª menor (fá natural) é a cor do modo: use-a no meio da linha; a chegada à final é por grau (lá → sol ou fá → sol).</p>",
+              texto: "tom: G mixolidio\ncantus:", duracao: 4,
+              solucao: "tom: G mixolidio\ncantus: G4/4 A4 C5 B4 D5 C5 A4 B4 A4 G4" },
+            { id: "mod4", titulo: "1ª espécie em lá eólio", modo: "aplicar", ...N1,
+              instrucoes: "<p>Contraponto de 1ª espécie em cima do cantus eólio de Fux. Notas do modo em toda a linha; na cadência, a sensível sol♯ sobre o si do cantus (6ª maior → 8ª).</p>",
+              texto: "tom: A eolio\ncf: cantus\ncontraponto:\ncantus: A3/4 C4 B3 D4 C4 E4 F4 E4 D4 C4 B3 A3", duracao: 4, plano: PLANO_CP,
+              solucao: "tom: A eolio\ncf: cantus\ncontraponto: E4/4 A4 D5 A4 C5 G4 A4 E5 B4 A4 G#4 A4\ncantus: A3/4 C4 B3 D4 C4 E4 F4 E4 D4 C4 B3 A3",
+              comentarioSolucao: "Solução encontrada pelo verificador: o sol♯ aparece só na penúltima nota; no compasso 6 o sol natural é a 7ª menor do modo." },
+          ],
+        },
         {
           id: "arquitetura", titulo: "Arquitetura da linha",
           // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)

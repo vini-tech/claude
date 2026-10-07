@@ -20,7 +20,7 @@ vem de [`pesquisa/06`](pesquisa/06-ensinar-composicao-a-avancados.md) (como ensi
 [`pesquisa/07`](pesquisa/07-oficio-de-composicao.md) (o conteúdo). A versão 2, com perguntas
 fechadas, foi retirada.
 
-- **Nível 1 · A linha a duas vozes:** arquitetura da linha, elaborar um esqueleto (2ª espécie), linha contínua (3ª espécie).
+- **Nível 1 · A linha a duas vozes:** os modos (notas, cor característica, cadência e *musica ficta*), arquitetura da linha, elaborar um esqueleto (2ª espécie), linha contínua (3ª espécie).
 - **Nível 2 · Das vozes à harmonia:** o baixo gera a harmonia (inversões e cifras), ritmo harmônico, esquemas galantes.
 - **Nível 3 · A frase e o tema:** esqueleto e superfície da melodia, sentença, período.
 
@@ -32,7 +32,13 @@ três perguntas obrigatórias de múltipla escolha sobre as decisões do tema; a
 compasso; depois da aprovação, três perguntas calculadas da sua própria partitura (clímax,
 consonâncias, movimento, inversões, ritmo harmônico) obrigam a relê-la, e só então aparecem o
 relatório de estilo e a versão do professor (nos cantus sorteados ela é composta na hora pelo
-buscador). Apagar uma nota no meio da voz a troca por uma pausa de mesmo valor.
+buscador). Apagar uma nota no meio da voz a troca por uma pausa de mesmo valor, e mudar a duração
+no meio não desloca o resto.
+
+Enquanto você escreve, a partitura mostra o intervalo de cada nota com a outra voz (ou o intervalo
+melódico, numa voz só) e as cifras, em vermelho quando há erro e em âmbar quando há aviso; a lista
+de correção com as explicações só aparece ao tocar em **Terminei**. Acima da partitura fica a escala
+do modo do exercício, e o piano marca a nota selecionada e a da outra voz no mesmo instante.
 
 | arquivo | o que tem |
 |---------|-----------|

@@ -99,6 +99,36 @@
       "Com poucas notas não há espaço para subir a um clímax e voltar; com muitas, a linha perde a forma.",
       "Ajuste para 8 a 14 notas."));
 
+  def("notas_do_modo", "Notas do modo",
+    "Cada nota pertence ao modo; a sensível (7º grau elevado) e, subindo para ela, o 6º elevado só aparecem na cadência, nos dois últimos compassos.",
+    function* (ex, ctx) {
+      const tom = ex.tonalidade;
+      if (!tom || tom.modo === "major" || tom.modo === "ionian") return;
+      const esc = escala(tom);
+      const nomes = new Set(esc.map(nome));
+      const lt = F.transpor(tom.tonica, -1, -1), seis = F.transpor(lt, -1, -2);
+      const lista = esc.map((a) => a.nome.replace(/-/g, "b")).join(" ");
+      const cf = ctx.cf !== undefined ? ctx.cf : ex.cantusFirmus;
+      for (let i = 0; i < ex.vozes.length; i++) {
+        const v = ex.vozes[i];
+        if (i === cf || !v.notas.length) continue;
+        const ultimo = ex.compassoDe(v.notas[v.notas.length - 1].inicio);
+        for (const n of v.notas) {
+          if (nomes.has(n.altura.nome)) continue;
+          const c = ex.compassoDe(n.inicio);
+          const alterada = n.altura.nome === lt.nome || n.altura.nome === seis.nome;
+          const k = v.notas.indexOf(n), prox = v.notas[k + 1];
+          const cadencial = c >= ultimo - 1 || (n.altura.nome === seis.nome && prox && prox.altura.nome === lt.nome);
+          if (alterada && (tom.modo === "minor" || cadencial)) continue;
+          yield [c, alterada
+            ? `${v.nome}: ${n.nome} é a nota alterada da cadência; fora dos dois últimos compassos use a do modo (${lista})`
+            : `${v.nome}: ${n.nome} não pertence a ${tom.tonica.nome.replace(/-/g, "b")} ${M.MODOS_PT[tom.modo]} (${lista})`, [n]];
+        }
+      }
+    }, { precisaTom: true, ...EXPL(
+      "O modo é definido pelas notas da escala e pela posição dos semitons em relação à final. Uma nota de fora muda o modo (ré dórico com si♭ vira ré eólio) e apaga a cor característica. A alteração da sensível é uma convenção de cadência (musica ficta), não uma nota do modo.",
+      "Troque pela nota do modo indicada na linha de escala acima da partitura; deixe a sensível alterada só para a penúltima nota.") });
+
   def("so_semibreves", "Só semibreves",
     "O cantus firmus não tem ritmo: todas as notas são semibreves, uma por compasso.",
     function* (ex, ctx) {

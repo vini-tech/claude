@@ -108,7 +108,39 @@
     };
   }
 
+  // uma voz só (cantus firmus): saltos e a nota característica do modo
+  function saltos(ex, i) {
+    const ns = ex.vozes[i].notas;
+    let n = 0;
+    for (let k = 1; k < ns.length; k++) if (F.ehSalto(ns[k - 1], ns[k])) n++;
+    const faixas = ["Nenhum ou um", "Dois ou três", "Quatro ou cinco", "Seis ou mais"];
+    const k = n <= 1 ? 0 : n <= 3 ? 1 : n <= 5 ? 2 : 3;
+    return {
+      p: "Quantos saltos (intervalos maiores que um grau) a sua linha tem?", o: faixas, certas: [k],
+      e: `${n} saltos em ${ns.length - 1} movimentos. ${n <= 1 ? "Quase só graus: cantável, mas pode faltar perfil; um ou dois saltos bem colocados dão relevo." : n <= 4 ? "Equilíbrio típico de cantus firmus: predominância de graus, saltos como acontecimentos." : "Muitos saltos para uma linha vocal: ela tende a soar como arpejo."}`,
+    };
+  }
+  const CARACTERISTICA = { dorian: [6, "a 6ª maior"], phrygian: [2, "a 2ª menor"], lydian: [4, "a 4ª aumentada"], mixolydian: [7, "a 7ª menor"], aeolian: [6, "a 6ª menor"] };
+  function caracteristica(ex, i) {
+    const t = ex.tonalidade;
+    if (!t || !CARACTERISTICA[t.modo]) return null;
+    const [grau, nome] = CARACTERISTICA[t.modo];
+    const ns = ex.vozes[i].notas;
+    const alvo = M.transpor(t.tonica, grau - 1, ({ dorian: [0, 2, 3, 5, 7, 9, 10], phrygian: [0, 1, 3, 5, 7, 8, 10], lydian: [0, 2, 4, 6, 7, 9, 11], mixolydian: [0, 2, 4, 5, 7, 9, 10], aeolian: [0, 2, 3, 5, 7, 8, 10] })[t.modo][grau - 1]);
+    const n = ns.filter((x) => x.altura.nome === alvo.nome).length;
+    const nomeNota = alvo.nome.replace(/-/g, "b");
+    const nums = vizinhos(n, 0, ns.length).slice(0, 4);
+    return {
+      p: `A nota característica deste modo é ${nome} (${nomeNota}). Quantas vezes ela aparece na sua linha?`, o: nums.map(String), certas: [nums.indexOf(n)],
+      e: `${n === 0 ? `Nenhuma: sem o ${nomeNota}, a linha não soa ${M.MODOS_PT[t.modo]} — poderia ser outro modo com a mesma final.` : `${n} vez(es). É essa nota que diferencia o modo dos vizinhos; ela soa mais quando aparece num ponto de destaque (clímax, nota longa, começo de um gesto).`}`,
+    };
+  }
+
   function depois(ex, { cf = -1, cifras = null } = {}) {
+    if (ex.vozes.filter((v) => v.notas.length > 1).length === 1) {
+      const i = ex.vozes.findIndex((v) => v.notas.length > 1);
+      return [climax(ex, i), saltos(ex, i), caracteristica(ex, i)].filter((q) => q && q.certas.length && q.certas.every((k) => k >= 0 && k < q.o.length));
+    }
     const vozes = ex.vozes.map((v, i) => i).filter((i) => ex.vozes[i].notas.length > 1);
     const minhas = vozes.filter((i) => i !== cf);
     if (!minhas.length) return [];

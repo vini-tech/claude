@@ -31,6 +31,21 @@
     info: "É só informação: a regra foi quebrada, e aqui isso é permitido.",
   };
 
+  // "Notas de ré dórico: D E F G A B C · na cadência: C♯" (para os modos e o menor)
+  const SOLFEJO = { C: "dó", D: "ré", E: "mi", F: "fá", G: "sol", A: "lá", B: "si" };
+  function textoEscala(t) {
+    if (t.modo === "major" || t.modo === "ionian") return "";
+    const esc = (Cn.ESCALAS[t.modo] || Cn.ESCALAS.major).map((s, g) => M.transpor(t.tonica, g, s));
+    const acid = (x) => x.replace(/#/g, "♯").replace(/-/g, "♭");
+    const nome = (a) => a.nome[0] + acid(a.nome.slice(1));
+    const solf = (a) => SOLFEJO[a.nome[0]] + acid(a.nome.slice(1));
+    const lt = M.transpor(t.tonica, -1, -1), seis = M.transpor(lt, -1, -2);
+    const temLt = !esc.some((a) => a.nome === lt.nome);
+    const cad = t.modo === "phrygian" ? "sem sensível: a cadência se apoia no semitom 2–1, que desce" : temLt
+      ? `na cadência (dois últimos compassos): ${nome(lt)}${!esc.some((a) => a.nome === seis.nome) ? ` e, subindo para ele, ${nome(seis)}` : ""}` : "";
+    return `<b>${solf(t.tonica)} ${M.MODOS_PT[t.modo]}:</b> ${esc.map(nome).join(" ")} <span class="solf">(${esc.map(solf).join(" ")})</span>${cad ? ` · ${cad}` : ""}`;
+  }
+
   function criar(el, cfg) {
     const est = {
       modelo: Ed.ler(cfg.texto), ex: null, resultado: null, visao: null, fins: [], layout: null,
@@ -48,6 +63,7 @@
       <section class="cartao">
         <div class="of-topo"><span class="rotulo of-info"></span>
           <label class="andamento">♩ = <input type="range" class="of-bpm" min="40" max="200" step="4" value="96"><span class="of-bpm-v">96</span></label></div>
+        <p class="of-escala" hidden></p>
         <div class="of-partitura"></div>
         ${cfg.cifrasAluno ? `<label class="of-cifras-rot">Cifras, uma por nota do baixo (ex.: I V43 I6 ii6 I64 V I)
           <input class="of-cifras" type="text" autocapitalize="off" autocomplete="off" spellcheck="false" value="${esc(cfg.cifrasIniciais || "")}"></label>` : ""}
@@ -57,7 +73,7 @@
         <div class="rotulo">Correção</div>
         <div class="veredito"><span class="selo neutro of-selo">—</span><div class="contagens of-contagens"></div></div>
         <p class="progresso of-progresso" hidden></p>
-        ${cfg.fimLivre ? `<button class="botao primario of-terminei">Terminei</button>` : ""}
+        <button class="botao primario of-terminei">Terminei</button>
         <ul class="achados of-achados"></ul>
         <p class="nada of-nada" hidden></p>
         <div class="of-auto" hidden></div>
@@ -88,6 +104,7 @@
         <button class="ferr of-liga" aria-pressed="false" aria-label="Ligadura"><span class="fig">⁀</span></button>
         <button class="ferr of-enarm" aria-label="Trocar a grafia">♯♭</button>
       </div>
+      <div class="legenda-piano so-aberta of-legenda"></div>
       <div class="piano-rolo so-aberta"><div class="piano"></div></div>
       <div class="aviso-doca so-aberta of-aviso" aria-live="polite"></div>
     </div>`;
@@ -126,6 +143,7 @@
 
     function aplicar() {
       est.terminado = false;
+      est.aprovadoAvisado = false;
       corrigirSel();
       const texto = Ed.escrever(est.modelo);
       if (cfg.aoMudar) cfg.aoMudar(texto);
@@ -155,7 +173,7 @@
         const ctx = contextoRegras();
         est.resultado = M.verificarPerfil(est.ex, cfg.perfil, ctx);
         const alvo = cfg.alvoCompassos ? cfg.alvoCompassos * est.ex.duracaoCompasso : undefined;
-        est.visao = M.concluidos(est.ex, est.resultado, est.fins, { alvo, terminado: est.terminado, semFimAutomatico: !!cfg.fimLivre });
+        est.visao = M.concluidos(est.ex, est.resultado, est.fins, { alvo, terminado: est.terminado && !est.falta, semFimAutomatico: true });
       } else est.resultado = est.visao = null;
       est.selecionado = null;
       $(".of-detalhe").hidden = true;
@@ -164,35 +182,31 @@
       atualizarDoca();
     }
 
+    // enquanto escreve: só os intervalos e as cifras coloridos na partitura; a lista de correção
+    // aparece quando o aluno toca em Terminei (e some de novo na próxima edição)
     function mostrar() {
       const v = est.visao;
-      const lista = $(".of-achados"), nada = $(".of-nada"), prog = $(".of-progresso");
+      const lista = $(".of-achados"), nada = $(".of-nada"), prog = $(".of-progresso"), ter = $(".of-terminei");
       lista.innerHTML = "";
       nada.hidden = prog.hidden = true;
-      let selo = "—", classe = "neutro", chips = "";
-      if (v) {
+      ter.hidden = false;
+      ter.textContent = "Terminei";
+      let selo = "Escrevendo", classe = "andamento", chips = "";
+      if (!v) selo = "—", classe = "neutro";
+      else if (!est.terminado) {
+        prog.innerHTML = "Embaixo das notas aparecem os intervalos entre as vozes: <b class=\"t-erro\">vermelho</b> quando há erro, <b class=\"t-aviso\">âmbar</b> quando há aviso. Quando acabar, toque em <b>Terminei</b> para a correção completa, com as explicações.";
+        prog.hidden = false;
+      } else if (est.falta) {
+        selo = "Incompleto"; classe = "reprovado";
+        prog.textContent = est.falta;
+        prog.hidden = false;
+      } else {
         chips = ["erro", "aviso", "info"].map((s) => { const n = v.contar(s); return `<span class="chip ${s}${n ? "" : " zero"}">${n} ${s}</span>`; }).join("");
-        const campoCifras = el.querySelector(".of-cifras");
-    if (campoCifras) {
-      let tc = null;
-      campoCifras.addEventListener("input", () => { clearTimeout(tc); tc = setTimeout(() => { if (cfg.aoMudarCifras) cfg.aoMudarCifras(campoCifras.value); analisar(); }, 350); });
-    }
-    const ter = $(".of-terminei");
-        if (v.completo) {
-          selo = v.aprovado ? "Aprovado" : "Reprovado";
-          classe = v.aprovado ? "aprovado" : "reprovado";
-          if (!v.visiveis.length) { nada.textContent = "Nenhuma regra quebrada. Toque em Ouvir e escute o resultado."; nada.hidden = false; }
-          if (ter) ter.hidden = true;
-        } else {
-          selo = "Escrevendo"; classe = "andamento";
-          prog.textContent = cfg.fimLivre
-            ? "As regras do fim (final, cadência, tamanho) são conferidas quando você tocar em Terminei."
-            : v.compassosCompletos === 0 ? "A correção começa quando o primeiro compasso estiver completo."
-              : `Compassos 1–${v.compassosCompletos} verificados. O resto aparece quando você completar os próximos.`;
-          prog.hidden = false;
-          if (ter) ter.hidden = false;
-          if (!v.visiveis.length && v.compassosCompletos > 0) { nada.textContent = "Nada de errado até aqui."; nada.hidden = false; }
-        }
+        selo = v.aprovado ? "Aprovado" : "Reprovado";
+        classe = v.aprovado ? "aprovado" : "reprovado";
+        if (!v.visiveis.length) { nada.textContent = "Nenhuma regra quebrada. Toque em Ouvir e escute o resultado."; nada.hidden = false; }
+        if (v.aprovado) ter.hidden = true;
+        else { ter.textContent = "Corrigir de novo"; prog.textContent = "Toque num item para ver onde está, por que é um problema e como corrigir. Depois de mudar a partitura, toque em Corrigir de novo."; prog.hidden = false; }
         v.visiveis.forEach((a, k) => {
           const li = document.createElement("li");
           const b = document.createElement("button");
@@ -210,17 +224,32 @@
           lista.appendChild(li);
         });
         ligarRever(lista);
-        if (v.completo && v.aprovado) {
+        if (v.aprovado) {
           mostrarAutoavaliacao();
           if (!est.aprovadoAvisado) { est.aprovadoAvisado = true; if (cfg.aoAprovar) cfg.aoAprovar(Ed.escrever(est.modelo)); }
-        } else $(".of-auto").hidden = true;
-        if (v.completo && !v.aprovado && cfg.aoErro) cfg.aoErro([...new Set(v.visiveis.filter((a) => a.severidade === "erro").map((a) => a.regra))]);
+        } else {
+          $(".of-auto").hidden = true;
+          if (cfg.aoErro) cfg.aoErro([...new Set(v.visiveis.filter((a) => a.severidade === "erro").map((a) => a.regra))]);
+        }
       }
       for (const [s, c, mini] of [[".of-selo", ".of-contagens", false], [".of-selo-mini", ".of-contagens-mini", true]]) {
         $(s).textContent = selo;
         $(s).className = `selo ${classe} ${mini ? "of-selo-mini" : "of-selo"}`;
         $(c).innerHTML = chips;
       }
+    }
+
+    // o que falta para o exercício ter o tamanho pedido (só quando ele tem tamanho fixo)
+    function faltando() {
+      if (cfg.fimLivre || !est.ex) return "";
+      const C = est.ex.duracaoCompasso;
+      const cf = cfIndice();
+      const alvo = cfg.alvoCompassos ? cfg.alvoCompassos * C : cf >= 0 ? est.fins[cf] : 0;
+      if (!alvo) return "";
+      const curtas = est.modelo.vozes.map((v, i) => [v, i]).filter(([, i]) => !travada(i) && est.fins[i] < alvo);
+      if (!curtas.length) return "";
+      return "Ainda não está completo: " + curtas.map(([v, i]) => `"${v.nome}" vai até o compasso ${Math.max(1, Math.ceil(est.fins[i] / C))}`).join(", ")
+        + `, e o exercício tem ${Math.round(alvo / C)} compassos.`;
     }
 
     function mostrarAutoavaliacao() {
@@ -275,11 +304,40 @@
     }
 
     // ---------------------------------------------------------------- partitura
+    // intervalo de cada nota da voz do aluno com a outra voz (a dada, ou a de baixo/cima)
+    function nomeIntervalo(iv) {
+      const n = iv.simples === 1 ? (iv.geral === 1 ? "U" : "8") : String(iv.simples);
+      return n + (iv.qual === "A" ? "+" : iv.qual === "d" ? "°" : "");
+    }
+    function intervalos(ex) {
+      if (ex.vozes.length < 2) {
+        // uma voz só (cantus firmus): o intervalo melódico de chegada em cada nota
+        const ns = ex.vozes[0] ? ex.vozes[0].notas : [];
+        return ns.slice(1).map((n, k) => { const iv = M.ferramentas.intervaloAlturas(ns[k].altura, n.altura); return [n, (n.ps > ns[k].ps ? "↑" : n.ps < ns[k].ps ? "↓" : "") + nomeIntervalo(iv), null]; });
+      }
+      const livres = ex.vozes.map((_, i) => i).filter((i) => !travada(i));
+      if (!livres.length) return [];
+      const minha = livres[0];
+      const cf = cfIndice();
+      const outra = cf >= 0 && cf !== minha ? cf : minha === 0 ? ex.vozes.length - 1 : 0;
+      const r = [];
+      for (const n of ex.vozes[minha].notas) {
+        const o = ex.vozes[outra].soandoEm(n.inicio);
+        if (!o) continue;
+        const [sup, inf] = minha < outra ? [n, o] : [o, n];
+        r.push([n, nomeIntervalo(M.ferramentas.harmonico(sup, inf)), o]);
+      }
+      return r;
+    }
+
     function desenhar() {
       const caixa = $(".of-partitura"), ex = est.ex;
       if (!ex) { caixa.innerHTML = `<div class="vazio">O texto do exercício tem um erro.</div>`; est.layout = null; return; }
       const t = ex.tonalidade;
       $(".of-info").textContent = `${ex.formula.join("/")}${t ? " · " + bonito(t.tonica.nome) + " " + M.MODOS_PT[t.modo] : ""}`;
+      const le = $(".of-escala");
+      const txt = t ? textoEscala(t) : "";
+      le.hidden = !txt; le.innerHTML = txt;
       const vS = vozSel(), sel = est.sel;
       let selecao = null, extraFim = cfg.alvoCompassos ? cfg.alvoCompassos * ex.duracaoCompasso : 0;
       if (vS && !travada(sel.voz)) {
@@ -288,16 +346,19 @@
         selecao = { voz: sel.voz, t: cursor ? fim : inicios[sel.pos], cursor };
         if (cursor) extraFim = Math.max(extraFim, fim + durAtual());
       }
-      const marcas = (est.visao ? est.visao.visiveis : []).map((a) => ({ notas: a.notas, sev: a.severidade, compasso: a.compasso }));
+      const vis = est.visao ? est.visao.visiveis.filter((a) => est.terminado || a.severidade !== "info") : [];
+      const marcas = est.terminado ? vis.map((a) => ({ notas: a.notas, sev: a.severidade, compasso: a.compasso })) : [];
+      const sevDe = (n) => { let r = null; for (const a of vis) if (a.notas.includes(n)) { if (a.severidade === "erro") return "erro"; r = "aviso"; } return r; };
+      const anotacoes = intervalos(ex).map(([n, texto, outra]) => ({ nota: n, texto, sev: sevDe(n) || (outra && sevDe(outra)) || null }));
       let cifras = [];
       if (cfg.acordes && t) cifras = R2.harmoniaDe(cfg.acordes, t, ex.duracaoCompasso).map((a) => ({ t: a.inicio, texto: a.simbolo }));
       else {
         const cf = cifrasAtuais();
         const baixo = ex.vozes[ex.vozes.length - 1];
-        if (cf && baixo) cifras = baixo.notas.map((n, i) => cf[i] && { t: n.inicio, texto: cf[i] }).filter(Boolean);
+        if (cf && baixo) cifras = baixo.notas.map((n, i) => cf[i] && { t: n.inicio, texto: cf[i], sev: vis.some((a) => /cifra|retrogress|seis_quatro|notas_do_acorde/.test(a.regra) && a.notas.includes(n)) ? (vis.find((a) => a.notas.includes(n)).severidade) : null }).filter(Boolean);
       }
       est.layout = P.desenhar(caixa, ex, {
-        fins: est.fins, extraFim, marcas, selecao, ativa: sel.voz, cifras,
+        fins: est.fins, extraFim, marcas, selecao, ativa: sel.voz, cifras, anotacoes,
         foco: est.selecionado !== null ? marcas[est.selecionado] : null,
         rotulos: ex.vozes.map((v, i) => v.nome + (travada(i) ? " · dado" : "")),
       });
@@ -336,6 +397,7 @@
       } else if (est.selecionado !== null) selecionar(null);
       else desenhar();
       atualizarDoca();
+      centralizar();
     });
 
     // ---------------------------------------------------------------- edição
@@ -373,8 +435,30 @@
     function mudarDuracao(q) {
       est.dur = q * T;
       const v = vozSel();
-      if (est.sel.pos < v.eventos.length && !travada(est.sel.voz)) { registrar(); v.eventos[est.sel.pos].dur = durAtual(); aplicar(); }
+      if (est.sel.pos < v.eventos.length && !travada(est.sel.voz)) { registrar(); ajustarDuracao(v, est.sel.pos, durAtual()); aplicar(); }
       else { desenhar(); atualizarDoca(); }
+    }
+    // mudar a duração no meio da voz não desloca o resto: encurtar deixa uma pausa no lugar,
+    // alongar ocupa o tempo dos eventos seguintes
+    const PARTES = [4, 3, 2, 1.5, 1, 0.75, 0.5, 0.25].map((x) => x * T);
+    function pausas(d) {
+      const r = [];
+      while (d > 0) { const p = PARTES.find((x) => x <= d + 1e-6); if (!p) break; r.push({ alt: null, dur: p, liga: false }); d -= p; }
+      return r;
+    }
+    function ajustarDuracao(v, pos, nova) {
+      const ev = v.eventos[pos];
+      const velha = ev.dur;
+      if (nova === velha) return;
+      ev.dur = nova;
+      if (nova < velha) { v.eventos.splice(pos + 1, 0, ...pausas(velha - nova)); return; }
+      let falta = nova - velha;
+      ev.liga = false;
+      while (falta > 0 && pos + 1 < v.eventos.length) {
+        const prox = v.eventos[pos + 1];
+        if (prox.dur <= falta) { falta -= prox.dur; v.eventos.splice(pos + 1, 1); }
+        else { v.eventos.splice(pos + 1, 1, ...pausas(prox.dur - falta)); falta = 0; }
+      }
     }
 
     function atualizarDoca() {
@@ -395,11 +479,26 @@
       $(".of-liga").setAttribute("aria-pressed", String(!!(alvo && alvo.liga)));
       $(".of-desfazer").disabled = !est.historico.length;
       $(".of-enarm").disabled = !(alvo && alvo.alt && /[#b]/.test(alvo.alt.slice(1, -1)));
-      for (const k of doca.querySelectorAll(".tecla.ativa")) k.classList.remove("ativa");
+      // no piano: a nota selecionada (azul) e, no mesmo instante, a das outras vozes (roxo)
+      for (const k of doca.querySelectorAll(".tecla.ativa, .tecla.outra")) k.classList.remove("ativa", "outra");
       const v = vozSel();
-      if (est.sel.pos < v.eventos.length && v.eventos[est.sel.pos].alt) {
-        doca.querySelector(`.tecla[data-midi="${M.lerAltura(v.eventos[est.sel.pos].alt).ps}"]`)?.classList.add("ativa");
-      }
+      const marcar = (alt, cls) => { if (alt) doca.querySelector(`.tecla[data-midi="${M.lerAltura(alt).ps}"]`)?.classList.add(cls); };
+      if (est.sel.pos < v.eventos.length) marcar(v.eventos[est.sel.pos].alt, "ativa");
+      const { inicios, fim } = Ed.inicios(v);
+      const t = est.sel.pos < v.eventos.length ? inicios[est.sel.pos] : fim;
+      const outras = [];
+      est.modelo.vozes.forEach((o, i) => {
+        if (i === est.sel.voz) return;
+        const ini = Ed.inicios(o).inicios;
+        let k = -1;
+        for (let j = 0; j < o.eventos.length; j++) if (ini[j] <= t && t < ini[j] + o.eventos[j].dur) { k = j; break; }
+        if (k >= 0) marcar(o.eventos[k].alt, "outra");
+        if (k >= 0 && o.eventos[k].alt) outras.push([o.nome, o.eventos[k].alt]);
+      });
+      est.outraPs = outras.length ? M.lerAltura(outras[0][1]).ps : null;
+      const sua = est.sel.pos < v.eventos.length && v.eventos[est.sel.pos].alt;
+      $(".of-legenda").innerHTML = (sua ? `<span class="leg ativa"></span>${esc(v.nome)}: ${esc(bonito(sua))}` : "")
+        + outras.map(([n, a]) => ` <span class="leg outra"></span>${esc(n)}: ${esc(bonito(a))}`).join("");
     }
 
     for (const b of doca.querySelectorAll("[data-dur]")) b.addEventListener("click", () => { est.ponto = false; mudarDuracao(+b.dataset.dur); });
@@ -421,15 +520,17 @@
       const outra = a.alter > 0 ? M.transpor(a, 1, 0) : M.transpor(a, -1, 0);
       registrar(); alvo.alt = Ed.normalizarAltura(outra.nome + outra.oitava); aplicar();
     });
-    $(".of-esq").addEventListener("click", () => { est.sel.pos = Math.max(0, est.sel.pos - 1); sincronizarDuracao(); desenhar(); atualizarDoca(); });
-    $(".of-dir").addEventListener("click", () => { est.sel.pos = Math.min(vozSel().eventos.length, est.sel.pos + 1); sincronizarDuracao(); desenhar(); atualizarDoca(); });
+    $(".of-esq").addEventListener("click", () => { est.sel.pos = Math.max(0, est.sel.pos - 1); sincronizarDuracao(); desenhar(); atualizarDoca(); centralizar(); });
+    $(".of-dir").addEventListener("click", () => { est.sel.pos = Math.min(vozSel().eventos.length, est.sel.pos + 1); sincronizarDuracao(); desenhar(); atualizarDoca(); centralizar(); });
     $(".of-apagar").addEventListener("click", () => {
       if (!podeEditar()) return;
       const v = vozSel();
       if (!v.eventos.length) return;
       // no meio da voz a nota vira pausa de mesmo valor (nada se desloca); no fim, o último evento sai
-      const ev = v.eventos[est.sel.pos];
-      if (ev && ev.alt) { registrar(); ev.alt = null; ev.liga = false; }
+      let ev = v.eventos[est.sel.pos];
+      // sobre uma pausa no meio, o apagar anda para trás e apaga a nota anterior
+      if (ev && !ev.alt && est.sel.pos < v.eventos.length - 1 && est.sel.pos > 0 && v.eventos[est.sel.pos - 1].alt) { est.sel.pos--; ev = v.eventos[est.sel.pos]; }
+      if (ev && ev.alt) { registrar(); ev.alt = null; ev.liga = false; if (est.sel.pos > 0 && v.eventos[est.sel.pos - 1].liga) v.eventos[est.sel.pos - 1].liga = false; }
       else if (ev && est.sel.pos === v.eventos.length - 1) { registrar(); v.eventos.pop(); }
       else if (!ev) { registrar(); v.eventos.pop(); est.sel.pos = v.eventos.length; }
       else return;
@@ -441,8 +542,17 @@
       est.modelo = Ed.ler(ant);
       aplicar();
     });
-    const ter = $(".of-terminei");
-    if (ter) ter.addEventListener("click", () => { est.terminado = true; analisar(); est.terminado = true; });
+    $(".of-terminei").addEventListener("click", () => {
+      est.terminado = true;
+      est.falta = faltando();
+      analisar();
+      $(".of-correcao").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    const campoCifras = el.querySelector(".of-cifras");
+    if (campoCifras) {
+      let tc = null;
+      campoCifras.addEventListener("input", () => { clearTimeout(tc); tc = setTimeout(() => { if (cfg.aoMudarCifras) cfg.aoMudarCifras(campoCifras.value); est.terminado = false; est.aprovadoAvisado = false; analisar(); }, 350); });
+    }
 
     // grafia das teclas pretas conforme a tonalidade
     function grafia(midi) {
@@ -473,6 +583,8 @@
       const alvo = eventoAlvo();
       if (alvo && alvo.alt) ps = M.lerAltura(alvo.alt).ps;
       else if (est.ex) { const outra = est.ex.vozes.find((x) => x.notas.length); if (outra) ps = outra.notas[0].ps + (est.sel.voz === 0 ? 7 : -9); }
+      // as duas notas marcadas cabem na tela? então centraliza entre elas
+      if (ps !== null && est.outraPs != null && Math.abs(ps - est.outraPs) * 23 < rolo.clientWidth * 0.8) ps = Math.round((ps + est.outraPs) / 2);
       Piano.centralizar(rolo, ps === null ? 60 : ps);
     }
 

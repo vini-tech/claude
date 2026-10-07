@@ -61,6 +61,11 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 500; margin: 0; text-wra
 .tecla:active, .tecla.tocada { filter: brightness(0.86); }
 .tecla.ativa.branca { background: var(--acento-suave); box-shadow: inset 0 -5px 0 var(--acento); }
 .tecla.ativa.preta { background: var(--acento); border-color: var(--acento); }
+.tecla.outra.branca { background: var(--info-fundo); box-shadow: inset 0 -5px 0 var(--info); }
+.tecla.outra.preta { background: var(--info); border-color: var(--info); }
+.legenda-piano { font-size: 0.8rem; color: var(--apagado); min-height: 1.2em; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 0 2px 4px; }
+.legenda-piano .leg { display: inline-block; width: 10px; height: 10px; border-radius: 3px; vertical-align: -1px; }
+.legenda-piano .leg.ativa { background: var(--acento); } .legenda-piano .leg.outra { background: var(--info); margin-left: 8px; }
 
 
 /* ---------------------------------------------------------------- página de leitura */
@@ -170,7 +175,12 @@ figure.exemplo .andamento input { width: 110px; }
 .anotacao { font: 700 11px var(--f-texto); fill: var(--apagado); }
 .sev-erro { --sev: var(--erro); } .sev-aviso { --sev: var(--aviso); } .sev-info { --sev: var(--info); } .sev-ok { --sev: var(--ok); } .sev-foco { --sev: var(--acento); }
 .marcada .tinta { fill: var(--sev); } .marcada .contorno { stroke: var(--sev); } .marcada .haste { stroke: var(--sev); }
-.anotacao.sev-erro, .anotacao.sev-ok { fill: var(--sev); }
+.anotacao.sev-erro, .anotacao.sev-aviso, .anotacao.sev-ok, .cifra.sev-erro, .cifra.sev-aviso { fill: var(--sev); }
+.of-escala { margin: 0 0 6px; font-size: 0.9rem; line-height: 1.45; } .of-escala .solf { color: var(--apagado); }
+.t-erro { color: var(--erro); } .t-aviso { color: var(--aviso); }
+.tabela-modos { display: block; overflow-x: auto; border-collapse: collapse; font-size: 0.88rem; max-width: 100%; }
+.tabela-modos th, .tabela-modos td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--linha); white-space: nowrap; vertical-align: top; }
+.tabela-modos th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--apagado); }
 .halo { fill: var(--sev); opacity: 0.22; } .halo-anel { fill: none; stroke: var(--sev); stroke-width: 1.6; }
 .faixa { fill: var(--sev); opacity: 0.07; } .risco { fill: var(--sev); }
 .selecao { fill: var(--acento); opacity: 0.16; }
@@ -457,8 +467,8 @@ function abrirExercicio(t, e, textoInicial) {
     perfil: perfilDe(e), contexto: G.contextoDaPratica(e),
     cifras: e.cifras, cifrasAluno: e.cifrasAluno, cifrasIniciais: st.cifras != null && !textoInicial ? st.cifras : e.cifrasIniciais,
     duracao: e.duracao, alvoCompassos: e.alvoCompassos, fimLivre: e.fimLivre,
-    aoMudar: (tx) => { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), rascunho: tx }; salvar(); },
-    aoMudarCifras: (c) => { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), cifras: c }; salvar(); },
+    aoMudar: (tx) => { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), rascunho: tx }; salvar(); caixa.querySelector(".depois")?.remove(); },
+    aoMudarCifras: (c) => { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), cifras: c }; salvar(); caixa.querySelector(".depois")?.remove(); },
     aoAprovar: (tx) => {
       const antes = est.exercicios[e.id] || {};
       if (!antes.aprovado) brinde("Exercício aprovado");

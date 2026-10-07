@@ -243,7 +243,7 @@
     for (const c of o.cifras || []) {
       const cc = Math.min(nCompassos - 1, Math.floor(c.t / C));
       const sis = sistemas[compassos[cc].sistema];
-      topo.push(`<text class="cifra" x="${xDoTempo(c.t) - 4}" y="${sis.y + MARGEM_SUP - 10}">${esc(c.texto)}</text>`);
+      topo.push(`<text class="cifra${c.sev ? " sev-" + c.sev : ""}" x="${xDoTempo(c.t) - 4}" y="${sis.y + MARGEM_SUP - 10}">${esc(c.texto)}</text>`);
     }
     for (const an of o.anotacoes || []) {
       const cab = cabecas.find((x) => x.nota === an.nota);
