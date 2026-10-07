@@ -17,6 +17,21 @@ O que conecta as receitas desta categoria (sem que fiquem parecidas entre si):
 Cada item puxa a parte do Nether de onde ele vem: fortaleza, bastião, vale das almas,
 florestas carmesim/distorcida, deltas de basalto ou o fundo do Nether.
 
+## O portão do Nether: Cinnabar e a Soul Forge
+
+Para os itens T4/T5 do Nether, o jogador precisa já estar no nível da netherita.
+
+- **Cinnabar Ore** (minério novo): aparece nos deltas de basalto, perto de lagos de lava, em
+  poucas quantidades. **Só a picareta de netherita minera.** Cinábrio é um mineral vulcânico
+  real, vermelho, minério de mercúrio: combina com o Nether.
+- **Raw Cinnabar** → triturado/lavado → **Cinnabar** → usado na **Infernal Casing**.
+- **Soul Forge** (máquina nova, uma das poucas): construída com Infernal Casing. Recebe rotação
+  e calor de um queimador de blaze embaixo, e funciona como um "assombrar" muito mais intenso.
+  É o passo-chave de todos os itens T4/T5 do Nether.
+
+Resultado: quem tem a Soul Forge já tem netherita, então automatizar netherita e a estrela do
+Nether não "pula" nenhuma etapa do jogo, só tira o trabalho repetitivo.
+
 ## Receitas
 
 ### Crying Obsidian (Obsidiana Chorosa) · T2
@@ -51,8 +66,9 @@ florestas carmesim/distorcida, deltas de basalto ou o fundo do Nether.
   2. Bica: 250 mB de lava (queimar)
   3. Prensa (compactar o carvão no osso)
 - Resultado: **Charred Skull** (item novo) · 80% de sucesso. Sucata: Bone Meal + Coal.
-- **Assombrar:** Charred Skull → Wither Skeleton Skull
-- História: um crânio comum é carbonizado e depois recebe uma alma no fogo de alma.
+- **Soul Forge:** Charred Skull → Wither Skeleton Skull
+- História: um crânio comum é carbonizado e depois recebe uma alma na forja.
+- Portão: Soul Forge (nível netherita).
 - Depende do Skeleton Skull (categoria Mobs do Overworld).
 
 ### Nether Star (Estrela do Nether) · T5
@@ -66,11 +82,12 @@ florestas carmesim/distorcida, deltas de basalto ou o fundo do Nether.
    3. Bica: 500 mB de lava
    4. Prensa
 - Resultado: **Awakened Wither Core** (item novo) · 100%, mas cada loop é caro
-- **Assombrar:** Awakened Wither Core → Nether Star
-- Custo comparável a invocar e matar o Wither de verdade, mas sem a luta: o desafio
+- **Soul Forge** com uma **Nether Star como catalisador** (não é consumida):
+  Awakened Wither Core → Nether Star
+- Portão duplo: a Soul Forge (nível netherita) e uma estrela que o jogador precisa ter
+  conseguido matando o Wither pelo menos uma vez.
+- Custo comparável a invocar e matar o Wither de verdade. A diferença é que o desafio
   passa a ser montar a fábrica inteira (crânios + bolos de blaze + experiência).
-- **Candidata a máquina especial.** Se quisermos uma das poucas máquinas novas aqui, o último
-  passo poderia ser um ritual ("Soul Forge") no lugar do ventilador. Decidimos depois.
 
 ### Ancient Debris (Detrito Ancestral) · T4
 *Origem: o fundo do Nether, sob calor e pressão. Raro e muito útil (netherita).*
@@ -80,7 +97,9 @@ florestas carmesim/distorcida, deltas de basalto ou o fundo do Nether.
   2. Implantador: Gold Ingot (o ouro que vira netherita)
   3. Bica: 250 mB de lava (calor)
   4. Prensa
-- Resultado: Ancient Debris · 75% de sucesso. Sucata: Netherrack + Gold Nugget.
+- Resultado: **Unstable Debris** (item novo) · 75% de sucesso. Sucata: Netherrack + Gold Nugget.
+- **Soul Forge:** Unstable Debris → Ancient Debris
+- Portão: Soul Forge (nível netherita).
 - Custo por detrito: 5 lingotes de ouro + 5 obsidianas + 1250 mB de lava. Um lingote de netherita
   (4 detritos + 4 ouros) sai por ~24 ouros e 20 obsidianas: caro, mas automatizável.
 - História: imita a formação geológica, camada por camada, sob pressão e calor.
@@ -126,17 +145,32 @@ florestas carmesim/distorcida, deltas de basalto ou o fundo do Nether.
 | Charred Skull | intermediário do Wither Skeleton Skull |
 | Dormant Wither Core | intermediário da Nether Star |
 | Awakened Wither Core | intermediário da Nether Star |
+| Unstable Debris | intermediário do Ancient Debris |
+| Cinnabar Ore | minério novo do Nether, só picareta de netherita minera |
+| Raw Cinnabar, Cinnabar | material do portão do Nether |
+| Infernal Casing | carcaça das máquinas do Nether |
+| Soul Forge | máquina especial do Nether |
 
 Mais os itens "incompletos" automáticos das montagens sequenciais.
 
-## Pendente da regra de flora
+## Flora do Nether
 
-Se troncos/plantas do Nether entrarem no escopo, uma receita só cobriria vários itens:
-
+### Crimson Stem, Warped Stem, Warped Wart Block, Shroomlight · T1
 - **Compactador:** 1 Crimson Fungus + 3 Bone Meal → 4 Crimson Stem + 2 Nether Wart Block + 20% Shroomlight
 - **Compactador:** 1 Warped Fungus + 3 Bone Meal → 4 Warped Stem + 2 Warped Wart Block + 20% Shroomlight
-- **Implantador** segurando o fungo (não é consumido) sobre Netherrack → Crimson/Warped Nylium
-- Raízes, brotos e cipós do Nether: excluídos como flora.
-- Wither Rose: é flor, excluída.
+- História: imita um fungo gigante crescendo (tronco, blocos de verruga e luz-de-cogumelo).
+  Uma receita cobre quatro itens.
 
-Isso imita um fungo gigante crescendo: tronco, blocos de verruga e luz-de-cogumelo.
+### Crimson Nylium, Warped Nylium · T1
+- **Implantador** segurando o fungo (não é consumido) sobre Netherrack → Crimson/Warped Nylium
+- História: o fungo "contamina" a netherrack.
+
+### Crimson Roots, Warped Roots, Nether Sprouts, Weeping Vines, Twisting Vines · T1
+- **Implantador** com Bone Meal sobre Crimson Nylium → Crimson Nylium + 2 Crimson Roots + 25% Weeping Vines
+- **Implantador** com Bone Meal sobre Warped Nylium → Warped Nylium + 2 Warped Roots + 1 Nether Sprouts + 25% Twisting Vines
+- História: é exatamente o que farinha de osso faz no nylium. O bloco volta inteiro, as plantas saem como "colheita".
+
+### Wither Rose · T2
+- **Implantador** segurando um Wither Skeleton Skull (não é consumido) sobre Poppy → Wither Rose
+- História: o toque do Wither murcha a flor. Barata depois que se tem um crânio, porque é só decorativa
+  (e ingrediente de ensopado suspeito).
