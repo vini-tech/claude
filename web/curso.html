@@ -528,6 +528,7 @@ function mostrarDepois(t, e, tx, cifras) {
   const itens = Est.relatorio(ex, { cf });
   const prior = [...itens.filter((i) => i.nivel === "atencao"), ...itens.filter((i) => i.nivel === "ok")];
   const perguntas = Qs.depois(ex, { cf, cifras: cifras && cifras.length ? cifras : null });
+  const proximo = proximoExercicio(t, e);
   const s = document.createElement("section");
   s.className = "cartao depois";
   s.innerHTML = `<div class="rotulo">Releia o que você escreveu</div>
@@ -536,10 +537,15 @@ function mostrarDepois(t, e, tx, cifras) {
     <div class="pos-quiz" hidden>
       <details class="relatorio-det"><summary>Relatório de estilo completo</summary>
       <ul class="relatorio">${prior.map((i) => `<li class="${i.nivel}"><b>${esc(i.titulo)}</b><span class="v">${esc(i.valor)}</span><small>Referência: ${esc(i.referencia)}. ${esc(i.nota)}</small></li>`).join("")}</ul></details>
-      ${e.solucao || e.sortear ? `<button class="botao primario" id="ver-prof">Ver a versão do professor</button><div id="prof" hidden></div>` : ""}
+      ${e.solucao || e.sortear ? `<button class="botao" id="ver-prof">Ver a versão do professor</button><div id="prof" hidden></div>` : ""}
+      ${proximo ? `<button class="botao primario grande" id="proximo">${proximo.rotulo}</button>` : ""}
     </div>`;
   caixa.appendChild(s);
   montarQuiz(s.querySelector(".quiz"), perguntas, false, () => { s.querySelector(".pos-quiz").hidden = false; });
+  $("proximo")?.addEventListener("click", () => {
+    if (proximo.tema !== t) history.replaceState(null, "", "#" + proximo.tema.id);
+    abrirExercicio(proximo.tema, proximo.ex);
+  });
   $("ver-prof")?.addEventListener("click", () => {
     const d = $("prof");
     const b = $("ver-prof");
@@ -555,6 +561,15 @@ function mostrarDepois(t, e, tx, cifras) {
       b.hidden = true;
     }, 30);
   });
+}
+
+// próximo exercício do tema; no último, o primeiro do tema seguinte
+function proximoExercicio(t, e) {
+  const k = t.exercicios.findIndex((x) => x.id === e.id);
+  if (k >= 0 && k < t.exercicios.length - 1) { const ex = t.exercicios[k + 1]; return { tema: t, ex, rotulo: `Próximo: ${ex.titulo} →` }; }
+  const idx = temasEmOrdem.findIndex((x) => x.id === t.id);
+  const tema = temasEmOrdem[idx + 1];
+  return tema ? { tema, ex: tema.exercicios[0], rotulo: `Próximo tema: ${tema.titulo} →` } : null;
 }
 
 // cifras da versão do professor, alinhadas às notas do baixo
