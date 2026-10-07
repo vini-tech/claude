@@ -102,6 +102,7 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 500; margin: 0; text-wra
 .par { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
 figure.exemplo { margin: 0; display: grid; gap: 6px; min-width: 0; }
 figure.exemplo figcaption { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 0.92rem; }
+figure.exemplo .andamento input { width: 110px; }
 .campo { display: grid; gap: 4px; }
 .rotulo-campo { font-size: 0.85rem; font-weight: 700; color: var(--apagado); }
 .rotulo-campo + textarea, .campo textarea { width: 100%; min-height: 72px; border: 1px solid var(--linha); border-radius: 8px; background: var(--folha); padding: 8px 10px; resize: vertical; line-height: 1.45; }
@@ -338,7 +339,15 @@ function desenharInicio() {
 // ---------------------------------------------------------------- exemplos com partitura e som
 function exemploHTML(ex, chave) {
   return `<figure class="exemplo" data-ex="${chave}"><div class="mini-partitura"></div>
-    <figcaption>${ex.rotulo ? `<b>${esc(ex.rotulo)}</b> ` : ""}<button class="ouvir" type="button">▶ Ouvir</button></figcaption></figure>`;
+    <figcaption>${ex.rotulo ? `<b>${esc(ex.rotulo)}</b> ` : ""}<button class="ouvir" type="button">▶ Ouvir</button>
+    <label class="andamento"><span aria-hidden="true">♩ =</span><input type="range" min="40" max="176" step="4" value="${bpmExemplos()}" aria-label="Andamento dos exemplos"><span class="bpm">${bpmExemplos()}</span></label></figcaption></figure>`;
+}
+
+// andamento único para todos os exemplos (fica guardado no navegador)
+const bpmExemplos = () => est.bpm || 88;
+function mudarBpm(v) {
+  est.bpm = v; salvar();
+  for (const f of document.querySelectorAll("figure.exemplo")) { f.querySelector(".andamento input").value = v; f.querySelector(".bpm").textContent = v; }
 }
 
 const exemplosDaPagina = new Map();
@@ -359,8 +368,12 @@ function montarExemplos(raiz) {
     const b = fig.querySelector(".ouvir");
     b.addEventListener("click", () => {
       if (Som.tocando()) { Som.parar(); return; }
-      if (Som.tocar(lido, { bpm: ex.bpm || 88, T, aoTick: (t) => P.moverCursor(fig._layout, t), aoFim: () => { P.moverCursor(fig._layout, null); b.textContent = "▶ Ouvir"; } })) b.textContent = "■ Parar";
+      if (Som.tocar(lido, { bpm: bpmExemplos(), T, aoTick: (t) => P.moverCursor(fig._layout, t), aoFim: () => { P.moverCursor(fig._layout, null); b.textContent = "▶ Ouvir"; } })) b.textContent = "■ Parar";
     });
+    const faixa = fig.querySelector(".andamento input");
+    faixa.addEventListener("input", () => mudarBpm(+faixa.value));
+    // tocando: recomeça no andamento novo quando o controle é solto
+    faixa.addEventListener("change", () => { if (b.textContent.startsWith("■")) { Som.parar(); b.click(); } });
   }
 }
 
