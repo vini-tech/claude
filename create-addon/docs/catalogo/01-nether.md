@@ -26,8 +26,12 @@ Para os itens T4/T5 do Nether, o jogador precisa já estar no nível da netherit
   real, vermelho, minério de mercúrio: combina com o Nether.
 - **Raw Cinnabar** → triturado/lavado → **Cinnabar** → usado na **Infernal Casing**.
 - **Soul Forge** (máquina nova, uma das poucas): construída com Infernal Casing. Recebe rotação
-  e calor de um queimador de blaze embaixo, e funciona como um "assombrar" muito mais intenso.
-  É o passo-chave de todos os itens T4/T5 do Nether.
+  e queima **almas** como combustível. É o passo-chave de todos os itens T4/T5 do Nether.
+  - Almas vêm de mobs que morrem a até ~8 blocos da forja (automático, com fazenda de mobs ao lado)
+    ou do **Soul Sack**, que guarda as almas dos mobs que o jogador mata em qualquer lugar.
+  - Valor por mob segue a vida máxima (galinha 1, zumbi 2, devastador 10, Wither 30). Guarda ~100.
+  - Custo proposto: Wither Skeleton Skull 8 almas, Ancient Debris 12, Nether Star 60.
+  - Detalhes completos em `DESIGN.md`.
 
 Resultado: quem tem a Soul Forge já tem netherita, então automatizar netherita e a estrela do
 Nether não "pula" nenhuma etapa do jogo, só tira o trabalho repetitivo.

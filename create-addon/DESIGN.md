@@ -91,6 +91,10 @@ Rules for every special machine:
   Soul value scales with the mob's max health (chicken 1, zombie 2,
   ravager 10, Wither 30). The sack is emptied into the forge by right-click
   or by funnels/belts.
+- The forge also **absorbs souls directly** from any mob that dies within
+  ~8 blocks of it (soul particles fly into it), so a mob farm built next to
+  the forge fuels it fully automatically. Same soul values as the sack.
+- Stores up to ~100 souls.
 - Items enter from the top and leave below/sideways, like a basin. Each recipe
   costs souls; if souls run out the forge pauses (nothing lost).
 - Catalyst slot: right-click with an item (e.g. a Nether Star) to place it,
