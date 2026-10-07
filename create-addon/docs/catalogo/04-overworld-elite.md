@@ -39,15 +39,18 @@ vêm nos próximos catálogos.
    - A estatueta de ouro dos illagers.
 2. **Montagem sequencial** (base: Golden Effigy, 4 loops):
    1. Implantador: Emerald (a magia dos illagers)
-   2. Implantador: Ghast Tear (regeneração)
-   3. Bica: 250 mB de **Potion of Regeneration** (o "DNA" da vida)
+   2. Implantador: Rabbit's Foot (o amuleto da sorte)
+   3. Bica: 250 mB de **Potion of Healing** (o "DNA" da vida)
    4. Prensa
    - Resultado: **Dormant Totem** (item novo) · 100%
 3. **Solar Crucible** com um **Totem of Undying como catalisador** (não é consumido):
    Dormant Totem → Totem of Undying
-- Custo: 4 ouro, 5 esmeraldas, 4 lágrimas de ghast (linha do Nether), 1 balde de poção de regeneração.
-- História: uma estatueta recebe a magia dos illagers e a força da vida, e o sol a "desperta",
-  copiando o totem original.
+- Custo: 4 ouro, 5 esmeraldas, 4 pés de coelho, 1 balde de poção de cura.
+- História: uma estatueta recebe a magia dos illagers, a sorte do pé de coelho e a força da vida,
+  e o sol a "desperta", copiando o totem original.
+- **Automação da poção:** o próprio Create faz poções no misturador sobre bacia aquecida, como fluido:
+  água + Nether Wart → Awkward Potion; + Glistering Melon Slice → Potion of Healing. Canos levam a
+  poção até a bica. Verruga por colheitadeira mecânica, melancia reluzente pelo crafter mecânico.
 
 ### Enchanted Golden Apple (Maçã Dourada Encantada) · T5
 *Baús de masmorras, minas e cidades antigas. Muito útil, não renovável no vanilla.*
