@@ -15,6 +15,10 @@ thematic production route built on Create's machines.
   spawn eggs, command blocks, barrier, ...).
 - **Skip:** items that Create or vanilla can already produce with machines
   (e.g. sand from crushing gravel). No duplicate routes.
+- **Skip:** bucketed mobs (fish, axolotl, tadpole buckets) and flora
+  (flowers, plants, crops, saplings, leaves).
+- **Dragon egg:** only gets a recipe if it is used as an ingredient or
+  catalyst somewhere else in the mod.
 
 ## Difficulty
 
@@ -34,6 +38,22 @@ Progressive. Difficulty is driven by **usefulness + rarity**, not rarity alone:
 - Variant families (music discs, trim templates, pottery sherds, mob heads):
   a shared base production line plus a unique final touch tied to each
   variant's theme.
+
+- Fluids as "DNA" (a fluid that gives the item its property) is a tool for
+  some recipes, not a rule for all of them.
+- **No duplication loops:** a recipe must never cost less than what Create
+  gives back when the output is crushed/milled (e.g. nether gold ore crushes
+  into 18 nuggets, so it must cost at least 2 gold ingots).
+
+## Difficulty tiers
+
+| Tier | Meaning |
+|---|---|
+| T1 | cheap: one machine, no heat |
+| T2 | simple: one or two steps, may need heat |
+| T3 | intermediate: chain of 2–3 machines, or superheated |
+| T4 | advanced: sequenced assembly with loops + inputs from other lines |
+| T5 | legendary: top of the tree, several production lines, maybe a special machine |
 
 ## New content
 
