@@ -47,13 +47,17 @@ style and palette, inspired by Create and its addons, but original.
 
 ## Project conventions
 
-- Everything in English: code, assets, lang keys, docs, commit messages.
-  `en_us` is the primary language; `pt_br` is kept as a translation.
+- Everything that ships to players is in English: item/block/machine names,
+  descriptions, tooltips, Ponder text, README. `en_us` is the primary
+  language; `pt_br` is kept as a translation.
+- Internal planning (recipe catalogs, discussion) may be in Portuguese.
 - Polish: reasonably good-looking, publishable later without rework.
 
 ## Workflow
 
-1. Build the full list of non-craftable survival items from game data
+1. Research how Create addons and modpacks design fun recipes; take
+   inspiration from their ideas without copying recipes.
+2. Build the full list of non-craftable survival items from game data
    (all items minus recipe outputs from vanilla + Create).
-2. Present a recipe catalog **one category at a time** for review.
-3. Implement only approved categories.
+3. Present a recipe catalog **one category at a time** for review.
+4. Implement only approved categories.

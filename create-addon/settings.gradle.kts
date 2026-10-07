@@ -1,4 +1,4 @@
-rootProject.name = "createaddon"
+rootProject.name = "create_synthesis"
 
 pluginManagement {
     repositories {

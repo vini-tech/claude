@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
-  "id": "createaddon",
+  "id": "create_synthesis",
   "version": "${version}",
 
-  "name": "Create Addon",
-  "description": "Add-on para o Create.",
+  "name": "Create: Synthesis",
+  "description": "Synthesize the unsynthesizable: Create production routes for every item that has no crafting recipe.",
   "authors": [ "vini-tech" ],
   "license": "MIT",
-  "icon": "assets/createaddon/icon.png",
+  "icon": "assets/create_synthesis/icon.png",
 
   "environment": "*",
   "entrypoints": {
-    "main": [ "com.vinitech.createaddon.CreateAddon" ],
-    "client": [ "com.vinitech.createaddon.CreateAddonClient" ]
+    "main": [ "com.vinitech.createsynthesis.CreateSynthesis" ],
+    "client": [ "com.vinitech.createsynthesis.CreateSynthesisClient" ]
   },
 
   "depends": {
