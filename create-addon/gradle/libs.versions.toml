@@ -1,0 +1,32 @@
+[versions]
+# Mesmas versões usadas pelo Create Fabric 6.0.8.1, para evitar incompatibilidades.
+minecraft = "1.20.1"
+# https://parchmentmc.org/docs/getting-started
+parchment = "2023.09.03"
+
+# https://fabricmc.net/develop/
+# o Create avisa: não subir o Loom além de 1.10 na 1.20.1
+loom = "1.10.+"
+fabric_loader = "0.17.2"
+fabric_api = "0.92.6+1.20.1"
+
+# https://modrinth.com/mod/create-fabric/versions
+create = "6.0.8.1+build.1744-mc1.20.1"
+
+# ferramentas de desenvolvimento (só no ambiente de teste)
+emi = "1.1.22+1.20.1"
+modmenu = "7.2.2"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+parchment = { module = "org.parchmentmc.data:parchment-1.20.1", version.ref = "parchment" }
+fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
+fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
+
+create = { module = "com.simibubi.create:create-fabric", version.ref = "create" }
+
+emi = { module = "dev.emi:emi-fabric", version.ref = "emi" }
+modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
+
+[plugins]
+loom = { id = "fabric-loom", version.ref = "loom" }

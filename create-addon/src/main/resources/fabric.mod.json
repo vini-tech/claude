@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "createaddon",
+  "version": "${version}",
+
+  "name": "Create Addon",
+  "description": "Add-on para o Create.",
+  "authors": [ "vini-tech" ],
+  "license": "MIT",
+  "icon": "assets/createaddon/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [ "com.vinitech.createaddon.CreateAddon" ],
+    "client": [ "com.vinitech.createaddon.CreateAddonClient" ]
+  },
+
+  "depends": {
+    "minecraft": "${minecraft_version}",
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": ">=${fabric_version}",
+    "create": ">=${create_version}"
+  }
+}
