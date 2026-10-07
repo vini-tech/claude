@@ -1,6 +1,6 @@
 # Catálogo 01: Nether
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 Nomes de itens novos estão em inglês (é o que vai para o jogo). Tiers conforme `DESIGN.md`
 (T1 barato → T5 lendário).

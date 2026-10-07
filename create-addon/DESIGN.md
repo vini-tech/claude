@@ -101,6 +101,17 @@ Rules for every special machine:
   floating and visible inside the forge; not consumed; removed by empty hand.
 - Goggles show the stored souls.
 
+### End: Rift Chamber (gate ore: Purpurite, netherite pickaxe)
+
+- Works only with **no blocks below it down to the bottom of the world**
+  (in practice: built over the End void).
+- **Void depth** (free distance to the world bottom) is its resource: each
+  recipe needs a minimum depth, so stronger items need chambers built higher
+  above the void. No fuel.
+- Rotation-driven (speed = processing speed); items drop into a visible
+  rift below and come back transformed. Same catalyst slot as the Soul Forge.
+- Goggles show void depth and the current recipe.
+
 ### Attachments for existing Create machines
 
 For easy but variant-heavy families:
