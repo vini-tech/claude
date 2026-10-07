@@ -110,6 +110,17 @@ Rules for every special machine:
   rift below and come back transformed. Same catalyst slot as the Soul Forge.
 - Goggles show whether it is over the void and the current recipe.
 
+### Deep Dark: Echo Chamber (gate ore: Dioptase, diamond pickaxe)
+
+- Resource: **silence**. Works only with no noise within ~8 blocks: any
+  vanilla vibration plus nearby spinning Create machines count as noise.
+- **Wool blocks sound**, as in vanilla, so the chamber must be insulated
+  with wool inside a factory. Its own drive shaft does not count as noise.
+- Noise pauses processing (nothing lost). Rotation-driven; same catalyst slot.
+- Goggles show how many noise sources it hears.
+- Lighter gate (diamond) because no Deep Dark item reaches T4/T5; used for
+  ancient-city-only items (echo shard, shrieker, Silence template).
+
 ### Attachments for existing Create machines
 
 For easy but variant-heavy families:
