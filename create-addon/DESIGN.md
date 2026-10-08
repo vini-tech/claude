@@ -26,7 +26,11 @@ skip the progression needed to get the item by hand.
   One **Animal Feed** for all land animals. **Fish Feed** for fish (raw fish
   are also skipped): dropped into water it turns into tiny floating feed
   flakes (a small 3D model) that fish swim to and eat, like real fish food.
-- **In:** all flora (logs, leaves, saplings, flowers, crops, Nether plants).
+- **In:** flora that is not trivially farmable: flowers, ground/cave/water
+  plants, Nether and End plants.
+- **Skip:** wood (logs, leaves, saplings, apples, azaleas) and crops (carrot,
+  potato, beetroot, melon, pumpkin, sugar cane, cactus, bamboo, sweet berries,
+  cocoa): Create already farms them easily.
 - **Dragon egg:** only gets a recipe if it is used as an ingredient or
   catalyst somewhere else in the mod.
 
