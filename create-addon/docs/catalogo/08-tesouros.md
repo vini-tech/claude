@@ -1,6 +1,6 @@
 # Catálogo 08: Tesouros de estruturas
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 Nomes de itens novos em inglês. Tiers conforme `DESIGN.md`.
 Já resolvido em outro catálogo: Enchanted Golden Apple (04).
