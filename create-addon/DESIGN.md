@@ -19,6 +19,10 @@ skip the progression needed to get the item by hand.
 - **Skip:** items that Create or vanilla can already produce with machines
   (e.g. sand from crushing gravel). No duplicate routes.
 - **Skip:** bucketed mobs (fish, axolotl, tadpole buckets).
+- **Skip:** raw meats and rabbit hide (animal farms are already easy).
+  Instead, Create-made **feeds** fatten animals (up to 3 levels, +1 meat per
+  level on death), fed by hand, by a Deployer, or via a **Feeding Trough**
+  block that animals within ~8 blocks walk to on their own.
 - **In:** all flora (logs, leaves, saplings, flowers, crops, Nether plants).
 - **Dragon egg:** only gets a recipe if it is used as an ingredient or
   catalyst somewhere else in the mod.

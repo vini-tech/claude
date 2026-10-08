@@ -10,24 +10,41 @@ Já resolvidos em outros catálogos: Totem of Undying (04), Ender Pearl (02).
 Cada drop sai de uma pequena "linha de produção" que imita a vida do mob:
 o que ele come, onde vive, o que acontece com ele.
 
-## Animais de criação (família)
+## Animais de criação: ração e engorda
 
-**Base comum: Fodder (ração, item novo)**
+As carnes **não têm receita** (fazendas de carne já são fáceis). Em vez disso, o mod adiciona
+**rações** feitas com as máquinas do Create, que deixam os animais mais gordos e com mais carne.
+
+**Base: Fodder (item novo)**
 - **Moedor:** Wheat → 2 Fodder
 - **Moedor:** Wheat Seeds / Beetroot Seeds / Melon Seeds / Pumpkin Seeds → 1 Fodder
 
-**Ração de cada animal (misturador) e "virar carne" (compactador)**
+**Rações (misturador), cada animal só come a sua**
 
-| Item | Passo 2: Misturador (ração) | Passo 3: Compactador | História |
-|---|---|---|---|
-| Raw Beef · T1 | 2 Fodder + 250 mB **Milk** → **Pasture Feed** | Pasture Feed + 1 Leather → 2 Raw Beef | a vaca pasta e tem couro |
-| Raw Mutton · T1 | (mesma Pasture Feed) | Pasture Feed + 1 White Wool → 2 Raw Mutton | a ovelha pasta e tem lã |
-| Raw Porkchop · T1 | 2 Fodder + 1 Carrot + 1 Potato → **Swill** | Swill → 2 Raw Porkchop | o porco come restos de horta |
-| Raw Chicken · T1 | 2 Fodder + 1 Feather → **Chicken Feed** | Chicken Feed → 1 Raw Chicken | a galinha come sementes |
-| Raw Rabbit · T1 | 1 Fodder + 1 Carrot + 1 Dandelion → **Rabbit Feed** | Rabbit Feed → Raw Rabbit + Rabbit Hide | o coelho come cenoura e dente-de-leão |
+| Ração (item novo) | Receita | Animais |
+|---|---|---|
+| Pasture Feed | 2 Fodder + 250 mB Milk | vaca, ovelha (e mooshroom) |
+| Swill | 2 Fodder + 1 Carrot + 1 Potato | porco |
+| Chicken Feed | 2 Fodder + 1 Feather | galinha |
+| Rabbit Feed | 1 Fodder + 1 Carrot + 1 Dandelion | coelho |
 
-Exemplo completo (carne bovina): Moedor 1 Wheat → 2 Fodder; Misturador 2 Fodder + 250 mB Milk → Pasture Feed;
-Compactador Pasture Feed + Leather → 2 Raw Beef.
+**Engorda**
+- Cada vez que come, o animal sobe um nível de engorda, até **3**.
+- **+1 carne por nível** ao morrer.
+- Fica visivelmente um pouco maior a cada nível e solta partículas ao comer.
+- A ração **não** serve para reproduzir (isso continua com os itens do vanilla).
+
+**Formas de alimentar**
+1. À mão: clicar no animal com a ração.
+2. Implantador do Create usando a ração no animal.
+3. **Feeding Trough (cocho, bloco novo):** você deposita ração nele (à mão, funil, calha ou esteira),
+   e os animais num raio de ~8 blocos **vão sozinhos até o cocho e comem**, até chegar ao nível 3.
+   O nível de ração aparece no modelo do bloco. Feito no crafting com tábuas e chapas de ferro/andesito.
+
+Assim um curral automatizado fica simples: esteira trazendo ração até o cocho, animais engordando
+sozinhos, e o abate quando quiser.
+
+Fora do escopo agora: Raw Beef, Raw Porkchop, Raw Mutton, Raw Chicken, Raw Rabbit, Rabbit Hide.
 
 ### Egg (Ovo) · T1
 - **Misturador:** 1 Chicken Feed + 1 Calcite (moída, vira a casca de cálcio) + 100 mB água → Egg
@@ -58,7 +75,7 @@ Compactador Pasture Feed + Leather → 2 Raw Beef.
 - Sem farinha de osso como insumo (moer osso dá até 6 farinhas, o que criaria duplicação).
 
 ### Rotten Flesh (Carne Podre) · T1
-- **Assombrar:** qualquer carne crua → 2 Rotten Flesh
+- **Assombrar:** qualquer carne crua (vinda da fazenda) → 2 Rotten Flesh
 - História: a carne é "corrompida" pela morte. Zumbis são mortos-vivos.
 
 ### Spider Eye (Olho de Aranha) · T2
@@ -128,7 +145,8 @@ Iron Ingot. O implantador segura o cinzel e esculpe; o cinzel não é consumido 
 | Item | Uso |
 |---|---|
 | Fodder | base da família dos animais |
-| Pasture Feed, Swill, Chicken Feed, Rabbit Feed | rações de cada animal |
+| Pasture Feed, Swill, Chicken Feed, Rabbit Feed | rações (engorda) |
+| Feeding Trough | cocho de ração (bloco) |
 | Fossil Fragment | intermediário do Bone |
 | Stretched Hide, Hollow Hide | intermediários da Phantom Membrane |
 | Horn Blank | intermediário do Goat Horn |
