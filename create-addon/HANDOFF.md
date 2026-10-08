@@ -146,9 +146,17 @@ Pesquisa de inspiração (CAB, Astral, Dreams & Desires, Mechanical Spawner...):
   `create_synthesis:die/<matriz>/...` só roda com essa matriz na prensa (e a prensa com matriz só roda essas);
   último segmento `random_...` sai **exatamente um** resultado, sorteado pelas chances do JSON (`RandomResults`,
   mixin em `ProcessingRecipe.rollResults`). As tesouras e o pincel passaram a desgastar.
-- Etapas restantes: 3) matrizes e ponteiras (com resultados aleatórios: discos,
-  cacos, moldes, chifre de cabra, sementes antigas); 4) comportamentos (couro secando, flocos de ração,
-  engorda, cocho).
+- **Etapa 4 (feita, falta testar no jogo):**
+  - Soaked Hide (`SoakedHideItem`): seca no inventário do jogador em 5 min (horário arredondado ao minuto
+    para empilhar), barra de progresso e tooltip "Dries in m:ss".
+  - Engorda: dado sincronizado em todo `Mob` (`MobMixin`), até 3 níveis; Animal Feed à mão/implantador
+    (`AnimalFeedItem.interactLivingEntity`); +1 carne por nível na morte (`LivingEntityMixin`, assada se em
+    chamas); desenhado 7% maior por nível (`LivingEntityRendererMixin`). Lista de mobs em `Fattening.MEAT`.
+  - Feeding Trough (bloco): guarda 64 rações, enche à mão ou por funil/calha/esteira (API de transferência),
+    não deixa tirar; animais a 8 blocos vão comer (`EatFromTroughGoal`, cochos indexados em `Troughs`).
+  - Fish Feed na água vira flocos (`FeedFlakeEntity`, afundam devagar, somem em 2 min); peixes vão comer
+    (`EatFlakeGoal`).
+- **Próximo:** testar tudo da fase 2 no jogo com o usuário; depois refinar todas as texturas; depois fase 3.
 
 ### Fase 2: plano original
 Itens novos com **texturas definitivas no estilo do Create**:

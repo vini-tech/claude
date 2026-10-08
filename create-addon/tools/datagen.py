@@ -313,14 +313,14 @@ materials = {}  # item name -> (english, portuguese, plain)
 PT_EXTRA = {}  # pt_br names of transitional items made in loops
 
 FODDER = material("fodder", "Fodder", "Forragem")
-ANIMAL_FEED = material("animal_feed", "Animal Feed", "Ração Animal")
-FISH_FEED = material("fish_feed", "Fish Feed", "Ração de Peixe")
+ANIMAL_FEED = material("animal_feed", "Animal Feed", "Ração Animal", plain=False)
+FISH_FEED = material("fish_feed", "Fish Feed", "Ração de Peixe", plain=False)
 FOSSIL_FRAGMENT = material("fossil_fragment", "Fossil Fragment", "Fragmento de Fóssil")
 STRETCHED_HIDE = material("stretched_hide", "Stretched Hide", "Couro Esticado")
 HOLLOW_HIDE = material("hollow_hide", "Hollow Hide", "Couro Oco")
 HORN_BLANK = material("horn_blank", "Horn Blank", "Chifre Bruto")
 NACRE = material("nacre", "Nacre", "Madrepérola")
-SOAKED_HIDE = material("soaked_hide", "Soaked Hide", "Couro Encharcado")
+SOAKED_HIDE = material("soaked_hide", "Soaked Hide", "Couro Encharcado", plain=False)
 TANNED_LEATHER = material("tanned_leather", "Tanned Leather", "Couro Curtido")
 SADDLE_FRAME = material("saddle_frame", "Saddle Frame", "Armação de Sela")
 ROUGH_BELL = material("rough_bell", "Rough Bell", "Sino Bruto")
@@ -500,6 +500,81 @@ for coral, dye in CORAL_DYES.items():
     deploying("ocean", f"{coral}_coral", f"{coral}_coral_block", CORAL_GRAFT,
               [f"{coral}_coral_block", f"{coral}_coral", out(f"{coral}_coral_fan", chance=0.5)])
 
+# ---------------------------------------------------------------- Phase 2: feeding and drying
+
+tooltip("soaked_hide",
+        ("Leather soaked in tannin. _Dries_ into Tanned Leather by itself after _5 minutes_ in your inventory, "
+         "or right away when _smoked_ by an Encased Fan.",),
+        ("Couro encharcado no tanino. _Seca_ sozinho e vira Couro Curtido depois de _5 minutos_ no inventário, "
+         "ou na hora se for _defumado_ por um Ventilador.",))
+lang_en["tooltip.create_synthesis.dries_in"] = "Dries in %s"
+lang_pt["tooltip.create_synthesis.dries_in"] = "Seca em %s"
+tooltip("animal_feed",
+        ("_Fattens_ land animals: up to _3 times_, each time a little bigger and _one more piece of meat_ when "
+         "they die. It does not breed them.",
+         ("When used on an animal", "Feeds it, by hand or with a _Deployer_."),
+         ("In a Feeding Trough", "Animals nearby _walk to the trough_ and eat by themselves.")),
+        ("_Engorda_ animais terrestres: até _3 vezes_, cada vez um pouco maiores e com _uma carne a mais_ quando "
+         "morrem. Não serve para reproduzir.",
+         ("Ao usar num animal", "Alimenta, à mão ou com um _Implantador_."),
+         ("Num Cocho", "Os animais por perto _vão até o cocho_ e comem sozinhos.")))
+tooltip("fish_feed",
+        ("_Fattens_ fish: up to _3 times_, each time _one more fish_ when they die.",
+         ("When it lands in water", "Breaks up into _flakes_ that fish swim to and eat. One flake feeds one fish.")),
+        ("_Engorda_ peixes: até _3 vezes_, cada vez _um peixe a mais_ quando morrem.",
+         ("Ao cair na água", "Vira _flocos_ que os peixes vêm comer. Cada floco alimenta um peixe.")))
+
+lang_en[f"block.{MOD}.feeding_trough"] = "Feeding Trough"
+lang_pt[f"block.{MOD}.feeding_trough"] = "Cocho"
+for lang, text in ((lang_en, ("Holds up to a stack of _Animal Feed_. Animals within _8 blocks_ walk to it and eat "
+                              "until they are fully fattened.",
+                              ("When filled", "By hand, or by _Funnels_, _Chutes_ and _Belts_."))),
+                   (lang_pt, ("Guarda até um pack de _Ração Animal_. Animais a até _8 blocos_ vêm até ele e comem "
+                              "até ficarem totalmente engordados.",
+                              ("Para encher", "À mão, ou com _Funis_, _Calhas_ e _Esteiras_.")))):
+    lang[f"block.{MOD}.feeding_trough.tooltip.summary"] = text[0]
+    lang[f"block.{MOD}.feeding_trough.tooltip.condition1"] = text[1][0]
+    lang[f"block.{MOD}.feeding_trough.tooltip.behaviour1"] = text[1][1]
+lang_en[f"entity.{MOD}.feed_flake"] = "Feed Flake"
+lang_pt[f"entity.{MOD}.feed_flake"] = "Floco de Ração"
+
+shaped("tools", "feeding_trough", ["S S", "PPP"], {"S": "create:iron_sheet", "P": "#planks"}, f"{MOD}:feeding_trough")
+
+block_files = {}  # path under assets/ or data/ -> json
+
+
+def box(frm, to, texture, faces=("north", "south", "east", "west", "up", "down")):
+    return {"from": frm, "to": to, "faces": {f: {"texture": texture, "cullface": f} if f == "down" else {"texture": texture}
+                                             for f in faces}}
+
+
+TROUGH_WALLS = [
+    box([0, 0, 0], [16, 2, 16], "#wood"),       # floor
+    box([0, 2, 0], [16, 8, 2], "#wood"),        # north wall
+    box([0, 2, 14], [16, 8, 16], "#wood"),      # south wall
+    box([0, 2, 2], [2, 8, 14], "#wood"),        # west wall
+    box([14, 2, 2], [16, 8, 14], "#wood"),      # east wall
+    box([3, 6, -0.5], [5, 8.5, 16.5], "#band"),   # iron bands around the trough
+    box([11, 6, -0.5], [13, 8.5, 16.5], "#band"),
+]
+for fill, height in ((0, None), (1, 3.5), (2, 5), (3, 6.5)):
+    elements = list(TROUGH_WALLS)
+    if height:
+        elements.append(box([2, 2, 2], [14, height, 14], "#feed", faces=("up",)))
+    block_files[f"assets/{MOD}/models/block/feeding_trough_{fill}.json"] = {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": "minecraft:block/spruce_planks", "wood": "minecraft:block/spruce_planks",
+                     "band": "minecraft:block/iron_block", "feed": f"{MOD}:block/feed_surface"},
+        "elements": elements}
+block_files[f"assets/{MOD}/blockstates/feeding_trough.json"] = {
+    "variants": {f"feed={i}": {"model": f"{MOD}:block/feeding_trough_{i}"} for i in range(4)}}
+block_files[f"assets/{MOD}/models/item/feeding_trough.json"] = {"parent": f"{MOD}:block/feeding_trough_2"}
+block_files[f"data/{MOD}/loot_tables/blocks/feeding_trough.json"] = {
+    "type": "minecraft:block",
+    "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": f"{MOD}:feeding_trough"}],
+               "conditions": [{"condition": "minecraft:survives_explosion"}]}]}
+block_files["data/minecraft/tags/blocks/mineable/axe.json"] = {"replace": False, "values": [f"{MOD}:feeding_trough"]}
+
 # ---------------------------------------------------------------- write
 
 PT = {  # pt_br names for transitional items
@@ -549,6 +624,8 @@ def main():
         texture = ROOT / f"src/main/resources/assets/{MOD}/textures/item/{name}.png"
         if not texture.exists():
             print(f"warning: missing texture {texture.relative_to(ROOT)}")
+    for path, data in block_files.items():
+        write(OUT / path, data)
     PT.update(PT_EXTRA)
     missing = set(incomplete) - set(PT)
     if missing:

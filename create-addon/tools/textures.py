@@ -911,6 +911,30 @@ FLUIDS = {
 }
 
 
+BLOCK_OUT = ROOT / "src/main/resources/assets/create_synthesis/textures/block"
+
+
+def feed_surface():
+    """Animal Feed seen from above in the trough: pellets packed edge to edge, tiling seamlessly."""
+    t = Tex()
+    for (x, y) in [(x, y) for y in range(N) for x in range(N)]:
+        t.put((x, y), FEED, 1)
+    pellet = [[6, 5, None], [5, 4, 2], [None, 2, 0]]
+    for row in range(0, N, 3):
+        for col in range(0, N, 3):
+            px = (col + (row // 3 % 2) * 1 + (row * 7 + col * 3) % 2) % N
+            for dy, line in enumerate(pellet):
+                for dx, idx in enumerate(line):
+                    if idx is not None:
+                        t.put(((px + dx) % N, (row + dy) % N), FEED, idx - (1 if (row + col) % 2 else 0))
+    return t
+
+
+def write_blocks():
+    BLOCK_OUT.mkdir(parents=True, exist_ok=True)
+    feed_surface().image().save(BLOCK_OUT / "feed_surface.png")
+
+
 def write_fluids():
     FLUID_OUT.mkdir(parents=True, exist_ok=True)
     for name, (ramp_, frames, flowing) in FLUIDS.items():
@@ -938,6 +962,7 @@ def main():
         im.save(OUT / f"{name}.png")
         images.append((name, im))
     write_fluids()
+    write_blocks()
     if "--preview" in sys.argv:
         preview(images, sys.argv[sys.argv.index("--preview") + 1])
     print(f"{len(images)} item textures, {len(FLUIDS)} fluid textures")

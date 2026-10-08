@@ -8,7 +8,9 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.vinitech.createsynthesis.content.die.PressDieInteraction;
+import com.vinitech.createsynthesis.registry.SynthesisBlocks;
 import com.vinitech.createsynthesis.registry.SynthesisCreativeTabs;
+import com.vinitech.createsynthesis.registry.SynthesisEntities;
 import com.vinitech.createsynthesis.registry.SynthesisFluids;
 import com.vinitech.createsynthesis.registry.SynthesisItems;
 
@@ -35,6 +37,8 @@ public class CreateSynthesis implements ModInitializer {
 		SynthesisCreativeTabs.register();
 		SynthesisItems.register();
 		SynthesisFluids.register();
+		SynthesisBlocks.register();
+		SynthesisEntities.register();
 		PressDieInteraction.register();
 
 		REGISTRATE.register();
@@ -45,6 +49,13 @@ public class CreateSynthesis implements ModInitializer {
 			LOGGER.info("{} loaded {} recipes", NAME, count);
 		});
 		LOGGER.info("{} initialized", NAME);
+	}
+
+	/** Game time of the world the client is in, or -1; set by the client entrypoint (items draw bars with it). */
+	public static java.util.function.LongSupplier clientTime = () -> -1;
+
+	public static long clientGameTime() {
+		return clientTime.getAsLong();
 	}
 
 	public static ResourceLocation asResource(String path) {

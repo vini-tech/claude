@@ -1,7 +1,17 @@
 {
+  "block.create_synthesis.feeding_trough": "Feeding Trough",
+  "block.create_synthesis.feeding_trough.tooltip.behaviour1": "By hand, or by _Funnels_, _Chutes_ and _Belts_.",
+  "block.create_synthesis.feeding_trough.tooltip.condition1": "When filled",
+  "block.create_synthesis.feeding_trough.tooltip.summary": "Holds up to a stack of _Animal Feed_. Animals within _8 blocks_ walk to it and eat until they are fully fattened.",
+  "entity.create_synthesis.feed_flake": "Feed Flake",
   "fluid.create_synthesis.experience_essence": "Experience Essence",
   "item.create_synthesis.ancient_soil": "Ancient Soil",
   "item.create_synthesis.animal_feed": "Animal Feed",
+  "item.create_synthesis.animal_feed.tooltip.behaviour1": "Feeds it, by hand or with a _Deployer_.",
+  "item.create_synthesis.animal_feed.tooltip.behaviour2": "Animals nearby _walk to the trough_ and eat by themselves.",
+  "item.create_synthesis.animal_feed.tooltip.condition1": "When used on an animal",
+  "item.create_synthesis.animal_feed.tooltip.condition2": "In a Feeding Trough",
+  "item.create_synthesis.animal_feed.tooltip.summary": "_Fattens_ land animals: up to _3 times_, each time a little bigger and _one more piece of meat_ when they die. It does not breed them.",
   "item.create_synthesis.blank_disc": "Blank Disc",
   "item.create_synthesis.blank_sherd": "Blank Sherd",
   "item.create_synthesis.blank_template": "Blank Template",
@@ -19,6 +29,9 @@
   "item.create_synthesis.engraving_die.tooltip.condition1": "When clicked on a Mechanical Press",
   "item.create_synthesis.engraving_die.tooltip.summary": "A die that engraves _Polished Blank Discs_: a _random_ disc on a belt, or a _specific_ one over a basin with the right ingredient.",
   "item.create_synthesis.fish_feed": "Fish Feed",
+  "item.create_synthesis.fish_feed.tooltip.behaviour1": "Breaks up into _flakes_ that fish swim to and eat. One flake feeds one fish.",
+  "item.create_synthesis.fish_feed.tooltip.condition1": "When it lands in water",
+  "item.create_synthesis.fish_feed.tooltip.summary": "_Fattens_ fish: up to _3 times_, each time _one more fish_ when they die.",
   "item.create_synthesis.fodder": "Fodder",
   "item.create_synthesis.fossil_fragment": "Fossil Fragment",
   "item.create_synthesis.growing_amethyst_cluster": "Growing Amethyst Cluster",
@@ -58,6 +71,7 @@
   "item.create_synthesis.sherd_stamp.tooltip.condition1": "When clicked on a Mechanical Press",
   "item.create_synthesis.sherd_stamp.tooltip.summary": "A stamp that marks _Blank Sherds_ with a _random_ pottery pattern.",
   "item.create_synthesis.soaked_hide": "Soaked Hide",
+  "item.create_synthesis.soaked_hide.tooltip.summary": "Leather soaked in tannin. _Dries_ into Tanned Leather by itself after _5 minutes_ in your inventory, or right away when _smoked_ by an Encased Fan.",
   "item.create_synthesis.stretched_hide": "Stretched Hide",
   "item.create_synthesis.tanned_leather": "Tanned Leather",
   "item.create_synthesis.template_die": "Template Die",
@@ -65,5 +79,6 @@
   "item.create_synthesis.template_die.tooltip.condition1": "When clicked on a Mechanical Press",
   "item.create_synthesis.template_die.tooltip.summary": "A die that stamps _Blank Templates_ into a _random_ armor trim template.",
   "itemGroup.create_synthesis.main": "Create: Synthesis",
-  "tag.item.create_synthesis.raw_meats": "Raw Meats"
+  "tag.item.create_synthesis.raw_meats": "Raw Meats",
+  "tooltip.create_synthesis.dries_in": "Dries in %s"
 }

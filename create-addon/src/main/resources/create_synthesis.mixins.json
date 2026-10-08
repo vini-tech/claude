@@ -5,11 +5,16 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BasinOperatingBlockEntityMixin",
+    "ItemEntityMixin",
+    "LivingEntityMixin",
     "MechanicalPressBlockEntityMixin",
+    "MobAccessor",
+    "MobMixin",
     "ProcessingRecipeMixin",
     "SmartBlockEntityMixin"
   ],
   "client": [
+    "client.LivingEntityRendererMixin",
     "client.MechanicalPressRendererMixin"
   ],
   "injectors": {

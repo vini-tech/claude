@@ -4,14 +4,11 @@ package com.vinitech.createsynthesis.registry;
 public final class SynthesisMaterials {
 	public static final String[] NAMES = {
 		"fodder",
-		"animal_feed",
-		"fish_feed",
 		"fossil_fragment",
 		"stretched_hide",
 		"hollow_hide",
 		"horn_blank",
 		"nacre",
-		"soaked_hide",
 		"tanned_leather",
 		"saddle_frame",
 		"rough_bell",

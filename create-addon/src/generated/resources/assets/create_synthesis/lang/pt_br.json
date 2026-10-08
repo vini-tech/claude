@@ -1,7 +1,17 @@
 {
+  "block.create_synthesis.feeding_trough": "Cocho",
+  "block.create_synthesis.feeding_trough.tooltip.behaviour1": "À mão, ou com _Funis_, _Calhas_ e _Esteiras_.",
+  "block.create_synthesis.feeding_trough.tooltip.condition1": "Para encher",
+  "block.create_synthesis.feeding_trough.tooltip.summary": "Guarda até um pack de _Ração Animal_. Animais a até _8 blocos_ vêm até ele e comem até ficarem totalmente engordados.",
+  "entity.create_synthesis.feed_flake": "Floco de Ração",
   "fluid.create_synthesis.experience_essence": "Essência de Experiência",
   "item.create_synthesis.ancient_soil": "Terra Antiga",
   "item.create_synthesis.animal_feed": "Ração Animal",
+  "item.create_synthesis.animal_feed.tooltip.behaviour1": "Alimenta, à mão ou com um _Implantador_.",
+  "item.create_synthesis.animal_feed.tooltip.behaviour2": "Os animais por perto _vão até o cocho_ e comem sozinhos.",
+  "item.create_synthesis.animal_feed.tooltip.condition1": "Ao usar num animal",
+  "item.create_synthesis.animal_feed.tooltip.condition2": "Num Cocho",
+  "item.create_synthesis.animal_feed.tooltip.summary": "_Engorda_ animais terrestres: até _3 vezes_, cada vez um pouco maiores e com _uma carne a mais_ quando morrem. Não serve para reproduzir.",
   "item.create_synthesis.blank_disc": "Disco Virgem",
   "item.create_synthesis.blank_sherd": "Caco Virgem",
   "item.create_synthesis.blank_template": "Molde Virgem",
@@ -19,6 +29,9 @@
   "item.create_synthesis.engraving_die.tooltip.condition1": "Ao clicar numa Prensa Mecânica",
   "item.create_synthesis.engraving_die.tooltip.summary": "Uma matriz que grava _Discos Virgens Polidos_: um disco _aleatório_ na esteira, ou um disco _específico_ sobre a bacia com o ingrediente certo.",
   "item.create_synthesis.fish_feed": "Ração de Peixe",
+  "item.create_synthesis.fish_feed.tooltip.behaviour1": "Vira _flocos_ que os peixes vêm comer. Cada floco alimenta um peixe.",
+  "item.create_synthesis.fish_feed.tooltip.condition1": "Ao cair na água",
+  "item.create_synthesis.fish_feed.tooltip.summary": "_Engorda_ peixes: até _3 vezes_, cada vez _um peixe a mais_ quando morrem.",
   "item.create_synthesis.fodder": "Forragem",
   "item.create_synthesis.fossil_fragment": "Fragmento de Fóssil",
   "item.create_synthesis.growing_amethyst_cluster": "Aglomerado de Ametista em Crescimento",
@@ -58,6 +71,7 @@
   "item.create_synthesis.sherd_stamp.tooltip.condition1": "Ao clicar numa Prensa Mecânica",
   "item.create_synthesis.sherd_stamp.tooltip.summary": "Um carimbo que marca _Cacos Virgens_ com um desenho de cerâmica _aleatório_.",
   "item.create_synthesis.soaked_hide": "Couro Encharcado",
+  "item.create_synthesis.soaked_hide.tooltip.summary": "Couro encharcado no tanino. _Seca_ sozinho e vira Couro Curtido depois de _5 minutos_ no inventário, ou na hora se for _defumado_ por um Ventilador.",
   "item.create_synthesis.stretched_hide": "Couro Esticado",
   "item.create_synthesis.tanned_leather": "Couro Curtido",
   "item.create_synthesis.template_die": "Matriz de Moldes",
@@ -65,5 +79,6 @@
   "item.create_synthesis.template_die.tooltip.condition1": "Ao clicar numa Prensa Mecânica",
   "item.create_synthesis.template_die.tooltip.summary": "Uma matriz que estampa _Moldes Virgens_ num molde de acabamento _aleatório_.",
   "itemGroup.create_synthesis.main": "Create: Synthesis",
-  "tag.item.create_synthesis.raw_meats": "Carnes Cruas"
+  "tag.item.create_synthesis.raw_meats": "Carnes Cruas",
+  "tooltip.create_synthesis.dries_in": "Seca em %s"
 }

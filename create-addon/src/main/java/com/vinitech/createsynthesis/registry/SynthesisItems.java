@@ -3,7 +3,9 @@ package com.vinitech.createsynthesis.registry;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.vinitech.createsynthesis.CreateSynthesis;
+import com.vinitech.createsynthesis.content.SoakedHideItem;
 import com.vinitech.createsynthesis.content.die.PressDieItem;
+import com.vinitech.createsynthesis.content.feed.AnimalFeedItem;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -18,6 +20,13 @@ public class SynthesisItems {
 	// deployer tips: held by a Deployer, they wear down instead of being used up
 	public static final ItemEntry<Item> CARVING_CHISEL = tip("carving_chisel", 256);
 	public static final ItemEntry<Item> CORAL_GRAFT = tip("coral_graft", 128);
+
+	// items with behaviour of their own
+	public static final ItemEntry<SoakedHideItem> SOAKED_HIDE =
+		CreateSynthesis.REGISTRATE.item("soaked_hide", SoakedHideItem::new).register();
+	public static final ItemEntry<AnimalFeedItem> ANIMAL_FEED =
+		CreateSynthesis.REGISTRATE.item("animal_feed", AnimalFeedItem::new).register();
+	public static final ItemEntry<Item> FISH_FEED = CreateSynthesis.REGISTRATE.item("fish_feed", Item::new).register();
 
 	private static ItemEntry<PressDieItem> die(String name) {
 		return CreateSynthesis.REGISTRATE.item(name, PressDieItem::new).register();

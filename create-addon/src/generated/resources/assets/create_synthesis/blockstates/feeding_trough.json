@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "feed=0": {
+      "model": "create_synthesis:block/feeding_trough_0"
+    },
+    "feed=1": {
+      "model": "create_synthesis:block/feeding_trough_1"
+    },
+    "feed=2": {
+      "model": "create_synthesis:block/feeding_trough_2"
+    },
+    "feed=3": {
+      "model": "create_synthesis:block/feeding_trough_3"
+    }
+  }
+}
