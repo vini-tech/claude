@@ -34,7 +34,7 @@ As carnes **não têm receita** (fazendas de carne já são fáceis). Em vez dis
 **Formas de alimentar**
 1. À mão: clicar no animal com a ração.
 2. Implantador do Create usando a ração no animal.
-3. **Feeding Trough (cocho, bloco novo; também funciona submerso, para peixes):** você deposita ração nele (à mão, funil, calha ou esteira),
+3. **Feeding Trough (cocho, bloco novo):** você deposita ração nele (à mão, funil, calha ou esteira),
    e os animais num raio de ~8 blocos **vão sozinhos até o cocho e comem**, até chegar ao nível 3.
    O nível de ração aparece no modelo do bloco. Feito no crafting com tábuas e chapas de ferro/andesito.
 
@@ -44,7 +44,7 @@ sozinhos, e o abate quando quiser.
 Fora do escopo agora: Raw Beef, Raw Porkchop, Raw Mutton, Raw Chicken, Raw Rabbit, Rabbit Hide.
 
 ### Egg (Ovo) · T1
-- **Misturador:** 1 Animal Feed + 1 Calcite (a casca de cálcio) + 100 mB água → Egg
+- **Misturador:** 1 Animal Feed + 1 Bone Meal (o cálcio da casca) + 100 mB água → Egg
 - História: ração + cálcio = casca.
 
 ### Feather (Pena) · T1

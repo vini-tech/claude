@@ -23,8 +23,9 @@ skip the progression needed to get the item by hand.
   Instead, Create-made **feeds** fatten animals (up to 3 levels, +1 meat per
   level on death), fed by hand, by a Deployer, or via a **Feeding Trough**
   block that animals within ~8 blocks walk to on their own.
-  One **Animal Feed** for all land animals; **Fish Feed** for fish (raw fish
-  are also skipped); the trough works underwater too.
+  One **Animal Feed** for all land animals. **Fish Feed** for fish (raw fish
+  are also skipped): dropped into water it turns into tiny floating feed
+  flakes (a small 3D model) that fish swim to and eat, like real fish food.
 - **In:** all flora (logs, leaves, saplings, flowers, crops, Nether plants).
 - **Dragon egg:** only gets a recipe if it is used as an ingredient or
   catalyst somewhere else in the mod.

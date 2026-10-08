@@ -19,8 +19,11 @@ Em vez disso, como nos animais terrestres (catálogo 06):
 
 - **Fish Feed** (item novo): **Misturador:** 2 Kelp + 1 Fodder → 2 Fish Feed
 - Peixes engordam até 3 níveis, **+1 peixe por nível** ao morrer.
-- Alimentar à mão, com implantador, ou com o **Feeding Trough submerso**: os peixes num raio
-  de ~8 blocos nadam até ele e comem.
+- **Como alimentar, como na vida real:** jogue a Fish Feed na água (à mão, ou com funil/calha/
+  implantador do Create). Ao tocar a água, o item vira **flocos de ração** (um modelo 3D bem pequeno)
+  que boiam e afundam devagar. Os peixes por perto nadam até os flocos e comem; cada floco alimenta
+  um peixe. Flocos que ninguém come se desfazem depois de um tempo.
+- Numa fábrica: uma calha soltando ração num tanque de peixes, de tempos em tempos.
 
 ## Corais (família, ponteira Coral Graft)
 
