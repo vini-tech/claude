@@ -1,6 +1,6 @@
 # Catálogo 05: Overworld, minérios e terreno
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 Todos T1/T2: são blocos baratos, a maioria decorativa ou de construção.
 

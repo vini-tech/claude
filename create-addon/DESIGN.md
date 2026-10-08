@@ -42,6 +42,9 @@ Progressive. Difficulty is driven by **usefulness + rarity**, not rarity alone:
   a shared base production line plus a unique final touch tied to each
   variant's theme.
 
+- **Be creative even with simple items:** chains of different machines are
+  welcome when each step adds to the story (e.g. pluck a chicken with a
+  deployer holding shears). Cheap does not mean one boring step.
 - Fluids as "DNA" (a fluid that gives the item its property) is a tool for
   some recipes, not a rule for all of them.
 - **No duplication loops:** a recipe must never cost less than what Create
