@@ -65,7 +65,7 @@ Uma regra cobre os 30 itens.
 
 ### Nautilus Shell (Concha de Náutilo) · T3
 *Pesca, afogados. Útil (conduíte).*
-1. **Misturador:** 1 Prismarine Crystals + 2 Clay Ball + 250 mB água → **Nacre** (item novo, madrepérola)
+1. **Crafting** (mesa ou crafter mecânico): Clay Ball + Prismarine Crystals + Clay Ball, em linha → **Nacre** (item novo, madrepérola)
 2. **Compactador:** 3 Nacre → 1 Nautilus Shell
 - História: a madrepérola é o material real das conchas. Camada por camada, vira a espiral.
 

@@ -1,6 +1,5 @@
 {
-  "type": "create:mechanical_crafting",
-  "acceptMirrored": true,
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "LLL",
     "CLC",

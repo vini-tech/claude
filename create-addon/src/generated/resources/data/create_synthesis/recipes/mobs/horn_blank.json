@@ -1,19 +1,19 @@
 {
-  "type": "create:compacting",
-  "ingredients": [
-    {
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  B",
+    " B ",
+    "C  "
+  ],
+  "key": {
+    "B": {
       "item": "minecraft:bone"
     },
-    {
-      "item": "minecraft:bone"
-    },
-    {
+    "C": {
       "item": "minecraft:calcite"
     }
-  ],
-  "results": [
-    {
-      "item": "create_synthesis:horn_blank"
-    }
-  ]
+  },
+  "result": {
+    "item": "create_synthesis:horn_blank"
+  }
 }

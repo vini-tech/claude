@@ -13,13 +13,14 @@ As receitas imitam **ofícios**: o seleiro, o ferreiro, o fundidor de sinos, o c
 ## Saddle (Sela) · T3
 *Muito útil (cavalos, porcos, striders) e rara.*
 1. **Curtir:**
-   1. **Misturador:** 1 Leather + 1 Oak Log + 250 mB água → **Soaked Hide** (item novo, couro encharcado no tanino)
+   1. **Crafting** (mesa ou crafter mecânico): Oak Log em cima, Leather no meio, Water Bucket embaixo → **Soaked Hide**
+      (item novo, couro encharcado no tanino da casca; o balde volta vazio)
    2. **Secar**, à escolha:
       - **Secar sozinho (lento, de graça):** o Soaked Hide seca no **inventário** depois de **5 minutos**
         reais (1/4 de dia do jogo) e vira Tanned Leather.
       - **Assando (rápido):** **Defumar** no ventilador do Create (soprando através de fogo).
    - Resultado: **Tanned Leather** (item novo)
-2. **Crafter mecânico** em forma de sela: 4 Tanned Leather + 2 Iron Sheet (estribos) + 2 Chain (correias)
+2. **Crafting** (mesa ou crafter mecânico) em forma de sela: 4 Tanned Leather + 2 Iron Sheet (estribos) + 2 Chain (correias)
    → **Saddle Frame** (item novo)
 3. **Montagem sequencial** (base: Saddle Frame, 3 loops):
    1. Implantador: String (costura)

@@ -17,7 +17,7 @@ os de origem única têm receita própria (`DESIGN.md`).
 
 ## A base: o disco virgem
 
-1. **Compactador aquecido:** 2 Coal + 1 Slime Ball → **Blank Disc** (item novo)
+1. **Crafting** (mesa ou crafter mecânico): Coal + Slime Ball + Coal, em linha → **Blank Disc** (item novo)
    - O "vinil" do Minecraft: carbono preto e algo elástico, moldados no calor.
 2. **Lixa** (polimento do Create, à mão ou com implantador segurando lixa): Blank Disc → **Polished Blank Disc** (item novo)
    - A superfície precisa estar lisa para receber os sulcos.

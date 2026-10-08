@@ -1,20 +1,17 @@
 {
-  "type": "create:compacting",
-  "ingredients": [
-    {
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CSC"
+  ],
+  "key": {
+    "C": {
       "item": "minecraft:coal"
     },
-    {
-      "item": "minecraft:coal"
-    },
-    {
+    "S": {
       "item": "minecraft:slime_ball"
     }
-  ],
-  "results": [
-    {
-      "item": "create_synthesis:blank_disc"
-    }
-  ],
-  "heatRequirement": "heated"
+  },
+  "result": {
+    "item": "create_synthesis:blank_disc"
+  }
 }

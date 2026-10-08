@@ -1,21 +1,22 @@
 {
-  "type": "create:mixing",
-  "ingredients": [
-    {
-      "item": "minecraft:leather"
-    },
-    {
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "O",
+    "L",
+    "W"
+  ],
+  "key": {
+    "O": {
       "item": "minecraft:oak_log"
     },
-    {
-      "fluid": "minecraft:water",
-      "amount": 20250,
-      "nbt": {}
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "W": {
+      "item": "minecraft:water_bucket"
     }
-  ],
-  "results": [
-    {
-      "item": "create_synthesis:soaked_hide"
-    }
-  ]
+  },
+  "result": {
+    "item": "create_synthesis:soaked_hide"
+  }
 }

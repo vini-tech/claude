@@ -90,7 +90,7 @@ Fora do escopo agora: Raw Beef, Raw Porkchop, Raw Mutton, Raw Chicken, Raw Rabbi
 ## Montanhas, colmeias e criaturas raras
 
 ### Goat Horn (Chifre de Cabra) · T2
-1. **Compactador:** 2 Bone + 1 Calcite → **Horn Blank** (item novo)
+1. **Crafting** (mesa ou crafter mecânico): 2 Bone em diagonal + 1 Calcite na ponta de baixo → **Horn Blank** (item novo)
 2. **Serra mecânica:** Horn Blank → Goat Horn
 - História: osso e calcita das montanhas, esculpidos na serra.
 - O chifre sai com **um dos 8 sons sorteado**, como o que a cabra solta no jogo.

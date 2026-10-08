@@ -132,6 +132,14 @@ def sequenced(cat, name, base, steps, loops, result, transitional, english, mode
                     "transitionalItem": {"item": t}, "results": rs, "sequence": seq})
 
 
+def shaped(cat, name, pattern, key, result, count=1):
+    r = {"item": mc(result)}
+    if count != 1:
+        r["count"] = count
+    add(cat, name, {"type": "minecraft:crafting_shaped", "pattern": pattern,
+                    "key": {k: ing(v) for k, v in key.items()}, "result": r})
+
+
 def tag(registry, name, values):
     tags[(registry, name)] = values
 
@@ -341,23 +349,20 @@ filling("mobs", "phantom_membrane", HOLLOW_HIDE,
         {"fluid": "create:potion", "amount": 250 * 81, "nbt": {"Potion": "minecraft:night_vision"}}, ["phantom_membrane"])
 
 # 06 Mobs: goat horn (the saw with a random instrument comes with the attachments step)
-compacting("mobs", "horn_blank", ["bone", "bone", "calcite"], [HORN_BLANK])
+shaped("mobs", "horn_blank", ["  B", " B ", "C  "], {"B": "bone", "C": "calcite"}, HORN_BLANK)  # a curved horn, calcite at the base
 
 # 07 Ocean
 mixing("ocean", "fish_feed", ["kelp", "kelp", FODDER], [out(FISH_FEED, 2)])
-mixing("ocean", "nacre", ["prismarine_crystals", "clay_ball", "clay_ball", water(250)], [NACRE])
+shaped("ocean", "nacre", ["CPC"], {"C": "clay_ball", "P": "prismarine_crystals"}, NACRE)  # sea crystal set in clay
 compacting("ocean", "nautilus_shell", [NACRE, NACRE, NACRE], ["nautilus_shell"])
 
 # 08 Treasures: saddle (tan, frame, stitch)
-mixing("treasures", "soaked_hide", ["leather", "oak_log", water(250)], [SOAKED_HIDE])
+shaped("treasures", "soaked_hide", ["O", "L", "W"], {"O": "oak_log", "L": "leather", "W": "water_bucket"}, SOAKED_HIDE)  # bark tannin + water
 add("treasures", "tanned_leather_from_smoking",
     {"type": "minecraft:smoking", "ingredient": {"item": SOAKED_HIDE}, "result": TANNED_LEATHER,
      "experience": 0.1, "cookingtime": 100})
-add("treasures", "saddle_frame",
-    {"type": "create:mechanical_crafting", "acceptMirrored": True,
-     "pattern": ["LLL", "CLC", "S S"],
-     "key": {"L": {"item": TANNED_LEATHER}, "C": {"item": "minecraft:chain"}, "S": {"item": "create:iron_sheet"}},
-     "result": {"item": SADDLE_FRAME}})
+shaped("treasures", "saddle_frame", ["LLL", "CLC", "S S"],
+       {"L": TANNED_LEATHER, "C": "chain", "S": "create:iron_sheet"}, SADDLE_FRAME)
 sequenced("treasures", "saddle", SADDLE_FRAME, [("deploy", "string"), ("deploy", "iron_nugget"), ("press",)], 3,
           "saddle", "incomplete_saddle", "Incomplete Saddle", ("texture", "minecraft:item/saddle"))
 
@@ -377,7 +382,7 @@ sequenced("treasures", "experience_bottle", "glass_bottle", [("fill", fluid(ESSE
           ("texture", "minecraft:item/experience_bottle"))
 
 # 09 Discs: the blank (the Engraving Die comes with the attachments step)
-compacting("discs", "blank_disc", ["coal", "coal", "slime_ball"], [BLANK_DISC], heat="heated")
+shaped("discs", "blank_disc", ["CSC"], {"C": "coal", "S": "slime_ball"}, BLANK_DISC)
 single("sandpaper_polishing", "discs", "polished_blank_disc", BLANK_DISC, [POLISHED_BLANK_DISC])
 
 # 10 Archaeology: the blanks (the Sherd Stamp and the brush come with the attachments step)
@@ -399,14 +404,6 @@ def tooltip(name, en, pt):
         for i, (condition, behaviour) in enumerate(pairs, 1):
             lang[f"item.{MOD}.{name}.tooltip.condition{i}"] = condition
             lang[f"item.{MOD}.{name}.tooltip.behaviour{i}"] = behaviour
-
-
-def shaped(cat, name, pattern, key, result, count=1):
-    r = {"item": mc(result)}
-    if count != 1:
-        r["count"] = count
-    add(cat, name, {"type": "minecraft:crafting_shaped", "pattern": pattern,
-                    "key": {k: ing(v) for k, v in key.items()}, "result": r})
 
 
 DIE_HOW_EN = ("When clicked on a Mechanical Press",

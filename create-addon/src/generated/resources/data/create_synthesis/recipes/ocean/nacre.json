@@ -1,24 +1,17 @@
 {
-  "type": "create:mixing",
-  "ingredients": [
-    {
-      "item": "minecraft:prismarine_crystals"
-    },
-    {
-      "item": "minecraft:clay_ball"
-    },
-    {
-      "item": "minecraft:clay_ball"
-    },
-    {
-      "fluid": "minecraft:water",
-      "amount": 20250,
-      "nbt": {}
-    }
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CPC"
   ],
-  "results": [
-    {
-      "item": "create_synthesis:nacre"
+  "key": {
+    "C": {
+      "item": "minecraft:clay_ball"
+    },
+    "P": {
+      "item": "minecraft:prismarine_crystals"
     }
-  ]
+  },
+  "result": {
+    "item": "create_synthesis:nacre"
+  }
 }
