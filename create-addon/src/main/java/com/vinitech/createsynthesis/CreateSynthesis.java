@@ -8,6 +8,7 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.vinitech.createsynthesis.registry.SynthesisCreativeTabs;
+import com.vinitech.createsynthesis.registry.SynthesisFluids;
 import com.vinitech.createsynthesis.registry.SynthesisItems;
 
 import net.createmod.catnip.lang.FontHelper;
@@ -32,6 +33,7 @@ public class CreateSynthesis implements ModInitializer {
 	public void onInitialize() {
 		SynthesisCreativeTabs.register();
 		SynthesisItems.register();
+		SynthesisFluids.register();
 
 		REGISTRATE.register();
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {

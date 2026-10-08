@@ -136,7 +136,11 @@ Pesquisa de inspiração (CAB, Astral, Dreams & Desires, Mechanical Spawner...):
 - Decisões: Fodder só de sementes (o Create já mói trigo em farinha); Soul Sack foi para a fase 3, junto com
   a Soul Forge; intermediários das máquinas especiais (Charred Skull, Golden Effigy, Wing Frame...) também
   ficam para a fase 3, porque sem a máquina seriam itens sem saída.
-- Próximas etapas: 2) fluido Experience Essence; 3) matrizes e ponteiras (com resultados aleatórios: discos,
+- Texturas: o usuário achou que ainda não estão perfeitas; **refinar todas juntas quando os itens novos da fase 2
+  estiverem prontos** (`tools/textures.py`, referências do vanilla e do Create).
+- **Etapa 2 (feita):** fluido virtual Experience Essence (`SynthesisFluids`, como o chá do Create: sem balde nem
+  bloco) e o Bottle o' Enchanting (misturador superaquecido → 50 mB; bica 5 vezes num frasco de vidro).
+- Próximas etapas: 3) matrizes e ponteiras (com resultados aleatórios: discos,
   cacos, moldes, chifre de cabra, sementes antigas); 4) comportamentos (couro secando, flocos de ração,
   engorda, cocho).
 

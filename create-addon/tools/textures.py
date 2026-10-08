@@ -756,6 +756,42 @@ def blank_template():
     return t
 
 
+# ---------------------------------------------------------------- fluids (animated strips of 16x16 frames)
+
+FLUID_OUT = ROOT / "src/main/resources/assets/create_synthesis/textures/fluid"
+ESSENCE = ramp("#2f6b12", "#4a8f1a", "#6db324", "#93d032", "#bfe84f", "#e2f77f", "#fbffc4")
+
+
+def fluid_strip(ramp_, frames, flowing):
+    """Glowing liquid with slow swirls; loops seamlessly over `frames` frames."""
+    strip = Image.new("RGBA", (N, N * frames))
+    for f in range(frames):
+        a = 2 * math.pi * f / frames
+        for y in range(N):
+            for x in range(N):
+                # tile-able waves: integer frequencies over 16 px, phase moving with the frame
+                yy = y + (f * N / frames if flowing else 0)
+                v = (math.sin(2 * math.pi * (x + 2 * yy) / N + a) +
+                     math.sin(2 * math.pi * (2 * x - yy) / N - a) * 0.7 +
+                     math.sin(2 * math.pi * (3 * x + yy) / N + 2 * a) * 0.4)
+                idx = 2 + round((v + 2.1) / 4.2 * 3)
+                strip.putpixel((x, f * N + y), ramp_[max(1, min(len(ramp_) - 1, idx))])
+    return strip
+
+
+FLUIDS = {
+    "experience_essence_still": (ESSENCE, 32, False),
+    "experience_essence_flow": (ESSENCE, 32, True),
+}
+
+
+def write_fluids():
+    FLUID_OUT.mkdir(parents=True, exist_ok=True)
+    for name, (ramp_, frames, flowing) in FLUIDS.items():
+        fluid_strip(ramp_, frames, flowing).save(FLUID_OUT / f"{name}.png")
+        (FLUID_OUT / f"{name}.png.mcmeta").write_text('{\n  "animation": {\n    "frametime": 2\n  }\n}\n')
+
+
 # ---------------------------------------------------------------- main
 
 def preview(images, path, scale=10, cols=6):
@@ -775,9 +811,10 @@ def main():
         im = fn().image()
         im.save(OUT / f"{name}.png")
         images.append((name, im))
+    write_fluids()
     if "--preview" in sys.argv:
         preview(images, sys.argv[sys.argv.index("--preview") + 1])
-    print(f"{len(images)} textures")
+    print(f"{len(images)} item textures, {len(FLUIDS)} fluid textures")
 
 
 if __name__ == "__main__":

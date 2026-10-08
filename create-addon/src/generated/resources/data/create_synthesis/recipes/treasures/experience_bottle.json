@@ -1,0 +1,35 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:glass_bottle"
+  },
+  "loops": 5,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_experience_bottle"
+  },
+  "results": [
+    {
+      "item": "minecraft:experience_bottle"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_experience_bottle"
+        },
+        {
+          "fluid": "create_synthesis:experience_essence",
+          "amount": 4050,
+          "nbt": {}
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_experience_bottle"
+        }
+      ]
+    }
+  ]
+}

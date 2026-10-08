@@ -1,4 +1,5 @@
 {
+  "fluid.create_synthesis.experience_essence": "Experience Essence",
   "item.create_synthesis.ancient_soil": "Ancient Soil",
   "item.create_synthesis.animal_feed": "Animal Feed",
   "item.create_synthesis.blank_disc": "Blank Disc",
@@ -21,6 +22,7 @@
   "item.create_synthesis.incomplete_chainmail_helmet": "Incomplete Chainmail Helmet",
   "item.create_synthesis.incomplete_chainmail_leggings": "Incomplete Chainmail Leggings",
   "item.create_synthesis.incomplete_diamond_horse_armor": "Incomplete Diamond Horse Armor",
+  "item.create_synthesis.incomplete_experience_bottle": "Filling Bottle o' Enchanting",
   "item.create_synthesis.incomplete_fossil_fragment": "Incomplete Fossil Fragment",
   "item.create_synthesis.incomplete_gilded_blackstone": "Incomplete Gilded Blackstone",
   "item.create_synthesis.incomplete_golden_horse_armor": "Incomplete Golden Horse Armor",

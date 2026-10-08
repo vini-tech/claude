@@ -14,6 +14,7 @@ public final class SynthesisIncompleteItems {
 		"incomplete_chainmail_helmet",
 		"incomplete_chainmail_leggings",
 		"incomplete_diamond_horse_armor",
+		"incomplete_experience_bottle",
 		"incomplete_fossil_fragment",
 		"incomplete_gilded_blackstone",
 		"incomplete_golden_horse_armor",

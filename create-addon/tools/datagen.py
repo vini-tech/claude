@@ -361,6 +361,17 @@ sequenced("treasures", "saddle", SADDLE_FRAME, [("deploy", "string"), ("deploy",
 compacting("treasures", "rough_bell", ["gold_ingot"] * 3 + ["clay_ball"], [ROUGH_BELL], heat="heated")
 single("sandpaper_polishing", "treasures", "bell", ROUGH_BELL, ["bell"])
 
+# 08 Treasures: Bottle o' Enchanting (Experience Essence comes in fifths of a bottle)
+ESSENCE = f"{MOD}:experience_essence"
+lang_en[f"fluid.{MOD}.experience_essence"] = "Experience Essence"
+lang_pt[f"fluid.{MOD}.experience_essence"] = "Essência de Experiência"
+mixing("treasures", "experience_essence",
+       ["create:experience_nugget", "create:experience_nugget", "lapis_lazuli", "glowstone_dust"],
+       [fluid_out(ESSENCE, 50)], heat="superheated")
+sequenced("treasures", "experience_bottle", "glass_bottle", [("fill", fluid(ESSENCE, 50))], 5,
+          "experience_bottle", "incomplete_experience_bottle", "Filling Bottle o' Enchanting",
+          ("texture", "minecraft:item/experience_bottle"))
+
 # 09 Discs: the blank (the Engraving Die comes with the attachments step)
 compacting("discs", "blank_disc", ["coal", "coal", "slime_ball"], [BLANK_DISC], heat="heated")
 single("sandpaper_polishing", "discs", "polished_blank_disc", BLANK_DISC, [POLISHED_BLANK_DISC])
@@ -380,6 +391,7 @@ compacting("templates", "blank_template", ["create:iron_sheet"] * 3 + ["diamond"
 PT = {  # pt_br names for transitional items
     "incomplete_fossil_fragment": "Fragmento de Fóssil Incompleto",
     "incomplete_saddle": "Sela Incompleta",
+    "incomplete_experience_bottle": "Frasco de Experiência Enchendo",
     "incomplete_gilded_blackstone": "Pedra-Negra Dourada Incompleta",
     "incomplete_sculk_sensor": "Sensor de Sculk Incompleto",
     "growing_small_amethyst_bud": "Broto Pequeno de Ametista em Crescimento",
