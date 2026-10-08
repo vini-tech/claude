@@ -41,6 +41,11 @@ Progressive. Difficulty is driven by **usefulness + rarity**, not rarity alone:
 - Variant families (music discs, trim templates, pottery sherds, mob heads):
   a shared base production line plus a unique final touch tied to each
   variant's theme.
+- **Random outputs** where the game itself is random: goat horns get a random
+  instrument; common music discs (13, cat, blocks, chirp, far, mall, mellohi,
+  stal, strad, ward, 11, wait) come out at random from the Engraving Die.
+  Discs with a unique origin keep their own themed recipe: Pigstep (bastion),
+  otherside (ancient city), Relic (archaeology).
 
 - **Be creative even with simple items:** chains of different machines are
   welcome when each step adds to the story (e.g. pluck a chicken with a

@@ -78,8 +78,8 @@ o que ele come, onde vive, o que acontece com ele.
 1. **Compactador:** 2 Bone + 1 Calcite → **Horn Blank** (item novo)
 2. **Serra mecânica:** Horn Blank → Goat Horn
 - História: osso e calcita das montanhas, esculpidos na serra.
-- O chifre tem 8 variações de som; a receita gera o "Ponder" (o comum). As outras variações
-  podem vir depois com toques extras, se você quiser.
+- O chifre sai com **um dos 8 sons sorteado**, como o que a cabra solta no jogo.
+  (Precisa de código próprio: as receitas do Create não sorteiam NBT.)
 
 ### Honeycomb (Favo de Mel) · T1
 1. **Misturador aquecido:** 3 Sugar + 1 flor qualquer + 250 mB água → 250 mB **Honey** (fluido do Create)
