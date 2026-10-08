@@ -543,28 +543,45 @@ shaped("tools", "feeding_trough", ["S S", "PPP"], {"S": "create:iron_sheet", "P"
 block_files = {}  # path under assets/ or data/ -> json
 
 
-def box(frm, to, texture, faces=("north", "south", "east", "west", "up", "down")):
-    return {"from": frm, "to": to, "faces": {f: {"texture": texture, "cullface": f} if f == "down" else {"texture": texture}
-                                             for f in faces}}
+def element(frm, to, faces):
+    """faces: direction -> (texture, uv) or texture."""
+    out = {}
+    for direction, face in faces.items():
+        texture, uv = face if isinstance(face, tuple) else (face, None)
+        out[direction] = {"texture": texture, **({"uv": uv} if uv else {})}
+    return {"from": frm, "to": to, "faces": out}
 
 
-TROUGH_WALLS = [
-    box([0, 0, 0], [16, 2, 16], "#wood"),       # floor
-    box([0, 2, 0], [16, 8, 2], "#wood"),        # north wall
-    box([0, 2, 14], [16, 8, 16], "#wood"),      # south wall
-    box([0, 2, 2], [2, 8, 14], "#wood"),        # west wall
-    box([14, 2, 2], [16, 8, 14], "#wood"),      # east wall
-    box([3, 6, -0.5], [5, 8.5, 16.5], "#band"),   # iron bands around the trough
-    box([11, 6, -0.5], [13, 8.5, 16.5], "#band"),
+# A trough built like Create's casings: andesite-framed wooden walls on little andesite feet,
+# dark boards inside, a metal rim on top.
+SIDE_FULL, SIDE_END_A, SIDE_END_B, SIDE_MID = [0, 0, 16, 8], [0, 0, 2, 8], [14, 0, 16, 8], [2, 0, 14, 8]
+RIM = "#rim"
+TROUGH = []
+for x, z in ((0, 0), (13, 0), (0, 13), (13, 13)):  # feet
+    TROUGH.append(element([x, 0, z], [x + 3, 2, z + 3], {f: RIM for f in ("north", "south", "east", "west", "down", "up")}))
+TROUGH.append(element([1, 2, 1], [15, 4, 15], {"up": "#inner", "down": RIM}))  # floor
+TROUGH += [  # long walls (north and south): the outside face shows the whole framed side
+    element([0, 2, 0], [16, 10, 2], {"north": ("#side", SIDE_FULL), "south": ("#inner", [0, 0, 16, 8]),
+                                     "up": ("#rim", [0, 0, 16, 2]), "east": ("#side", SIDE_END_B),
+                                     "west": ("#side", SIDE_END_A), "down": RIM}),
+    element([0, 2, 14], [16, 10, 16], {"south": ("#side", SIDE_FULL), "north": ("#inner", [0, 0, 16, 8]),
+                                       "up": ("#rim", [0, 0, 16, 2]), "east": ("#side", SIDE_END_A),
+                                       "west": ("#side", SIDE_END_B), "down": RIM}),
+    # short walls (west and east) fill the middle of those sides, between the long walls' ends
+    element([0, 2, 2], [2, 10, 14], {"west": ("#side", SIDE_MID), "east": ("#inner", [2, 0, 14, 8]),
+                                     "up": ("#rim", [0, 0, 2, 12]), "down": RIM}),
+    element([14, 2, 2], [16, 10, 14], {"east": ("#side", SIDE_MID), "west": ("#inner", [2, 0, 14, 8]),
+                                       "up": ("#rim", [0, 0, 2, 12]), "down": RIM}),
 ]
-for fill, height in ((0, None), (1, 3.5), (2, 5), (3, 6.5)):
-    elements = list(TROUGH_WALLS)
+for fill, height in ((0, None), (1, 5.5), (2, 7.5), (3, 9.5)):
+    elements = list(TROUGH)
     if height:
-        elements.append(box([2, 2, 2], [14, height, 14], "#feed", faces=("up",)))
+        elements.append(element([2, 4, 2], [14, height, 14], {"up": ("#feed", [2, 2, 14, 14])}))
     block_files[f"assets/{MOD}/models/block/feeding_trough_{fill}.json"] = {
         "parent": "minecraft:block/block",
-        "textures": {"particle": "minecraft:block/spruce_planks", "wood": "minecraft:block/spruce_planks",
-                     "band": "minecraft:block/iron_block", "feed": f"{MOD}:block/feed_surface"},
+        "textures": {"particle": f"{MOD}:block/feeding_trough_side", "side": f"{MOD}:block/feeding_trough_side",
+                     "inner": f"{MOD}:block/feeding_trough_inner", "rim": f"{MOD}:block/feeding_trough_rim",
+                     "feed": f"{MOD}:block/feed_surface"},
         "elements": elements}
 block_files[f"assets/{MOD}/blockstates/feeding_trough.json"] = {
     "variants": {f"feed={i}": {"model": f"{MOD}:block/feeding_trough_{i}"} for i in range(4)}}

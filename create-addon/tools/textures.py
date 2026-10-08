@@ -36,16 +36,16 @@ def ramp(*colors):
 
 # ---------------------------------------------------------------- palettes (darkest first)
 
-STRAW = ramp("#4a3108", "#6e4b10", "#8f6619", "#ae8224", "#c99f34", "#ddbb52", "#eed784")
+STRAW = ramp("#5a2f12", "#7d4a17", "#a0681e", "#c08a2b", "#dcaf45", "#f0d06c", "#fff0b0")
 HUSK = ramp("#3f4a12", "#556318", "#6b7d21", "#83962c", "#9aae3a", "#b2c452", "#c8d873")
-FEED = ramp("#3a2210", "#5c3519", "#7f4c24", "#a0672f", "#bd843f", "#d4a35a", "#e6c182")
+FEED = ramp("#4a1f14", "#6e3420", "#94512c", "#b5703a", "#d0904c", "#e6b46a", "#f8dc9c")
 FISH = ramp("#4a1810", "#74261a", "#9e3a22", "#c4532b", "#df7337", "#ef9a4f", "#f8c07a")
 FLAKE_GREEN = ramp("#22401a", "#2f5a22", "#3f742b", "#548f36", "#6caa42", "#88c254", "#a8d873")
 FLAKE_YELLOW = ramp("#5a4210", "#7d5d17", "#a17b20", "#c49a2c", "#dcb43e", "#ecce5e", "#f7e494")
 STONE = ramp("#35322d", "#4f4b44", "#69645b", "#837d72", "#9d978b", "#b6b0a4", "#cdc8bd")
-BONE = ramp("#5b4a30", "#867254", "#ad9a78", "#c9b994", "#ddd0b0", "#ece3cb", "#f8f3e6")
-LEATHER = ramp("#3a1608", "#5c240f", "#7e3518", "#a04b24", "#bb6332", "#d07f45", "#e3a066")
-TANNED = ramp("#2c0f06", "#47190b", "#652612", "#83361b", "#9f4925", "#b85f33", "#cc7a48")
+BONE = ramp("#5e4234", "#8a6c56", "#ad9478", "#c9b694", "#ddd0b0", "#eee6cf", "#fffbee")
+LEATHER = ramp("#4a1612", "#6e2416", "#93361c", "#b44f27", "#cf6d36", "#e5904f", "#f8bb7c")
+TANNED = ramp("#3a1210", "#561c12", "#742916", "#933b1d", "#ad5228", "#c66e38", "#de9254")
 WET = ramp("#1c0c05", "#2e150a", "#422011", "#562c18", "#6b3a21", "#7f4b2d", "#94603d")
 WATER = ramp("#1d3a52", "#2a5272", "#3b6d92", "#5289b0", "#70a5c9", "#95c3df", "#c6e3f3")
 HOLLOW = ramp("#2a3638", "#3f5053", "#58696b", "#728383", "#8c9d9b", "#a8b8b5", "#c7d5d1")
@@ -53,11 +53,11 @@ IRON = ramp("#2a2e33", "#454b52", "#646b73", "#868d95", "#a8aeb5", "#c9ced3", "#
 NACRE = ramp("#5c5468", "#7d7489", "#9d95a9", "#bbb4c6", "#d4cedd", "#e8e4ef", "#fbf9ff")
 PINK = ramp("#6e4c5c", "#8e6074", "#b07a91", "#cf98ad", "#e5b5c8", "#f2cfdc", "#fbe8f0")
 CYAN = ramp("#40626a", "#527c85", "#6a99a1", "#86b5bb", "#a3cdd1", "#c2e2e3", "#e2f4f3")
-GOLD = ramp("#4f2d06", "#7a4a0c", "#a26914", "#c48a20", "#d9a834", "#e8c252", "#f3db86")
+GOLD = ramp("#62301a", "#8e4f1c", "#b77322", "#d9a12e", "#f0c844", "#fbe372", "#fff8c4")
 CLAY = ramp("#3d4350", "#555d6c", "#6f7889", "#8a93a4", "#a3acbb", "#bcc3cf", "#d3d8e1")
 DISC = ramp("#0d0d10", "#17171b", "#212126", "#2b2b31", "#36363d", "#43434b", "#55555e")
 GLOSS = ramp("#0b0b10", "#15151c", "#1f1f29", "#2a2a36", "#373745", "#4b4b5c", "#9a9ab4")
-TERRACOTTA = ramp("#4a1e10", "#69301a", "#8a4324", "#a8582f", "#c0703f", "#d38a54", "#e3a670")
+TERRACOTTA = ramp("#561c16", "#76301e", "#984426", "#b55a2f", "#cc753f", "#e09456", "#f2b97c")
 SOIL = ramp("#1e130a", "#2f1e11", "#412a18", "#54371f", "#674628", "#7b5734", "#906a42")
 MOSS = ramp("#26340f", "#3a4d16", "#4e661d", "#638026", "#789932", "#8fb043", "#a8c75c")
 SEED = ramp("#5a3a10", "#7d541a", "#a17226", "#c49236", "#dcae4c", "#ecc86c", "#f7e29c")
@@ -184,7 +184,9 @@ def slab(t, top, ramp_, thickness=1, base=4, spread=2):
     """A flat object with a visible edge below its top face."""
     side = {(x, y + d) for (x, y) in top for d in range(1, thickness + 1)} - top
     t.paint(top, ramp_, flat(top, base=base, spread=spread))
-    t.paint(side, ramp_, {p: (1 if (p[0], p[1] + 1) in side else 0) for p in side})
+    # the edge: lighter just under the top face, darkest at the bottom
+    t.paint(side, ramp_, {p: (0 if (p[0], p[1] + 1) not in side else (2 if (p[0], p[1] - 1) in top else 1))
+                          for p in side})
 
 
 # ---------------------------------------------------------------- the items
@@ -238,37 +240,90 @@ def fodder():
 
 @texture
 def animal_feed():
-    """A heap of pressed feed pellets, each one a small lit cylinder."""
+    """A burlap sack of feed, tied at the neck, with pellets showing at the open top."""
     t = Tex()
-    heap = mask(HEAP)
-    t.paint(heap, FEED, {p: max(0, i - 2) for p, i in volume(heap, len(FEED)).items()})  # gaps between pellets
-    pellets = [  # back to front, packed so they overlap
-        (6, 3), (8, 4), (4, 5), (10, 5), (6, 6), (2, 8), (8, 7), (11, 8), (4, 9), (7, 9), (12, 10),
-        (2, 11), (9, 11), (5, 11), (11, 12), (7, 12),
-    ]
-    # a short cylinder lying diagonally: lit end at the top-left, shadow at the bottom-right
-    pellet = [[6, 5, None], [5, 4, 2], [None, 2, 0]]
-    for i, (px, py) in enumerate(pellets):
-        tone = -1 if i < 6 else 0  # pellets at the back are a bit darker
-        for dy, row in enumerate(pellet):
-            for dx, idx in enumerate(row):
-                if idx is not None:
-                    t.put((px + dx, py + dy), FEED, idx + tone)
+    sack = mask([
+        "................",
+        "................",
+        "................",
+        "................",
+        "......####......",
+        ".....######.....",
+        "....########....",
+        "...##########...",
+        "..############..",
+        "..############..",
+        "..############..",
+        "..############..",
+        "..############..",
+        "...##########...",
+        "................",
+        "................",
+    ])
+    solid(t, sack, BURLAP, roundness=1.1)
+    # the weave: every other pixel a shade darker, only where the cloth is lit
+    for (x, y) in sack:
+        if (x + y) % 2 == 0 and 2 <= t.shade[(x, y)] <= 5:
+            t.put((x, y), BURLAP, t.shade[(x, y)] - 1)
+    for x, idx in ((5, 5), (6, 4), (7, 4), (8, 3), (9, 3), (10, 2)):  # string tied around the neck
+        t.put((x, 5), STRING, idx)
+    # pellets heaped at the open top
+    t.grid([
+        "..ab.ab..",
+        ".abcabcab",
+        "abcbcbcbc",
+    ], {"a": (FEED, 6), "b": (FEED, 4), "c": (FEED, 1)}, 4, 2)
+    # a stencilled brass tag, the Create touch
+    t.grid(["ab", "bc"], {"a": (BRASS, 6), "b": (BRASS, 4), "c": (BRASS, 1)}, 10, 9)
     return t
 
 
 @texture
 def fish_feed():
-    """Fish food flakes: a low pile of thin, colorful flakes."""
+    """A copper tin of fish food, banded like Create's copper gear, colorful flakes on the open top."""
     t = Tex()
-    pile = mask(HEAP)
-    solid(t, pile, FISH)
-    greens = {(5, 6), (6, 6), (10, 8), (11, 8), (3, 10), (4, 10), (8, 11), (9, 11), (12, 11), (7, 5)}
-    yellows = {(8, 7), (9, 7), (12, 9), (13, 9), (5, 9), (6, 9), (2, 11), (10, 12)}
-    t.recolor(greens, FLAKE_GREEN, 1)
-    t.recolor(yellows, FLAKE_YELLOW, 1)
-    for p in ((7, 4), (4, 7), (9, 6), (11, 7), (6, 10)):  # flakes on top catch the light
-        t.put(p, FISH, 6)
+    body = mask([
+        "................",
+        "................",
+        "................",
+        "................",
+        "....########....",
+        "...##########...",
+        "...##########...",
+        "...##########...",
+        "...##########...",
+        "...##########...",
+        "...##########...",
+        "...##########...",
+        "...##########...",
+        "....########....",
+        "................",
+        "................",
+    ])
+    # a cylinder lit from the left: tone by column
+    columns = {3: 4, 4: 6, 5: 5, 6: 5, 7: 4, 8: 4, 9: 3, 10: 3, 11: 2, 12: 1}
+    for (x, y) in body:
+        t.put((x, y), COPPER, columns.get(x, 3))
+    for (x, y) in body:
+        if y == 13 or (x, y + 1) not in body:
+            t.put((x, y), COPPER, 0)
+    for y in (6, 12):  # andesite bands
+        for x in range(3, 13):
+            t.put((x, y), CASING, {3: 5, 4: 6, 5: 6, 11: 2, 12: 1}.get(x, 4))
+    # paper label with a little fish
+    t.grid([
+        "wwwww",
+        "wbbww",
+        "wwwww",
+    ], {"w": (STRING, 5), "b": (WATER, 3)}, 5, 8)
+    t.put((7, 9), WATER, 5)
+    # the open top: rim and the flakes inside
+    t.grid([
+        ".aaaaaaaa.",
+        "agyrgoyrga",
+        ".bbbbbbbb.",
+    ], {"a": (CASING, 6), "b": (CASING, 2), "g": (FLAKE_GREEN, 4), "y": (FLAKE_YELLOW, 5),
+        "r": (FISH, 3), "o": (FISH, 5)}, 3, 3)
     return t
 
 
@@ -758,8 +813,12 @@ def blank_template():
 
 # ---------------------------------------------------------------- press dies and deployer tips
 
-BRASS = ramp("#4a2a08", "#74440f", "#a06418", "#c48526", "#dca63a", "#eec45c", "#f9e194")
-ANDESITE = ramp("#262b27", "#3f4741", "#5b665d", "#7b867d", "#9aa49c", "#b9c2ba", "#d6ddd6")
+BRASS = ramp("#602f24", "#76462d", "#995a3d", "#b57849", "#d3a155", "#fbcc68", "#ffeb94")
+ANDESITE = ramp("#2b3635", "#374141", "#4a5451", "#5e6963", "#6d7d73", "#829789", "#a9afa1")
+COPPER = ramp("#6d3421", "#8a4129", "#9c4529", "#c15a36", "#e77c56", "#fc9982", "#fbc3b6")
+CASING = ramp("#404543", "#505351", "#60635f", "#686c68", "#828784", "#9aa49d", "#a8b3ab")
+PLANKS = ramp("#3a2412", "#4a301a", "#553a1f", "#614b2e", "#70522e", "#7a5a34", "#886539")
+BURLAP = ramp("#4e3424", "#6d4f36", "#8c6b48", "#a8875a", "#c2a26f", "#d8bd88", "#ead6a8")
 
 
 def tool(t, segments):
@@ -817,15 +876,15 @@ DIE_TOP = [
     "................",
     "................",
     "................",
-    "................",
-    "......####......",
+    ".....######.....",
     "...##########...",
     "..############..",
     ".##############.",
+    ".##############.",
+    ".##############.",
     "..############..",
     "...##########...",
-    "......####......",
-    "................",
+    ".....######.....",
     "................",
     "................",
     "................",
@@ -833,12 +892,19 @@ DIE_TOP = [
 ]
 
 
+def die_base():
+    t = Tex()
+    slab(t, mask(DIE_TOP), BRASS, thickness=2)
+    for p in ((3, 5), (12, 5), (3, 10), (12, 10)):  # andesite bolts
+        t.put(p, ANDESITE, 5)
+        t.put((p[0] + 1, p[1] + 1), ANDESITE, 1)
+    return t
+
+
 @texture
 def engraving_die():
     """A brass puck with a spiral groove and the diamond needle that cuts it."""
-    t = Tex()
-    top = mask(DIE_TOP)
-    slab(t, top, BRASS, thickness=3)
+    t = die_base()
     ring = mask([
         "....######....",
         "..##......##..",
@@ -854,9 +920,7 @@ def engraving_die():
 @texture
 def sherd_stamp():
     """A brass stamp with the outline of a pot raised on its face and an iron knob to hold it."""
-    t = Tex()
-    top = mask(DIE_TOP)
-    slab(t, top, BRASS, thickness=3)
+    t = die_base()
     pot = mask(["..#..", ".###.", ".###.", "..#.."], 3, 5)
     for p in pot:
         t.put(p, BRASS, 6)
@@ -867,9 +931,7 @@ def sherd_stamp():
 @texture
 def template_die():
     """A brass die with a template-shaped cavity lined with steel."""
-    t = Tex()
-    top = mask(DIE_TOP)
-    slab(t, top, BRASS, thickness=3)
+    t = die_base()
     cavity = mask([
         "...####...",
         ".########.",
@@ -918,8 +980,8 @@ def feed_surface():
     """Animal Feed seen from above in the trough: pellets packed edge to edge, tiling seamlessly."""
     t = Tex()
     for (x, y) in [(x, y) for y in range(N) for x in range(N)]:
-        t.put((x, y), FEED, 1)
-    pellet = [[6, 5, None], [5, 4, 2], [None, 2, 0]]
+        t.put((x, y), FEED, 2)
+    pellet = [[5, 4, None], [4, 3, 2], [None, 2, 1]]  # softer than the item: seen from a distance
     for row in range(0, N, 3):
         for col in range(0, N, 3):
             px = (col + (row // 3 % 2) * 1 + (row * 7 + col * 3) % 2) % N
@@ -930,9 +992,72 @@ def feed_surface():
     return t
 
 
+def planks(t, x0, y0, x1, y1, ramp_=None, vertical=True):
+    """Dark boards like the inside of Create's andesite casing: seams every 3-4 px, a lit edge per board."""
+    ramp_ = ramp_ or PLANKS
+    for y in range(y0, y1 + 1):
+        for x in range(x0, x1 + 1):
+            u, v = (x - x0, y - y0) if vertical else (y - y0, x - x0)
+            board = u // 4
+            in_board = u % 4
+            idx = (3, 5, 4, 3)[in_board] - (board % 2)
+            if in_board == 3:
+                idx = 1  # the seam
+            if (v * 7 + board * 3) % 11 == 0 and in_board in (1, 2):
+                idx -= 1  # grain
+            t.put((x, y), ramp_, idx)
+
+
+def frame(t, x0, y0, x1, y1, width=2):
+    """Andesite frame, bevelled: lit on the top/left, dark on the bottom/right, like andesite casing."""
+    for y in range(y0, y1 + 1):
+        for x in range(x0, x1 + 1):
+            if x0 + width <= x <= x1 - width and y0 + width <= y <= y1 - width:
+                continue
+            if y == y0 or x == x0:
+                idx = 6
+            elif y == y1 or x == x1:
+                idx = 1
+            elif y == y0 + 1 or x == x0 + 1:
+                idx = 4
+            else:
+                idx = 2
+            t.put((x, y), CASING, idx)
+
+
+def trough_side():
+    """Outside wall (top half of the texture is used: 16 x 8)."""
+    t = Tex()
+    for oy in (0, 8):
+        planks(t, 2, oy + 2, 13, oy + 5)
+        frame(t, 0, oy, 15, oy + 7)
+        for x in (1, 14):  # bolts in the frame corners
+            t.put((x, oy + 1), CASING, 0)
+    return t
+
+
+def trough_inner():
+    t = Tex()
+    planks(t, 0, 0, 15, 15, vertical=False)
+    for (x, y), idx in list(t.shade.items()):
+        t.put((x, y), PLANKS, idx - 1)  # in the shade of the walls
+    return t
+
+
+def trough_rim():
+    t = Tex()
+    for y in range(N):
+        for x in range(N):
+            t.put((x, y), CASING, 5 if y % 8 == 0 else (2 if y % 8 == 7 else 4))
+    return t
+
+
 def write_blocks():
     BLOCK_OUT.mkdir(parents=True, exist_ok=True)
     feed_surface().image().save(BLOCK_OUT / "feed_surface.png")
+    trough_side().image().save(BLOCK_OUT / "feeding_trough_side.png")
+    trough_inner().image().save(BLOCK_OUT / "feeding_trough_inner.png")
+    trough_rim().image().save(BLOCK_OUT / "feeding_trough_rim.png")
 
 
 def write_fluids():

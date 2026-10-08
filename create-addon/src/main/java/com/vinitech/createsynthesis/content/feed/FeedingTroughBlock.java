@@ -29,7 +29,7 @@ public class FeedingTroughBlock extends BaseEntityBlock {
 	/** How full the trough looks: 0 empty .. 3 full. */
 	public static final IntegerProperty FEED = IntegerProperty.create("feed", 0, 3);
 
-	private static final VoxelShape SHAPE = Shapes.join(Block.box(0, 0, 0, 16, 8, 16), Block.box(1, 2, 1, 15, 8, 15),
+	private static final VoxelShape SHAPE = Shapes.join(Block.box(0, 0, 0, 16, 10, 16), Block.box(2, 4, 2, 14, 10, 14),
 		(a, b) -> a && !b);
 
 	public FeedingTroughBlock(Properties properties) {
