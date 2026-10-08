@@ -1,6 +1,6 @@
 # Catálogo 10: Arqueologia
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 Raros mas de pouca utilidade: **T2**. Nomes de itens novos em inglês.
 
@@ -12,39 +12,18 @@ do deserto, poços, ruínas do oceano e ruínas de trilha.
 ### O acoplamento: Sherd Stamp (carimbo de cacos)
 - Item novo, feito no crafting: 2 Brass Sheet + 1 Iron Sheet + 1 Flint (a ponta que risca a argila).
 - **Clica-se na prensa mecânica com o carimbo**: ele fica encaixado e visível. Agachar + mão vazia tira.
-- A prensa com o carimbo trabalha sobre uma **bacia**: o caco virgem + o "toque" do desenho → o caco.
+- A prensa com o carimbo, **sobre a esteira**, estampa o caco virgem com **um dos 20 desenhos sorteado**.
 
 ### A base: o caco virgem
 1. **Prensa** (sem acoplamento): Clay Ball → **Clay Tablet** (item novo, argila achatada)
 2. **Ventilador através de lava** (o "assar" do Create): Clay Tablet → **Blank Sherd** (item novo, cerâmica cozida)
 - História: como um oleiro, achatar a argila e cozinhar.
 
-### Os toques (na bacia, com o Blank Sherd)
-
-O toque é **o que o desenho mostra**:
-
-| Caco | Toque | Desenho |
-|---|---|---|
-| Angler | Raw Cod | anzol |
-| Archer | Arrow | arco e flecha |
-| Arms Up | Armor Stand | figura de braços erguidos |
-| Blade | Flint | lâmina |
-| Brewer | Glass Bottle | poção |
-| Burn | Blaze Powder | fogo |
-| Danger | Gunpowder | creeper |
-| Explorer | Map | mapa |
-| Friend | Emerald | rosto amigo (aldeões) |
-| Heart | Poppy | coração |
-| Heartbreak | Wither Rose | coração partido |
-| Howl | Bone | lobo |
-| Miner | Raw Iron | picareta |
-| Mourner | Soul Sand | figura chorando |
-| Plenty | Chest | baú cheio |
-| Prize | Amethyst Shard | joia |
-| Sheaf | Wheat | feixe de trigo |
-| Shelter | qualquer Sapling | árvore |
-| Skull | Bone Meal | caveira |
-| Snort | Moss Block | farejador |
+### Os cacos (aleatórios)
+- **Prensa com Sherd Stamp**, sobre a esteira: Blank Sherd → um dos 20 cacos, sorteado
+  (Angler, Archer, Arms Up, Blade, Brewer, Burn, Danger, Explorer, Friend, Heart, Heartbreak, Howl,
+  Miner, Mourner, Plenty, Prize, Sheaf, Shelter, Skull, Snort).
+- História: na arqueologia de verdade também não se escolhe o que se desenterra.
 
 ## Sementes antigas (o que o farejador encontra)
 

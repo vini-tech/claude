@@ -52,7 +52,8 @@ Progressive. Difficulty is driven by **usefulness + rarity**, not rarity alone:
   instrument; common music discs (13, cat, blocks, chirp, far, mall, mellohi,
   stal, strad, ward, 11, wait) come out at random from the Engraving Die.
   Discs with a unique origin keep their own themed recipe: Pigstep (bastion),
-  otherside (ancient city), Relic (archaeology).
+  otherside (ancient city), Relic (archaeology). Pottery sherds are random too
+  (Sherd Stamp on a press).
 
 - **Be creative even with simple items:** chains of different machines are
   welcome when each step adds to the story (e.g. pluck a chicken with a
