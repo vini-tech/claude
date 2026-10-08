@@ -18,5 +18,6 @@
   "item.create_synthesis.incomplete_scute": "Hatching Turtle Egg",
   "item.create_synthesis.incomplete_sniffer_egg": "Incomplete Sniffer Egg",
   "item.create_synthesis.incomplete_wet_sponge": "Soaking Sponge",
-  "itemGroup.create_synthesis.main": "Create: Synthesis"
+  "itemGroup.create_synthesis.main": "Create: Synthesis",
+  "tag.item.create_synthesis.raw_meats": "Raw Meats"
 }

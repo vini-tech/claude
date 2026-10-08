@@ -220,6 +220,8 @@ deploying("mobs", "feather", "chicken", "shears", [out("feather", 3)], keep=True
 sequenced("mobs", "rabbit_foot", "rabbit_hide", [("deploy", "golden_carrot"), ("deploy", "string"), ("press",)], 1,
           "rabbit_foot", "incomplete_rabbit_foot", "Incomplete Rabbit's Foot", ("texture", "minecraft:item/rabbit_foot"))
 tag("items", "raw_meats", ["minecraft:beef", "minecraft:porkchop", "minecraft:mutton", "minecraft:chicken", "minecraft:rabbit"])
+lang_en[f"tag.item.{MOD}.raw_meats"] = "Raw Meats"  # tag names shown by EMI
+lang_pt[f"tag.item.{MOD}.raw_meats"] = "Carnes Cruas"
 single("haunting", "mobs", "rotten_flesh", f"#{MOD}:raw_meats", [out("rotten_flesh", 2)])
 mixing("mobs", "spider_eye", ["poisonous_potato", "sweet_berries", "string"], ["spider_eye"])
 mixing("mobs", "honey", ["sugar", "sugar", "sugar", "#small_flowers", water(250)], [fluid_out("create:honey", 250)], heat="heated")

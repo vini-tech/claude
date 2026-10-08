@@ -18,5 +18,6 @@
   "item.create_synthesis.incomplete_scute": "Ovo de Tartaruga Chocando",
   "item.create_synthesis.incomplete_sniffer_egg": "Ovo de Farejador Incompleto",
   "item.create_synthesis.incomplete_wet_sponge": "Esponja Encharcando",
-  "itemGroup.create_synthesis.main": "Create: Synthesis"
+  "itemGroup.create_synthesis.main": "Create: Synthesis",
+  "tag.item.create_synthesis.raw_meats": "Carnes Cruas"
 }
