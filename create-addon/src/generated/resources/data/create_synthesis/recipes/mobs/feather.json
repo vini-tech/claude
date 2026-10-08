@@ -1,0 +1,18 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:chicken"
+    },
+    {
+      "item": "minecraft:shears"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:feather",
+      "count": 3
+    }
+  ],
+  "keepHeldItem": true
+}

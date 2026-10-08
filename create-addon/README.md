@@ -26,7 +26,7 @@ Dependency versions live in `gradle/libs.versions.toml` and match the ones Creat
 | `./gradlew runClient` | launches Minecraft with Create and this addon |
 | `./gradlew runServer` | launches a dedicated test server |
 | `./gradlew build` | builds the mod into `build/libs/create_synthesis-<version>.jar` |
-| `./gradlew runDatagen` | generates JSON assets/data into `src/generated/resources` |
+| `python3 tools/datagen.py` | regenerates recipes, transitional item models, lang and tags into `src/generated/resources` |
 
 To play outside the dev environment, put the built jar in your `mods` folder together with
 Create Fabric 6.0.8.1 and Fabric API.
@@ -41,7 +41,9 @@ src/main/java/com/vinitech/createsynthesis/
 src/main/resources/
   fabric.mod.json
   assets/create_synthesis/      textures, models, lang
-  data/create_synthesis/        recipes, tags, loot tables
+  data/create_synthesis/        hand-written data (loot tables, etc.)
+src/generated/resources/        output of tools/datagen.py (do not edit by hand)
+tools/datagen.py                recipe definitions; edit here and re-run
 ```
 
 ## License

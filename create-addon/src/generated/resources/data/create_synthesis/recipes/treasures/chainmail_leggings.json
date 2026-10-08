@@ -1,0 +1,46 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:leather_leggings"
+  },
+  "loops": 7,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_chainmail_leggings"
+  },
+  "results": [
+    {
+      "item": "minecraft:chainmail_leggings"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_leggings"
+        },
+        {
+          "item": "minecraft:chain"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_leggings"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_leggings"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_leggings"
+        }
+      ]
+    }
+  ]
+}

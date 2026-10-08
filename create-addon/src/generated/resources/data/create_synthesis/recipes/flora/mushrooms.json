@@ -1,0 +1,24 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:mycelium"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:mycelium"
+    },
+    {
+      "item": "minecraft:brown_mushroom",
+      "chance": 0.5
+    },
+    {
+      "item": "minecraft:red_mushroom",
+      "chance": 0.5
+    }
+  ]
+}

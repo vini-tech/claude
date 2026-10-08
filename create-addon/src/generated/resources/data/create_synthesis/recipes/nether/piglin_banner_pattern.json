@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "minecraft:gilded_blackstone"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:piglin_banner_pattern"
+    }
+  ],
+  "keepHeldItem": true
+}

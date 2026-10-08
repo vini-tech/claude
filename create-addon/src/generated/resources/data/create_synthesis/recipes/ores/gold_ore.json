@@ -1,0 +1,20 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "minecraft:stone"
+    },
+    {
+      "item": "minecraft:raw_gold"
+    },
+    {
+      "item": "minecraft:raw_gold"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:gold_ore"
+    }
+  ],
+  "heatRequirement": "heated"
+}

@@ -1,0 +1,27 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:warped_nylium"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:warped_nylium"
+    },
+    {
+      "item": "minecraft:warped_roots",
+      "count": 2
+    },
+    {
+      "item": "minecraft:nether_sprouts"
+    },
+    {
+      "item": "minecraft:twisting_vines",
+      "chance": 0.25
+    }
+  ]
+}

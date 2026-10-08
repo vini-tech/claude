@@ -1,0 +1,22 @@
+{
+  "item.create_synthesis.growing_amethyst_cluster": "Aglomerado de Ametista em Crescimento",
+  "item.create_synthesis.growing_large_amethyst_bud": "Broto Grande de Ametista em Crescimento",
+  "item.create_synthesis.growing_medium_amethyst_bud": "Broto Médio de Ametista em Crescimento",
+  "item.create_synthesis.growing_small_amethyst_bud": "Broto Pequeno de Ametista em Crescimento",
+  "item.create_synthesis.incomplete_bee_nest_birch": "Ninho de Abelha Incompleto",
+  "item.create_synthesis.incomplete_bee_nest_oak": "Ninho de Abelha Incompleto",
+  "item.create_synthesis.incomplete_chainmail_boots": "Botas de Malha Incompletas",
+  "item.create_synthesis.incomplete_chainmail_chestplate": "Peitoral de Malha Incompleto",
+  "item.create_synthesis.incomplete_chainmail_helmet": "Capacete de Malha Incompleto",
+  "item.create_synthesis.incomplete_chainmail_leggings": "Calças de Malha Incompletas",
+  "item.create_synthesis.incomplete_diamond_horse_armor": "Armadura de Diamante para Cavalo Incompleta",
+  "item.create_synthesis.incomplete_gilded_blackstone": "Pedra-Negra Dourada Incompleta",
+  "item.create_synthesis.incomplete_golden_horse_armor": "Armadura de Ouro para Cavalo Incompleta",
+  "item.create_synthesis.incomplete_iron_horse_armor": "Armadura de Ferro para Cavalo Incompleta",
+  "item.create_synthesis.incomplete_rabbit_foot": "Pé de Coelho Incompleto",
+  "item.create_synthesis.incomplete_sculk_sensor": "Sensor de Sculk Incompleto",
+  "item.create_synthesis.incomplete_scute": "Ovo de Tartaruga Chocando",
+  "item.create_synthesis.incomplete_sniffer_egg": "Ovo de Farejador Incompleto",
+  "item.create_synthesis.incomplete_wet_sponge": "Esponja Encharcando",
+  "itemGroup.create_synthesis.main": "Create: Synthesis"
+}

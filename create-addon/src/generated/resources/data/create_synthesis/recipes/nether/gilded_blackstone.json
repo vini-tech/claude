@@ -1,0 +1,33 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:blackstone"
+  },
+  "loops": 2,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_gilded_blackstone"
+  },
+  "results": [
+    {
+      "item": "minecraft:gilded_blackstone"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_gilded_blackstone"
+        },
+        {
+          "item": "minecraft:gold_ingot"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_gilded_blackstone"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:large_amethyst_bud"
+  },
+  "loops": 1,
+  "transitionalItem": {
+    "item": "create_synthesis:growing_amethyst_cluster"
+  },
+  "results": [
+    {
+      "item": "minecraft:amethyst_cluster"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:growing_amethyst_cluster"
+        },
+        {
+          "item": "minecraft:amethyst_shard"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:growing_amethyst_cluster"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_synthesis:growing_amethyst_cluster"
+        },
+        {
+          "fluid": "minecraft:water",
+          "amount": 20250,
+          "nbt": {}
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:growing_amethyst_cluster"
+        }
+      ]
+    }
+  ]
+}

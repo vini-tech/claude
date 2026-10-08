@@ -1,0 +1,88 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:egg"
+  },
+  "loops": 1,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_sniffer_egg"
+  },
+  "results": [
+    {
+      "item": "minecraft:sniffer_egg",
+      "chance": 90
+    },
+    {
+      "item": "minecraft:moss_block",
+      "chance": 10
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_sniffer_egg"
+        },
+        {
+          "item": "minecraft:torchflower_seeds"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_sniffer_egg"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_sniffer_egg"
+        },
+        {
+          "item": "minecraft:pitcher_pod"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_sniffer_egg"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_sniffer_egg"
+        },
+        {
+          "item": "minecraft:moss_block"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_sniffer_egg"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_sniffer_egg"
+        },
+        {
+          "fluid": "minecraft:water",
+          "amount": 20250,
+          "nbt": {}
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_sniffer_egg"
+        }
+      ]
+    }
+  ]
+}

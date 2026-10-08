@@ -1,0 +1,19 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:poisonous_potato"
+    },
+    {
+      "item": "minecraft:sweet_berries"
+    },
+    {
+      "item": "minecraft:string"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:spider_eye"
+    }
+  ]
+}

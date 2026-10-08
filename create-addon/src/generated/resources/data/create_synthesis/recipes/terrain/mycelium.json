@@ -1,0 +1,16 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:dirt"
+    },
+    {
+      "item": "minecraft:brown_mushroom"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:mycelium"
+    }
+  ]
+}

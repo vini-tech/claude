@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "minecraft:map"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:globe_banner_pattern"
+    }
+  ],
+  "keepHeldItem": true
+}

@@ -1,0 +1,67 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:hay_block"
+  },
+  "loops": 2,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_wet_sponge"
+  },
+  "results": [
+    {
+      "item": "minecraft:wet_sponge"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_wet_sponge"
+        },
+        {
+          "item": "minecraft:prismarine_crystals"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_wet_sponge"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_wet_sponge"
+        },
+        {
+          "item": "minecraft:kelp"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_wet_sponge"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_wet_sponge"
+        },
+        {
+          "fluid": "minecraft:water",
+          "amount": 40500,
+          "nbt": {}
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_wet_sponge"
+        }
+      ]
+    }
+  ]
+}

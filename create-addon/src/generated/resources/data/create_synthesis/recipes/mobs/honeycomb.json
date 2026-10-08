@@ -1,0 +1,15 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "fluid": "create:honey",
+      "amount": 20250,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:honeycomb"
+    }
+  ]
+}

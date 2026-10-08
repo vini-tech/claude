@@ -1,0 +1,21 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:kelp"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 20250,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:sea_pickle"
+    }
+  ]
+}

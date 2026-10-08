@@ -1,0 +1,63 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:oak_log"
+  },
+  "loops": 1,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_bee_nest_oak"
+  },
+  "results": [
+    {
+      "item": "minecraft:bee_nest"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_oak"
+        },
+        {
+          "item": "minecraft:honeycomb"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_oak"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_oak"
+        },
+        {
+          "item": "minecraft:honeycomb"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_oak"
+        }
+      ]
+    },
+    {
+      "type": "create:cutting",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_oak"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_oak"
+        }
+      ],
+      "processingTime": 50
+    }
+  ]
+}

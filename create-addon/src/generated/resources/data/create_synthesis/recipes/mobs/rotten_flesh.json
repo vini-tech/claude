@@ -1,0 +1,14 @@
+{
+  "type": "create:haunting",
+  "ingredients": [
+    {
+      "tag": "create_synthesis:raw_meats"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:rotten_flesh",
+      "count": 2
+    }
+  ]
+}

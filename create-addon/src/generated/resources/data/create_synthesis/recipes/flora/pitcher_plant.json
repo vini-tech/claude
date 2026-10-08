@@ -1,0 +1,21 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:pitcher_pod"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 20250,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:pitcher_plant"
+    }
+  ]
+}

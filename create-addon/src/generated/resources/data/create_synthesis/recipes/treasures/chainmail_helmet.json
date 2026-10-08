@@ -1,0 +1,46 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:leather_helmet"
+  },
+  "loops": 5,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_chainmail_helmet"
+  },
+  "results": [
+    {
+      "item": "minecraft:chainmail_helmet"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_helmet"
+        },
+        {
+          "item": "minecraft:chain"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_helmet"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_helmet"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_helmet"
+        }
+      ]
+    }
+  ]
+}

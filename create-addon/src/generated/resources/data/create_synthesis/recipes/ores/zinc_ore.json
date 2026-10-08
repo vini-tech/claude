@@ -1,0 +1,20 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "minecraft:stone"
+    },
+    {
+      "item": "create:raw_zinc"
+    },
+    {
+      "item": "create:raw_zinc"
+    }
+  ],
+  "results": [
+    {
+      "item": "create:zinc_ore"
+    }
+  ],
+  "heatRequirement": "heated"
+}

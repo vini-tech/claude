@@ -1,0 +1,19 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:magma_cream"
+    },
+    {
+      "item": "minecraft:magma_cream"
+    },
+    {
+      "item": "minecraft:lily_pad"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:ochre_froglight"
+    }
+  ]
+}

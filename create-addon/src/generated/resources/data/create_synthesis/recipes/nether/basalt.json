@@ -1,0 +1,22 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "minecraft:soul_soil"
+    },
+    {
+      "item": "minecraft:ice"
+    },
+    {
+      "fluid": "minecraft:lava",
+      "amount": 20250,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:basalt",
+      "count": 2
+    }
+  ]
+}

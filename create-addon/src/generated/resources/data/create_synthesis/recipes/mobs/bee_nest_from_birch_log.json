@@ -1,0 +1,63 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:birch_log"
+  },
+  "loops": 1,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_bee_nest_birch"
+  },
+  "results": [
+    {
+      "item": "minecraft:bee_nest"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_birch"
+        },
+        {
+          "item": "minecraft:honeycomb"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_birch"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_birch"
+        },
+        {
+          "item": "minecraft:honeycomb"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_birch"
+        }
+      ]
+    },
+    {
+      "type": "create:cutting",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_birch"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_bee_nest_birch"
+        }
+      ],
+      "processingTime": 50
+    }
+  ]
+}

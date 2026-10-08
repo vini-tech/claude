@@ -1,0 +1,21 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:jungle_leaves"
+    },
+    {
+      "item": "minecraft:shears"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:jungle_leaves"
+    },
+    {
+      "item": "minecraft:vine",
+      "count": 2
+    }
+  ],
+  "keepHeldItem": true
+}

@@ -1,0 +1,25 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:end_stone"
+    },
+    {
+      "item": "minecraft:chorus_flower"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:end_stone"
+    },
+    {
+      "item": "minecraft:chorus_fruit",
+      "count": 2
+    },
+    {
+      "item": "minecraft:chorus_flower",
+      "chance": 0.1
+    }
+  ],
+  "keepHeldItem": true
+}

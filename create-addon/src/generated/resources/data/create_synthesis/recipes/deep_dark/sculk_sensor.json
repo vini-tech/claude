@@ -1,0 +1,62 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:sculk"
+  },
+  "loops": 1,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_sculk_sensor"
+  },
+  "results": [
+    {
+      "item": "minecraft:sculk_sensor"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_sculk_sensor"
+        },
+        {
+          "item": "minecraft:redstone"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_sculk_sensor"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_sculk_sensor"
+        },
+        {
+          "item": "minecraft:string"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_sculk_sensor"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_sculk_sensor"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_sculk_sensor"
+        }
+      ]
+    }
+  ]
+}

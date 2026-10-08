@@ -1,0 +1,22 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:obsidian"
+    },
+    {
+      "item": "minecraft:amethyst_shard"
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 8100,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:crying_obsidian"
+    }
+  ],
+  "heatRequirement": "heated"
+}

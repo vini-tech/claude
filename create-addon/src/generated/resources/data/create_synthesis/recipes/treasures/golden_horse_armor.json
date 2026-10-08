@@ -1,0 +1,46 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:leather_horse_armor"
+  },
+  "loops": 4,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_golden_horse_armor"
+  },
+  "results": [
+    {
+      "item": "minecraft:golden_horse_armor"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_golden_horse_armor"
+        },
+        {
+          "item": "create:golden_sheet"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_golden_horse_armor"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_golden_horse_armor"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_golden_horse_armor"
+        }
+      ]
+    }
+  ]
+}

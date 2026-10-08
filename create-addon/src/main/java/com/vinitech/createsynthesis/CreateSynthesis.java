@@ -12,6 +12,7 @@ import com.vinitech.createsynthesis.registry.SynthesisItems;
 
 import net.createmod.catnip.lang.FontHelper;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.resources.ResourceLocation;
 
 public class CreateSynthesis implements ModInitializer {
@@ -33,6 +34,12 @@ public class CreateSynthesis implements ModInitializer {
 		SynthesisItems.register();
 
 		REGISTRATE.register();
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			long count = server.getRecipeManager().getRecipes().stream()
+				.filter(recipe -> recipe.getId().getNamespace().equals(ID))
+				.count();
+			LOGGER.info("{} loaded {} recipes", NAME, count);
+		});
 		LOGGER.info("{} initialized", NAME);
 	}
 

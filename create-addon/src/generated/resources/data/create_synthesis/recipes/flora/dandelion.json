@@ -1,0 +1,22 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:dandelion"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "fluid": "create:honey",
+      "amount": 8100,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:dandelion",
+      "count": 3
+    }
+  ]
+}

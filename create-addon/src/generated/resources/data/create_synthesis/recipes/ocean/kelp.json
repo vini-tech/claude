@@ -1,0 +1,22 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:kelp"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 40500,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:kelp",
+      "count": 3
+    }
+  ]
+}

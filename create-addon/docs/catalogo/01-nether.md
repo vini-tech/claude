@@ -159,11 +159,11 @@ Mais os itens "incompletos" automáticos das montagens sequenciais.
 
 ## Flora do Nether
 
-### Crimson Stem, Warped Stem, Warped Wart Block, Shroomlight · T1
-- **Compactador:** 1 Crimson Fungus + 3 Bone Meal → 4 Crimson Stem + 2 Nether Wart Block + 20% Shroomlight
-- **Compactador:** 1 Warped Fungus + 3 Bone Meal → 4 Warped Stem + 2 Warped Wart Block + 20% Shroomlight
-- História: imita um fungo gigante crescendo (tronco, blocos de verruga e luz-de-cogumelo).
-  Uma receita cobre quatro itens.
+### Shroomlight, Warped Wart Block · T1
+- **Compactador:** 1 Crimson Fungus + 3 Bone Meal + 1 Glowstone Dust → 1 Shroomlight + 1 Nether Wart Block
+- **Compactador:** 1 Warped Fungus + 3 Bone Meal → 2 Warped Wart Block
+- História: o que cresce na copa de um fungo gigante. Os troncos (Crimson/Warped Stem) ficam fora do escopo,
+  porque fazendas de fungos gigantes já são fáceis com o Create.
 
 ### Crimson Nylium, Warped Nylium · T1
 - **Implantador** segurando o fungo (não é consumido) sobre Netherrack → Crimson/Warped Nylium

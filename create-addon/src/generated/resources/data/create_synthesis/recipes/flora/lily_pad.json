@@ -1,0 +1,14 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "minecraft:big_dripleaf"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:lily_pad",
+      "count": 2
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:grass_block"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:grass_block"
+    },
+    {
+      "item": "minecraft:grass",
+      "count": 2
+    },
+    {
+      "item": "minecraft:fern",
+      "chance": 0.25
+    }
+  ]
+}

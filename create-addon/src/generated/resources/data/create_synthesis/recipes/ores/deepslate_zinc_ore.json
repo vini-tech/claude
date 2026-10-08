@@ -1,0 +1,23 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "minecraft:deepslate"
+    },
+    {
+      "item": "create:raw_zinc"
+    },
+    {
+      "item": "create:raw_zinc"
+    },
+    {
+      "item": "create:raw_zinc"
+    }
+  ],
+  "results": [
+    {
+      "item": "create:deepslate_zinc_ore"
+    }
+  ],
+  "heatRequirement": "heated"
+}

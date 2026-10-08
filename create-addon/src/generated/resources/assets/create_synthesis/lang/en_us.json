@@ -1,0 +1,22 @@
+{
+  "item.create_synthesis.growing_amethyst_cluster": "Growing Amethyst Cluster",
+  "item.create_synthesis.growing_large_amethyst_bud": "Growing Large Amethyst Bud",
+  "item.create_synthesis.growing_medium_amethyst_bud": "Growing Medium Amethyst Bud",
+  "item.create_synthesis.growing_small_amethyst_bud": "Growing Small Amethyst Bud",
+  "item.create_synthesis.incomplete_bee_nest_birch": "Incomplete Bee Nest",
+  "item.create_synthesis.incomplete_bee_nest_oak": "Incomplete Bee Nest",
+  "item.create_synthesis.incomplete_chainmail_boots": "Incomplete Chainmail Boots",
+  "item.create_synthesis.incomplete_chainmail_chestplate": "Incomplete Chainmail Chestplate",
+  "item.create_synthesis.incomplete_chainmail_helmet": "Incomplete Chainmail Helmet",
+  "item.create_synthesis.incomplete_chainmail_leggings": "Incomplete Chainmail Leggings",
+  "item.create_synthesis.incomplete_diamond_horse_armor": "Incomplete Diamond Horse Armor",
+  "item.create_synthesis.incomplete_gilded_blackstone": "Incomplete Gilded Blackstone",
+  "item.create_synthesis.incomplete_golden_horse_armor": "Incomplete Golden Horse Armor",
+  "item.create_synthesis.incomplete_iron_horse_armor": "Incomplete Iron Horse Armor",
+  "item.create_synthesis.incomplete_rabbit_foot": "Incomplete Rabbit's Foot",
+  "item.create_synthesis.incomplete_sculk_sensor": "Incomplete Sculk Sensor",
+  "item.create_synthesis.incomplete_scute": "Hatching Turtle Egg",
+  "item.create_synthesis.incomplete_sniffer_egg": "Incomplete Sniffer Egg",
+  "item.create_synthesis.incomplete_wet_sponge": "Soaking Sponge",
+  "itemGroup.create_synthesis.main": "Create: Synthesis"
+}

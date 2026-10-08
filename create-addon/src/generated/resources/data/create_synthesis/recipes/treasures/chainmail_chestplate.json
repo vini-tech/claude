@@ -1,0 +1,46 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:leather_chestplate"
+  },
+  "loops": 8,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_chainmail_chestplate"
+  },
+  "results": [
+    {
+      "item": "minecraft:chainmail_chestplate"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_chestplate"
+        },
+        {
+          "item": "minecraft:chain"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_chestplate"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_chestplate"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_chestplate"
+        }
+      ]
+    }
+  ]
+}

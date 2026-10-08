@@ -1,0 +1,46 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:leather_boots"
+  },
+  "loops": 4,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_chainmail_boots"
+  },
+  "results": [
+    {
+      "item": "minecraft:chainmail_boots"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_boots"
+        },
+        {
+          "item": "minecraft:chain"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_boots"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_boots"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_chainmail_boots"
+        }
+      ]
+    }
+  ]
+}

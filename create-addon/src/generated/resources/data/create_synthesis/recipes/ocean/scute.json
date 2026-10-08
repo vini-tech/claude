@@ -1,0 +1,64 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:turtle_egg"
+  },
+  "loops": 2,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_scute"
+  },
+  "results": [
+    {
+      "item": "minecraft:scute"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_scute"
+        },
+        {
+          "item": "minecraft:seagrass"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_scute"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_scute"
+        },
+        {
+          "fluid": "minecraft:water",
+          "amount": 20250,
+          "nbt": {}
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_scute"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_scute"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_scute"
+        }
+      ]
+    }
+  ]
+}

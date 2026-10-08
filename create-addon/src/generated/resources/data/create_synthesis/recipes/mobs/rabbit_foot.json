@@ -1,0 +1,62 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:rabbit_hide"
+  },
+  "loops": 1,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_rabbit_foot"
+  },
+  "results": [
+    {
+      "item": "minecraft:rabbit_foot"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_rabbit_foot"
+        },
+        {
+          "item": "minecraft:golden_carrot"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_rabbit_foot"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_rabbit_foot"
+        },
+        {
+          "item": "minecraft:string"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_rabbit_foot"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_rabbit_foot"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_rabbit_foot"
+        }
+      ]
+    }
+  ]
+}
