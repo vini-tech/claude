@@ -1,6 +1,6 @@
 # Catálogo 06: Mobs do Overworld
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 Nomes de itens novos em inglês. Tiers conforme `DESIGN.md`.
 Já resolvidos em outros catálogos: Totem of Undying (04), Ender Pearl (02).
@@ -16,17 +16,18 @@ o que ele come, onde vive, o que acontece com ele.
 - **Moedor:** Wheat → 2 Fodder
 - **Moedor:** Wheat Seeds / Beetroot Seeds / Melon Seeds / Pumpkin Seeds → 1 Fodder
 
-**Toque de cada animal: misturador + prensa**
+**Ração de cada animal (misturador) e "virar carne" (compactador)**
 
-| Item | Passo 1: Misturador | Passo 2 | História |
+| Item | Passo 2: Misturador (ração) | Passo 3: Compactador | História |
 |---|---|---|---|
-| Raw Beef · T1 | 2 Fodder + 250 mB **Milk** → **Cattle Feed** (item novo) | **Compactador:** Cattle Feed + 1 Leather → 2 Raw Beef | a vaca come capim e dá leite e couro |
-| Raw Porkchop · T1 | 2 Fodder + 1 Carrot + 1 Potato → **Swill** (item novo) | **Compactador:** Swill → 2 Raw Porkchop | o porco come restos de horta |
-| Raw Mutton · T1 | 2 Fodder + 100 mB água → Fodder molhada | **Compactador:** Fodder molhada + 1 White Wool → 2 Raw Mutton | a ovelha come capim e cresce lã |
-| Raw Chicken · T1 | 2 Fodder (de sementes) + 1 Feather → **Chicken Feed** (item novo) | **Compactador:** Chicken Feed → 1 Raw Chicken | a galinha come sementes |
-| Raw Rabbit · T1 | 1 Fodder + 1 Carrot + 1 Dandelion → **Rabbit Feed** (item novo) | **Compactador:** Rabbit Feed → Raw Rabbit + Rabbit Hide | o coelho come cenoura e dente-de-leão |
+| Raw Beef · T1 | 2 Fodder + 250 mB **Milk** → **Pasture Feed** | Pasture Feed + 1 Leather → 2 Raw Beef | a vaca pasta e tem couro |
+| Raw Mutton · T1 | (mesma Pasture Feed) | Pasture Feed + 1 White Wool → 2 Raw Mutton | a ovelha pasta e tem lã |
+| Raw Porkchop · T1 | 2 Fodder + 1 Carrot + 1 Potato → **Swill** | Swill → 2 Raw Porkchop | o porco come restos de horta |
+| Raw Chicken · T1 | 2 Fodder + 1 Feather → **Chicken Feed** | Chicken Feed → 1 Raw Chicken | a galinha come sementes |
+| Raw Rabbit · T1 | 1 Fodder + 1 Carrot + 1 Dandelion → **Rabbit Feed** | Rabbit Feed → Raw Rabbit + Rabbit Hide | o coelho come cenoura e dente-de-leão |
 
-(Itens "Fodder molhada" podem ser o mesmo Cattle Feed para não multiplicar itens: decidimos na implementação.)
+Exemplo completo (carne bovina): Moedor 1 Wheat → 2 Fodder; Misturador 2 Fodder + 250 mB Milk → Pasture Feed;
+Compactador Pasture Feed + Leather → 2 Raw Beef.
 
 ### Egg (Ovo) · T1
 - **Misturador:** 1 Chicken Feed + 1 Calcite (moída, vira a casca de cálcio) + 100 mB água → Egg
@@ -127,7 +128,7 @@ Iron Ingot. O implantador segura o cinzel e esculpe; o cinzel não é consumido 
 | Item | Uso |
 |---|---|
 | Fodder | base da família dos animais |
-| Cattle Feed, Swill, Chicken Feed, Rabbit Feed | rações de cada animal |
+| Pasture Feed, Swill, Chicken Feed, Rabbit Feed | rações de cada animal |
 | Fossil Fragment | intermediário do Bone |
 | Stretched Hide, Hollow Hide | intermediários da Phantom Membrane |
 | Horn Blank | intermediário do Goat Horn |
