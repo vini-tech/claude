@@ -15,9 +15,8 @@ As receitas imitam **ofícios**: o seleiro, o ferreiro, o fundidor de sinos, o c
 1. **Curtir:**
    1. **Misturador:** 1 Leather + 1 Oak Log + 250 mB água → **Soaked Hide** (item novo, couro encharcado no tanino)
    2. **Secar**, à escolha:
-      - **No sol (lento, de graça):** no **Drying Rack** (bloco novo, varal de secagem feito de gravetos e
-        tábuas). Coloca-se o couro à mão ou por funil; precisa de céu aberto e só seca de dia,
-        em cerca de **1 dia inteiro do jogo**.
+      - **Secar sozinho (lento, de graça):** o Soaked Hide seca no **inventário** depois de **5 minutos**
+        reais (1/4 de dia do jogo) e vira Tanned Leather.
       - **Assando (rápido):** **Defumar** no ventilador do Create (soprando através de fogo).
    - Resultado: **Tanned Leather** (item novo)
 2. **Crafter mecânico** em forma de sela: 4 Tanned Leather + 2 Iron Sheet (estribos) + 2 Chain (correias)
@@ -69,12 +68,12 @@ da malha. A malha é tecida com **Chain** (corrente), loop a loop.
 
 ## Bottle o' Enchanting (Frasco de Experiência) · T4
 *Só com aldeões clérigos. Muito valioso (Remendo). T4 sem máquina especial (exceção combinada).*
-1. **Misturador superaquecido:** 2 Experience Nugget + 1 Lapis Lazuli → **50 mB** de **Experience Essence**
+1. **Misturador superaquecido:** 2 Experience Nugget + 1 Lapis Lazuli + 1 Glowstone Dust → **50 mB** de **Experience Essence**
    (fluido novo). Cada mistura dá 1/5 de um frasco.
 2. **Montagem sequencial** (base: Glass Bottle, **5 loops**):
    1. Bica: 50 mB de Experience Essence
    - As 5 partes enchem a garrafa → Bottle o' Enchanting · 100%
-- Custo por frasco: 10 pepitas de experiência, 5 lápis, 5 misturas superaquecidas.
+- Custo por frasco: 10 pepitas de experiência, 5 lápis, 5 glowstone, 5 misturas superaquecidas.
 - **De onde vêm as pepitas:** o Create já solta Experience Nugget (75% de chance) ao triturar quase todo
   minério e minério bruto. Uma linha de processamento de minérios produz pepitas como subproduto;
   basta filtrá-las para esta linha.
@@ -91,6 +90,5 @@ da malha. A malha é tecida com **Chain** (corrente), loop a loop.
 | Item | Uso |
 |---|---|
 | Soaked Hide, Tanned Leather, Saddle Frame | intermediários da Saddle |
-| Drying Rack | bloco: secar itens ao sol (lento) |
 | Rough Bell | intermediário do Bell |
 | Experience Essence (fluido) | intermediário do Bottle o' Enchanting |
