@@ -11,12 +11,12 @@ Reproduz as regras do Create 6 (Fabric) para a bacia:
 Também compara as receitas de entrada única (prensa na esteira, moedor, triturador, serra, ventilador,
 bica, implantador, lixa) e o primeiro passo de cada montagem sequencial.
 
-Por padrão simula as regras que o mod adiciona (BasinRecipeRules): bacia aquecida não automatiza
-crafting, e as nossas receitas vão primeiro quando estão completas. `--create-puro` desliga as regras.
+Por padrão simula a regra que o mod adiciona (BasinRecipeRules): as nossas receitas vão primeiro
+quando estão completas. `--create-puro` desliga a regra.
 
 Níveis: SEMPRE/EMPATE = conflito mesmo com os ingredientes na proporção certa (precisa corrigir);
 "bacia aquecida" = a nossa só toma o lugar da outra se a bacia estiver aquecida;
-"sobras" = a outra só roda quando sobra um ingrediente (entrada desbalanceada).
+"sobras" = a outra só roda quando a nossa está incompleta (entrada desbalanceada; o filtro da bacia resolve).
 
 Uso: python docs/tools/conflicts.py  (lê os jars do cache do Gradle; rode `gradlew build` antes)
 """
@@ -259,10 +259,6 @@ for r, m in basin:
     for o, om in basin:
         if o is r or om != m:
             continue
-        crafting = o.type.startswith("minecraft:")
-        # regra do mod (BasinRecipeRules): bacia aquecida não automatiza receitas de crafting
-        if crafting and RULES and r.heat != "none":
-            continue
         # 1) outra receita roda com os ingredientes da nossa
         if heat_ok(o, r.heat) and satisfiable(o, avail_items, avail_fluids):
             n_r, n_o = len(r.items), len(o.items)
@@ -279,7 +275,7 @@ for r, m in basin:
             if satisfiable(r, o_items, o_fluids):
                 if RULES:
                     # a nossa vai primeiro; só a exigência de calor a impede
-                    if o.heat == "none" and r.heat != "none" and not crafting:
+                    if o.heat == "none" and r.heat != "none":
                         found.append(("bacia aquecida", m, r, o, "a nossa rouba"))
                     elif HEAT_RANK[r.heat] <= HEAT_RANK.get(o.heat, 0):
                         found.append(("SEMPRE", m, r, o, "a nossa rouba"))

@@ -33,7 +33,7 @@ de Mobs do Overworld.
 ## Receitas
 
 ### End Stone (Pedra do End) · T1
-- **Compactador aquecido:** 4 Sandstone + 1 Popped Chorus Fruit → 4 End Stone
+- **Compactador:** 4 Sandstone + 1 Popped Chorus Fruit → 4 End Stone
 - História: a areia "absorve" a essência do coro e vira a pedra pálida das ilhas.
 
 ### Chorus Fruit, Chorus Flower (Fruta e Flor do Coro) · T1

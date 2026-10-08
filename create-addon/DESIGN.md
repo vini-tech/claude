@@ -65,10 +65,10 @@ Progressive. Difficulty is driven by **usefulness + rarity**, not rarity alone:
 - Fluids as "DNA" (a fluid that gives the item its property) is a tool for
   some recipes, not a rule for all of them.
 - **No basin conflicts:** a press/mixer recipe must not be stolen by (or
-  steal) a vanilla or Create recipe made from the same ingredients. Heated
-  basins don't automate crafting-table recipes in this mod, and our recipes
-  win when complete, so recipes that share ingredients with crafting recipes
-  are heated. Check with `docs/tools/conflicts.py`.
+  steal) a vanilla or Create recipe made from the same ingredients. Our
+  recipes win when complete, so a recipe of ours must never be made only of
+  another recipe's ingredients. Heat is for recipes that actually cook
+  something, never a conflict fix. Check with `docs/tools/conflicts.py`.
 - **No duplication loops:** a recipe must never cost less than what Create
   gives back when the output is crushed/milled (e.g. nether gold ore crushes
   into 18 nuggets, so it must cost at least 2 gold ingots).

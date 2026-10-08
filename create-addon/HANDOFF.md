@@ -121,9 +121,12 @@ Pesquisa de inspiração (CAB, Astral, Dreams & Desires, Mechanical Spawner...):
 - Calor: `"heatRequirement": "heated"` ou `"superheated"`.
 - **Conflitos na bacia:** o Create escolhe a receita com mais ingredientes, e as receitas de crafting
   (blocos 3x3, tijolos 2x2, botas...) roubavam as nossas. O mod corrige com `BasinRecipeRules` (mixin em
-  `BasinOperatingBlockEntity.getMatchingRecipes`): bacia aquecida não automatiza crafting, e as nossas
-  receitas vão primeiro quando estão completas. Receitas de prensa/misturador que disputam ingredientes com
-  crafting devem ser **aquecidas**. Conferir sempre com `python docs/tools/conflicts.py` (depois de um build).
+  `BasinOperatingBlockEntity`): as nossas receitas vão primeiro quando estão completas, e se completarem
+  no meio de um ciclo a máquina troca para a nossa antes de aplicar. Com entrada desbalanceada, o **filtro
+  da bacia** (mecânica do Create) garante a receita. O usuário **não** quer calor como solução: calor só
+  quando a receita "cozinha" algo. Uma receita nossa não pode ser feita só com ingredientes de uma receita
+  do vanilla/Create (por isso a teia leva slime: só linha seria lã).
+  Conferir sempre com `python docs/tools/conflicts.py` (depois de um build).
 - Ambiente local (Windows): o caminho do projeto não pode ter acento (o Fabric não acha o jogo). Usar uma
   unidade `subst` ou mover o projeto. JDK 21 em `~\.jdks`.
 

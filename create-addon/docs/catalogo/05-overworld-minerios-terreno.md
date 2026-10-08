@@ -10,8 +10,8 @@ Todos T1/T2: são blocos baratos, a maioria decorativa ou de construção.
 devolve ao triturá-lo (contando as chances extras). Assim, fazer um minério e triturar nunca dá lucro.
 Só sobra a pepita de experiência que o Create dá de bônus, o que é aceitável.
 
-**Uma receita para todos:** **Compactador aquecido:** rocha hospedeira + material bruto → minério.
-História: o calor e a pressão "cimentam" o mineral dentro da rocha, como num veio de verdade.
+**Uma receita para todos:** **Compactador:** rocha hospedeira + material bruto → minério.
+História: a pressão "cimenta" o mineral dentro da rocha, como num veio de verdade.
 
 | Minério | Rocha | Material (máx. que o triturador devolve) |
 |---|---|---|
@@ -62,7 +62,7 @@ cada estágio é **um loop de montagem sequencial** sobre o estágio anterior.
 | Hanging Roots | **Implantador** com Bone Meal sobre Rooted Dirt → Rooted Dirt + Hanging Roots | as raízes crescem para baixo |
 | Glow Lichen | **Misturador:** 2 Moss Carpet + 1 Glow Ink Sac → 4 Glow Lichen | musgo que brilha |
 | Pointed Dripstone | **Bica:** 100 mB água sobre Calcite → Pointed Dripstone | água pingando na rocha |
-| Cobweb | **Compactador aquecido:** 5 String → 1 Cobweb | teia compactada |
+| Cobweb | **Compactador:** 4 String + 1 Slime Ball → 1 Cobweb | linha grudenta compactada (sem o slime, seria lã) |
 
 ## Neve e luzes de sapo
 
