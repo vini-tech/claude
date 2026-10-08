@@ -1,173 +1,190 @@
 #!/usr/bin/env python3
-"""Draws the item textures of Create: Synthesis (16x16, Create-like style).
+"""Draws the item textures of Create: Synthesis (16x16, in the style of Create and vanilla).
 
 Run from the create-addon folder:  python tools/textures.py [--preview out.png]
 Writes src/main/resources/assets/create_synthesis/textures/item/<name>.png.
 
-Style rules (taken from Create's own items): objects seen slightly from above, light from the
-top-left, a 5-tone ramp per material, outlines in the darkest tone of the material (never black).
+How a texture is made:
+1. a hand-drawn silhouette (a grid of '#');
+2. volume shading computed from the silhouette: light from the top-left, like every Create item;
+   only the bottom/right border gets the darkest tone (the shadow side), the lit border stays light;
+3. hand-placed details (stitches, grooves, specks), recolored by the shade of the pixel under them.
+
+Each material has a ramp of tones, darkest first. Outlines are the darkest tone of the material, never black.
 """
-import colorsys
-import random
+import math
 import sys
+from collections import deque
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "src/main/resources/assets/create_synthesis/textures/item"
 N = 16
+NEIGHBORS = ((1, 0), (-1, 0), (0, 1), (0, -1))
 
 
-# ---------------------------------------------------------------- colors
-
-def hexrgb(h):
+def rgb(h):
     h = h.lstrip("#")
-    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4)) + (255,)
 
 
 def ramp(*colors):
-    """5 tones, darkest first: outline, dark, mid, light, highlight."""
-    return [hexrgb(c) + (255,) for c in colors]
+    return [rgb(c) for c in colors]
 
 
-def auto_ramp(base, hue_shift=0.03):
-    """Ramp from one mid color: darker tones shift to warmer hue and more saturation, like Create."""
-    r, g, b = [c / 255 for c in hexrgb(base)]
-    h, s, v = colorsys.rgb_to_hsv(r, g, b)
-    tones = []
-    for dv, ds, dh in ((-0.52, 0.18, hue_shift), (-0.28, 0.10, hue_shift / 2), (0, 0, 0),
-                       (0.16, -0.10, -hue_shift / 2), (0.30, -0.22, -hue_shift)):
-        rr, gg, bb = colorsys.hsv_to_rgb((h + dh) % 1, min(1, max(0, s + ds)), min(1, max(0, v + dv)))
-        tones.append((round(rr * 255), round(gg * 255), round(bb * 255), 255))
-    return tones
+# ---------------------------------------------------------------- palettes (darkest first)
+
+STRAW = ramp("#4a3108", "#6e4b10", "#8f6619", "#ae8224", "#c99f34", "#ddbb52", "#eed784")
+HUSK = ramp("#3f4a12", "#556318", "#6b7d21", "#83962c", "#9aae3a", "#b2c452", "#c8d873")
+FEED = ramp("#3a2210", "#5c3519", "#7f4c24", "#a0672f", "#bd843f", "#d4a35a", "#e6c182")
+FISH = ramp("#4a1810", "#74261a", "#9e3a22", "#c4532b", "#df7337", "#ef9a4f", "#f8c07a")
+FLAKE_GREEN = ramp("#22401a", "#2f5a22", "#3f742b", "#548f36", "#6caa42", "#88c254", "#a8d873")
+FLAKE_YELLOW = ramp("#5a4210", "#7d5d17", "#a17b20", "#c49a2c", "#dcb43e", "#ecce5e", "#f7e494")
+STONE = ramp("#35322d", "#4f4b44", "#69645b", "#837d72", "#9d978b", "#b6b0a4", "#cdc8bd")
+BONE = ramp("#5b4a30", "#867254", "#ad9a78", "#c9b994", "#ddd0b0", "#ece3cb", "#f8f3e6")
+LEATHER = ramp("#3a1608", "#5c240f", "#7e3518", "#a04b24", "#bb6332", "#d07f45", "#e3a066")
+TANNED = ramp("#2c0f06", "#47190b", "#652612", "#83361b", "#9f4925", "#b85f33", "#cc7a48")
+WET = ramp("#1c0c05", "#2e150a", "#422011", "#562c18", "#6b3a21", "#7f4b2d", "#94603d")
+WATER = ramp("#1d3a52", "#2a5272", "#3b6d92", "#5289b0", "#70a5c9", "#95c3df", "#c6e3f3")
+HOLLOW = ramp("#2a3638", "#3f5053", "#58696b", "#728383", "#8c9d9b", "#a8b8b5", "#c7d5d1")
+IRON = ramp("#2a2e33", "#454b52", "#646b73", "#868d95", "#a8aeb5", "#c9ced3", "#eceff1")
+NACRE = ramp("#5c5468", "#7d7489", "#9d95a9", "#bbb4c6", "#d4cedd", "#e8e4ef", "#fbf9ff")
+PINK = ramp("#6e4c5c", "#8e6074", "#b07a91", "#cf98ad", "#e5b5c8", "#f2cfdc", "#fbe8f0")
+CYAN = ramp("#40626a", "#527c85", "#6a99a1", "#86b5bb", "#a3cdd1", "#c2e2e3", "#e2f4f3")
+GOLD = ramp("#4f2d06", "#7a4a0c", "#a26914", "#c48a20", "#d9a834", "#e8c252", "#f3db86")
+CLAY = ramp("#3d4350", "#555d6c", "#6f7889", "#8a93a4", "#a3acbb", "#bcc3cf", "#d3d8e1")
+DISC = ramp("#0d0d10", "#17171b", "#212126", "#2b2b31", "#36363d", "#43434b", "#55555e")
+GLOSS = ramp("#0b0b10", "#15151c", "#1f1f29", "#2a2a36", "#373745", "#4b4b5c", "#9a9ab4")
+TERRACOTTA = ramp("#4a1e10", "#69301a", "#8a4324", "#a8582f", "#c0703f", "#d38a54", "#e3a670")
+SOIL = ramp("#1e130a", "#2f1e11", "#412a18", "#54371f", "#674628", "#7b5734", "#906a42")
+MOSS = ramp("#26340f", "#3a4d16", "#4e661d", "#638026", "#789932", "#8fb043", "#a8c75c")
+SEED = ramp("#5a3a10", "#7d541a", "#a17226", "#c49236", "#dcae4c", "#ecc86c", "#f7e29c")
+STEEL = ramp("#1f2329", "#353b44", "#4d5560", "#67717d", "#848e99", "#a5aeb7", "#c9d0d6")
+GEM = ramp("#0f4a48", "#16706c", "#1f938d", "#2bb5ad", "#4ad1c8", "#7de8df", "#c8fbf6")
+STRING = ramp("#5e5648", "#857b69", "#a89e8a", "#c4bba6", "#dad2be", "#ebe5d4", "#f8f5ec")
 
 
 # ---------------------------------------------------------------- canvas
 
 class Tex:
     def __init__(self):
-        self.px = [[None] * N for _ in range(N)]
+        self.color = {}
+        self.shade = {}  # pixel -> tone index, so details can be recolored by the light they receive
 
-    def set(self, x, y, c):
-        if 0 <= x < N and 0 <= y < N:
-            self.px[y][x] = c
+    def put(self, p, ramp_, idx):
+        idx = max(0, min(len(ramp_) - 1, idx))
+        self.color[p] = ramp_[idx]
+        self.shade[p] = idx
 
-    def get(self, x, y):
-        return self.px[y][x] if 0 <= x < N and 0 <= y < N else None
+    def paint(self, m, ramp_, shades):
+        for p in m:
+            self.put(p, ramp_, shades[p])
 
-    def grid(self, rows, colors, ox=0, oy=0):
-        """Paint a character grid; '.' or ' ' is skipped."""
+    def recolor(self, pixels, ramp_, offset=0):
+        """Paint pixels with another material, keeping the light they already receive."""
+        for p in pixels:
+            if p in self.shade:
+                self.put(p, ramp_, self.shade[p] + offset)
+
+    def erase(self, pixels):
+        for p in pixels:
+            self.color.pop(p, None)
+            self.shade.pop(p, None)
+
+    def grid(self, rows, palette, ox=0, oy=0):
+        """palette: char -> (ramp, index)."""
         for y, row in enumerate(rows):
             for x, ch in enumerate(row):
-                if ch not in ". " and ch in colors:
-                    self.set(ox + x, oy + y, colors[ch])
+                if ch in palette:
+                    self.put((ox + x, oy + y), *palette[ch])
 
     def image(self):
         im = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-        for y in range(N):
-            for x in range(N):
-                if self.px[y][x]:
-                    im.putpixel((x, y), self.px[y][x])
+        for (x, y), c in self.color.items():
+            if 0 <= x < N and 0 <= y < N:
+                im.putpixel((x, y), c)
         return im
 
 
-def mask_polygon(points):
-    im = Image.new("1", (N, N), 0)
-    ImageDraw.Draw(im).polygon(points, fill=1)
-    return {(x, y) for y in range(N) for x in range(N) if im.getpixel((x, y))}
+def mask(rows, ox=0, oy=0, ch="#"):
+    return {(ox + x, oy + y) for y, row in enumerate(rows) for x, c in enumerate(row) if c == ch}
 
 
-def mask_ellipse(box):
-    im = Image.new("1", (N, N), 0)
-    ImageDraw.Draw(im).ellipse(box, fill=1)
-    return {(x, y) for y in range(N) for x in range(N) if im.getpixel((x, y))}
+def volume(m, levels=7, light=(-0.6, -0.75, 0.55), roundness=1.0, cap=4, top_bias=0.12, lift=0.0):
+    """Tone index per pixel, as if the silhouette were a rounded object lit from the top-left."""
+    dist = {}
+    queue = deque()
+    for p in m:
+        if any((p[0] + dx, p[1] + dy) not in m for dx, dy in NEIGHBORS):
+            dist[p] = 1
+            queue.append(p)
+    while queue:
+        p = queue.popleft()
+        for dx, dy in NEIGHBORS:
+            q = (p[0] + dx, p[1] + dy)
+            if q in m and q not in dist:
+                dist[q] = dist[p] + 1
+                queue.append(q)
+    h = {p: min(d, cap) ** 0.75 for p, d in dist.items()}
+    lx, ly, lz = light
+    ln = math.sqrt(lx * lx + ly * ly + lz * lz)
+    lx, ly, lz = lx / ln, ly / ln, lz / ln
+    ys = [p[1] for p in m]
+    y0, y1 = min(ys), max(ys)
+    light_of = {}
+    for (x, y) in m:
+        gx = (h.get((x + 1, y), 0) - h.get((x - 1, y), 0)) / 2 * roundness
+        gy = (h.get((x, y + 1), 0) - h.get((x, y - 1), 0)) / 2 * roundness
+        nx, ny, nz = -gx, -gy, 1.0
+        nn = math.sqrt(nx * nx + ny * ny + nz * nz)
+        s = (nx * lx + ny * ly + nz * lz) / nn
+        light_of[(x, y)] = s - top_bias * ((y - y0) / max(1, y1 - y0) - 0.5) + lift
+    # hand out the tones by proportion, brightest first: a few highlights, mostly mid tones
+    order = sorted(light_of, key=lambda p: (-light_of[p], p[1], p[0]))
+    shares = [(levels - 1, 0.07), (levels - 2, 0.18), (levels - 3, 0.28), (levels - 4, 0.27), (levels - 5, 0.20)]
+    out = {}
+    i = 0
+    for idx, share in shares:
+        n = round(share * len(order))
+        for p in order[i:i + n]:
+            out[p] = idx
+        i += n
+    for p in order[i:]:
+        out[p] = levels - 5
+    for (x, y) in m:
+        if (x + 1, y) not in m or (x, y + 1) not in m:
+            out[(x, y)] = 0 if out[(x, y)] <= 3 else 1  # shadow side border
+    return out
 
 
-def shift(mask, dx, dy):
-    return {(x + dx, y + dy) for x, y in mask}
+def flat(m, levels=7, base=4, spread=2):
+    """A flat sheet lit from the top-left: lit rim on top/left, shadow rim on bottom/right."""
+    xs = [p[0] for p in m]
+    ys = [p[1] for p in m]
+    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+    out = {}
+    for (x, y) in m:
+        t = ((x - x0) / max(1, x1 - x0) + (y - y0) / max(1, y1 - y0)) / 2  # 0 top-left .. 1 bottom-right
+        idx = base + (1 if t < 0.35 else (-1 if t > 0.7 else 0))
+        if (x - 1, y) not in m or (x, y - 1) not in m:
+            idx = base + spread
+        if (x + 1, y) not in m or (x, y + 1) not in m:
+            idx = 1
+        out[(x, y)] = max(0, min(levels - 1, idx))
+    return out
 
 
-def solid(tex, top, thickness, r, light_bias=0):
-    """An object seen from above: `top` face plus `thickness` pixels of side below it.
-
-    Outline in r[0], side in r[1], top shaded from r[4] (top-left rim) to r[2] (bottom-right).
-    """
-    side = set()
-    for t in range(1, thickness + 1):
-        side |= shift(top, 0, t)
-    side -= top
-    shape = top | side
-    def inside(p, m):
-        return p in m
-    for (x, y) in shape:
-        edge = any((x + dx, y + dy) not in shape for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
-        if edge:
-            tex.set(x, y, r[0])
-        elif (x, y) in side:
-            tex.set(x, y, r[1])
-        else:
-            up_left = (x - 1, y) not in top or (x, y - 1) not in top
-            down_right = (x + 1, y) not in top or (x, y + 1) not in top
-            if up_left:
-                tex.set(x, y, r[4])
-            elif down_right:
-                tex.set(x, y, r[2])
-            else:
-                # soft diagonal gradient across the face
-                xs = [p[0] for p in top]
-                ys = [p[1] for p in top]
-                t = ((x - min(xs)) / max(1, max(xs) - min(xs)) + (y - min(ys)) / max(1, max(ys) - min(ys))) / 2
-                tex.set(x, y, r[3] if t + light_bias < 0.55 else r[2])
-    return shape
+def solid(t, m, ramp_, **kw):
+    t.paint(m, ramp_, volume(m, len(ramp_), **kw))
 
 
-def speckle(tex, region, colors, density, seed):
-    rnd = random.Random(seed)
-    for p in sorted(region):
-        if rnd.random() < density:
-            tex.set(*p, rnd.choice(colors))
-
-
-def outline_mask(mask):
-    return {(x, y) for (x, y) in mask
-            if any((x + dx, y + dy) not in mask for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))}
-
-
-# ---------------------------------------------------------------- shapes reused by several items
-
-def pile(tex, r, seed, grains=None, density=0.0):
-    """A heap of powder/grains, like Create's flours."""
-    top = mask_ellipse((2, 5, 13, 13)) | mask_ellipse((4, 3, 11, 9))
-    top = {p for p in top if p[1] <= 12}
-    shape = solid(tex, top, 1, r)
-    if grains:
-        inner = shape - outline_mask(shape)
-        speckle(tex, inner, grains, density, seed)
-    return shape
-
-
-PELT = [
-    "................",
-    "................",
-    "....##.....##...",
-    "....###...###...",
-    ".....#######....",
-    "....#########...",
-    "....#########...",
-    "...##########...",
-    "...##########...",
-    "...#########....",
-    "....#######.....",
-    "...###...###....",
-    "...##.....##....",
-    "................",
-]
-
-
-def pelt_top():
-    """A hide lying flat, seen from above: rounded body, four short leg flaps, slightly skewed."""
-    return {(x + (2 - y // 4), y) for y, row in enumerate(PELT) for x, ch in enumerate(row) if ch == "#"}
+def slab(t, top, ramp_, thickness=1, base=4, spread=2):
+    """A flat object with a visible edge below its top face."""
+    side = {(x, y + d) for (x, y) in top for d in range(1, thickness + 1)} - top
+    t.paint(top, ramp_, flat(top, base=base, spread=spread))
+    t.paint(side, ramp_, {p: (1 if (p[0], p[1] + 1) in side else 0) for p in side})
 
 
 # ---------------------------------------------------------------- the items
@@ -180,315 +197,562 @@ def texture(fn):
     return fn
 
 
+HEAP = [
+    "................",
+    "................",
+    "................",
+    "................",
+    "......####......",
+    "....########....",
+    "...##########...",
+    "..############..",
+    "..############..",
+    ".##############.",
+    ".##############.",
+    ".##############.",
+    "..############..",
+    "...##########...",
+    "................",
+    "................",
+]
+
+
 @texture
 def fodder():
+    """Chopped seeds and husks: a loose golden heap with bits of straw."""
     t = Tex()
-    r = ramp("#4a3b12", "#8a7426", "#b9a03c", "#d8c35e", "#eadf8c")
-    pile(t, r, 1, grains=[hexrgb("#7d8f2e") + (255,), hexrgb("#a5b54a") + (255,), hexrgb("#f2e7a8") + (255,)], density=0.35)
+    heap = mask(HEAP) | {(7, 3), (8, 2), (12, 5), (13, 4), (3, 6), (2, 5)}  # stalks poking out
+    solid(t, heap, STRAW, lift=0.05)
+    # short chopped stalks lying on the heap: a lit pixel with its shadow below
+    for x, y in ((5, 6), (6, 5), (9, 7), (10, 6), (4, 9), (5, 8), (11, 10), (12, 9), (7, 10), (8, 9), (9, 12), (10, 11)):
+        t.put((x, y), STRAW, 6)
+        if (x, y + 1) in t.shade and t.shade[(x, y + 1)] > 1:
+            t.put((x, y + 1), STRAW, 2)
+    t.recolor({(7, 7), (3, 10), (12, 7), (6, 12)}, HUSK)
+    t.put((7, 3), STRAW, 5)
+    t.put((8, 2), STRAW, 6)
+    t.put((13, 4), STRAW, 5)
+    t.put((2, 5), STRAW, 5)
     return t
 
 
 @texture
 def animal_feed():
+    """A heap of pressed feed pellets, each one a small lit cylinder."""
     t = Tex()
-    r = ramp("#3d220f", "#6e3f1c", "#9a5f2c", "#bf8445", "#d9a868")
-    shape = pile(t, r, 2)
-    inner = shape - outline_mask(shape)
-    # pellets: little 2x2 cylinders with a lit corner and a dark seam
-    rnd = random.Random(7)
-    for y in range(3, 13, 2):
-        for x in range(2 + (y // 2) % 2, 14, 2):
-            if {(x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)} <= inner:
-                tone = rnd.choice((3, 3, 2, 4))
-                t.set(x, y, r[min(4, tone + 1)])
-                t.set(x + 1, y, r[tone])
-                t.set(x, y + 1, r[tone])
-                t.set(x + 1, y + 1, r[1])
+    heap = mask(HEAP)
+    t.paint(heap, FEED, {p: max(0, i - 2) for p, i in volume(heap, len(FEED)).items()})  # gaps between pellets
+    pellets = [  # back to front, packed so they overlap
+        (6, 3), (8, 4), (4, 5), (10, 5), (6, 6), (2, 8), (8, 7), (11, 8), (4, 9), (7, 9), (12, 10),
+        (2, 11), (9, 11), (5, 11), (11, 12), (7, 12),
+    ]
+    # a short cylinder lying diagonally: lit end at the top-left, shadow at the bottom-right
+    pellet = [[6, 5, None], [5, 4, 2], [None, 2, 0]]
+    for i, (px, py) in enumerate(pellets):
+        tone = -1 if i < 6 else 0  # pellets at the back are a bit darker
+        for dy, row in enumerate(pellet):
+            for dx, idx in enumerate(row):
+                if idx is not None:
+                    t.put((px + dx, py + dy), FEED, idx + tone)
     return t
 
 
 @texture
 def fish_feed():
+    """Fish food flakes: a low pile of thin, colorful flakes."""
     t = Tex()
-    r = ramp("#4a1f14", "#8c3a22", "#c45a33", "#e68350", "#f6b37c")
-    shape = pile(t, r, 3)
-    inner = shape - outline_mask(shape)
-    flakes = [hexrgb(c) + (255,) for c in ("#6d9b3a", "#9ec45a", "#f2d36b", "#e8e0c4", "#b8432c")]
-    speckle(t, inner, flakes, 0.45, 11)
+    pile = mask(HEAP)
+    solid(t, pile, FISH)
+    greens = {(5, 6), (6, 6), (10, 8), (11, 8), (3, 10), (4, 10), (8, 11), (9, 11), (12, 11), (7, 5)}
+    yellows = {(8, 7), (9, 7), (12, 9), (13, 9), (5, 9), (6, 9), (2, 11), (10, 12)}
+    t.recolor(greens, FLAKE_GREEN, 1)
+    t.recolor(yellows, FLAKE_YELLOW, 1)
+    for p in ((7, 4), (4, 7), (9, 6), (11, 7), (6, 10)):  # flakes on top catch the light
+        t.put(p, FISH, 6)
     return t
 
 
 @texture
 def fossil_fragment():
+    """A lump of sediment rock with a fossilised bone set into it."""
     t = Tex()
-    r = ramp("#3d3a35", "#635f57", "#878278", "#a39e93", "#bab5aa")
-    top = mask_polygon([(2, 6), (6, 3), (12, 3), (14, 7), (12, 11), (5, 12), (2, 10)])
-    solid(t, top, 2, r)
-    bone = {"o": hexrgb("#6b5536") + (255,), "s": hexrgb("#d9c9a3") + (255,), "h": hexrgb("#f6eedb") + (255,)}
-    t.grid([
-        ".hh.....",
-        "hssho...",
-        ".shhho..",
-        "..ohhso.",
-        "...ohssh",
-        "....ossh",
-        ".....hh.",
-    ], bone, 3, 3)
-    speckle(t, {(3, 10), (11, 9), (9, 11), (12, 5), (6, 10)}, [r[1]], 1.0, 0)
+    rock = mask([
+        "................",
+        "................",
+        "................",
+        ".....####.......",
+        "...#########....",
+        "..############..",
+        "..#############.",
+        ".##############.",
+        ".##############.",
+        ".#############..",
+        "..############..",
+        "..###########...",
+        "...########.....",
+        "................",
+        "................",
+        "................",
+    ])
+    solid(t, rock, STONE)
+    for p in ((6, 6), (7, 7), (11, 9), (12, 10), (4, 10), (5, 11)):  # cracks between the lumps
+        t.put(p, STONE, 1)
+    bone = mask([
+        "##......",
+        "###.....",
+        ".###....",
+        "..###...",
+        "...###..",
+        "....###.",
+        ".....##.",
+    ], 3, 4)
+    t.recolor(bone, BONE, 1)  # raised a bit above the rock
+    for p in ((3, 4), (4, 5), (5, 6), (6, 7), (7, 8), (8, 9)):
+        t.put(p, BONE, 6)
+    for p in ((5, 7), (6, 8), (7, 9), (8, 10), (9, 10)):
+        t.put(p, BONE, 2)
     return t
+
+
+SHEET = [
+    "................",
+    "................",
+    "................",
+    "..##.......##...",
+    "..####...####...",
+    "...##########...",
+    "...###########..",
+    "..############..",
+    "..############..",
+    "..###########...",
+    "...##########...",
+    "...####...####..",
+    "...##.......##..",
+    "................",
+    "................",
+    "................",
+]
+
+
+def hide_sheet(t, ramp_):
+    """A hide pressed flat: the four leg flaps pulled out to the corners."""
+    m = mask(SHEET)
+    slab(t, m, ramp_)
+    return m
 
 
 @texture
 def stretched_hide():
     t = Tex()
-    r = ramp("#4a2410", "#7d3f1c", "#a85a2c", "#c77b45", "#de9c66")
-    solid(t, pelt_top(), 1, r)
+    hide_sheet(t, LEATHER)
+    for p in ((5, 6), (6, 7), (10, 6), (9, 7), (5, 10), (6, 9), (10, 10), (9, 9)):  # stretch marks
+        t.put(p, LEATHER, 5)
+    for p in ((7, 8), (8, 8)):
+        t.put(p, LEATHER, 3)
     return t
 
 
 @texture
 def hollow_hide():
+    """The stretched hide after haunting: pale, thin, torn through in places."""
     t = Tex()
-    r = ramp("#2c3a3d", "#4f6669", "#7a9396", "#a1b8b8", "#c8dcda")
-    shape = solid(t, pelt_top(), 1, r)
-    # torn through: holes show what is behind, with a dark torn rim
-    for hole in ({(6, 6), (7, 6), (7, 7)}, {(10, 8), (10, 9)}, {(8, 4)}):
-        for (x, y) in hole:
-            t.set(x, y, None)
-            for dx, dy in ((1, 0), (0, 1)):
-                if (x + dx, y + dy) in shape and (x + dx, y + dy) not in hole:
-                    t.set(x + dx, y + dy, r[0])
+    hide_sheet(t, HOLLOW)
+    holes = [{(6, 7), (7, 7)}, {(10, 9), (10, 10)}]
+    for hole in holes:
+        t.erase(hole)
+    every_hole = set().union(*holes)
+    for (x, y) in every_hole:  # the torn rim catches the light on the far side
+        for q, idx in (((x + 1, y), 6), ((x, y + 1), 6), ((x - 1, y), 1), ((x, y - 1), 1)):
+            if q in t.shade and q not in every_hole:
+                t.put(q, HOLLOW, idx)
+    for p in ((4, 8), (5, 9), (9, 5), (11, 7), (12, 8)):  # veins, like a phantom's wing
+        t.put(p, HOLLOW, 3)
     return t
+
+
+PELT = [
+    "................",
+    "................",
+    "...##......##...",
+    "...###....###...",
+    "....########....",
+    "...##########...",
+    "..############..",
+    "..############..",
+    "..############..",
+    "..############..",
+    "...##########...",
+    "...####..####...",
+    "...###....###...",
+    "................",
+    "................",
+    "................",
+]
 
 
 @texture
 def soaked_hide():
+    """Leather soaked in tannin: dark, heavy, dripping."""
     t = Tex()
-    r = ramp("#2a1408", "#4f2812", "#6b3a1c", "#86502a", "#9c6a40")
-    shape = solid(t, pelt_top(), 1, r)
-    water = [hexrgb("#6fa8d6") + (255,), hexrgb("#a9d4f0") + (255,)]
-    for x, y in ((5, 7), (9, 5), (11, 8), (7, 10)):
-        t.set(x, y, water[1])
-        t.set(x, y + 1, water[0])
+    solid(t, mask(PELT), WET, roundness=0.6)
+    for p in ((5, 6), (6, 5), (9, 7), (4, 9), (10, 10)):  # wet sheen
+        t.put(p, WATER, 5)
+    for p in ((6, 6), (10, 7), (5, 9)):
+        t.put(p, WATER, 3)
+    for p in ((4, 13), (11, 13), (8, 11)):  # drops falling
+        t.put(p, WATER, 4)
+    t.put((4, 14), WATER, 2)
     return t
 
 
 @texture
 def tanned_leather():
+    """A finished hide rolled up and tied with string."""
     t = Tex()
-    r = ramp("#3b1608", "#6e2c12", "#9a4520", "#bb6233", "#d6884f")
-    # a rolled hide: a cylinder lying diagonally, the spiral end facing the viewer
-    body = mask_polygon([(2, 9), (10, 3), (14, 7), (6, 13)])
-    solid(t, body, 1, r)
-    end = mask_ellipse((2, 8, 7, 13))
-    for (x, y) in end:
-        t.set(x, y, r[2])
-    for (x, y) in outline_mask(end):
-        t.set(x, y, r[0])
-    t.grid([".44.", "4..3", "4.3.", ".3.."], {"4": r[4], "3": r[3]}, 3, 9)
-    # stitched edge along the roll
-    for x, y in ((8, 6), (10, 5), (12, 6)):
-        t.set(x, y, hexrgb("#e9d9b4") + (255,))
+    roll = mask([
+        "................",
+        ".........####...",
+        "........######..",
+        ".......########.",
+        "......#########.",
+        ".....#########..",
+        "....#########...",
+        "...#########....",
+        "..#########.....",
+        ".#########......",
+        ".########.......",
+        ".#######........",
+        ".######.........",
+        "..####..........",
+        "................",
+        "................",
+    ])
+    solid(t, roll, TANNED, roundness=1.3)
+    t.grid([  # the spiral at the open end
+        ".23.",
+        "2541",
+        "3412",
+        ".21.",
+    ], {"1": (TANNED, 1), "2": (TANNED, 2), "3": (TANNED, 3), "4": (TANNED, 4), "5": (TANNED, 6)}, 1, 10)
+    for p, idx in (((6, 5), 6), ((7, 6), 5), ((8, 7), 4), ((9, 8), 3), ((10, 9), 1)):
+        if p in t.shade:  # string tied around the roll
+            t.put(p, STRING, idx)
     return t
 
 
 @texture
 def saddle_frame():
+    """The saddle before stitching: a leather seat on its tree, chains and iron stirrups hanging."""
     t = Tex()
-    leather = ramp("#3b1608", "#6e2c12", "#9a4520", "#bb6233", "#d6884f")
-    iron = ramp("#3a3d42", "#6b7078", "#a2a8b0", "#c9cdd2", "#eef0f2")
-    t.grid([
+    seat = mask([
         "................",
         "................",
-        "..........0000..",
-        "...00....04430..",
-        "..0430..0433310.",
-        "..03330033333210",
-        "..0233333333210.",
-        "...022333332110.",
-        "....0011222110..",
-        "......000000....",
-    ], {"0": leather[0], "1": leather[1], "2": leather[2], "3": leather[3], "4": leather[4]})
-    # chains hanging from the seat, iron sheet stirrups at the ends
+        "..........###...",
+        ".........#####..",
+        "..##.....#####..",
+        "..###...######..",
+        "..############..",
+        "...###########..",
+        "...##########...",
+        "....########....",
+    ])
+    solid(t, seat, TANNED, roundness=1.1)
+    for x in range(4, 12):  # the iron tree under the seat
+        t.put((x, 9), IRON, 2 if x < 8 else 1)
     t.grid([
-        "a......a",
-        "b......b",
-        "a......b",
-        "b......a",
-        "aaa..aaa",
-        "cdd..ddc",
-    ], {"a": iron[1], "b": iron[3], "c": iron[0], "d": iron[2]}, 4, 9)
+        "ab....ab",
+        "ba....ba",
+        "ab....ab",
+        "cdc..cdc",
+        "beb..beb",
+    ], {"a": (IRON, 5), "b": (IRON, 2), "c": (IRON, 4), "d": (IRON, 6), "e": (IRON, 1)}, 4, 10)
     return t
 
 
 @texture
 def horn_blank():
+    """An uncarved horn: bone and calcite pressed into a rough curved blank."""
     t = Tex()
-    r = ramp("#5c5547", "#958c78", "#c2b9a3", "#ddd5c1", "#f1ecdf")
-    top = set()
-    centers = []
-    for i in range(41):
-        k = i / 40
-        # quadratic curve from the wide base (bottom-left) to the tip (top-right)
-        x = (1 - k) ** 2 * 3.5 + 2 * (1 - k) * k * 12 + k * k * 12.5
-        y = (1 - k) ** 2 * 11.5 + 2 * (1 - k) * k * 12 + k * k * 2.5
-        rad = 2.6 * (1 - k) + 0.5
-        centers.append((x, y))
-        top |= mask_ellipse((x - rad, y - rad, x + rad, y + rad))
-    shape = solid(t, top, 1, r)
-    # rough growth rings: it is still an uncarved blank
-    for k in (0.18, 0.36, 0.55):
-        cx, cy = centers[int(k * 40)]
-        for d in (-2, -1, 0, 1, 2):
-            p = (round(cx + d * 0.6), round(cy - d * 0.8))
-            if p in top and p not in outline_mask(shape):
-                t.set(*p, r[1])
+    horn = mask([
+        "................",
+        "...........##...",
+        "...........###..",
+        "............###.",
+        "............###.",
+        "...........####.",
+        "..........#####.",
+        ".........#####..",
+        "........######..",
+        ".......######...",
+        ".....########...",
+        "...#########....",
+        "..#########.....",
+        "..########......",
+        "...#####........",
+        "................",
+    ])
+    solid(t, horn, BONE, roundness=1.3)
+    # growth ridges across the horn, following its curve
+    for ridge in (((12, 4), (13, 4), (14, 4)), ((10, 7), (11, 7), (12, 7), (13, 6)),
+                  ((7, 10), (8, 10), (9, 9), (10, 9)), ((4, 12), (5, 12), (6, 11), (7, 11))):
+        for p in ridge:
+            if p in t.shade and t.shade[p] > 1:
+                t.put(p, BONE, t.shade[p] - 2)
+    t.grid([".ab", "abc", "bc."], {"a": (BONE, 3), "b": (BONE, 1), "c": (BONE, 0)}, 2, 12)  # the hollow core
     return t
 
 
 @texture
 def nacre():
+    """Mother of pearl: a smooth pearly plate with soft rainbow sheens."""
     t = Tex()
-    r = ramp("#4f4a5c", "#8b8399", "#c4bccf", "#e2dcea", "#fbf8ff")
-    top = mask_polygon([(3, 4), (9, 2), (14, 6), (12, 12), (5, 13), (2, 9)])
-    shape = solid(t, top, 1, r)
-    sheen = [hexrgb(c) + (255,) for c in ("#f4c6dc", "#bfe6ef", "#d9f2d0", "#fbf8ff")]
-    inner = top - outline_mask(shape)
-    for (x, y) in sorted(inner):
-        d = x + y
-        if d in (9, 10):
-            t.set(x, y, sheen[0])
-        elif d in (14, 15):
-            t.set(x, y, sheen[1])
-        elif d == 18:
-            t.set(x, y, sheen[2])
+    plate = mask([
+        "................",
+        "................",
+        "................",
+        ".....#####......",
+        "...########.....",
+        "..##########....",
+        "..###########...",
+        ".#############..",
+        ".##############.",
+        ".##############.",
+        "..#############.",
+        "...###########..",
+        ".....#######....",
+        "................",
+        "................",
+        "................",
+    ])
+    solid(t, plate, NACRE, roundness=0.6, lift=0.1)
+    # growth lines: arcs around the hinge at the bottom-left, with the rainbow sheen between them
+    for (x, y) in sorted(plate):
+        if t.shade[(x, y)] == 0:
+            continue
+        r = math.hypot(x - 2, y - 13)
+        if 6.5 <= r < 7.5 or 10.5 <= r < 11.5:
+            t.put((x, y), NACRE, t.shade[(x, y)] - 2)
+        elif 7.5 <= r < 9:
+            t.recolor({(x, y)}, PINK)
+        elif 11.5 <= r < 13:
+            t.recolor({(x, y)}, CYAN)
+    for p in ((5, 5), (6, 4), (4, 6), (3, 7)):
+        t.put(p, NACRE, 6)
     return t
 
 
 @texture
 def rough_bell():
+    """A freshly cast bell, still matte and with bits of its clay mould stuck to it."""
     t = Tex()
-    gold = ramp("#5e3b0c", "#a8701a", "#d6a02e", "#f0c84a", "#fbe58a")
-    clay = ramp("#3f4652", "#6b7484", "#959eae", "#b4bcc9", "#cdd3dd")
-    t.grid([
+    bell = mask([
         "................",
+        ".......##.......",
+        "......#..#......",
+        "......####......",
+        ".....######.....",
+        "....########....",
+        "....########....",
+        "....########....",
+        "....########....",
+        "....########....",
+        "...##########...",
+        "..############..",
+        ".##############.",
+        ".##############.",
+        "..############..",
         "................",
-        "......0000......",
-        ".....043320.....",
-        ".....0433210....",
-        "....04332210....",
-        "....04332210....",
-        "....04332210....",
-        "...0433322110...",
-        "...0433322110...",
-        "..043333221110..",
-        "..001111111100..",
-        "...0000000000...",
-        "................",
-    ], {"0": gold[0], "1": gold[1], "2": gold[2], "3": gold[3], "4": gold[4]}, 0, 1)
-    # bits of the clay mould still stuck to the casting, and no polish
-    for x, y, c in ((6, 5, 2), (7, 5, 3), (9, 8, 1), (10, 9, 2), (5, 10, 3), (6, 11, 2), (11, 11, 1)):
-        t.set(x, y, clay[c])
+    ])
+    solid(t, bell, GOLD, roundness=1.4, light=(-0.9, -0.3, 0.5), lift=-0.05)
+    for x in range(2, 14):  # the lip of the bell
+        t.put((x, 12), GOLD, 5 if x < 8 else 4)
+        t.put((x, 13), GOLD, 2 if x < 9 else 1)
+    t.recolor({(6, 6), (7, 6), (6, 7), (10, 9), (9, 10), (10, 10), (4, 11), (5, 11), (11, 12)}, CLAY)
+    for p in ((7, 8), (8, 9), (6, 10)):  # casting seams
+        t.put(p, GOLD, 2)
     return t
 
 
-def disc(t, r):
-    top = mask_ellipse((1, 3, 14, 12))
-    shape = solid(t, top, 1, r)
-    hole = {(7, 7), (8, 7)}
-    for p in hole:
-        t.set(*p, r[0])
-    return top, shape
+DISC_SHAPE = [
+    "................",
+    "................",
+    "................",
+    ".....######.....",
+    "...##########...",
+    "..############..",
+    ".##############.",
+    ".##############.",
+    ".##############.",
+    "..############..",
+    "...##########...",
+    ".....######.....",
+    "................",
+    "................",
+    "................",
+    "................",
+]
+
+
+def disc_base(t, ramp_):
+    slab(t, mask(DISC_SHAPE), ramp_, base=3, spread=1)
+    for p in ((7, 7), (8, 7)):  # spindle hole
+        t.put(p, ramp_, 0)
 
 
 @texture
 def blank_disc():
+    """Pressed but not yet smooth: matte, with a rough surface."""
     t = Tex()
-    r = ramp("#141416", "#262629", "#38383c", "#47474c", "#56565c")
-    top, shape = disc(t, r)
-    inner = top - outline_mask(shape)
-    speckle(t, inner - {(7, 7), (8, 7)}, [r[1], r[3]], 0.25, 5)
+    disc_base(t, DISC)
+    for p in ((4, 6), (10, 5), (12, 8), (5, 9), (9, 10), (3, 8)):
+        t.put(p, DISC, 5)
+    for p in ((6, 5), (11, 7), (7, 9)):
+        t.put(p, DISC, 1)
     return t
 
 
 @texture
 def polished_blank_disc():
+    """Sanded smooth: fine grooves ready for engraving and a glossy shine."""
     t = Tex()
-    r = ramp("#0e0e12", "#1d1d24", "#2c2c36", "#3e3e4a", "#6a6a7c")
-    top, shape = disc(t, r)
-    # grooves ready to be engraved, and a glossy reflection
-    ring = mask_ellipse((3, 5, 12, 10)) - mask_ellipse((4, 6, 11, 9))
-    for p in ring:
-        if p in top:
-            t.set(*p, r[1])
-    for x, y in ((4, 5), (5, 4), (6, 4), (10, 9), (11, 8)):
-        t.set(x, y, hexrgb("#a9a9c0") + (255,))
-    t.set(5, 5, hexrgb("#dcdcef") + (255,))
+    disc_base(t, GLOSS)
+    groove = mask([
+        "....######....",
+        "..##......##..",
+        ".#..........#.",
+        "..##......##..",
+        "....######....",
+    ], 1, 5)
+    for p in groove:
+        t.put(p, GLOSS, 1)
+    for p, idx in (((4, 5), 6), ((5, 4), 6), ((6, 4), 5), ((3, 6), 5), ((11, 10), 5), ((12, 9), 4)):
+        t.put(p, GLOSS, idx)
     return t
 
 
 @texture
 def clay_tablet():
+    """A slab of clay flattened by the press."""
     t = Tex()
-    r = ramp("#3f4652", "#6b7484", "#959eae", "#b4bcc9", "#cdd3dd")
-    solid(t, mask_polygon([(1, 8), (8, 3), (15, 7), (8, 12)]), 2, r)
+    top = mask([
+        "................",
+        "................",
+        "................",
+        "................",
+        ".......###......",
+        ".....#######....",
+        "...###########..",
+        ".##############.",
+        "..############..",
+        "....########....",
+        "......####......",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+    ])
+    slab(t, top, CLAY, thickness=2)
+    for p in ((6, 7), (7, 7), (10, 8)):  # finger marks
+        t.put(p, CLAY, 3)
     return t
 
 
 @texture
 def blank_sherd():
+    """A fired, still undecorated piece of pottery."""
     t = Tex()
-    r = ramp("#4a1e10", "#8a3c20", "#b45a33", "#cf7a4c", "#e29c6e")
-    top = mask_polygon([(2, 7), (7, 3), (13, 4), (14, 9), (9, 13), (4, 12)])
-    shape = solid(t, top, 2, r)
-    # a slightly curved surface, like a piece of a pot
-    for x in range(4, 13):
-        y = 6 + abs(x - 8) // 3
-        if (x, y) in top and (x, y) not in outline_mask(shape):
-            t.set(x, y, r[4])
+    m = mask([
+        "................",
+        "................",
+        "...#########....",
+        "...##########...",
+        "...###########..",
+        "..############..",
+        "..#############.",
+        "..#############.",
+        "...############.",
+        "...###########..",
+        "....#########...",
+        "....######......",
+        ".....###........",
+        "................",
+        "................",
+        "................",
+    ])
+    t.paint(m, TERRACOTTA, flat(m, base=4, spread=2))
+    for x in range(3, 13):  # the thick rim of the pot along the top, and the groove under it
+        if (x, 2) in m:
+            t.put((x, 2), TERRACOTTA, 6 if x < 9 else 5)
+        if (x, 3) in m:
+            t.put((x, 3), TERRACOTTA, 2)
+    for p in ((4, 6), (5, 7), (6, 8), (5, 5), (7, 9)):  # the curve of the wall catches the light
+        t.put(p, TERRACOTTA, 5)
+    for p in ((12, 8), (13, 7), (11, 10), (9, 11), (7, 12)):  # fresh broken edge
+        t.put(p, TERRACOTTA, 1)
     return t
 
 
 @texture
 def ancient_soil():
+    """Old, dark soil with moss on top and a forgotten seed in it."""
     t = Tex()
-    r = ramp("#241509", "#45291a", "#5f3c26", "#7a5236", "#94694a")
-    top = mask_polygon([(2, 7), (6, 3), (11, 3), (14, 7), (12, 12), (4, 12)])
-    shape = solid(t, top, 1, r)
-    inner = top - outline_mask(shape)
-    moss = [hexrgb(c) + (255,) for c in ("#4f6b22", "#6e8d2e", "#8fae45")]
-    speckle(t, inner, moss, 0.3, 21)
-    # an old seed half buried
-    t.grid(["ab", "bc"], {"a": hexrgb("#f0d78c") + (255,), "b": hexrgb("#c9a453") + (255,),
-                          "c": hexrgb("#7a5b25") + (255,)}, 8, 7)
+    m = mask([
+        "................",
+        "................",
+        "................",
+        "................",
+        ".....#####......",
+        "...#########....",
+        "..###########...",
+        ".#############..",
+        ".##############.",
+        ".##############.",
+        "..#############.",
+        "..############..",
+        "...#########....",
+        "................",
+        "................",
+        "................",
+    ])
+    solid(t, m, SOIL)
+    t.recolor({(5, 4), (6, 4), (4, 5), (5, 5), (3, 6), (9, 5), (10, 5), (11, 6), (2, 8)}, MOSS)  # moss on top
+    t.recolor({(7, 9), (12, 10), (5, 11)}, STONE, 1)  # pebbles
+    t.grid(["ab", "bc"], {"a": (SEED, 6), "b": (SEED, 4), "c": (SEED, 2)}, 9, 9)
     return t
 
 
 @texture
 def blank_template():
+    """A smithing template plate ready to be stamped, with the diamond that makes a copy."""
     t = Tex()
-    r = ramp("#2b2f36", "#4c535d", "#727b86", "#959ea8", "#bcc4cc")
     t.grid([
         "................",
-        "..000000000000..",
-        "..044444444430..",
-        "..043333333320..",
-        "..043222222120..",
-        "..043222222120..",
-        "..043222222120..",
-        "..043222222120..",
-        "..043222222120..",
-        "..043222222120..",
-        "..043222222120..",
-        "..043222222120..",
-        "..043111111120..",
-        "..032222222210..",
-        "..000000000000..",
+        ".00000000000000.",
+        ".06666666666650.",
+        ".06555555555430.",
+        ".06522222222430.",
+        ".06523333333430.",
+        ".06523333333430.",
+        ".06523333333430.",
+        ".06523333333430.",
+        ".06523333333430.",
+        ".06523333333430.",
+        ".06524444444430.",
+        ".06444444444430.",
+        ".03333333333330.",
+        ".00000000000000.",
         "................",
-    ], {"0": r[0], "1": r[1], "2": r[2], "3": r[3], "4": r[4]})
-    # the diamond set in the middle (copying a template costs diamonds)
-    t.grid([".a.", "abc", ".c."], {"a": hexrgb("#a5f3eb") + (255,), "b": hexrgb("#4ad9d0") + (255,),
-                                    "c": hexrgb("#1f8f8a") + (255,)}, 6, 6)
+    ], {str(i): (STEEL, i) for i in range(7)})
+    for p in ((5, 5), (10, 5), (5, 10), (10, 10)):  # guide marks for the die
+        t.put(p, STEEL, 4)
+    t.grid([
+        "..a..",
+        ".abb.",
+        "abbcc",
+        ".ccd.",
+        "..d..",
+    ], {"a": (GEM, 6), "b": (GEM, 4), "c": (GEM, 2), "d": (GEM, 1)}, 5, 5)
     return t
 
 
@@ -499,7 +763,8 @@ def preview(images, path, scale=10, cols=6):
     cell = N * scale + 12
     sheet = Image.new("RGBA", (cols * cell, rows * cell), (60, 60, 60, 255))
     for i, (_, im) in enumerate(images):
-        sheet.alpha_composite(im.resize((N * scale, N * scale), Image.NEAREST), ((i % cols) * cell + 6, (i // cols) * cell + 6))
+        sheet.alpha_composite(im.resize((N * scale, N * scale), Image.NEAREST),
+                              ((i % cols) * cell + 6, (i // cols) * cell + 6))
     sheet.save(path)
 
 
