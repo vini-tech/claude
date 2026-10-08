@@ -1,6 +1,6 @@
 # Catálogo 11: Moldes de ferraria
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 17 moldes: 16 de acabamento (decorativos) + o de upgrade de netherita (essencial).
 Nomes de itens novos em inglês.
