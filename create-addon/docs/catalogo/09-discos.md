@@ -1,6 +1,6 @@
 # Catálogo 09: Discos de música
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 Raros mas de pouca utilidade: **T2**. Decisão já tomada: os discos comuns saem **aleatórios**;
 os de origem única têm receita própria (`DESIGN.md`).
