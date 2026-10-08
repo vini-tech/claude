@@ -8,13 +8,19 @@ Já resolvidos em outros catálogos: Heart of the Sea e Trident (04).
 ## A assinatura do oceano
 
 - **Água**: lavagem no ventilador e bica com água.
-- **Calcário**: conchas e corais são carbonato de cálcio, como a calcita.
+- **Cálcio e sedimento**: corais (farinha de osso) e conchas (argila do fundo do mar).
 - **Prismarinho**: os monumentos e os guardiões.
 - **Vida marinha**: algas, ervas marinhas, tartarugas.
 
-## Fora do escopo (mesma lógica das carnes)
+## Peixes: ração em vez de receita
 
-Peixes crus (Cod, Salmon, Pufferfish, Tropical Fish): a pesca já é fácil e automatizável.
+Peixes crus (Cod, Salmon, Pufferfish, Tropical Fish) **não têm receita**: a pesca já é fácil.
+Em vez disso, como nos animais terrestres (catálogo 06):
+
+- **Fish Feed** (item novo): **Misturador:** 2 Kelp + 1 Fodder → 2 Fish Feed
+- Peixes engordam até 3 níveis, **+1 peixe por nível** ao morrer.
+- Alimentar à mão, com implantador, ou com o **Feeding Trough submerso**: os peixes num raio
+  de ~8 blocos nadam até ele e comem.
 
 ## Corais (família, ponteira Coral Graft)
 
@@ -23,9 +29,9 @@ São 5 tipos (Tube, Brain, Bubble, Fire, Horn), cada um com coral, leque e bloco
 **Coral Graft (ponteira de implantador, item novo):** uma pequena faca de enxerto. Feita no crafting
 com Iron Nugget + Brass Sheet. O implantador segura e não consome (só desgasta).
 
-1. **Coral Block vivo** · T1: **Misturador:** 4 Calcite + 1 corante da cor + 1 Sea Pickle + 1000 mB água → 2 Coral Block
+1. **Coral Block vivo** · T1: **Misturador:** 4 Bone Meal + 1 corante da cor + 1 Sea Pickle + 1000 mB água → 2 Coral Block
    - Cores: Tube = azul, Brain = rosa, Bubble = roxo, Fire = vermelho, Horn = amarelo.
-   - História: calcário + vida do recife (pepino-do-mar) + a cor de cada espécie, crescendo na água.
+   - História: o esqueleto de cálcio (farinha de osso) + vida do recife (pepino-do-mar) + a cor de cada espécie, crescendo na água.
 2. **Coral e Coral Fan vivos** · T1: **Implantador** com Coral Graft sobre Coral Block →
    Coral Block + 1 Coral + 50% Coral Fan
    - História: enxertar pólipos sem destruir o recife. O bloco volta inteiro.
@@ -56,7 +62,7 @@ Uma regra cobre os 30 itens.
 
 ### Nautilus Shell (Concha de Náutilo) · T3
 *Pesca, afogados. Útil (conduíte).*
-1. **Misturador:** 1 Calcite + 1 Prismarine Crystals + 250 mB água → **Nacre** (item novo, madrepérola)
+1. **Misturador:** 1 Prismarine Crystals + 2 Clay Ball + 250 mB água → **Nacre** (item novo, madrepérola)
 2. **Compactador:** 3 Nacre → 1 Nautilus Shell
 - História: a madrepérola é o material real das conchas. Camada por camada, vira a espiral.
 
@@ -89,3 +95,4 @@ Uma regra cobre os 30 itens.
 |---|---|
 | Coral Graft | ponteira de implantador (corais) |
 | Nacre | intermediário da Nautilus Shell |
+| Fish Feed | ração dos peixes (engorda) |

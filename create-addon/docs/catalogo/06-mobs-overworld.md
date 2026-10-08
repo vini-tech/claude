@@ -19,14 +19,11 @@ As carnes **não têm receita** (fazendas de carne já são fáceis). Em vez dis
 - **Moedor:** Wheat → 2 Fodder
 - **Moedor:** Wheat Seeds / Beetroot Seeds / Melon Seeds / Pumpkin Seeds → 1 Fodder
 
-**Rações (misturador), cada animal só come a sua**
+**Ração única para todos os animais terrestres (misturador)**
 
-| Ração (item novo) | Receita | Animais |
-|---|---|---|
-| Pasture Feed | 2 Fodder + 250 mB Milk | vaca, ovelha (e mooshroom) |
-| Swill | 2 Fodder + 1 Carrot + 1 Potato | porco |
-| Chicken Feed | 2 Fodder + 1 Feather | galinha |
-| Rabbit Feed | 1 Fodder + 1 Carrot + 1 Dandelion | coelho |
+- **Animal Feed** (item novo): 2 Fodder + 1 Carrot + 1 Bone Meal + 250 mB água → 2 Animal Feed
+- Serve para qualquer animal terrestre que se cria (vaca, ovelha, porco, galinha, coelho, mooshroom, etc.).
+- Peixes têm a sua própria ração (Fish Feed, catálogo 07).
 
 **Engorda**
 - Cada vez que come, o animal sobe um nível de engorda, até **3**.
@@ -37,7 +34,7 @@ As carnes **não têm receita** (fazendas de carne já são fáceis). Em vez dis
 **Formas de alimentar**
 1. À mão: clicar no animal com a ração.
 2. Implantador do Create usando a ração no animal.
-3. **Feeding Trough (cocho, bloco novo):** você deposita ração nele (à mão, funil, calha ou esteira),
+3. **Feeding Trough (cocho, bloco novo; também funciona submerso, para peixes):** você deposita ração nele (à mão, funil, calha ou esteira),
    e os animais num raio de ~8 blocos **vão sozinhos até o cocho e comem**, até chegar ao nível 3.
    O nível de ração aparece no modelo do bloco. Feito no crafting com tábuas e chapas de ferro/andesito.
 
@@ -47,7 +44,7 @@ sozinhos, e o abate quando quiser.
 Fora do escopo agora: Raw Beef, Raw Porkchop, Raw Mutton, Raw Chicken, Raw Rabbit, Rabbit Hide.
 
 ### Egg (Ovo) · T1
-- **Misturador:** 1 Chicken Feed + 1 Calcite (moída, vira a casca de cálcio) + 100 mB água → Egg
+- **Misturador:** 1 Animal Feed + 1 Calcite (a casca de cálcio) + 100 mB água → Egg
 - História: ração + cálcio = casca.
 
 ### Feather (Pena) · T1
@@ -145,7 +142,7 @@ Iron Ingot. O implantador segura o cinzel e esculpe; o cinzel não é consumido 
 | Item | Uso |
 |---|---|
 | Fodder | base da família dos animais |
-| Pasture Feed, Swill, Chicken Feed, Rabbit Feed | rações (engorda) |
+| Animal Feed | ração única dos animais terrestres (engorda) |
 | Feeding Trough | cocho de ração (bloco) |
 | Fossil Fragment | intermediário do Bone |
 | Stretched Hide, Hollow Hide | intermediários da Phantom Membrane |
