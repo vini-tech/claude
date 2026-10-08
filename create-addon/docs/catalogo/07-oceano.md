@@ -1,6 +1,6 @@
 # Catálogo 07: Oceano e água
 
-Status: **proposta, aguardando revisão**.
+Status: **aprovado**.
 
 Nomes de itens novos em inglês. Tiers conforme `DESIGN.md`.
 Já resolvidos em outros catálogos: Heart of the Sea e Trident (04).
