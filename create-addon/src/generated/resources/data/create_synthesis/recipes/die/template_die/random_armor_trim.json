@@ -1,0 +1,70 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "create_synthesis:blank_template"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:coast_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:dune_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:eye_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:host_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:raiser_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:rib_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:sentry_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:shaper_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:snout_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:spire_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:tide_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:vex_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:ward_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:wayfinder_armor_trim_smithing_template",
+      "chance": 0.0667
+    },
+    {
+      "item": "minecraft:wild_armor_trim_smithing_template",
+      "chance": 0.0667
+    }
+  ]
+}

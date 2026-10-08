@@ -1,0 +1,65 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:skeleton_skull"
+  },
+  "loops": 1,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_creeper_head"
+  },
+  "results": [
+    {
+      "item": "minecraft:creeper_head"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_creeper_head"
+        },
+        {
+          "item": "minecraft:gunpowder"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_creeper_head"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_creeper_head"
+        },
+        {
+          "item": "minecraft:lime_dye"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_creeper_head"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_creeper_head"
+        },
+        {
+          "item": "create_synthesis:carving_chisel"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_creeper_head"
+        }
+      ]
+    }
+  ]
+}

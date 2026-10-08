@@ -1,0 +1,21 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "create_synthesis:ancient_soil"
+    },
+    {
+      "item": "minecraft:brush"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:torchflower_seeds",
+      "chance": 0.6
+    },
+    {
+      "item": "minecraft:pitcher_pod",
+      "chance": 0.4
+    }
+  ]
+}

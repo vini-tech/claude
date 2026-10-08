@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "BIB"
+  ],
+  "key": {
+    "F": {
+      "item": "minecraft:flint"
+    },
+    "B": {
+      "item": "create:brass_sheet"
+    },
+    "I": {
+      "item": "create:iron_sheet"
+    }
+  },
+  "result": {
+    "item": "create_synthesis:sherd_stamp"
+  }
+}

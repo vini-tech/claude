@@ -1,0 +1,16 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "create_synthesis:polished_blank_disc"
+    },
+    {
+      "tag": "minecraft:decorated_pot_sherds"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:music_disc_relic"
+    }
+  ]
+}

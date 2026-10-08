@@ -4,7 +4,13 @@
   "package": "com.vinitech.createsynthesis.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "BasinOperatingBlockEntityMixin"
+    "BasinOperatingBlockEntityMixin",
+    "MechanicalPressBlockEntityMixin",
+    "ProcessingRecipeMixin",
+    "SmartBlockEntityMixin"
+  ],
+  "client": [
+    "client.MechanicalPressRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

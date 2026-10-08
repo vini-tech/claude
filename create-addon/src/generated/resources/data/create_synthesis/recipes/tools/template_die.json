@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BSB"
+  ],
+  "key": {
+    "B": {
+      "item": "create:brass_sheet"
+    },
+    "S": {
+      "item": "minecraft:smithing_table"
+    }
+  },
+  "result": {
+    "item": "create_synthesis:template_die"
+  }
+}

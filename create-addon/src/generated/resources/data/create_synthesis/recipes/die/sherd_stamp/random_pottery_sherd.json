@@ -1,0 +1,90 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "create_synthesis:blank_sherd"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:angler_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:archer_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:arms_up_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:blade_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:brewer_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:burn_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:danger_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:explorer_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:friend_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:heart_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:heartbreak_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:howl_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:miner_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:mourner_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:plenty_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:prize_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:sheaf_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:shelter_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:skull_pottery_sherd",
+      "chance": 0.05
+    },
+    {
+      "item": "minecraft:snort_pottery_sherd",
+      "chance": 0.05
+    }
+  ]
+}

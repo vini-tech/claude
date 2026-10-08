@@ -217,7 +217,7 @@ for light, touch in [("ochre_froglight", "lily_pad"), ("pearlescent_froglight", 
 
 # ---------------------------------------------------------------- 06 Overworld mobs
 
-deploying("mobs", "feather", "chicken", "shears", [out("feather", 3)], keep=True)
+deploying("mobs", "feather", "chicken", "shears", [out("feather", 3)])  # the shears wear down
 sequenced("mobs", "rabbit_foot", "rabbit_hide", [("deploy", "golden_carrot"), ("deploy", "string"), ("press",)], 1,
           "rabbit_foot", "incomplete_rabbit_foot", "Incomplete Rabbit's Foot", ("texture", "minecraft:item/rabbit_foot"))
 tag("items", "raw_meats", ["minecraft:beef", "minecraft:porkchop", "minecraft:mutton", "minecraft:chicken", "minecraft:rabbit"])
@@ -282,7 +282,7 @@ deploying("flora", "tall_grass", "grass", "bone_meal", ["tall_grass"])
 deploying("flora", "large_fern", "fern", "bone_meal", ["large_fern"])
 deploying("flora", "mushrooms", "mycelium", "bone_meal",
           ["mycelium", out("brown_mushroom", chance=0.5), out("red_mushroom", chance=0.5)])
-deploying("flora", "vine", "jungle_leaves", "shears", ["jungle_leaves", out("vine", 2)], keep=True)
+deploying("flora", "vine", "jungle_leaves", "shears", ["jungle_leaves", out("vine", 2)])  # the shears wear down
 mixing("flora", "small_dripleaf", ["small_dripleaf", "clay_ball", "bone_meal", water(250)], [out("small_dripleaf", 2)])
 deploying("flora", "big_dripleaf", "small_dripleaf", "bone_meal", ["big_dripleaf"])
 mixing("flora", "spore_blossom", ["pink_petals", "moss_block", "glow_berries", water(250)], ["spore_blossom"])
@@ -290,15 +290,19 @@ single("pressing", "flora", "lily_pad", "big_dripleaf", [out("lily_pad", 2)])
 
 # ---------------------------------------------------------------- Phase 2: new intermediate items
 
-def material(name, english, portuguese):
-    """A plain item of this mod, with its texture at assets/<mod>/textures/item/<name>.png."""
-    materials[name] = (english, portuguese)
+def material(name, english, portuguese, plain=True):
+    """An item of this mod, with its texture at assets/<mod>/textures/item/<name>.png.
+
+    plain=False: the item has its own class in Java (SynthesisItems), so it stays out of SynthesisMaterials.
+    """
+    materials[name] = (english, portuguese, plain)
     lang_en[f"item.{MOD}.{name}"] = english
     lang_pt[f"item.{MOD}.{name}"] = portuguese
     return f"{MOD}:{name}"
 
 
-materials = {}  # item name -> (english, portuguese)
+materials = {}  # item name -> (english, portuguese, plain)
+PT_EXTRA = {}  # pt_br names of transitional items made in loops
 
 FODDER = material("fodder", "Fodder", "Forragem")
 ANIMAL_FEED = material("animal_feed", "Animal Feed", "Ração Animal")
@@ -386,6 +390,119 @@ mixing("archaeology", "ancient_soil", ["moss_block", "dirt", "bone_meal", water(
 # 11 Smithing templates: the blank (the Template Die comes with the attachments step)
 compacting("templates", "blank_template", ["create:iron_sheet"] * 3 + ["diamond"], [BLANK_TEMPLATE], heat="heated")
 
+# ---------------------------------------------------------------- Phase 2: press dies and deployer tips
+
+def tooltip(name, en, pt):
+    """Create-style item description: summary, then (condition, behaviour) pairs. _word_ is highlighted."""
+    for lang, (summary, *pairs) in ((lang_en, en), (lang_pt, pt)):
+        lang[f"item.{MOD}.{name}.tooltip.summary"] = summary
+        for i, (condition, behaviour) in enumerate(pairs, 1):
+            lang[f"item.{MOD}.{name}.tooltip.condition{i}"] = condition
+            lang[f"item.{MOD}.{name}.tooltip.behaviour{i}"] = behaviour
+
+
+def shaped(cat, name, pattern, key, result, count=1):
+    r = {"item": mc(result)}
+    if count != 1:
+        r["count"] = count
+    add(cat, name, {"type": "minecraft:crafting_shaped", "pattern": pattern,
+                    "key": {k: ing(v) for k, v in key.items()}, "result": r})
+
+
+DIE_HOW_EN = ("When clicked on a Mechanical Press",
+              "_Fits_ into the press, which then _stamps_ with it instead of pressing. _Sneak_ and click with an "
+              "empty hand to take it out.")
+DIE_HOW_PT = ("Ao clicar numa Prensa Mecânica",
+              "_Encaixa_ na prensa, que passa a _estampar_ com ela em vez de prensar. _Agache_ e clique com a mão "
+              "vazia para tirar.")
+TIP_HOW_EN = ("When held by a Deployer", "Works like a tool: it _wears down_ with use instead of being used up.")
+TIP_HOW_PT = ("Na mão de um Implantador", "Funciona como ferramenta: _desgasta_ com o uso em vez de ser consumido.")
+
+ENGRAVING_DIE = material("engraving_die", "Engraving Die", "Matriz de Gravação", plain=False)
+tooltip("engraving_die",
+        ("A die that engraves _Polished Blank Discs_: a _random_ disc on a belt, or a _specific_ one over a basin "
+         "with the right ingredient.", DIE_HOW_EN),
+        ("Uma matriz que grava _Discos Virgens Polidos_: um disco _aleatório_ na esteira, ou um disco _específico_ "
+         "sobre a bacia com o ingrediente certo.", DIE_HOW_PT))
+SHERD_STAMP = material("sherd_stamp", "Sherd Stamp", "Carimbo de Cacos", plain=False)
+tooltip("sherd_stamp",
+        ("A stamp that marks _Blank Sherds_ with a _random_ pottery pattern.", DIE_HOW_EN),
+        ("Um carimbo que marca _Cacos Virgens_ com um desenho de cerâmica _aleatório_.", DIE_HOW_PT))
+TEMPLATE_DIE = material("template_die", "Template Die", "Matriz de Moldes", plain=False)
+tooltip("template_die",
+        ("A die that stamps _Blank Templates_ into a _random_ armor trim template.", DIE_HOW_EN),
+        ("Uma matriz que estampa _Moldes Virgens_ num molde de acabamento _aleatório_.", DIE_HOW_PT))
+CARVING_CHISEL = material("carving_chisel", "Carving Chisel", "Cinzel de Entalhe", plain=False)
+tooltip("carving_chisel",
+        ("A _Deployer_ tip for carving _mob heads_ out of bone.", TIP_HOW_EN),
+        ("Uma ponteira de _Implantador_ para esculpir _cabeças de mobs_ em osso.", TIP_HOW_PT))
+CORAL_GRAFT = material("coral_graft", "Coral Graft", "Enxerto de Coral", plain=False)
+tooltip("coral_graft",
+        ("A _Deployer_ tip for taking _coral_ from a living coral block without harming it.", TIP_HOW_EN),
+        ("Uma ponteira de _Implantador_ para tirar _coral_ de um bloco de coral vivo sem machucá-lo.", TIP_HOW_PT))
+
+shaped("tools", "engraving_die", [" D ", "BNB"], {"D": "diamond", "B": "create:brass_sheet", "N": "note_block"}, ENGRAVING_DIE)
+shaped("tools", "sherd_stamp", [" F ", "BIB"], {"F": "flint", "B": "create:brass_sheet", "I": "create:iron_sheet"}, SHERD_STAMP)
+shaped("tools", "template_die", ["BSB"], {"B": "create:brass_sheet", "S": "smithing_table"}, TEMPLATE_DIE)
+shaped("tools", "carving_chisel", [" I", "A "], {"I": "iron_ingot", "A": "create:andesite_alloy"}, CARVING_CHISEL)
+shaped("tools", "coral_graft", [" N", "B "], {"N": "iron_nugget", "B": "create:brass_sheet"}, CORAL_GRAFT)
+
+
+def pick_one(items):
+    """Results for a random_ recipe: exactly one is picked, weighted by these chances (see RandomResults)."""
+    return [dict(out(i), chance=round(1 / len(items), 4)) if isinstance(i, str) else i for i in items]
+
+
+# 09 Discs: the Engraving Die (path die/<die>/... = needs that die in the press, see PressDies)
+COMMON_DISCS = ["13", "cat", "blocks", "chirp", "far", "mall", "mellohi", "stal", "strad", "ward", "11", "wait"]
+single("pressing", "die/engraving_die", "random_music_disc", POLISHED_BLANK_DISC,
+       pick_one([f"music_disc_{d}" for d in COMMON_DISCS]))
+compacting("die/engraving_die", "music_disc_pigstep", [POLISHED_BLANK_DISC, "gilded_blackstone"], ["music_disc_pigstep"])
+compacting("die/engraving_die", "music_disc_otherside", [POLISHED_BLANK_DISC, "echo_shard"], ["music_disc_otherside"])
+compacting("die/engraving_die", "music_disc_relic", [POLISHED_BLANK_DISC, "#decorated_pot_sherds"], ["music_disc_relic"])
+compacting("die/engraving_die", "disc_fragment_5", [POLISHED_BLANK_DISC, "sculk_vein"], [out("disc_fragment_5", 3)])
+
+# 10 Archaeology: the Sherd Stamp, and the brush on Ancient Soil
+SHERDS = ["angler", "archer", "arms_up", "blade", "brewer", "burn", "danger", "explorer", "friend", "heart",
+          "heartbreak", "howl", "miner", "mourner", "plenty", "prize", "sheaf", "shelter", "skull", "snort"]
+single("pressing", "die/sherd_stamp", "random_pottery_sherd", BLANK_SHERD, pick_one([f"{s}_pottery_sherd" for s in SHERDS]))
+deploying("archaeology", "random_ancient_seed", ANCIENT_SOIL, "brush",
+          [out("torchflower_seeds", chance=0.6), out("pitcher_pod", chance=0.4)])  # the brush wears down
+
+# 11 Smithing templates: the Template Die
+TRIMS = ["coast", "dune", "eye", "host", "raiser", "rib", "sentry", "shaper", "snout", "spire", "tide", "vex",
+         "ward", "wayfinder", "wild"]
+single("pressing", "die/template_die", "random_armor_trim", BLANK_TEMPLATE,
+       pick_one([f"{t}_armor_trim_smithing_template" for t in TRIMS]))
+
+# 06 Mobs: goat horn with a random sound, like the ones goats drop
+HORNS = ["ponder", "sing", "seek", "feel", "admire", "call", "yearn", "dream"]
+single("cutting", "mobs", "random_goat_horn", HORN_BLANK,
+       pick_one([{"item": "minecraft:goat_horn", "nbt": {"instrument": f"minecraft:{h}_goat_horn"}} for h in HORNS]))
+for r in recipes["mobs/random_goat_horn"]["results"]:
+    r["chance"] = round(1 / len(HORNS), 4)
+
+# 06 Mobs: heads carved with the Carving Chisel (it wears down)
+deploying("mobs", "skeleton_skull", "bone_block", CARVING_CHISEL, ["skeleton_skull"])
+HEADS = {
+    "zombie_head": ("rotten_flesh", "rotten_flesh", "Incomplete Zombie Head", "Cabeça de Zumbi Incompleta"),
+    "creeper_head": ("gunpowder", "lime_dye", "Incomplete Creeper Head", "Cabeça de Creeper Incompleta"),
+    "piglin_head": ("gold_ingot", "crimson_fungus", "Incomplete Piglin Head", "Cabeça de Piglin Incompleta"),
+    "dragon_head": ("dragon_breath", "obsidian", "Incomplete Dragon Head", "Cabeça de Dragão Incompleta"),
+}
+for head, (first, second, en, pt) in HEADS.items():
+    sequenced("mobs", head, "skeleton_skull", [("deploy", first), ("deploy", second), ("deploy", CARVING_CHISEL)], 1,
+              head, f"incomplete_{head}", en, ("parent", "minecraft:block/bone_block"))
+    PT_EXTRA[f"incomplete_{head}"] = pt
+
+# 07 Ocean: corals grown in the mixer, then grafted with the Coral Graft (it wears down)
+CORAL_DYES = {"tube": "blue_dye", "brain": "pink_dye", "bubble": "purple_dye", "fire": "red_dye", "horn": "yellow_dye"}
+for coral, dye in CORAL_DYES.items():
+    mixing("ocean", f"{coral}_coral_block", ["bone_meal"] * 4 + [dye, "sea_pickle", water(1000)],
+           [out(f"{coral}_coral_block", 2)])
+    deploying("ocean", f"{coral}_coral", f"{coral}_coral_block", CORAL_GRAFT,
+              [f"{coral}_coral_block", f"{coral}_coral", out(f"{coral}_coral_fan", chance=0.5)])
+
 # ---------------------------------------------------------------- write
 
 PT = {  # pt_br names for transitional items
@@ -435,6 +552,7 @@ def main():
         texture = ROOT / f"src/main/resources/assets/{MOD}/textures/item/{name}.png"
         if not texture.exists():
             print(f"warning: missing texture {texture.relative_to(ROOT)}")
+    PT.update(PT_EXTRA)
     missing = set(incomplete) - set(PT)
     if missing:
         raise SystemExit(f"missing pt_br names: {sorted(missing)}")
@@ -455,7 +573,7 @@ public final class SynthesisIncompleteItems {{
 	}}
 }}
 """, encoding="utf-8")
-    names = ",\n".join(f'\t\t"{n}"' for n in materials)
+    names = ",\n".join(f'\t\t"{n}"' for n, (_, _, plain) in materials.items() if plain)
     JAVA_MATERIALS.write_text(f"""package com.vinitech.createsynthesis.registry;
 
 // GENERATED by tools/datagen.py, do not edit by hand.

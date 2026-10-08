@@ -756,6 +756,132 @@ def blank_template():
     return t
 
 
+# ---------------------------------------------------------------- press dies and deployer tips
+
+BRASS = ramp("#4a2a08", "#74440f", "#a06418", "#c48526", "#dca63a", "#eec45c", "#f9e194")
+ANDESITE = ramp("#262b27", "#3f4741", "#5b665d", "#7b867d", "#9aa49c", "#b9c2ba", "#d6ddd6")
+
+
+def tool(t, segments):
+    """A hand tool drawn along the diagonal, like vanilla tools: lit on the top-left, outlined all around.
+
+    segments: list of (ramp, length, width) from the handle end (bottom-left) to the tip (top-right).
+    """
+    owner = {}
+    k = 0
+    for ramp_, length, width in segments:
+        for _ in range(length):
+            cx, cy = 2 + k, 13 - k
+            for w in range(width):
+                owner[(cx + w, cy)] = ramp_
+                if w:
+                    owner[(cx, cy - w)] = ramp_
+            k += 1
+    body = set(owner)
+    for (x, y), ramp_ in owner.items():
+        if (x - 1, y) not in body or (x, y - 1) not in body:
+            t.put((x, y), ramp_, 5)
+        elif (x + 1, y) not in body or (x, y + 1) not in body:
+            t.put((x, y), ramp_, 2)
+        else:
+            t.put((x, y), ramp_, 4)
+    for (x, y), ramp_ in owner.items():  # outline in the darkest tone of each part
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                q = (x + dx, y + dy)
+                if q not in body and q not in t.shade:
+                    t.put(q, ramp_, 0)
+    return body
+
+
+@texture
+def carving_chisel():
+    t = Tex()
+    tool(t, [(ANDESITE, 5, 2), (BRASS, 1, 2), (IRON, 4, 2)])
+    for p in ((12, 2), (13, 3)):  # the flat, sharpened edge
+        t.put(p, IRON, 6)
+    return t
+
+
+@texture
+def coral_graft():
+    t = Tex()
+    tool(t, [(BRASS, 5, 2), (IRON, 1, 2), (IRON, 3, 1)])
+    t.grid(["ab", "b."], {"a": (IRON, 6), "b": (IRON, 3)}, 11, 2)  # the hooked tip that lifts the polyps
+    t.put((11, 1), IRON, 0)
+    t.put((10, 2), IRON, 0)
+    return t
+
+
+DIE_TOP = [
+    "................",
+    "................",
+    "................",
+    "................",
+    "......####......",
+    "...##########...",
+    "..############..",
+    ".##############.",
+    "..############..",
+    "...##########...",
+    "......####......",
+    "................",
+    "................",
+    "................",
+    "................",
+    "................",
+]
+
+
+@texture
+def engraving_die():
+    """A brass puck with a spiral groove and the diamond needle that cuts it."""
+    t = Tex()
+    top = mask(DIE_TOP)
+    slab(t, top, BRASS, thickness=3)
+    ring = mask([
+        "....######....",
+        "..##......##..",
+        "..##......##..",
+        "....######....",
+    ], 1, 5)
+    for p in ring:
+        t.put(p, BRASS, 2)
+    t.grid(["ab", "bc"], {"a": (GEM, 6), "b": (GEM, 4), "c": (GEM, 2)}, 7, 6)
+    return t
+
+
+@texture
+def sherd_stamp():
+    """A brass stamp with the outline of a pot raised on its face and an iron knob to hold it."""
+    t = Tex()
+    top = mask(DIE_TOP)
+    slab(t, top, BRASS, thickness=3)
+    pot = mask(["..#..", ".###.", ".###.", "..#.."], 3, 5)
+    for p in pot:
+        t.put(p, BRASS, 6)
+    t.grid([".ab.", "abbc", ".cd."], {"a": (IRON, 6), "b": (IRON, 4), "c": (IRON, 2), "d": (IRON, 0)}, 8, 5)
+    return t
+
+
+@texture
+def template_die():
+    """A brass die with a template-shaped cavity lined with steel."""
+    t = Tex()
+    top = mask(DIE_TOP)
+    slab(t, top, BRASS, thickness=3)
+    cavity = mask([
+        "...####...",
+        ".########.",
+        "..######..",
+    ], 3, 6)
+    for (x, y) in cavity:
+        t.put((x, y), STEEL, 1 if (x, y - 1) not in cavity else 3)
+    for p in ((5, 7), (6, 7), (7, 6)):
+        t.put(p, STEEL, 5)
+    return t
+
+
 # ---------------------------------------------------------------- fluids (animated strips of 16x16 frames)
 
 FLUID_OUT = ROOT / "src/main/resources/assets/create_synthesis/textures/fluid"

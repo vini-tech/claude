@@ -1,0 +1,23 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:fire_coral_block"
+    },
+    {
+      "item": "create_synthesis:coral_graft"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:fire_coral_block"
+    },
+    {
+      "item": "minecraft:fire_coral"
+    },
+    {
+      "item": "minecraft:fire_coral_fan",
+      "chance": 0.5
+    }
+  ]
+}

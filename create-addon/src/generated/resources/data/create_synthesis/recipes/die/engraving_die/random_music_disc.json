@@ -1,0 +1,58 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "create_synthesis:polished_blank_disc"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:music_disc_13",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_cat",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_blocks",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_chirp",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_far",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_mall",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_mellohi",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_stal",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_strad",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_ward",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_11",
+      "chance": 0.0833
+    },
+    {
+      "item": "minecraft:music_disc_wait",
+      "chance": 0.0833
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "create_synthesis:polished_blank_disc"
+    },
+    {
+      "item": "minecraft:gilded_blackstone"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:music_disc_pigstep"
+    }
+  ]
+}

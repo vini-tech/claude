@@ -13,18 +13,22 @@ public final class SynthesisIncompleteItems {
 		"incomplete_chainmail_chestplate",
 		"incomplete_chainmail_helmet",
 		"incomplete_chainmail_leggings",
+		"incomplete_creeper_head",
 		"incomplete_diamond_horse_armor",
+		"incomplete_dragon_head",
 		"incomplete_experience_bottle",
 		"incomplete_fossil_fragment",
 		"incomplete_gilded_blackstone",
 		"incomplete_golden_horse_armor",
 		"incomplete_iron_horse_armor",
+		"incomplete_piglin_head",
 		"incomplete_rabbit_foot",
 		"incomplete_saddle",
 		"incomplete_sculk_sensor",
 		"incomplete_scute",
 		"incomplete_sniffer_egg",
-		"incomplete_wet_sponge"
+		"incomplete_wet_sponge",
+		"incomplete_zombie_head"
 	};
 
 	private SynthesisIncompleteItems() {

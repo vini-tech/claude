@@ -1,0 +1,17 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "create_synthesis:polished_blank_disc"
+    },
+    {
+      "item": "minecraft:sculk_vein"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:disc_fragment_5",
+      "count": 3
+    }
+  ]
+}

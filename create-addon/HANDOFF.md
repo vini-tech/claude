@@ -140,7 +140,13 @@ Pesquisa de inspiração (CAB, Astral, Dreams & Desires, Mechanical Spawner...):
   estiverem prontos** (`tools/textures.py`, referências do vanilla e do Create).
 - **Etapa 2 (feita):** fluido virtual Experience Essence (`SynthesisFluids`, como o chá do Create: sem balde nem
   bloco) e o Bottle o' Enchanting (misturador superaquecido → 50 mB; bica 5 vezes num frasco de vidro).
-- Próximas etapas: 3) matrizes e ponteiras (com resultados aleatórios: discos,
+- **Etapa 3 (feita, falta testar no jogo):** 3 matrizes de prensa (`PressDieItem`, guardadas na prensa por mixin,
+  desenhadas sob a cabeça; agachar + mão vazia tira) e 2 ponteiras de implantador (durabilidade: o Create já
+  desgasta ferramentas em vez de consumir). Convenções de id de receita:
+  `create_synthesis:die/<matriz>/...` só roda com essa matriz na prensa (e a prensa com matriz só roda essas);
+  último segmento `random_...` sai **exatamente um** resultado, sorteado pelas chances do JSON (`RandomResults`,
+  mixin em `ProcessingRecipe.rollResults`). As tesouras e o pincel passaram a desgastar.
+- Etapas restantes: 3) matrizes e ponteiras (com resultados aleatórios: discos,
   cacos, moldes, chifre de cabra, sementes antigas); 4) comportamentos (couro secando, flocos de ração,
   engorda, cocho).
 

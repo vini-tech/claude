@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "BNB"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "B": {
+      "item": "create:brass_sheet"
+    },
+    "N": {
+      "item": "minecraft:note_block"
+    }
+  },
+  "result": {
+    "item": "create_synthesis:engraving_die"
+  }
+}

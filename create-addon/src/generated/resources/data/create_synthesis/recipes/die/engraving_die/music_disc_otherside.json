@@ -1,0 +1,16 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "create_synthesis:polished_blank_disc"
+    },
+    {
+      "item": "minecraft:echo_shard"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:music_disc_otherside"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
+import com.vinitech.createsynthesis.content.die.PressDieInteraction;
 import com.vinitech.createsynthesis.registry.SynthesisCreativeTabs;
 import com.vinitech.createsynthesis.registry.SynthesisFluids;
 import com.vinitech.createsynthesis.registry.SynthesisItems;
@@ -34,6 +35,7 @@ public class CreateSynthesis implements ModInitializer {
 		SynthesisCreativeTabs.register();
 		SynthesisItems.register();
 		SynthesisFluids.register();
+		PressDieInteraction.register();
 
 		REGISTRATE.register();
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {

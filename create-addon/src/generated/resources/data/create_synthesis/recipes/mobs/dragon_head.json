@@ -1,0 +1,65 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:skeleton_skull"
+  },
+  "loops": 1,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_dragon_head"
+  },
+  "results": [
+    {
+      "item": "minecraft:dragon_head"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_dragon_head"
+        },
+        {
+          "item": "minecraft:dragon_breath"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_dragon_head"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_dragon_head"
+        },
+        {
+          "item": "minecraft:obsidian"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_dragon_head"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_dragon_head"
+        },
+        {
+          "item": "create_synthesis:carving_chisel"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_dragon_head"
+        }
+      ]
+    }
+  ]
+}

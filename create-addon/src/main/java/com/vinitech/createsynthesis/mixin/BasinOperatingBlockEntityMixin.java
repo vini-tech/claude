@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.vinitech.createsynthesis.content.BasinRecipeRules;
+import com.vinitech.createsynthesis.content.die.DieHolder;
+import com.vinitech.createsynthesis.content.die.PressDies;
 
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -25,7 +27,11 @@ public abstract class BasinOperatingBlockEntityMixin {
 
 	@Inject(method = "getMatchingRecipes", at = @At("RETURN"))
 	private void create_synthesis$prioritize(CallbackInfoReturnable<List<Recipe<?>>> cir) {
-		BasinRecipeRules.prioritize(cir.getReturnValue());
+		List<Recipe<?>> recipes = cir.getReturnValue();
+		// a press compacts only what fits the die in it (none: only recipes that need no die)
+		if ((Object) this instanceof DieHolder holder)
+			PressDies.filterBasin(recipes, holder.create_synthesis$getDie());
+		BasinRecipeRules.prioritize(recipes);
 	}
 
 	// The recipe is picked when the press/mixer starts its cycle. If the rest of our ingredients

@@ -1,0 +1,66 @@
+{
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "create_synthesis:horn_blank"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": {
+        "instrument": "minecraft:ponder_goat_horn"
+      },
+      "chance": 0.125
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": {
+        "instrument": "minecraft:sing_goat_horn"
+      },
+      "chance": 0.125
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": {
+        "instrument": "minecraft:seek_goat_horn"
+      },
+      "chance": 0.125
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": {
+        "instrument": "minecraft:feel_goat_horn"
+      },
+      "chance": 0.125
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": {
+        "instrument": "minecraft:admire_goat_horn"
+      },
+      "chance": 0.125
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": {
+        "instrument": "minecraft:call_goat_horn"
+      },
+      "chance": 0.125
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": {
+        "instrument": "minecraft:yearn_goat_horn"
+      },
+      "chance": 0.125
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": {
+        "instrument": "minecraft:dream_goat_horn"
+      },
+      "chance": 0.125
+    }
+  ]
+}

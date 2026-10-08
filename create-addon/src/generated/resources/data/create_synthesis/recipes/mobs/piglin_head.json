@@ -1,0 +1,65 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:skeleton_skull"
+  },
+  "loops": 1,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_piglin_head"
+  },
+  "results": [
+    {
+      "item": "minecraft:piglin_head"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_piglin_head"
+        },
+        {
+          "item": "minecraft:gold_ingot"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_piglin_head"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_piglin_head"
+        },
+        {
+          "item": "minecraft:crimson_fungus"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_piglin_head"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_piglin_head"
+        },
+        {
+          "item": "create_synthesis:carving_chisel"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_piglin_head"
+        }
+      ]
+    }
+  ]
+}
