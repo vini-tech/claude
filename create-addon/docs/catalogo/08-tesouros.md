@@ -10,15 +10,20 @@ Já resolvido em outro catálogo: Enchanted Golden Apple (04).
 São itens "feitos por alguém" que o jogador só acha prontos em baús ou com aldeões.
 As receitas imitam **ofícios**: o seleiro, o ferreiro, o fundidor de sinos, o cartógrafo.
 
-## Saddle (Sela) · T2
-*Útil (cavalos, porcos, striders).*
-- **Montagem sequencial** (base: **Stretched Hide**, o couro esticado do catálogo 06; 3 loops):
-  1. Implantador: Leather
-  2. Implantador: Iron Nugget (as fivelas)
-  3. Implantador: String (a costura)
-- Resultado: Saddle · 100%
-- Custo: 4 couros no total, igual ao máximo que o moedor do Create devolve ao moer uma sela. Sem duplicação.
-- História: o seleiro estica o couro e vai costurando camadas, fivelas e linha.
+## Saddle (Sela) · T3
+*Muito útil (cavalos, porcos, striders) e rara.*
+1. **Misturador:** 1 Leather + 1 Oak Log + 250 mB água → **Tanned Leather** (item novo)
+   - O tanino da casca do carvalho curte o couro, como na vida real.
+2. **Crafter mecânico** em forma de sela: 4 Tanned Leather + 2 Iron Sheet (estribos) + 2 Chain (correias)
+   → **Saddle Frame** (item novo)
+3. **Montagem sequencial** (base: Saddle Frame, 3 loops):
+   1. Implantador: String (costura)
+   2. Implantador: Iron Nugget (fivelas e rebites)
+   3. Prensa
+   - Resultado: Saddle · 100%
+- Custo: 4 couros (o máximo que o moedor devolve ao moer uma sela), 2 chapas de ferro, 2 correntes,
+  3 linhas, 3 pepitas de ferro, 4 toras.
+- História: o ofício completo do seleiro: curtir, montar, costurar.
 
 ## Armaduras de cavalo (família) · T2/T3
 *Utilidade baixa a média.*
@@ -56,14 +61,20 @@ da malha. A malha é tecida com **Chain** (corrente), loop a loop.
 - História: o sino é fundido num molde de argila e depois polido até brilhar.
 - Usa o polimento com lixa, uma mecânica do Create que quase ninguém usa.
 
-## Bottle o' Enchanting (Frasco de Experiência) · T2
-*Só com aldeões clérigos. Útil (consertar com Remendo).*
-1. **Misturador aquecido:** 4 Experience Nugget + 1 Lapis Lazuli + 1 Glowstone Dust →
+## Bottle o' Enchanting (Frasco de Experiência) · T4
+*Só com aldeões clérigos. Muito valioso (Remendo). T4 sem máquina especial (exceção combinada).*
+1. **Misturador superaquecido:** 9 Experience Nugget + 2 Lapis Lazuli + 1 Glowstone Dust →
    250 mB de **Experience Essence** (fluido novo)
-2. **Bica:** 250 mB de Experience Essence sobre Glass Bottle → Bottle o' Enchanting
-- História: a experiência das pepitas é derretida com lápis (encantamento) e glowstone (brilho)
-  num líquido que se engarrafa.
-- O fluido pode ser reaproveitado em outras receitas mágicas no futuro.
+2. **Montagem sequencial** (base: Glass Bottle, 3 loops):
+   1. Implantador: Amethyst Shard (ressonância mágica)
+   2. Bica: 100 mB de Experience Essence
+   - Resultado: Bottle o' Enchanting · 100%
+- Custo por frasco: ~11 pepitas de experiência, 3 ametistas, lápis, glowstone e queimador superaquecido.
+- **De onde vêm as pepitas:** o Create já solta Experience Nugget (75% de chance) ao triturar quase todo
+  minério e minério bruto. Uma linha de processamento de minérios produz pepitas como subproduto;
+  basta filtrá-las para esta linha.
+- As pepitas dão mais experiência direto do que o frasco; o valor do frasco é a praticidade
+  (guardar, dispensador, Remendo).
 
 ## Globe Banner Pattern (Padrão "Globe") · T1
 *Só com aldeões cartógrafos. Decorativo.*
@@ -74,5 +85,6 @@ da malha. A malha é tecida com **Chain** (corrente), loop a loop.
 
 | Item | Uso |
 |---|---|
+| Tanned Leather, Saddle Frame | intermediários da Saddle |
 | Rough Bell | intermediário do Bell |
 | Experience Essence (fluido) | intermediário do Bottle o' Enchanting |
