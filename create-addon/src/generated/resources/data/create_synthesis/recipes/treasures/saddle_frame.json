@@ -1,0 +1,23 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "pattern": [
+    "LLL",
+    "CLC",
+    "S S"
+  ],
+  "key": {
+    "L": {
+      "item": "create_synthesis:tanned_leather"
+    },
+    "C": {
+      "item": "minecraft:chain"
+    },
+    "S": {
+      "item": "create:iron_sheet"
+    }
+  },
+  "result": {
+    "item": "create_synthesis:saddle_frame"
+  }
+}

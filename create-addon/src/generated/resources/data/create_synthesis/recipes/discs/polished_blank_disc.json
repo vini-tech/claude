@@ -1,0 +1,13 @@
+{
+  "type": "create:sandpaper_polishing",
+  "ingredients": [
+    {
+      "item": "create_synthesis:blank_disc"
+    }
+  ],
+  "results": [
+    {
+      "item": "create_synthesis:polished_blank_disc"
+    }
+  ]
+}

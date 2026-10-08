@@ -1,0 +1,62 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_synthesis:saddle_frame"
+  },
+  "loops": 3,
+  "transitionalItem": {
+    "item": "create_synthesis:incomplete_saddle"
+  },
+  "results": [
+    {
+      "item": "minecraft:saddle"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_saddle"
+        },
+        {
+          "item": "minecraft:string"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_saddle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_saddle"
+        },
+        {
+          "item": "minecraft:iron_nugget"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_saddle"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_synthesis:incomplete_saddle"
+        }
+      ],
+      "results": [
+        {
+          "item": "create_synthesis:incomplete_saddle"
+        }
+      ]
+    }
+  ]
+}

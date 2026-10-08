@@ -1,0 +1,28 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_synthesis:fodder"
+    },
+    {
+      "item": "create_synthesis:fodder"
+    },
+    {
+      "item": "minecraft:carrot"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 20250,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "create_synthesis:animal_feed",
+      "count": 2
+    }
+  ]
+}

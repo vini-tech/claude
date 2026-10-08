@@ -1,0 +1,21 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_synthesis:animal_feed"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 8100,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:egg"
+    }
+  ]
+}

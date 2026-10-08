@@ -1,0 +1,13 @@
+{
+  "type": "create:sandpaper_polishing",
+  "ingredients": [
+    {
+      "item": "create_synthesis:rough_bell"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:bell"
+    }
+  ]
+}

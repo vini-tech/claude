@@ -1,0 +1,13 @@
+{
+  "type": "create:haunting",
+  "ingredients": [
+    {
+      "item": "create_synthesis:stretched_hide"
+    }
+  ],
+  "results": [
+    {
+      "item": "create_synthesis:hollow_hide"
+    }
+  ]
+}

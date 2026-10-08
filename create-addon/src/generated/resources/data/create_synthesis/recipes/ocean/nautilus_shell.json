@@ -1,0 +1,19 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "create_synthesis:nacre"
+    },
+    {
+      "item": "create_synthesis:nacre"
+    },
+    {
+      "item": "create_synthesis:nacre"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:nautilus_shell"
+    }
+  ]
+}

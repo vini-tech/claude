@@ -1,0 +1,13 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "minecraft:leather"
+    }
+  ],
+  "results": [
+    {
+      "item": "create_synthesis:stretched_hide"
+    }
+  ]
+}

@@ -130,7 +130,17 @@ Pesquisa de inspiração (CAB, Astral, Dreams & Desires, Mechanical Spawner...):
 - Ambiente local (Windows): o caminho do projeto não pode ter acento (o Fabric não acha o jogo). Usar uma
   unidade `subst` ou mover o projeto. JDK 21 em `~\.jdks`.
 
-### Fase 2: próxima
+### Fase 2: em andamento
+- **Etapa 1 (itens intermediários):** 18 itens com textura (`tools/textures.py` desenha todas, prévia em
+  `docs/arte/`) e 27 receitas novas. Itens comuns registrados por `SynthesisMaterials` (gerado pelo datagen).
+- Decisões: Fodder só de sementes (o Create já mói trigo em farinha); Soul Sack foi para a fase 3, junto com
+  a Soul Forge; intermediários das máquinas especiais (Charred Skull, Golden Effigy, Wing Frame...) também
+  ficam para a fase 3, porque sem a máquina seriam itens sem saída.
+- Próximas etapas: 2) fluido Experience Essence; 3) matrizes e ponteiras (com resultados aleatórios: discos,
+  cacos, moldes, chifre de cabra, sementes antigas); 4) comportamentos (couro secando, flocos de ração,
+  engorda, cocho).
+
+### Fase 2: plano original
 Itens novos com **texturas definitivas no estilo do Create**:
 - Intermediários: Fodder, Animal Feed, Fish Feed, Nacre, Fossil Fragment, Horn Blank, Stretched/Hollow Hide,
   Soaked Hide, Tanned Leather, Saddle Frame, Rough Bell, Blank/Polished Blank Disc, Clay Tablet, Blank Sherd,

@@ -1,0 +1,21 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "item": "minecraft:oak_log"
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 20250,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "create_synthesis:soaked_hide"
+    }
+  ]
+}

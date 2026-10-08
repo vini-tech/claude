@@ -16,8 +16,8 @@ As carnes **não têm receita** (fazendas de carne já são fáceis). Em vez dis
 **rações** feitas com as máquinas do Create, que deixam os animais mais gordos e com mais carne.
 
 **Base: Fodder (item novo)**
-- **Moedor:** Wheat → 2 Fodder
 - **Moedor:** Wheat Seeds / Beetroot Seeds / Melon Seeds / Pumpkin Seeds → 1 Fodder
+- O trigo ficou de fora: o Create já mói trigo em farinha, e as duas receitas iam brigar.
 
 **Ração única para todos os animais terrestres (misturador)**
 
@@ -63,8 +63,8 @@ Fora do escopo agora: Raw Beef, Raw Porkchop, Raw Mutton, Raw Chicken, Raw Rabbi
 
 ### Bone (Osso) · T1
 1. **Montagem sequencial** (base: Calcite, 2 loops):
-   1. Bica: 100 mB água
-   2. Implantador: Cobblestone (sedimento)
+   1. Implantador: Cobblestone (sedimento)
+   2. Bica: 100 mB água
    3. Prensa
    - Resultado: **Fossil Fragment** (item novo)
 2. **Triturador:** Fossil Fragment → 2 Bone + 25% Bone Meal

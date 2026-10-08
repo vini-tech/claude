@@ -14,6 +14,7 @@ MOD = "create_synthesis"
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "src/generated/resources"
 JAVA_INCOMPLETE = ROOT / "src/main/java/com/vinitech/createsynthesis/registry/SynthesisIncompleteItems.java"
+JAVA_MATERIALS = ROOT / "src/main/java/com/vinitech/createsynthesis/registry/SynthesisMaterials.java"
 
 recipes = {}       # path -> json
 incomplete = {}    # item name -> (english name, model parent or texture)
@@ -287,9 +288,98 @@ deploying("flora", "big_dripleaf", "small_dripleaf", "bone_meal", ["big_dripleaf
 mixing("flora", "spore_blossom", ["pink_petals", "moss_block", "glow_berries", water(250)], ["spore_blossom"])
 single("pressing", "flora", "lily_pad", "big_dripleaf", [out("lily_pad", 2)])
 
+# ---------------------------------------------------------------- Phase 2: new intermediate items
+
+def material(name, english, portuguese):
+    """A plain item of this mod, with its texture at assets/<mod>/textures/item/<name>.png."""
+    materials[name] = (english, portuguese)
+    lang_en[f"item.{MOD}.{name}"] = english
+    lang_pt[f"item.{MOD}.{name}"] = portuguese
+    return f"{MOD}:{name}"
+
+
+materials = {}  # item name -> (english, portuguese)
+
+FODDER = material("fodder", "Fodder", "Forragem")
+ANIMAL_FEED = material("animal_feed", "Animal Feed", "Ração Animal")
+FISH_FEED = material("fish_feed", "Fish Feed", "Ração de Peixe")
+FOSSIL_FRAGMENT = material("fossil_fragment", "Fossil Fragment", "Fragmento de Fóssil")
+STRETCHED_HIDE = material("stretched_hide", "Stretched Hide", "Couro Esticado")
+HOLLOW_HIDE = material("hollow_hide", "Hollow Hide", "Couro Oco")
+HORN_BLANK = material("horn_blank", "Horn Blank", "Chifre Bruto")
+NACRE = material("nacre", "Nacre", "Madrepérola")
+SOAKED_HIDE = material("soaked_hide", "Soaked Hide", "Couro Encharcado")
+TANNED_LEATHER = material("tanned_leather", "Tanned Leather", "Couro Curtido")
+SADDLE_FRAME = material("saddle_frame", "Saddle Frame", "Armação de Sela")
+ROUGH_BELL = material("rough_bell", "Rough Bell", "Sino Bruto")
+BLANK_DISC = material("blank_disc", "Blank Disc", "Disco Virgem")
+POLISHED_BLANK_DISC = material("polished_blank_disc", "Polished Blank Disc", "Disco Virgem Polido")
+CLAY_TABLET = material("clay_tablet", "Clay Tablet", "Placa de Argila")
+BLANK_SHERD = material("blank_sherd", "Blank Sherd", "Caco Virgem")
+ANCIENT_SOIL = material("ancient_soil", "Ancient Soil", "Terra Antiga")
+BLANK_TEMPLATE = material("blank_template", "Blank Template", "Molde Virgem")
+
+# 06 Mobs: feeds (Create already mills wheat into flour, so only seeds make fodder)
+for seeds in ("wheat_seeds", "beetroot_seeds", "melon_seeds", "pumpkin_seeds"):
+    single("milling", "mobs", f"fodder_from_{seeds}", seeds, [FODDER])
+mixing("mobs", "animal_feed", [FODDER, FODDER, "carrot", "bone_meal", water(250)], [out(ANIMAL_FEED, 2)])
+mixing("mobs", "egg", [ANIMAL_FEED, "bone_meal", water(100)], ["egg"])
+
+# 06 Mobs: bone, through a fossil
+sequenced("mobs", "fossil_fragment", "calcite", [("deploy", "cobblestone"), ("fill", water(100)), ("press",)], 2,
+          FOSSIL_FRAGMENT, "incomplete_fossil_fragment", "Incomplete Fossil Fragment", ("parent", "minecraft:block/calcite"))
+single("crushing", "mobs", "bone", FOSSIL_FRAGMENT, [out("bone", 2), out("bone_meal", chance=0.25)])
+
+# 06 Mobs: phantom membrane (leather stretched, made undead, soaked in "night")
+single("pressing", "mobs", "stretched_hide", "leather", [STRETCHED_HIDE])
+single("haunting", "mobs", "hollow_hide", STRETCHED_HIDE, [HOLLOW_HIDE])
+filling("mobs", "phantom_membrane", HOLLOW_HIDE,
+        {"fluid": "create:potion", "amount": 250 * 81, "nbt": {"Potion": "minecraft:night_vision"}}, ["phantom_membrane"])
+
+# 06 Mobs: goat horn (the saw with a random instrument comes with the attachments step)
+compacting("mobs", "horn_blank", ["bone", "bone", "calcite"], [HORN_BLANK])
+
+# 07 Ocean
+mixing("ocean", "fish_feed", ["kelp", "kelp", FODDER], [out(FISH_FEED, 2)])
+mixing("ocean", "nacre", ["prismarine_crystals", "clay_ball", "clay_ball", water(250)], [NACRE])
+compacting("ocean", "nautilus_shell", [NACRE, NACRE, NACRE], ["nautilus_shell"])
+
+# 08 Treasures: saddle (tan, frame, stitch)
+mixing("treasures", "soaked_hide", ["leather", "oak_log", water(250)], [SOAKED_HIDE])
+add("treasures", "tanned_leather_from_smoking",
+    {"type": "minecraft:smoking", "ingredient": {"item": SOAKED_HIDE}, "result": TANNED_LEATHER,
+     "experience": 0.1, "cookingtime": 100})
+add("treasures", "saddle_frame",
+    {"type": "create:mechanical_crafting", "acceptMirrored": True,
+     "pattern": ["LLL", "CLC", "S S"],
+     "key": {"L": {"item": TANNED_LEATHER}, "C": {"item": "minecraft:chain"}, "S": {"item": "create:iron_sheet"}},
+     "result": {"item": SADDLE_FRAME}})
+sequenced("treasures", "saddle", SADDLE_FRAME, [("deploy", "string"), ("deploy", "iron_nugget"), ("press",)], 3,
+          "saddle", "incomplete_saddle", "Incomplete Saddle", ("texture", "minecraft:item/saddle"))
+
+# 08 Treasures: bell (cast in clay, then sanded)
+compacting("treasures", "rough_bell", ["gold_ingot"] * 3 + ["clay_ball"], [ROUGH_BELL], heat="heated")
+single("sandpaper_polishing", "treasures", "bell", ROUGH_BELL, ["bell"])
+
+# 09 Discs: the blank (the Engraving Die comes with the attachments step)
+compacting("discs", "blank_disc", ["coal", "coal", "slime_ball"], [BLANK_DISC], heat="heated")
+single("sandpaper_polishing", "discs", "polished_blank_disc", BLANK_DISC, [POLISHED_BLANK_DISC])
+
+# 10 Archaeology: the blanks (the Sherd Stamp and the brush come with the attachments step)
+single("pressing", "archaeology", "clay_tablet", "clay_ball", [CLAY_TABLET])
+add("archaeology", "blank_sherd_from_smelting",
+    {"type": "minecraft:smelting", "ingredient": {"item": CLAY_TABLET}, "result": BLANK_SHERD,
+     "experience": 0.1, "cookingtime": 200})
+mixing("archaeology", "ancient_soil", ["moss_block", "dirt", "bone_meal", water(250)], [ANCIENT_SOIL])
+
+# 11 Smithing templates: the blank (the Template Die comes with the attachments step)
+compacting("templates", "blank_template", ["create:iron_sheet"] * 3 + ["diamond"], [BLANK_TEMPLATE], heat="heated")
+
 # ---------------------------------------------------------------- write
 
 PT = {  # pt_br names for transitional items
+    "incomplete_fossil_fragment": "Fragmento de Fóssil Incompleto",
+    "incomplete_saddle": "Sela Incompleta",
     "incomplete_gilded_blackstone": "Pedra-Negra Dourada Incompleta",
     "incomplete_sculk_sensor": "Sensor de Sculk Incompleto",
     "growing_small_amethyst_bud": "Broto Pequeno de Ametista em Crescimento",
@@ -327,6 +417,12 @@ def main():
     for name, (_, (kind, ref)) in incomplete.items():
         model = {"parent": "minecraft:item/generated", "textures": {"layer0": ref}} if kind == "texture" else {"parent": ref}
         write(OUT / f"assets/{MOD}/models/item/{name}.json", model)
+    for name in materials:
+        write(OUT / f"assets/{MOD}/models/item/{name}.json",
+              {"parent": "minecraft:item/generated", "textures": {"layer0": f"{MOD}:item/{name}"}})
+        texture = ROOT / f"src/main/resources/assets/{MOD}/textures/item/{name}.png"
+        if not texture.exists():
+            print(f"warning: missing texture {texture.relative_to(ROOT)}")
     missing = set(incomplete) - set(PT)
     if missing:
         raise SystemExit(f"missing pt_br names: {sorted(missing)}")
@@ -347,7 +443,20 @@ public final class SynthesisIncompleteItems {{
 	}}
 }}
 """, encoding="utf-8")
-    print(f"{len(recipes)} recipes, {len(incomplete)} transitional items, {len(tags)} tags")
+    names = ",\n".join(f'\t\t"{n}"' for n in materials)
+    JAVA_MATERIALS.write_text(f"""package com.vinitech.createsynthesis.registry;
+
+// GENERATED by tools/datagen.py, do not edit by hand.
+public final class SynthesisMaterials {{
+	public static final String[] NAMES = {{
+{names}
+	}};
+
+	private SynthesisMaterials() {{
+	}}
+}}
+""", encoding="utf-8")
+    print(f"{len(recipes)} recipes, {len(materials)} items, {len(incomplete)} transitional items, {len(tags)} tags")
 
 
 if __name__ == "__main__":

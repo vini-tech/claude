@@ -1,0 +1,13 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "minecraft:melon_seeds"
+    }
+  ],
+  "results": [
+    {
+      "item": "create_synthesis:fodder"
+    }
+  ]
+}

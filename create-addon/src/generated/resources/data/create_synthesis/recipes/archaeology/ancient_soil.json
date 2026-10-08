@@ -1,0 +1,24 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:moss_block"
+    },
+    {
+      "item": "minecraft:dirt"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 20250,
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "create_synthesis:ancient_soil"
+    }
+  ]
+}

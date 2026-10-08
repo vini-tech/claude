@@ -1,0 +1,18 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "create_synthesis:fossil_fragment"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:bone",
+      "count": 2
+    },
+    {
+      "item": "minecraft:bone_meal",
+      "chance": 0.25
+    }
+  ]
+}
