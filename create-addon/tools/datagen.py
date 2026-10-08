@@ -226,7 +226,7 @@ mixing("mobs", "honey", ["sugar", "sugar", "sugar", "#small_flowers", water(250)
 compacting("mobs", "honeycomb", [fluid("create:honey", 250)], ["honeycomb"])
 for log in ["oak_log", "birch_log"]:
     sequenced("mobs", f"bee_nest_from_{log}", log, [("deploy", "honeycomb"), ("deploy", "honeycomb"), ("cut",)], 1,
-              "bee_nest", f"incomplete_bee_nest_{log.split('_')[0]}", "Incomplete Bee Nest", ("parent", "minecraft:block/bee_nest_empty"))
+              "bee_nest", f"incomplete_bee_nest_{log.split('_')[0]}", "Incomplete Bee Nest", ("parent", "minecraft:item/bee_nest"))
 sequenced("mobs", "sniffer_egg", "egg",
           [("deploy", "torchflower_seeds"), ("deploy", "pitcher_pod"), ("deploy", "moss_block"), ("fill", water(250))], 1,
           "sniffer_egg", "incomplete_sniffer_egg", "Incomplete Sniffer Egg", ("texture", "minecraft:item/egg"),
