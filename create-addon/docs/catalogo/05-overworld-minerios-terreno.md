@@ -62,7 +62,7 @@ cada estágio é **um loop de montagem sequencial** sobre o estágio anterior.
 | Hanging Roots | **Implantador** com Bone Meal sobre Rooted Dirt → Rooted Dirt + Hanging Roots | as raízes crescem para baixo |
 | Glow Lichen | **Misturador:** 2 Moss Carpet + 1 Glow Ink Sac → 4 Glow Lichen | musgo que brilha |
 | Pointed Dripstone | **Bica:** 100 mB água sobre Calcite → Pointed Dripstone | água pingando na rocha |
-| Cobweb | **Compactador:** 5 String → 1 Cobweb | teia compactada |
+| Cobweb | **Compactador aquecido:** 5 String → 1 Cobweb | teia compactada |
 
 ## Neve e luzes de sapo
 

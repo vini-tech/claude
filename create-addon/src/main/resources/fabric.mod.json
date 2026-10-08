@@ -14,6 +14,7 @@
     "main": [ "com.vinitech.createsynthesis.CreateSynthesis" ],
     "client": [ "com.vinitech.createsynthesis.CreateSynthesisClient" ]
   },
+  "mixins": [ "create_synthesis.mixins.json" ],
 
   "depends": {
     "minecraft": "${minecraft_version}",

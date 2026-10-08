@@ -99,7 +99,7 @@ Fora do escopo agora: Raw Beef, Raw Porkchop, Raw Mutton, Raw Chicken, Raw Rabbi
 ### Honeycomb (Favo de Mel) · T1
 1. **Misturador aquecido:** 3 Sugar + 1 flor qualquer + 250 mB água → 250 mB **Honey** (fluido do Create)
    - 3 açúcares porque uma garrafa de mel (250 mB) vira 3 açúcares no vanilla: assim não há duplicação.
-2. **Compactador:** 250 mB Honey → 1 Honeycomb
+2. **Compactador aquecido:** 250 mB Honey → 1 Honeycomb
 - História: as abelhas transformam o néctar das flores em mel, e o mel vira cera.
 - Bônus: o mod passa a produzir mel do Create sem colmeia.
 

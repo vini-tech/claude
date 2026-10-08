@@ -18,5 +18,6 @@
       "item": "minecraft:basalt",
       "count": 2
     }
-  ]
+  ],
+  "heatRequirement": "heated"
 }

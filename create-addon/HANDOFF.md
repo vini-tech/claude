@@ -119,6 +119,13 @@ Pesquisa de inspiração (CAB, Astral, Dreams & Desires, Mechanical Spawner...):
 - Implantador sem consumir o item: `"keepHeldItem": true`.
 - Fan "defumar" usa receitas `minecraft:smoking`; "assombrar" é `create:haunting`; "lavar" é `create:splashing`.
 - Calor: `"heatRequirement": "heated"` ou `"superheated"`.
+- **Conflitos na bacia:** o Create escolhe a receita com mais ingredientes, e as receitas de crafting
+  (blocos 3x3, tijolos 2x2, botas...) roubavam as nossas. O mod corrige com `BasinRecipeRules` (mixin em
+  `BasinOperatingBlockEntity.getMatchingRecipes`): bacia aquecida não automatiza crafting, e as nossas
+  receitas vão primeiro quando estão completas. Receitas de prensa/misturador que disputam ingredientes com
+  crafting devem ser **aquecidas**. Conferir sempre com `python docs/tools/conflicts.py` (depois de um build).
+- Ambiente local (Windows): o caminho do projeto não pode ter acento (o Fabric não acha o jogo). Usar uma
+  unidade `subst` ou mover o projeto. JDK 21 em `~\.jdks`.
 
 ### Fase 2: próxima
 Itens novos com **texturas definitivas no estilo do Create**:

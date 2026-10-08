@@ -11,5 +11,6 @@
     {
       "item": "minecraft:honeycomb"
     }
-  ]
+  ],
+  "heatRequirement": "heated"
 }

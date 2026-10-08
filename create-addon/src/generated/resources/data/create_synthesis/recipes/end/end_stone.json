@@ -22,5 +22,6 @@
       "item": "minecraft:end_stone",
       "count": 4
     }
-  ]
+  ],
+  "heatRequirement": "heated"
 }

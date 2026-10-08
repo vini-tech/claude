@@ -142,15 +142,15 @@ mixing("nether", "ghast_tear", ["crying_obsidian", "soul_sand", "soul_sand", "so
        ["ghast_tear", "obsidian", out("soul_soil", 4)], heat="heated")
 mixing("nether", "blaze_rod", ["glowstone_dust", "glowstone_dust", "create:cinder_flour", "create:cinder_flour", lava(250)],
        ["blaze_rod"], heat="superheated")
-compacting("nether", "basalt", ["soul_soil", "ice", lava(250)], [out("basalt", 2)])
-compacting("nether", "nether_gold_ore", ["netherrack", "gold_ingot", "gold_ingot"], ["nether_gold_ore"])
-compacting("nether", "nether_quartz_ore", ["netherrack", "quartz", "quartz", "quartz"], ["nether_quartz_ore"])
+compacting("nether", "basalt", ["soul_soil", "ice", lava(250)], [out("basalt", 2)], heat="heated")
+compacting("nether", "nether_gold_ore", ["netherrack", "gold_ingot", "gold_ingot"], ["nether_gold_ore"], heat="heated")
+compacting("nether", "nether_quartz_ore", ["netherrack", "quartz", "quartz", "quartz"], ["nether_quartz_ore"], heat="heated")
 sequenced("nether", "gilded_blackstone", "blackstone", [("deploy", "gold_ingot")], 2, "gilded_blackstone",
           "incomplete_gilded_blackstone", "Incomplete Gilded Blackstone", ("parent", "minecraft:block/gilded_blackstone"))
 deploying("nether", "piglin_banner_pattern", "paper", "gilded_blackstone", ["piglin_banner_pattern"], keep=True)
 compacting("nether", "shroomlight", ["crimson_fungus", "bone_meal", "bone_meal", "bone_meal", "glowstone_dust"],
-           ["shroomlight", "nether_wart_block"])
-compacting("nether", "warped_wart_block", ["warped_fungus", "bone_meal", "bone_meal", "bone_meal"], [out("warped_wart_block", 2)])
+           ["shroomlight", "nether_wart_block"], heat="heated")
+compacting("nether", "warped_wart_block", ["warped_fungus", "bone_meal", "bone_meal", "bone_meal"], [out("warped_wart_block", 2)], heat="heated")
 deploying("nether", "crimson_nylium", "netherrack", "crimson_fungus", ["crimson_nylium"], keep=True)
 deploying("nether", "warped_nylium", "netherrack", "warped_fungus", ["warped_nylium"], keep=True)
 deploying("nether", "crimson_roots", "crimson_nylium", "bone_meal",
@@ -161,7 +161,7 @@ deploying("nether", "wither_rose", "poppy", "wither_skeleton_skull", ["wither_ro
 
 # ---------------------------------------------------------------- 02 End
 
-compacting("end", "end_stone", ["sandstone"] * 4 + ["popped_chorus_fruit"], [out("end_stone", 4)])
+compacting("end", "end_stone", ["sandstone"] * 4 + ["popped_chorus_fruit"], [out("end_stone", 4)], heat="heated")
 deploying("end", "chorus_fruit", "end_stone", "chorus_flower",
           ["end_stone", out("chorus_fruit", 2), out("chorus_flower", chance=0.1)], keep=True)
 compacting("end", "ender_pearl", ["popped_chorus_fruit"] * 8 + ["amethyst_shard"], ["ender_pearl"], heat="heated")
@@ -209,7 +209,7 @@ deploying("terrain", "moss_block", "moss_block", "bone_meal", [out("moss_block",
 deploying("terrain", "hanging_roots", "rooted_dirt", "bone_meal", ["rooted_dirt", "hanging_roots"])
 mixing("terrain", "glow_lichen", ["moss_carpet", "moss_carpet", "glow_ink_sac"], [out("glow_lichen", 4)])
 filling("terrain", "pointed_dripstone", "calcite", water(100), ["pointed_dripstone"])
-compacting("terrain", "cobweb", ["string"] * 5, ["cobweb"])
+compacting("terrain", "cobweb", ["string"] * 5, ["cobweb"], heat="heated")
 single("milling", "terrain", "snowball", "ice", [out("snowball", 2)], time=100)
 for light, touch in [("ochre_froglight", "lily_pad"), ("pearlescent_froglight", "mud"), ("verdant_froglight", "snowball")]:
     mixing("terrain", light, ["magma_cream", "magma_cream", touch], [light])
@@ -223,7 +223,7 @@ tag("items", "raw_meats", ["minecraft:beef", "minecraft:porkchop", "minecraft:mu
 single("haunting", "mobs", "rotten_flesh", f"#{MOD}:raw_meats", [out("rotten_flesh", 2)])
 mixing("mobs", "spider_eye", ["poisonous_potato", "sweet_berries", "string"], ["spider_eye"])
 mixing("mobs", "honey", ["sugar", "sugar", "sugar", "#small_flowers", water(250)], [fluid_out("create:honey", 250)], heat="heated")
-compacting("mobs", "honeycomb", [fluid("create:honey", 250)], ["honeycomb"])
+compacting("mobs", "honeycomb", [fluid("create:honey", 250)], ["honeycomb"], heat="heated")
 for log in ["oak_log", "birch_log"]:
     sequenced("mobs", f"bee_nest_from_{log}", log, [("deploy", "honeycomb"), ("deploy", "honeycomb"), ("cut",)], 1,
               "bee_nest", f"incomplete_bee_nest_{log.split('_')[0]}", "Incomplete Bee Nest", ("parent", "minecraft:item/bee_nest"))

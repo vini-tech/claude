@@ -111,15 +111,15 @@ Nether não "pula" nenhuma etapa do jogo, só tira o trabalho repetitivo.
 ### Basalt (Basalto) · T1
 *Origem: deltas de basalto. Comum.*
 
-- **Compactador:** 1 Soul Soil + 1 Ice + 250 mB de lava → 2 Basalt
+- **Compactador aquecido:** 1 Soul Soil + 1 Ice + 250 mB de lava → 2 Basalt
 - História: imita a geração natural (lava sobre solo de almas, resfriada por gelo).
 
 ### Nether Gold Ore (Minério de Ouro do Nether) · T1
-- **Compactador:** 1 Netherrack + 2 Gold Ingot → 1 Nether Gold Ore
+- **Compactador aquecido:** 1 Netherrack + 2 Gold Ingot → 1 Nether Gold Ore
 - Custo ≥ o que o triturador devolve (18 pepitas = 2 lingotes). Sem duplicação.
 
 ### Nether Quartz Ore (Minério de Quartzo do Nether) · T1
-- **Compactador:** 1 Netherrack + 3 Nether Quartz → 1 Nether Quartz Ore
+- **Compactador aquecido:** 1 Netherrack + 3 Nether Quartz → 1 Nether Quartz Ore
 - Triturar devolve ~2,25 quartzo. Sem duplicação.
 
 ### Gilded Blackstone (Pedra-Negra Dourada) · T1
@@ -160,8 +160,8 @@ Mais os itens "incompletos" automáticos das montagens sequenciais.
 ## Flora do Nether
 
 ### Shroomlight, Warped Wart Block · T1
-- **Compactador:** 1 Crimson Fungus + 3 Bone Meal + 1 Glowstone Dust → 1 Shroomlight + 1 Nether Wart Block
-- **Compactador:** 1 Warped Fungus + 3 Bone Meal → 2 Warped Wart Block
+- **Compactador aquecido:** 1 Crimson Fungus + 3 Bone Meal + 1 Glowstone Dust → 1 Shroomlight + 1 Nether Wart Block
+- **Compactador aquecido:** 1 Warped Fungus + 3 Bone Meal → 2 Warped Wart Block
 - História: o que cresce na copa de um fungo gigante. Os troncos (Crimson/Warped Stem) ficam fora do escopo,
   porque fazendas de fungos gigantes já são fáceis com o Create.
 
