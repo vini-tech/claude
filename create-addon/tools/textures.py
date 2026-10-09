@@ -944,6 +944,119 @@ def template_die():
     return t
 
 
+# ---------------------------------------------------------------- 3D item atlases (like Create's wrench texture)
+
+ATLASES = {}
+
+
+def atlas(fn):
+    ATLASES[fn.__name__] = fn
+    return fn
+
+
+def fill(t, x0, y0, x1, y1, ramp_, idx):
+    for y in range(y0, y1 + 1):
+        for x in range(x0, x1 + 1):
+            t.put((x, y), ramp_, idx)
+
+
+def column(t, x0, y0, x1, y1, ramp_, tones):
+    """A vertical strip shaded by column (lit on the left), for the sides of rods and handles."""
+    for x in range(x0, x1 + 1):
+        fill(t, x, y0, x, y1, ramp_, tones[min(x - x0, len(tones) - 1)])
+
+
+@atlas
+def die_parts():
+    """Swatches for the press dies: plate edges, bolts, gem, iron, andesite and the underside."""
+    t = Tex()
+    fill(t, 0, 0, 15, 0, BRASS, 6)    # upper plate edge
+    fill(t, 0, 1, 15, 1, BRASS, 4)
+    fill(t, 0, 2, 15, 2, BRASS, 4)    # lower plate edge
+    fill(t, 0, 3, 15, 3, BRASS, 2)
+    for x0, ramp_ in ((0, ANDESITE), (4, GEM), (8, IRON), (12, STEEL)):
+        for i, idx in enumerate((6, 5, 3, 1)):
+            fill(t, x0, 4 + i, x0 + 3, 4 + i, ramp_, idx)
+    fill(t, 0, 8, 15, 15, BRASS, 2)   # underside
+    return t
+
+
+def die_face(pattern):
+    """The top face of a die (uv 4..12 is the visible 8x8 face), with a bevel like Create's brass."""
+    t = Tex()
+    fill(t, 0, 0, 15, 15, BRASS, 4)
+    for i in range(16):
+        t.put((i, 0), BRASS, 6)
+        t.put((0, i), BRASS, 6)
+        t.put((i, 15), BRASS, 2)
+        t.put((15, i), BRASS, 2)
+    for i in range(4, 12):  # bevel of the 8x8 face
+        t.put((i, 4), BRASS, 6)
+        t.put((4, i), BRASS, 5)
+        t.put((i, 11), BRASS, 2)
+        t.put((11, i), BRASS, 3)
+    pattern(t)
+    return t
+
+
+@atlas
+def engraving_die_face():
+    def grooves(t):
+        for (x, y) in mask([
+            "######",
+            "#....#",
+            "#.##.#",
+            "#.#..#",
+            "#....#",
+            "######",
+        ], 5, 5):
+            t.put((x, y), BRASS, 1)
+    return die_face(grooves)
+
+
+@atlas
+def sherd_stamp_face():
+    def pot(t):
+        t.grid([
+            "..a...",
+            ".abb..",
+            ".abbb.",
+            "abbbbc",
+            ".bbbc.",
+            "..cc..",
+        ], {"a": (BRASS, 6), "b": (BRASS, 5), "c": (BRASS, 2)}, 5, 5)
+    return die_face(pot)
+
+
+@atlas
+def template_die_face():
+    return die_face(lambda t: None)
+
+
+@atlas
+def tool_parts():
+    """Swatches for the deployer tips: andesite handle with grip rings, brass, iron, sharpened edge."""
+    t = Tex()
+    column(t, 0, 0, 1, 15, ANDESITE, (5, 3))
+    for y in range(1, 16, 3):  # grip rings
+        t.put((0, y), ANDESITE, 2)
+        t.put((1, y), ANDESITE, 1)
+    column(t, 2, 0, 3, 15, BRASS, (6, 4))
+    column(t, 4, 0, 5, 15, IRON, (5, 3))
+    column(t, 6, 0, 7, 15, IRON, (6, 5))     # the sharpened edge
+    column(t, 8, 0, 9, 15, BRASS, (5, 3))
+    for y in range(1, 16, 3):
+        t.put((8, y), BRASS, 2)
+        t.put((9, y), BRASS, 1)
+    fill(t, 10, 0, 15, 15, IRON, 2)          # ends and undersides
+    return t
+
+
+def write_atlases():
+    for name, fn in ATLASES.items():
+        fn().image().save(OUT / f"{name}.png")
+
+
 # ---------------------------------------------------------------- fluids (animated strips of 16x16 frames)
 
 FLUID_OUT = ROOT / "src/main/resources/assets/create_synthesis/textures/fluid"
@@ -1088,6 +1201,7 @@ def main():
         images.append((name, im))
     write_fluids()
     write_blocks()
+    write_atlases()
     if "--preview" in sys.argv:
         preview(images, sys.argv[sys.argv.index("--preview") + 1])
     print(f"{len(images)} item textures, {len(FLUIDS)} fluid textures")

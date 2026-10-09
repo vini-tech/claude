@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Isometric preview of a block model JSON of this mod (only the faces seen from the south-east, above).
 
-Run from the create-addon folder:  python tools/model_preview.py <model name> <out.png>
+Run from the create-addon folder:  python tools/model_preview.py <block/name or item/name> <out.png> [scale]
 Textures are read from src/main/resources (this mod) or from the Create jar in the Gradle cache.
 """
 import glob
@@ -15,9 +15,9 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
-GEN = ROOT / "src/generated/resources/assets/create_synthesis/models/block"
+GEN = ROOT / "src/generated/resources/assets/create_synthesis/models"
 TEX = ROOT / "src/main/resources/assets/create_synthesis/textures"
-SCALE = 16  # pixels per model unit in the preview
+SCALE = int(sys.argv[3]) if len(sys.argv) > 3 else 16  # pixels per model unit in the preview
 
 
 def load_texture(ref):

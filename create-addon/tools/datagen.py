@@ -583,6 +583,102 @@ for fill, height in ((0, None), (1, 5.5), (2, 7.5), (3, 9.5)):
                      "inner": f"{MOD}:block/feeding_trough_inner", "rim": f"{MOD}:block/feeding_trough_rim",
                      "feed": f"{MOD}:block/feed_surface"},
         "elements": elements}
+# ---------------------------------------------------------------- 3D item models (dies and deployer tips)
+
+def cube(frm, to, tex, uv_side, uv_top=None, uv_bottom=None, name=None):
+    """A box whose four sides share one uv, like the parts of Create's wrench."""
+    faces = {d: (tex, uv_side) for d in ("north", "south", "east", "west")}
+    faces["up"] = (tex, uv_top or uv_side)
+    faces["down"] = (tex, uv_bottom or uv_side)
+    el = element(frm, to, faces)
+    if name:
+        el["name"] = name
+    return el
+
+
+PARTS = "#parts"
+BOLT_UV, GEM_UV, IRON_UV, STEEL_UV = [0, 4, 4, 8], [4, 4, 8, 8], [8, 4, 12, 8], [12, 4, 16, 8]
+
+
+def die_model(name, extra):
+    """Two brass plates (a chamfered face on a wider base), four andesite bolts, plus the die's own part."""
+    elements = [
+        cube([2, 0, 2], [14, 2, 14], PARTS, [2, 2, 14, 4], uv_top=[2, 8, 14, 15], uv_bottom=[2, 8, 14, 15], name="base"),
+        element([4, 2, 4], [12, 3.5, 12], {"up": ("#face", [4, 4, 12, 12]),
+                                           **{d: (PARTS, [4, 0, 12, 1.5]) for d in ("north", "south", "east", "west")}}),
+    ]
+    for x, z in ((2.5, 2.5), (12.5, 2.5), (2.5, 12.5), (12.5, 12.5)):
+        elements.append(cube([x, 2, z], [x + 1, 2.75, z + 1], PARTS, BOLT_UV, name="bolt"))
+    elements += extra
+    block_files[f"assets/{MOD}/models/item/{name}.json"] = {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": f"{MOD}:item/{name}", "parts": f"{MOD}:item/die_parts", "face": f"{MOD}:item/{name}_face"},
+        "elements": elements,
+        "display": {
+            "gui": {"rotation": [30, 225, 0], "scale": [0.85, 0.85, 0.85], "translation": [0, 2, 0]},
+            "ground": {"scale": [0.4, 0.4, 0.4], "translation": [0, 3, 0]},
+            "fixed": {"rotation": [90, 0, 0], "scale": [0.7, 0.7, 0.7]},
+            "thirdperson_righthand": {"rotation": [75, 45, 0], "translation": [0, 2.5, 0], "scale": [0.4, 0.4, 0.4]},
+            "firstperson_righthand": {"rotation": [0, 45, 0], "translation": [0, 3, 0], "scale": [0.5, 0.5, 0.5]},
+            "firstperson_lefthand": {"rotation": [0, 225, 0], "translation": [0, 3, 0], "scale": [0.5, 0.5, 0.5]},
+        },
+    }
+
+
+die_model("engraving_die", [  # the diamond needle that cuts the grooves
+    cube([7, 3.5, 7], [9, 4.5, 9], PARTS, GEM_UV, name="needle"),
+    cube([7.5, 4.5, 7.5], [8.5, 5.5, 8.5], PARTS, GEM_UV, name="needle tip"),
+])
+die_model("sherd_stamp", [  # an andesite knob to hold the stamp, set off-centre so the pot shows
+    cube([9, 3.5, 9], [11, 6, 11], PARTS, BOLT_UV, name="knob"),
+    cube([8.5, 6, 8.5], [11.5, 7, 11.5], PARTS, BOLT_UV, name="knob cap"),
+])
+die_model("template_die", [  # a raised steel frame around the cavity that shapes the template
+    cube([5, 3.5, 5], [11, 4.5, 6], PARTS, STEEL_UV),
+    cube([5, 3.5, 10], [11, 4.5, 11], PARTS, STEEL_UV),
+    cube([5, 3.5, 6], [6, 4.5, 10], PARTS, STEEL_UV),
+    cube([10, 3.5, 6], [11, 4.5, 10], PARTS, STEEL_UV),
+    cube([7.5, 3.5, 7.5], [8.5, 4, 8.5], PARTS, GEM_UV, name="diamond"),
+])
+
+# deployer tips stand upright like Create's wrench, and use its hand and inventory poses
+WRENCH_DISPLAY = {
+    "thirdperson_righthand": {"rotation": [-21.5, 90, 0], "translation": [0, 3.25, -2.25]},
+    "thirdperson_lefthand": {"rotation": [-22.5, -90, 1], "translation": [0, 3.25, -2.25]},
+    "firstperson_righthand": {"rotation": [-4.5, 100.25, 10], "translation": [1, 4, 1]},
+    "firstperson_lefthand": {"rotation": [17.25, 267, 10], "translation": [1, 4, 1]},
+    "ground": {"rotation": [-90, 0, 0], "translation": [0, -2.3, 0], "scale": [0.76914, 0.76914, 0.76914]},
+    "gui": {"rotation": [28, -163, 43], "translation": [0.5, 0, 0], "scale": [1.09453, 1.09453, 1.09453]},
+    "fixed": {"rotation": [0, 180, 0], "translation": [0.5, 0.5, -0.75]},
+}
+ANDESITE_UV, BRASS_UV, IRON_UV_T, EDGE_UV, BRASS_GRIP_UV, END_UV = (
+    [0, 0, 2, 16], [2, 0, 4, 16], [4, 0, 6, 16], [6, 0, 8, 16], [8, 0, 10, 16], [10, 0, 12, 2])
+
+
+def tool_model(name, elements):
+    block_files[f"assets/{MOD}/models/item/{name}.json"] = {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": f"{MOD}:item/{name}", "parts": f"{MOD}:item/tool_parts"},
+        "elements": elements,
+        "display": WRENCH_DISPLAY,
+    }
+
+
+tool_model("carving_chisel", [
+    cube([7, 0, 7], [9, 7, 9], PARTS, [0, 0, 2, 7], uv_top=END_UV, uv_bottom=END_UV, name="andesite handle"),
+    cube([6.75, 7, 6.75], [9.25, 8, 9.25], PARTS, [2, 0, 4, 1], uv_top=[2, 0, 4, 2], name="brass ferrule"),
+    cube([7.5, 8, 7.5], [8.5, 11.5, 8.5], PARTS, [4, 0, 5, 3.5], name="shaft"),
+    cube([6.75, 11.5, 7.6], [9.25, 14, 8.4], PARTS, [4, 0, 6, 2.5], name="blade"),
+    cube([6.75, 14, 7.75], [9.25, 14.75, 8.25], PARTS, [6, 0, 8, 1], name="edge"),
+])
+tool_model("coral_graft", [
+    cube([7.25, 0, 7.25], [8.75, 7, 8.75], PARTS, [8, 0, 10, 7], uv_top=END_UV, uv_bottom=END_UV, name="brass handle"),
+    cube([7, 7, 7], [9, 7.75, 9], PARTS, [0, 0, 2, 1], name="andesite collar"),
+    cube([7.6, 7.75, 7.75], [8.4, 13, 8.25], PARTS, [4, 0, 5, 5], name="blade"),
+    cube([8.4, 12, 7.75], [9.4, 13, 8.25], PARTS, [6, 0, 7, 1], name="hook"),
+    cube([7.6, 13, 7.75], [8.4, 13.75, 8.25], PARTS, [6, 0, 7, 1], name="tip"),
+])
+
 block_files[f"assets/{MOD}/blockstates/feeding_trough.json"] = {
     "variants": {f"feed={i}": {"model": f"{MOD}:block/feeding_trough_{i}"} for i in range(4)}}
 block_files[f"assets/{MOD}/models/item/feeding_trough.json"] = {"parent": f"{MOD}:block/feeding_trough_2"}

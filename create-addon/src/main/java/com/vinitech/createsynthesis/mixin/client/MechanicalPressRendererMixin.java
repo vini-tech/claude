@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 
 @Mixin(value = MechanicalPressRenderer.class, remap = false)
 public abstract class MechanicalPressRendererMixin {
-	// the fitted die rides under the press head, lying flat
+	// the fitted die (a 3D model lying flat, face down) rides under the press head
 	@Inject(method = "renderSafe", at = @At("HEAD"))
 	private void create_synthesis$renderDie(MechanicalPressBlockEntity be, float partialTicks, PoseStack ms,
 		MultiBufferSource buffer, int light, int overlay, CallbackInfo ci) {
@@ -29,11 +29,12 @@ public abstract class MechanicalPressRendererMixin {
 		PressingBehaviour pressing = be.getPressingBehaviour();
 		float headOffset = pressing.getRenderedHeadOffset(partialTicks) * pressing.mode.headOffset;
 		ms.pushPose();
-		ms.translate(.5, -.02 - headOffset, .5);
-		ms.mulPose(Axis.XP.rotationDegrees(90));
-		ms.scale(.6f, .6f, .6f);
+		// the item renderer centres the model on the origin; once flipped, its base sits at the bottom of the
+		// press block, right under the head, and the rest of the die hangs below it
+		ms.translate(.5, -.5 - headOffset, .5);
+		ms.mulPose(Axis.XP.rotationDegrees(180)); // face down, towards the item being stamped
 		Minecraft.getInstance().getItemRenderer()
-			.renderStatic(die, ItemDisplayContext.FIXED, light, overlay, ms, buffer, be.getLevel(), 0);
+			.renderStatic(die, ItemDisplayContext.NONE, light, overlay, ms, buffer, be.getLevel(), 0);
 		ms.popPose();
 	}
 }
