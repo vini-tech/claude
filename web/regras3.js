@@ -441,6 +441,7 @@
 
   for (const id of ["cadencias_do_plano", "ritmo_harmonico", "climax_no_lugar", "perfeitas_no_meio", "figuras_obrigatorias", "dissonancias_minimas", "baixo_por_grau"]) M.PRECISA_FIM.add(id);
   for (const id of ["seis_quatro", "retrogressao_cifrada"]) M.OLHA_ADIANTE.add(id);
+  M.PRECISA_FIM.add("modulacao");
 
   return { lerCifra, membros, harmoniaDasCifras, harmoniasCifradas };
 });
