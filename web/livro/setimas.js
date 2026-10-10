@@ -263,5 +263,122 @@
     ],
   }, { depoisDe: "retardos_harm" });
 
+  // ================================================================ 2. As sétimas da sensível
+  const S1 = "tom: A menor\nsoprano: E5/1 F5 E5 D5 C5 B4 C5 A4 D5/2 C5/1 B4/1 A4/4\nbaixo: A2/1 G#2 A2 B2 C3 D3 C3 D3 F3/2 E3/1 E3/1 A2/4";
+  const S1c = "i vii°7 i vii°65 i6 vii°43 i6 iv vii°42 i64 V7 i";
+  const S2 = "tom: C maior\nsoprano: E5/1 G5 A5 G5 F5 Ab5 G5 F5 E5/2 D5/2 C5/4\nbaixo: C3/1 E3 D3 E3 F3 F3 E3 F3 G3/2 G3/2 C3/4";
+  const S2c = "I I6 viiø65 I6 IV vii°43 I6 ii6 I64 V7 I";
+
+  T_.inserir(2, {
+    id: "setima_sens", titulo: "As sétimas da sensível",
+    antes: [
+      { p: "Em lá menor, quais são as notas do vii°7, e para onde vai a 7ª dele?", o: ["sol♯–si–ré–fá; o fá desce para mi", "sol–si–ré–fá; o fá sobe para sol", "sol♯–si–ré–fá♯; o fá♯ desce para mi", "si–ré–fá–lá; o lá desce para sol"], e: "O vii°7 é feito de 3ªs menores sobre a sensível: sol♯–si–ré–fá. A 7ª é o 6º grau (fá), que desce ao 5º (mi); a sensível sobe à tônica." },
+      { p: "Em dó maior, qual a diferença entre viiø7 e vii°7?", o: ["O viiø7 tem lá (diatônico); o vii°7 tem lá♭, emprestado de dó menor", "O viiø7 tem fá♯; o vii°7 tem fá", "O viiø7 é menor; o vii°7 é maior", "Nenhuma: são duas grafias do mesmo acorde"], e: "Si–ré–fá–lá é a tétrade diatônica (meio-diminuta). Com lá♭ ela vira diminuta, por empréstimo do modo menor (mistura): mais escura e mais tensa, com o lá♭ querendo cair em sol." },
+      { p: "No viiø7 → I em dó maior, por que o ré costuma subir a mi (dobrando a 3ª do I)?", o: ["Porque ré–lá é uma 5ª justa: se o ré descesse a dó enquanto o lá desce a sol, haveria quintas paralelas", "Porque o ré é a 7ª do acorde", "Porque a 3ª do I nunca pode faltar", "Porque o ré é a sensível"], e: "No viiø7 a 3ª (ré) e a 7ª (lá) formam uma 5ª justa. Com lá → sol obrigatório, ré → dó daria 5ªs paralelas; por isso o ré sobe a mi e o I fica com a 3ª dobrada — ou o acorde vai antes ao V7." },
+    ],
+    objetivo: "Usar o vii°7 (em menor e, por mistura, em maior) e o viiø7 como dominantes: resolver as suas duas dissonâncias, evitar as quintas que eles escondem e perceber a ambiguidade do acorde diminuto.",
+    ouvir: [
+      "Bach, Paixão segundo São Mateus: o grito 'Barrabam!' da multidão, num acorde de 7ª diminuta",
+      "Mozart, Don Giovanni, cena do Comendador (ato II): as 7ªs diminutas da entrada da estátua",
+      "Beethoven, Sonata 'Patética' op. 13, Grave inicial: 7ªs diminutas no primeiro compasso",
+      "Weber, Der Freischütz, cena da Garganta do Lobo: a 7ª diminuta como som do sobrenatural",
+    ],
+    esboco: "Em lá menor, escreva só baixo e soprano para i – vii°7 – i e para i6 – vii°43 – i6. Em cada vii°7, qual nota é a 7ª, e qual é a sensível?",
+    secoes: [
+      { tipo: "texto", rotulo: "A regra", titulo: "Dominante sem fundamental", html: `
+        <p>O acorde de 7ª construído sobre a sensível é uma <b>dominante</b>: tem 7̂ (que sobe a 1̂), 4̂ (que desce a 3̂) e 2̂, como o V7, mais uma 7ª própria. Muitos tratados dos séculos XVIII e XIX o explicavam como um V9 sem a fundamental (em dó menor, sol–si–ré–fá–lá♭ sem o sol). A leitura ajuda a lembrar as resoluções: ele vai onde o V7 iria.</p>
+        <table class="tabela-modos"><thead><tr><th>Acorde</th><th>Em</th><th>Notas (tônica dó)</th><th>Qualidade</th></tr></thead><tbody>
+        <tr><td><b>vii°7</b></td><td>menor (natural da escala harmônica)</td><td>si–ré–fá–lá♭</td><td>três 3ªs menores; duas 5ªs diminutas</td></tr>
+        <tr><td><b>vii°7</b></td><td>maior, por mistura</td><td>si–ré–fá–lá♭</td><td>o mesmo acorde, com o 6º grau emprestado</td></tr>
+        <tr><td><b>viiø7</b></td><td>maior (diatônico)</td><td>si–ré–fá–lá</td><td>tríade diminuta + 7ª menor</td></tr>
+        </tbody></table>
+        <h3>Resoluções</h3>
+        <ul><li><b>Fundamental (7̂) sobe</b> a 1̂; <b>7ª (6̂ ou ♭6̂) desce</b> a 5̂ — no vii°7, meio tom (lá♭ → sol), o que dá ao acorde o seu peso.</li>
+        <li><b>A 5ª (4̂) desce</b> a 3̂, como a 7ª do V7. <b>A 3ª (2̂)</b> é livre: desce a 1̂ ou sobe a 3̂.</li>
+        <li>Resultado frequente: <b>3ª dobrada no I</b>. Em menor ela é inofensiva; no viiø7 → I ela é <b>obrigatória</b> quando 2̂ e 6̂ estão a uma 5ª justa (ré–lá), para evitar quintas paralelas. No vii°7 a mesma relação é uma 5ª diminuta (ré–lá♭): d5 → 5ª justa entre vozes superiores é tolerado; com o baixo, evite.</li>
+        <li>O <b>viiø7</b> também vai muitas vezes ao <b>V7</b> antes do I: o lá desce a sol e as outras três notas ficam — uma dominante que se transforma em outra.</li></ul>
+        <h3>Inversões</h3>
+        <table class="tabela-modos"><thead><tr><th>Cifra</th><th>Baixo</th><th>Vai a</th></tr></thead><tbody>
+        <tr><td>vii°7</td><td>7̂</td><td>i (1̂)</td></tr>
+        <tr><td>vii°65</td><td>2̂</td><td>i6 (3̂) — passagem 1–2–3, como o V43</td></tr>
+        <tr><td>vii°43</td><td>4̂</td><td>i6 (3̂) — o baixo desce como a 7ª do V42</td></tr>
+        <tr><td>vii°42</td><td>♭6̂ = a 7ª</td><td>5̂: V, ou i64 cadencial — o baixo desce meio tom</td></tr>
+        </tbody></table>
+        <p>No par externo, a pergunta de sempre: quem tem a 7ª? Se é o soprano, ele desce; se é o baixo (vii°42), o baixo desce e a melodia não pode dobrá-lo.</p>
+        <h3>Um acorde sem centro</h3>
+        <p>O vii°7 divide a oitava em quatro 3ªs menores iguais. Soado isoladamente, qualquer uma das quatro notas pode ser a sensível: si–ré–fá–lá♭ (dó menor) é, para o ouvido, o mesmo acorde que sol♯–si–ré–fá (lá menor), ré–fá–lá♭–dó♭ (mi♭ menor) ou fá–lá♭–dó♭–mi♭♭. Só existem três acordes diminutos diferentes. Essa simetria é a base da <b>modulação enarmônica</b> (nível 4); aqui, basta ouvir que o acorde só ganha tom quando resolve.</p>` },
+      { tipo: "exemplo", titulo: "As quatro posições em lá menor", intro: "Cada inversão do vii°7 leva o baixo a um lugar diferente; a sensível e a 7ª resolvem sempre igual.",
+        camadas: [
+          { titulo: "O baixo e as cifras", partitura: "tom: A menor\nbaixo: A2/1 G#2 A2 B2 C3 D3 C3 D3 F3/2 E3/1 E3/1 A2/4", rotulos: ["baixo"], cifras: cifrar(S1, S1c),
+            notas: [["decisao", "Compasso 1: vii°7 como bordadura inferior (lá–sol♯–lá) e vii°65 como passagem (lá–si–dó). Compasso 2: vii°43 entre dois i6, o baixo 3–4–3."],
+              ["decisao", "Compasso 3: iv → vii°42, o baixo sobe ré → fá e desce meio tom a mi, onde o 6/4 cadencial prepara o V7."],
+              ["checagem", "O vii°42 vai ao i64, não direto ao i: o baixo (a 7ª, fá) precisa descer a mi, e no mi o acorde de tônica só pode ser 6/4 — cadencial."]] },
+          { titulo: "A melodia", partitura: S1, cifras: cifrar(S1, S1c), rotulos: ["soprano", "baixo"], anotacoes: [[0, 1, "7ª"], [0, 3, "5ª do acorde"], [1, 8, "7ª"]],
+            notas: [["decisao", "Fá5 sobre sol♯2: a 7ª do vii°7 na melodia, como bordadura de mi5 — a 7ª diminuta contra o baixo resolve na 5ª justa da tônica."],
+              ["decisao", "Sobre o vii°65, ré5 (a 5ª do acorde) desce a dó5: a tendência 4̂ → 3̂ é a mesma do fá no V7."],
+              ["rejeitada", "Sobre o vii°42 pensei em fá5, dobrando a 7ª do baixo: as duas desceriam fá → mi em oitavas. Ré5 desce a dó5 (sobre o 6/4) por grau, sem dobrar nada."],
+              ["checagem", "A 2ª aumentada fá–sol♯ não aparece em nenhuma voz; o clímax (fá5) é a própria dissonância do compasso 1."]],
+            pausa: ["Por que o vii°43 (e não o vii°7) entre os dois i6?", "Porque o baixo está em dó (3̂) e quer uma bordadura superior: ré (4̂) é a 5ª do acorde de sol♯ diminuto, logo vii°43. É o mesmo lugar do V42 na regra da oitava — mas, com o ré no baixo em vez de fá, o baixo pode voltar a dó subindo ou descendo."] },
+        ] },
+      { tipo: "exemplo", titulo: "Em maior: o viiø7 diatônico e o vii°7 emprestado", intro: "Dó maior. O lá natural do viiø7 e o lá♭ do vii°7 na mesma frase.",
+        camadas: [
+          { titulo: "A frase", partitura: S2, cifras: cifrar(S2, S2c), rotulos: ["soprano", "baixo"], anotacoes: [[0, 2, "7ª (lá)"], [0, 5, "7ª (lá♭)"]],
+            notas: [["decisao", "Compasso 1: viiø65 como bordadura do I6 (mi–ré–mi no baixo); a 7ª lá5 desce a sol5. O baixo sobe ré → mi: é a 3ª do viiø7 que sobe, como manda a regra das quintas."],
+              ["decisao", "Compasso 2: o fá3 do IV fica no baixo e o acorde vira vii°43 com lá♭5 — o empréstimo é o clímax da linha, e a 7ª diminuta cai meio tom em sol5."],
+              ["rejeitada", "Pensei em chegar ao viiø65 vindo do I em estado fundamental (dó3 → ré3) com mi5 → lá5: 5ª atingida por salto em movimento direto. Com o I6 antes, o baixo desce mi → ré enquanto a melodia sobe: movimento contrário."],
+              ["checagem", "Lá5 sobre ré3 é uma 5ª justa; a resolução vai a sol5 sobre mi3 (10ª), não a sol5 sobre dó3 — que seriam quintas paralelas ré–lá → dó–sol."]],
+            pausa: ["Ouça lá5 e depois lá♭5: o que muda na função?", "Nada: os dois são dominantes e resolvem igual. Muda a cor e a força da 7ª — o lá♭ está a meio tom do sol, e a frase escurece por um instante, como se dó menor passasse por dentro de dó maior."] },
+        ] },
+      { tipo: "contraste", titulo: "viiø65 × vii°65 na mesma frase",
+        a: { rotulo: "A — viiø65 (lá natural)", ...ex("tom: C maior\nsoprano: E5/1 G5 A5 G5 F5/2 E5/1 D5/1 C5/4\nbaixo: C3/1 E3 D3 E3 F3/2 G3/1 G3/1 C3/4", "I I6 viiø65 I6 ii6 I64 V7 I") },
+        b: { rotulo: "B — vii°65 (lá♭, por mistura)", ...ex("tom: C maior\nsoprano: E5/1 G5 Ab5 G5 F5/2 E5/1 D5/1 C5/4\nbaixo: C3/1 E3 D3 E3 F3/2 G3/1 G3/1 C3/4", "I I6 vii°65 I6 ii6 I64 V7 I") },
+        pergunta: "Só uma nota muda. Qual das duas versões pede mais a resolução, e por quê?",
+        comentario: "<p>Em A, lá5 está a um tom de sol5: a 7ª é uma dissonância suave, quase uma nota de passagem. Em B, lá♭5 forma uma 5ª diminuta com o ré do baixo e está a meio tom de sol: a atração é muito maior, e o empréstimo do menor faz a frase escurecer por um instante. É por isso que o vii°7 foi o acorde preferido para os momentos de crise — e o viiø7 para o tecido do dia a dia.</p>" },
+      { tipo: "quebra", titulo: "A 7ª diminuta como efeito", html: `
+        <p>Pela sua tensão e pela ambiguidade, o acorde diminuto virou o som do susto. Bach põe o grito da multidão, 'Barrabam!', na Paixão segundo São Mateus, sobre uma 7ª diminuta; Mozart abre a cena do Comendador em Don Giovanni com ela; Weber faz dela a cor do sobrenatural na Garganta do Lobo (Der Freischütz); Beethoven a coloca já no primeiro compasso da 'Patética'. No século XIX o diminuto em tremolo vira clichê de ópera e, depois, de trilha sonora.</p>
+        <p>O que se quebra não é a resolução da 7ª (os compositores continuam resolvendo), mas a <b>função</b>: o acorde aparece no tempo forte sem preparação, dura além do normal, ou desliza para <b>outro</b> diminuto por semitom, sem ir à tônica — a tonalidade fica suspensa até uma dominante "de verdade" aparecer. E a simetria permite a virada: o mesmo som que era sensível de dó menor resolve, de repente, em lá menor.</p>`,
+        exemplos: [
+          { rotulo: "Deslizando por diminutos", ...ex("tom: C maior\nsoprano: G5/2 Ab5 G5 F#5 F5 F5 E5/4\nbaixo: C3/2 B2 Bb2 A2 Ab2 G2 C3/4", "I vii°7 vii°42/ii vii°65/V vii°42 V7 I"),
+            perfil: { ...SET, intervalo_melodico_aumentado_diminuto: "info" }, comentario: "O baixo desce cromaticamente de dó a sol sob quatro acordes diminutos seguidos. Cada 7ª ainda desce um grau (lá♭5, si♭2, lá♭2), mas nenhum diminuto vai à sua tônica: o ouvido perde o tom até o V7. Os semitons cromáticos (si → si♭, fá♯ → fá), que o estilo estrito evita, são o próprio efeito." },
+          { rotulo: "O diminuto que muda de tom", ...ex("tom: C menor\nsoprano: Eb5/2 F5 E5 F5 D5 C5\nbaixo: C3/2 B2 C3 D3 E3 A2", "i vii°7=a:vii°65 i6 iv V7 i"),
+            perfil: { ...SET }, comentario: "Si–ré–fá–lá♭ é o vii°7 de dó menor. Lido como sol♯–si–ré–fá, é o vii°65 de lá menor — e resolve lá: o baixo sobe si → dó, mas a melodia vai de fá a mi natural, e a cadência confirma lá menor. Uma prévia da modulação enarmônica (nível 4)." },
+        ] },
+    ],
+    exercicios: [
+      { id: "sns1", titulo: "Completar: o vii°7 em ré menor", modo: "completar", perfil: SET, nivel: 6, contexto: { nivel: 6, plano: {} },
+        cifras: "i vii°7 i vii°65 i6 vii°43 i6 iv vii°42 i64 V7 i".split(" "),
+        instrucoes: "<p>Ré menor. Baixo, cifras e o primeiro compasso da melodia estão prontos. Escreva a melodia dos compassos 2–4. No vii°43 a 7ª (si♭) pode estar na melodia; no vii°42 ela está no baixo. A sensível (dó♯) sobe sempre.</p>",
+        texto: "tom: D menor\ncf: baixo\nsoprano: F5/1 E5 D5 C#5\nbaixo: D3/1 C#3 D3 E3 F3 G3 F3 G2 Bb2/2 A2/1 A2/1 D3/4", duracao: 1, alvoCompassos: 4,
+        solucao: "tom: D menor\ncf: baixo\nsoprano: F5/1 E5 D5 C#5 D5 Bb4 A4 D5 E5/2 D5/1 C#5/1 D5/4\nbaixo: D3/1 C#3 D3 E3 F3 G3 F3 G2 Bb2/2 A2/1 A2/1 D3/4",
+        comentarioSolucao: "Si♭4 (a 7ª do vii°43) desce a lá4 sobre o i6; o salto lá4 → ré5 vem com o baixo descendo sol3 → sol2 (movimento contrário). Sobre o vii°42 a melodia tem mi5, que desce a ré5 enquanto o baixo, com a 7ª, desce si♭ → lá." },
+      { id: "sns2", titulo: "Menos apoio: sol menor", modo: "menos apoio", perfil: SET, nivel: 6, contexto: { nivel: 6, plano: { cadencia: 4 } },
+        cifrasAluno: true, cifrasIniciais: "i vii°7 i",
+        instrucoes: "<p>Sol menor. Só o baixo está dado. Escreva cifras e melodia: o baixo pede vii°7, vii°65, vii°43 (com a 7ª preparada pelo iv) e vii°42 antes da cadência composta.</p>",
+        texto: "tom: G menor\ncf: baixo\nsoprano:\nbaixo: G2/1 F#2 G2 A2 Bb2 C3 C3 Bb2 Eb3/2 D3/1 D3/1 G2/4", duracao: 1, alvoCompassos: 4,
+        solucao: "tom: G menor\ncf: baixo\nsoprano: D5/1 C5 Bb4 C5 Bb4 Eb5/2 D5/1 C5/2 Bb4/1 A4/1 G4/4\nbaixo: G2/1 F#2 G2 A2 Bb2 C3 C3 Bb2 Eb3/2 D3/1 D3/1 G2/4",
+        solucaoCifras: "i vii°7 i vii°65 i6 iv vii°43 i6 vii°42 i64 V7 i",
+        comentarioSolucao: "O mi♭5 entra como 3ª do iv e fica (ligado) enquanto o acorde vira vii°43: a 7ª preparada à maneira barroca, resolvida em ré5. O vii°42 (mi♭ no baixo) desce ao 6/4 cadencial, e a melodia desce por grau até a tônica." },
+      { id: "sns3", titulo: "Restrição: lá natural e lá bemol", modo: "restrição", perfil: { ...SET, set_cifras_pedidas: "erro" }, nivel: 6,
+        contexto: { nivel: 6, plano: { cadencia: 4 }, cifrasPedidas: ["viiø7", "vii°7"] }, cifrasAluno: true,
+        instrucoes: "<p>Dó maior. Escreva cifras e melodia para o baixo dado. <b>Restrição:</b> use um viiø7 (com lá) e um vii°7 (com lá♭, por mistura), em qualquer inversão, e resolva as 7ªs. Cuidado com a 5ª justa ré–lá do viiø7.</p>",
+        texto: "tom: C maior\ncf: baixo\nsoprano:\nbaixo: C3/1 D3 E3 F3 F3 E3 F3/2 G3/2 G3/2 C3/4", duracao: 1, alvoCompassos: 4,
+        solucao: "tom: C maior\ncf: baixo\nsoprano: C5/1 F5 G5 F5 Ab5 G5 F5/2 E5/2 D5/2 C5/4\nbaixo: C3/1 D3 E3 F3 F3 E3 F3/2 G3/2 G3/2 C3/4",
+        solucaoCifras: "I viiø65 I6 IV vii°43 I6 ii6 I64 V7 I",
+        comentarioSolucao: "viiø65 como passagem dó–ré–mi (a melodia sobe fá5 → sol5 em 10ªs com o baixo); vii°43 sobre o fá preso do IV, com lá♭5 como clímax e 7ª, descendo a sol5. Depois, a cadência composta desce por grau até dó5." },
+      { id: "sns4", titulo: "Livre: dó menor", modo: "livre", perfil: SET, nivel: 6, contexto: { nivel: 6, plano: { cadencia: 4 } }, cifrasAluno: true, alvoCompassos: 4,
+        instrucoes: "<p>Componha baixo, melodia e cifras: 4 compassos em dó menor com o vii°7 em pelo menos duas posições e cadência autêntica perfeita. Escolha onde a 7ª fica na melodia e onde fica no baixo.</p>",
+        texto: "tom: C menor\nsoprano:\nbaixo:", duracao: 1,
+        solucao: "tom: C menor\nsoprano: Eb5/1 D5 C5 B4 C5 Ab4 G4 C5 D5/2 C5/1 B4/1 C5/4\nbaixo: C3/1 B2 C3 D3 Eb3 F3 Eb3 F2 Ab2/2 G2/1 G2/1 C3/4",
+        solucaoCifras: "i vii°7 i vii°65 i6 vii°43 i6 iv vii°42 i64 V7 i",
+        comentarioSolucao: "As quatro posições em ordem: vii°7 e vii°65 em volta da tônica, vii°43 com a 7ª (lá♭4) na melodia, vii°42 com a 7ª no baixo (lá♭2 → sol2, sobre o 6/4 cadencial)." },
+      { id: "sns5", titulo: "Quebrar: diminutos em cadeia", modo: "quebrar", perfil: { ...SET, intervalo_melodico_aumentado_diminuto: "info" }, nivel: 6,
+        contexto: { nivel: 6, plano: {} }, cifras: "i vii°7 vii°43/iv vii°65/V vii°42 V7 i".split(" "),
+        instrucoes: "<p>Mi menor. O baixo desce cromaticamente sob três acordes diminutos seguidos (cifras dadas) antes do V7. <b>A quebra:</b> nenhum diminuto vai à sua tônica, e as vozes andam por semitons cromáticos, como na ópera e no piano românticos. Escreva a melodia (uma nota por acorde), mantendo cada 7ª descendo um grau — o efeito vem da cadeia, não do descuido.</p>",
+        texto: "tom: E menor\ncf: baixo\nsoprano:\nbaixo: E3/2 D#3 D3 C#3 C3 B2 E3/4", duracao: 2, alvoCompassos: 4,
+        solucao: "tom: E menor\ncf: baixo\nsoprano: B4/2 C5 B4 A#4 A4 A4 G4/4\nbaixo: E3/2 D#3 D3 C#3 C3 B2 E3/4",
+        comentarioSolucao: "A melodia desce dó5 – si4 – lá♯4 – lá4 em 6ªs com o baixo cromático: dó5 (7ª do vii°7) desce a si4, o dó3 do baixo (7ª do vii°42) desce a si2, e lá4 é preparado e vira a 7ª do V7. Só o V7 devolve o tom de mi menor." },
+    ],
+  }, { depoisDe: "setima_dom" });
+
 //CAPITULOS
 })(this);
