@@ -22,43 +22,75 @@
   const FUNCAO = { 1: "T", 6: "T", 3: "T", 2: "PD", 4: "PD", 5: "D", 7: "D" };
 
   /* "V43" → { grau, setima, membroBaixo (0 fundamental, 1 terça, 2 quinta, 3 sétima), texto } */
-  // dominantes secundárias: "V43/V", "V7/IV", "vii°7/V" (só V e vii° antes da barra)
+  /* Cifras aceitas:
+   *   graus romanos com qualidade pela caixa (I maior, ii menor, vii° diminuto, viiø7 meio-diminuto, III+ aumentado)
+   *   e figura (6, 64, 7, 65, 43, 42, 9): I6, ii65, V43, vii°7, IV7, V9
+   *   empréstimo e alterações com b/# antes do grau: iv, bVI, bIII, bVII, #iv°7
+   *   dominantes secundárias: V43/V, V7/IV, vii°7/V
+   *   napolitana N ou N6; sextas aumentadas It6, Fr43, Ger65 (com o 6º grau abaixado no baixo) */
+  const AUMENTADAS = { It: [5, 0, 3], Fr: [5, 0, 1, 3], Ger: [5, 0, 2, 3] };
   function lerCifra(s) {
-    const m = /^([ivIV]+)(°|o|ø)?(7|65|6\/5|43|4\/3|42|4\/2|2|64|6\/4|6)?(?:\/([ivIV]+))?$/.exec(String(s).trim());
+    const t = String(s).trim();
+    const aum = /^(It|Fr|Ger)(6|43|4\/3|65|6\/5)?$/.exec(t);
+    if (aum) return { grau: 4, setima: aum[1] !== "It", membroBaixo: 0, fig: "", texto: t, aumentada: aum[1], seisQuatro: false };
+    const nap = /^N(6|64)?$/.exec(t);
+    if (nap) return { grau: 2, setima: false, membroBaixo: nap[1] === "6" ? 1 : nap[1] === "64" ? 2 : 0, fig: nap[1] || "", texto: t, napolitana: true, alteracao: -1, maior: true, seisQuatro: nap[1] === "64" };
+    const m = /^(b|#)?([ivIV]+)(°|o|ø|\+)?(7|65|6\/5|43|4\/3|42|4\/2|2|64|6\/4|6|9)?(?:\/([ivIV]+))?$/.exec(t);
     if (!m) return null;
-    const grau = NUM[m[1].toUpperCase()];
+    const grau = NUM[m[2].toUpperCase()];
     if (!grau) return null;
-    const fig = (m[3] || "").replace("/", "");
-    const setima = ["7", "65", "43", "42", "2"].includes(fig);
-    const membroBaixo = { "": 0, 7: 0, 6: 1, 65: 1, 64: 2, 43: 2, 42: 3, 2: 3 }[fig];
-    const c = { grau, setima, membroBaixo, fig, texto: s.trim(), seisQuatro: fig === "64" };
-    if (m[4]) {
-      const alvo = NUM[m[4].toUpperCase()];
-      if (!alvo || !(grau === 5 || grau === 7)) return null;
+    const fig = (m[4] || "").replace("/", "");
+    const setima = ["7", "65", "43", "42", "2", "9"].includes(fig);
+    const membroBaixo = { "": 0, 7: 0, 9: 0, 6: 1, 65: 1, 64: 2, 43: 2, 42: 3, 2: 3 }[fig];
+    const q = m[3] === "o" ? "°" : m[3];
+    const c = { grau, setima, membroBaixo, fig, texto: t, seisQuatro: fig === "64", nona: fig === "9",
+      maior: m[2] === m[2].toUpperCase(), qualidade: q || "", alteracao: m[1] === "b" ? -1 : m[1] === "#" ? 1 : 0 };
+    if (m[5]) {
+      const alvo = NUM[m[5].toUpperCase()];
+      if (!alvo || !(grau === 5 || grau === 7) || c.alteracao) return null;
       // o grau passa a ser o da fundamental do acorde (V/V → 2, vii°/V → 4), para as regras de função
-      c.secundaria = { tipo: grau, alvo, semi: m[2] === "ø" ? "meio" : "dim" };
+      c.secundaria = { tipo: grau, alvo, semi: q === "ø" ? "meio" : "dim" };
       c.grau = ((alvo - 1 + (grau === 5 ? 4 : 6)) % 7) + 1;
     }
     return c;
   }
 
   function membros(c, tom) {
+    const esc = R2.escala(tom);
+    const nome = (a) => a.nome;
+    if (c.aumentada) return AUMENTADAS[c.aumentada].map((k) => [F.transpor(tom.tonica, 5, 8), tom.tonica, F.transpor(tom.tonica, 1, 2), F.transpor(tom.tonica, 2, 3), F.transpor(tom.tonica, 3, 6)][[5, 0, 1, 2, 3].indexOf(k)]).map(nome);
     if (c.secundaria) {
-      const esc = R2.escala(tom);
       const alvo = esc[c.secundaria.alvo - 1];
       const nomes = c.secundaria.tipo === 5
         ? [[0, 0], [2, 4], [4, 7], [6, 10]].map(([g, st]) => F.transpor(F.transpor(alvo, 4, 7), g, st).nome)
         : [[0, 0], [2, 3], [4, 6], [6, c.secundaria.semi === "meio" ? 10 : 9]].map(([g, st]) => F.transpor(F.transpor(alvo, -1, -1), g, st).nome);
       return c.setima ? nomes : nomes.slice(0, 3);
     }
-    const esc = R2.escala(tom);
-    const nomes = [0, 2, 4, 6].map((k) => esc[(c.grau - 1 + k) % 7].nome);
-    if (tom.modo === "minor" && (c.grau === 5 || c.grau === 7)) {
-      const lt = F.transpor(tom.tonica, -1, -1).nome;
-      const i = nomes.indexOf(esc[6].nome);
-      if (i >= 0) nomes[i] = lt;
+    // fundamental: grau da escala (no menor, o vii° e o V usam a sensível), alterada por b/#
+    let raiz = esc[c.grau - 1];
+    if (tom.modo === "minor" && c.grau === 7 && !c.maior && !c.alteracao) raiz = F.transpor(tom.tonica, -1, -1);
+    if (c.alteracao) raiz = F.transpor(raiz, 0, c.alteracao);
+    const dim = c.qualidade === "°" || c.qualidade === "ø", aum = c.qualidade === "+";
+    const terca = F.transpor(raiz, 2, c.maior && !dim ? 4 : 3);
+    const quinta = F.transpor(raiz, 4, dim ? 6 : aum ? 8 : 7);
+    const nomes = [raiz, terca, quinta];
+    if (c.setima) {
+      let st;
+      if (c.qualidade === "°") st = 9;
+      else if (c.qualidade === "ø") st = 10;
+      else if ((c.grau === 5 && c.maior && !c.alteracao) || c.alteracao) st = 10;
+      else {
+        // sétima diatônica: a nota da escala uma 7ª acima da fundamental
+        const diat = esc[(c.grau - 1 + 6) % 7];
+        st = (((diat.ps - raiz.ps) % 12) + 12) % 12;
+      }
+      nomes.push(F.transpor(raiz, 6, st));
     }
-    return c.setima ? nomes : nomes.slice(0, 3);
+    if (c.nona) {
+      const diat = esc[(c.grau - 1 + 1) % 7];
+      nomes.push(F.transpor(raiz, 8, 12 + ((((diat.ps - raiz.ps) % 12) + 12) % 12)));
+    }
+    return nomes.map(nome);
   }
 
   /* Modulação nas cifras:

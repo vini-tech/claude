@@ -725,5 +725,26 @@
     },
   ];
 
-  raiz.TEMAS = { niveis };
+  // nível 4: preenchido pelos módulos de web/livro
+  niveis.push({ numero: 4, titulo: "Cromatismo e modulação", resumo: "Dominantes secundárias, empréstimo modal, napolitana, sextas aumentadas e os três tipos de modulação — primeiro como os tratados ensinam, depois como os compositores quebraram.", temas: [] });
+
+  // capítulos em módulos separados (web/livro/*.js) entram com TEMAS.inserir
+  function inserir(numero, tema, { antesDe, depoisDe } = {}) {
+    let n = niveis.find((x) => x.numero === numero);
+    if (!n) throw new Error("nível inexistente: " + numero);
+    const lista = n.temas;
+    if (lista.some((t) => t.id === tema.id)) throw new Error("tema repetido: " + tema.id);
+    let k = lista.length;
+    if (antesDe) { const i = lista.findIndex((t) => t.id === antesDe); if (i >= 0) k = i; }
+    if (depoisDe) { const i = lista.findIndex((t) => t.id === depoisDe); if (i >= 0) k = i + 1; }
+    lista.splice(k, 0, tema);
+  }
+  function novoNivel(nivel) {
+    if (niveis.some((x) => x.numero === nivel.numero)) return;
+    niveis.push({ temas: [], ...nivel });
+    niveis.sort((a, b) => a.numero - b.numero);
+  }
+  const perfis = { N1, N2, N3, N4, TONAL, MELODIA, CANTUS, PLANO_CP, PLANO_BAIXO, PLANO_FRASE, FUX, CF1, CF2 };
+
+  raiz.TEMAS = { niveis, inserir, novoNivel, perfis };
 })(this);

@@ -8,6 +8,10 @@ const Bu = require("../web/buscador.js");
 const Qs = require("../web/questoes.js");
 const Tr = require("../web/transpor.js");
 const { niveis } = require("../web/temas.js").TEMAS;
+const problemasModulos = [];
+for (const nome of require("../web/livro/indice.js")) {
+  try { require(`../web/livro/${nome}.js`); } catch (e) { problemasModulos.push(`módulo ${nome}: ${e.message}`); }
+}
 
 const problemas = [];
 const erro = (onde, msg) => problemas.push(`${onde}: ${msg}`);
@@ -57,6 +61,9 @@ function validarPartitura(onde, obj, perfilEx, ctxEx) {
   const parcial = /(^|\s)P\//.test(obj.partitura) || ex.vozes.length < 2;
   if (parcial || obj.semVerificar) return;
   const modelo = Ed.ler(obj.partitura);
+  // exemplos de "como quebrar" (e outros) podem trazer o próprio perfil e contexto
+  if (obj.perfil) perfilEx = { ...obj.perfil };
+  if (obj.contexto) ctxEx = { ...ctxEx, ...obj.contexto };
   // camada de esqueleto: vale o perfil da espécie indicada
   if (obj.especie) { perfilEx = { ...M.perfilDoNivel(obj.especie), climax_coincidente: "aviso" }; ctxEx = { ...ctxEx, nivel: obj.especie }; }
   let ctx = contextoBase({ nivel: ctxEx.nivel, contexto: ctxEx }, modelo);
@@ -130,6 +137,8 @@ for (const n of niveis) {
     (t.secoes || []).forEach((s, k) => {
       const os = `${onde}#${k + 1}`;
       if (s.tipo === "exemplo") s.camadas.forEach((c, j) => { if (c.partitura) validarPartitura(`${os}.${j + 1}`, c, perfilEx, ctxEx); });
+      if (s.tipo === "quebra") (s.exemplos || []).forEach((x, j) => validarPartitura(`${os}q${j + 1}`, x, perfilEx, ctxEx));
+      if (!["texto", "exemplo", "contraste", "quebra"].includes(s.tipo)) erro(os, "tipo de seção desconhecido: " + s.tipo);
       if (s.tipo === "contraste") {
         validarPartitura(os + "a", s.a, perfilEx, ctxEx);
         validarPartitura(os + "b", s.b, perfilEx, ctxEx);
@@ -140,4 +149,4 @@ for (const n of niveis) {
   }
 }
 
-console.log(JSON.stringify(problemas, null, 1));
+console.log(JSON.stringify([...problemasModulos, ...problemas], null, 1));

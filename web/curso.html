@@ -178,6 +178,12 @@ figure.exemplo .andamento input { width: 110px; }
 .anotacao.sev-erro, .anotacao.sev-aviso, .anotacao.sev-ok, .cifra.sev-erro, .cifra.sev-aviso { fill: var(--sev); }
 .of-escala { margin: 0 0 6px; font-size: 0.9rem; line-height: 1.45; } .of-escala .solf { color: var(--apagado); }
 .t-erro { color: var(--erro); } .t-aviso { color: var(--aviso); }
+.sumario { display: flex; gap: 6px; flex-wrap: wrap; position: sticky; top: 0; z-index: 3; background: var(--papel); padding: 8px 0; border-bottom: 1px solid var(--linha); }
+.sumario a { font-size: 0.8rem; font-weight: 700; text-decoration: none; color: var(--acento); background: var(--acento-suave); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+.sumario a.quebra { color: var(--erro); background: var(--erro-fundo); } .sumario a.exs { color: var(--sobre-acento); background: var(--acento); }
+.bloco.quebra { border-top: 3px solid var(--erro); }
+.bloco.quebra > .rotulo { color: var(--erro); }
+.quebra-ex { display: grid; gap: 6px; } .comentario-q { font-size: 0.95rem; color: var(--apagado); margin: 0; }
 .hoje { display: grid; gap: 12px; border-color: var(--acento); }
 .hoje-cab { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
 .hoje-cab h2 { font-size: 1.3rem; }
@@ -291,6 +297,7 @@ figure.exemplo .andamento input { width: 110px; }
 <script src="estilo.js"></script>
 <script src="oficina.js"></script>
 <script src="temas.js"></script>
+<script src="livro/indice.js"></script>
 <script>
 "use strict";
 const M = window.Motor, P = window.Partitura, Som = window.Som, G = window.Geradores, Of = window.Oficina, Cn = window.Cantus, Est = window.Estilo, Bu = window.Buscador, Qs = window.Questoes, Tr = window.Transpor, T = M.T;
@@ -308,7 +315,8 @@ const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify(est)); }
 const nota = (k) => est.notas[k] || "";
 const guardarNota = (k, v) => { est.notas[k] = v; salvar(); };
 
-const temasEmOrdem = niveis.flatMap((n) => n.temas.map((t) => ({ ...t, nivel: n })));
+let temasEmOrdem = [];
+const ordenarTemas = () => { temasEmOrdem = niveis.flatMap((n) => n.temas.map((t) => ({ ...t, nivel: n }))); };
 const temaPorId = (id) => temasEmOrdem.find((t) => t.id === id);
 const exFeito = (id) => est.exercicios[id] && est.exercicios[id].aprovado;
 
@@ -468,10 +476,18 @@ function desenharTema(t) {
     <header class="cab-tema"><h1>${esc(t.titulo)}</h1><p class="lead">${esc(t.objetivo)}</p>
     ${t.ouvir && t.ouvir.length ? `<div class="ouvir-lista"><span class="rotulo">Para ouvir e estudar</span><ul>${t.ouvir.map((o) => `<li>${esc(o)}</li>`).join("")}</ul></div>` : ""}</header>`;
   if (t.esboco) h += `<section class="bloco esboco"><div class="rotulo">Antes da aula · esboço</div><p>${t.esboco}</p>${campoAberto(t.id + ":esboco", "Seu esboço ou sua primeira decisão", "Sem correção: escreva o que faria antes de ler.")}</section>`;
-  for (const s of t.secoes) {
-    if (s.tipo === "texto") h += `<section class="bloco texto">${s.titulo ? `<h2>${esc(s.titulo)}</h2>` : ""}${s.html}</section>`;
-    else if (s.tipo === "exemplo") {
-      h += `<section class="bloco exemplo-camadas"><div class="rotulo">Exemplo resolvido</div><h2>${esc(s.titulo)}</h2>${s.intro ? `<p>${s.intro}</p>` : ""}`;
+  // sumário do capítulo: cada seção com âncora
+  const ROTULO = { texto: "", exemplo: "Exemplo", contraste: "Contraste", quebra: "Como quebrar" };
+  const ancora = (k) => `${t.id}-s${k}`;
+  h += `<nav class="sumario">${t.secoes.map((s, k) => `<a href="javascript:void 0" data-alvo="${ancora(k)}" class="${s.tipo}">${esc(s.titulo || ROTULO[s.tipo])}</a>`).join("")}<a href="javascript:void 0" data-alvo="${t.id}-ex" class="exs">Exercícios</a></nav>`;
+  t.secoes.forEach((s, k) => {
+    const id = `id="${ancora(k)}"`;
+    if (s.tipo === "texto") h += `<section class="bloco texto" ${id}>${s.rotulo ? `<div class="rotulo">${esc(s.rotulo)}</div>` : ""}${s.titulo ? `<h2>${esc(s.titulo)}</h2>` : ""}${s.html}</section>`;
+    else if (s.tipo === "quebra") {
+      h += `<section class="bloco quebra" ${id}><div class="rotulo">Como quebrar</div>${s.titulo ? `<h2>${esc(s.titulo)}</h2>` : ""}${s.html || ""}
+        ${(s.exemplos || []).map((x) => `<div class="quebra-ex">${reg(x)}${x.comentario ? `<p class="comentario-q">${x.comentario}</p>` : ""}</div>`).join("")}</section>`;
+    } else if (s.tipo === "exemplo") {
+      h += `<section class="bloco exemplo-camadas" ${id}><div class="rotulo">Exemplo resolvido</div><h2>${esc(s.titulo)}</h2>${s.intro ? `<p>${s.intro}</p>` : ""}`;
       s.camadas.forEach((c, k) => {
         h += `<div class="camada"><div class="camada-cab"><span class="num">${k + 1}</span><b>${esc(c.titulo)}</b></div>${c.texto ? `<p>${c.texto}</p>` : ""}
           ${c.partitura ? reg(c) : ""}
@@ -481,14 +497,14 @@ function desenharTema(t) {
       });
       h += `</section>`;
     } else if (s.tipo === "contraste") {
-      h += `<section class="bloco contraste"><div class="rotulo">Contraste</div><h2>${esc(s.titulo)}</h2>${s.intro ? `<p>${s.intro}</p>` : ""}
+      h += `<section class="bloco contraste" ${id}><div class="rotulo">Contraste</div><h2>${esc(s.titulo)}</h2>${s.intro ? `<p>${s.intro}</p>` : ""}
         <div class="par">${reg({ ...s.a, rotulo: s.a.rotulo || "A" })}${reg({ ...s.b, rotulo: s.b.rotulo || "B" })}</div>
         <p><b>${s.pergunta}</b></p>${campoAberto(`${t.id}:contraste:${s.titulo}`, "O que muda?", "")}
         <button class="botao revelar" type="button">Ver o comentário</button><div class="comentario" hidden>${s.comentario}</div></section>`;
     }
-  }
+  });
   if (t.esboco) h += `<section class="bloco"><div class="rotulo">Volta ao esboço</div><p>Releia o que você escreveu antes da aula. O que mudaria agora?</p>${campoAberto(t.id + ":revisao-esboco", "O que mudaria", "")}</section>`;
-  h += `<section class="bloco exercicios"><div class="rotulo">Compor</div><h2>Exercícios</h2>
+  h += `<section class="bloco exercicios" id="${t.id}-ex"><div class="rotulo">Compor</div><h2>Exercícios</h2>
     <p class="lead">Em ordem: completar, com menos apoio, com restrição, livre e uma variante sua. Se o primeiro sair limpo, pule para o livre.</p><ol class="lista-ex">`;
   t.exercicios.forEach((e, k) => {
     const st = est.exercicios[e.id];
@@ -497,6 +513,7 @@ function desenharTema(t) {
   h += `</ol></section><nav class="rodape-tema">${ant ? `<a href="#${ant.id}">← ${esc(ant.titulo)}</a>` : `<a href="#">← Ateliê</a>`}${prox ? `<a href="#${prox.id}">${esc(prox.titulo)} →</a>` : ""}</nav>`;
   $("pagina").innerHTML = h;
   montarExemplos($("pagina"));
+  for (const a of document.querySelectorAll(".sumario a")) a.addEventListener("click", () => document.getElementById(a.dataset.alvo)?.scrollIntoView({ behavior: "smooth", block: "start" }));
   for (const ta of document.querySelectorAll("textarea[data-nota]")) ta.addEventListener("input", () => guardarNota(ta.dataset.nota, ta.value));
   for (const b of document.querySelectorAll(".revelar")) b.addEventListener("click", () => { b.nextElementSibling.hidden = false; b.hidden = true; });
   for (const b of document.querySelectorAll(".ex-link")) b.addEventListener("click", () => abrirExercicio(t, t.exercicios[+b.dataset.ex]));
@@ -753,6 +770,15 @@ $("fechar-ex").addEventListener("click", () => {
 });
 
 document.addEventListener("pointerdown", () => { try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {} }, { once: true });
-rota();
+// capítulos em módulos (web/livro): carregados em ordem antes de desenhar
+function carregarLivro() {
+  return (window.LIVRO || []).reduce((p, nome) => p.then(() => new Promise((ok) => {
+    const sc = document.createElement("script");
+    sc.src = `livro/${nome}.js`;
+    sc.onload = ok; sc.onerror = () => { console.error("capítulo não carregou: " + nome); ok(); };
+    document.head.appendChild(sc);
+  })), Promise.resolve());
+}
+carregarLivro().then(() => { ordenarTemas(); rota(); });
 if (document.fonts) document.fonts.ready.then(() => document.querySelectorAll("figure.exemplo").forEach((f) => f._redesenhar && f._redesenhar()));
 </script>
