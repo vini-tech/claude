@@ -13,16 +13,24 @@ nível  8  estilo clássico ao piano    █████░░░░░░░
 nível 10  escrita livre               █░░░░░░░░░░░  quase tudo é info
 ```
 
-## Versão 3: o ateliê de composição (níveis 1–3)
+## Versão 3: o ateliê de composição (um livro em 39 capítulos)
 
-`web/curso.html` ensina **ofício de composição**, não teoria, a quem já sabe a teoria. O desenho
-vem de [`pesquisa/06`](pesquisa/06-ensinar-composicao-a-avancados.md) (como ensinar quem já sabe) e
-[`pesquisa/07`](pesquisa/07-oficio-de-composicao.md) (o conteúdo). A versão 2, com perguntas
-fechadas, foi retirada.
+`web/curso.html` ensina **ofício de composição**, não teoria, a quem já sabe a teoria. O conteúdo vem
+de duas pesquisas: [como as grandes escolas ensinavam](reports/Como%20se%20ensina%20composição.md) e
+[o que elas ensinavam](research_notes/O%20que%20se%20ensina%20em%20composição/). Cada capítulo traz
+**a regra como os tratados a ensinavam** e depois **como os compositores a quebraram**, com profundidade
+proporcional à importância (modulação: 4 capítulos; nona de dominante: 1 curto).
 
-- **Nível 1 · A linha a duas vozes:** os modos (notas, cor característica, cadência e *musica ficta*), arquitetura da linha, elaborar um esqueleto (2ª espécie), linha contínua (3ª espécie), retardos (4ª espécie).
-- **Nível 2 · Das vozes à harmonia:** a regra da oitava (com treino transposto, num tom por dia), o baixo gera a harmonia (inversões e cifras), ritmo harmônico, esquemas galantes.
-- **Nível 3 · A frase e o tema:** esqueleto e superfície da melodia, sentença, período.
+- **Nível 1 · A linha a duas vozes (8):** modos, 1ª a 4ª espécie, contraponto florido, invertível, imitação e cânone.
+- **Nível 2 · Das vozes à harmonia (12):** regra da oitava, cadências, função e progressão, o baixo, notas fora do acorde, retardos, três capítulos de sétimas, ritmo harmônico, sequências, esquemas galantes.
+- **Nível 3 · A frase e o tema (7):** esqueleto e superfície, motivo e variação, sentença, período, expansão da frase, binária/ternária/minueto, tema e variações.
+- **Nível 4 · Cromatismo e modulação (12):** dominantes e sensíveis secundárias, empréstimo modal, napolitana, sextas aumentadas (2), modulação diatônica, cromática, enarmônica e na forma, nona de dominante, cromatismo linear.
+
+São 168 exercícios, todos com solução conferida pelo verificador (`node tests/validar_temas.js`). Os
+capítulos dos níveis novos ficam em `web/livro/*.js` (ordem em `web/livro/indice.js`); o formato e as
+regras estão em [`docs/guia-capitulos.md`](docs/guia-capitulos.md). As cifras aceitam inversões,
+secundárias (`V43/V`), empréstimo (`bVI`), `N6`, `It6 Fr43 Ger65`, `V9`, troca de tom (`G:ii6`) e pivô
+(`vi=G:ii`, inclusive enarmônico).
 
 Cada tema tem: um **esboço** antes da aula (sem correção); uma aula curta e técnica; um **exemplo
 em camadas** escrito como diário de decisões (decisão, alternativa descartada, checagem) com uma

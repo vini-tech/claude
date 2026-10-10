@@ -240,10 +240,18 @@
       }
     });
 
+    // cifras longas (pivôs, trocas de tom) que encostariam na vizinha sobem uma linha
+    const fimLinha = new Map();
     for (const c of o.cifras || []) {
       const cc = Math.min(nCompassos - 1, Math.floor(c.t / C));
-      const sis = sistemas[compassos[cc].sistema];
-      topo.push(`<text class="cifra${c.sev ? " sev-" + c.sev : ""}" x="${xDoTempo(c.t) - 4}" y="${sis.y + MARGEM_SUP - 10}">${esc(c.texto)}</text>`);
+      const sistema = compassos[cc].sistema, sis = sistemas[sistema];
+      const x = xDoTempo(c.t) - 4, larg = String(c.texto).length * 6.6;
+      const linhas = fimLinha.get(sistema) || [];
+      let k = 0;
+      while (linhas[k] !== undefined && linhas[k] > x - 3) k++;
+      linhas[k] = x + larg;
+      fimLinha.set(sistema, linhas);
+      topo.push(`<text class="cifra${c.sev ? " sev-" + c.sev : ""}" x="${x}" y="${sis.y + MARGEM_SUP - 10 - k * 11}">${esc(c.texto)}</text>`);
     }
     for (const an of o.anotacoes || []) {
       const cab = cabecas.find((x) => x.nota === an.nota);

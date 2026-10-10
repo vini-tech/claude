@@ -7,8 +7,7 @@
   const T = raiz.TEMAS || require("../temas.js").TEMAS;
   const M = raiz.Motor || require("../motor.js");
   const R3 = raiz.Regras3 || require("../regras3.js");
-  const { TONAL, MELODIA, PLANO_FRASE } = T.perfis;
-  const F = M.ferramentas;
+  const { TONAL, MELODIA } = T.perfis;
 
   // ------------------------------------------------------------ utilidades
 

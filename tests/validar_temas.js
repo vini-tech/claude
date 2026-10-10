@@ -22,7 +22,7 @@ const T = M.T;
 const SO_DO_EXERCICIO = ["climax_no_lugar", "perfeitas_no_meio", "esqueleto_preservado", "figuras_obrigatorias", "dissonancias_minimas",
   "sequencia_do_motivo", "esquema", "ideia_repetida", "baixo_por_grau", "ritmo_harmonico", "semicadencia", "cadencia_final",
   "modulacao", "retardos_minimos", "sec_acordes_pedidos", "cad_pedidas", "cad_acordes_pedidos", "cad_progressao",
-  "set_sequencia", "set_setima_no_soprano", "set_cifras_pedidas", "set_setima_preparada", "mod_plano_de_tons", "mod_nota_comum"];
+  "set_sequencia", "set_setima_no_soprano", "set_cifras_pedidas", "set_setima_preparada", "mod_plano_de_tons", "mod_nota_comum", "frm_cadencias", "frm_variacao", "frm_transformacao"];
 const CTX_DO_EXERCICIO = ["esqueleto", "climax", "maxPerfeitas", "figuras", "minDissonancias", "motivo", "esquemas", "repete", "maxSaltosBaixo",
   "pedidos", "cadencias", "acordesPedidos", "movimentos", "modulacao", "minRetardos", "sequencia", "minSetimasSoprano", "cifrasPedidas", "planoTons", "notaComum"];
 

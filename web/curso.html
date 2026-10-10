@@ -185,7 +185,8 @@ details.nivel:not([open]) > summary h2::after { content: " ▸"; }
 .barra-nivel { height: 5px; background: var(--linha); border-radius: 3px; overflow: hidden; } .barra-nivel i { display: block; height: 100%; background: var(--ok); }
 .tema-link .cap { display: inline-block; min-width: 1.8em; color: var(--apagado); font-variant-numeric: tabular-nums; }
 .tema-link.completo { border-color: var(--ok); }
-.sumario { display: flex; gap: 6px; flex-wrap: wrap; position: sticky; top: 0; z-index: 3; background: var(--papel); padding: 8px 0; border-bottom: 1px solid var(--linha); }
+.sumario { display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; position: sticky; top: 0; z-index: 3; background: var(--papel); padding: 8px 0; border-bottom: 1px solid var(--linha); margin-inline: -16px; padding-inline: 16px; }
+.sumario::-webkit-scrollbar { display: none; }
 .sumario a { font-size: 0.8rem; font-weight: 700; text-decoration: none; color: var(--acento); background: var(--acento-suave); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
 .sumario a.quebra { color: var(--erro); background: var(--erro-fundo); } .sumario a.exs { color: var(--sobre-acento); background: var(--acento); }
 .bloco.quebra { border-top: 3px solid var(--erro); }

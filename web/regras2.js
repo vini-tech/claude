@@ -325,7 +325,7 @@
     function* (ex, ctx) {
       const v = ex.vozes[vozAlvo(ex, ctx)];
       const mt = ctx.motivo;
-      if (!v || !mt) return;
+      if (!v || !mt || !Array.isArray(mt.em)) return;
       const C = ex.duracaoCompasso;
       const doCompasso = (c) => v.notas.filter((n) => n.inicio >= (c - 1) * C && n.inicio < c * C);
       const assinatura = (ns) => ({
