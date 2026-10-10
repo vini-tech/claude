@@ -126,9 +126,17 @@ Fux estende as cinco espécies a três e quatro vozes. Aqui o problema passa a s
 - **Fux** (*Gradus*, 1725) traz espécies e exercícios que preparam a fuga. Haydn ensinava por um resumo dele. [Wikipedia: Fugue](https://en.wikipedia.org/wiki/Fugue)
 
 ### Inferences
-**Exemplo de 1ª espécie a 3 vozes** (reconstruído). Cantus no meio, dórico:
-- Soprano: `A4 A4 B4 A4`
-- Cantus: `D4 F4 G4 F4`? Preferível mostrar a cadência: Soprano `F4 E4 D4` | Cantus `D4 G4? ...`. **Recomendação:** usar no app os exemplos de Fux/Mann, cap. "Composition in three parts", em vez de reconstruções.
+**Exemplo de 1ª espécie a 3 vozes** (reconstruído, dórico, CF no baixo):
+- Soprano: `A4 A4 C#5 D5`
+- Contralto: `D4 C4 E4 A4`
+- Baixo (CF): `D3 F3 E3 D3`
+- Verticais:
+  - D-D-A: abertura sem 3ª, aceita em Fux;
+  - F-C-A: tríade completa;
+  - E-E-C#: 8ª + 6ª, a "6ª da cadência";
+  - D-A-D: final.
+- Todas as chegadas a 5ª ou 8ª são por movimento contrário. As vozes superiores fazem 6ªs paralelas (permitidas).
+- **Recomendação:** conferir no app com os exemplos de Fux/Mann, cap. "Composition in three parts".
 - Regra pedagógica típica (geral, não verificada aqui): buscar 3ª e 5ª em cada vertical (tríade completa). A tríade final pode omitir a 3ª em Fux; tradições posteriores admitem a 3ª no acorde final.
 
 **Combined species** (Salzer & Schachter, Kennan; geral): cada voz numa espécie diferente. Treina independência rítmica, que é o objetivo da 5ª espécie a várias vozes.
@@ -184,8 +192,8 @@ O contraponto modal "de estilo" (Jeppesen; Schubert, *Modal Counterpoint, Renais
 **Imitação:** pontos de imitação, imitação em pares e o motet imitativo. A missa paródia aparece como gênero (Schubert).
 
 **Exemplo de cadência dupla** (reconstruído, dórico, final em D):
-- Superius: `C5(mínima ligada) | C5 B4 | C#5? D5`. Melhor: superius `D5 | D5(ligada, 7ª sobre E4) C#5 | D5`.
-- Tenor: `F4 | E4 | D4`.
+- Superius: `D5 | D5(ligada) C#5 | D5`
+- Tenor: `F4 | E4 | D4`
 - Leitura: 6ª, depois 7→6 com sensível, depois 8ª. É a cláusula *cantizans/tenorizans*.
 
 **Quebra e extensão:**
