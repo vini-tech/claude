@@ -18,11 +18,12 @@
   const pc = (nome) => ((M.lerAltura(nome.replace(/-/g, "b") + "4").ps % 12) + 12) % 12;
 
   def("mod_intervalo_melodico", "Intervalo melódico aumentado ou diminuto",
-    "A melodia evita saltos aumentados e diminutos (trítono, 2ª aumentada, 4ª diminuta…). O semitom cromático (dó → dó♯ na mesma voz) é permitido: é ele que conduz a modulação cromática.",
+    "A melodia evita saltos aumentados e diminutos (trítono, 2ª aumentada, 4ª diminuta…). O semitom cromático (dó → dó♯ na mesma voz) é permitido — é ele que conduz a modulação cromática —, assim como a reescrita enarmônica de uma nota presa (si♭ → lá♯).",
     function* (ex) {
       for (const v of ex.vozes) for (const [a, b] of v.paresMelodicos()) {
         const iv = F.intervalo(a, b);
-        if (iv.nome === "A1") continue;
+        // semitom cromático (dó → dó♯, dó → dó♭) e reescrita enarmônica da mesma altura (si♭ → lá♯)
+        if (iv.nome === "A1" || iv.nome === "d1" || (iv.semitons === 0 && a.ps === b.ps)) continue;
         if (iv.qual[0] === "A" || iv.qual[0] === "d") yield [ex.compassoDe(b.inicio), `${v.nome}: ${F.nomeIntervalo(iv)} de ${a.nome} para ${b.nome}`, [a, b]];
       }
     }, { porque: "Saltos aumentados e diminutos são difíceis de cantar e apontam para tons que a harmonia não confirma. O semitom cromático é outra coisa: ele altera a mesma nota e mostra ao ouvido, numa voz só, que a escala mudou.",

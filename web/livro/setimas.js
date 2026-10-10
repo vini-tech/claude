@@ -80,9 +80,12 @@
     "O exercício pede certos acordes (por exemplo vii°7 e viiø65); cada um tem de aparecer nas cifras.",
     function* (ex, ctx) {
       if (!ctx.cifrasPedidas || !ctx.cifras) return;
-      const base = (s) => String(s || "").replace(/(7|65|43|42|64|6|9)$/, "");
+      // "vii°7" vale para vii°7, vii°65, vii°43 e vii°42; sem figura ("V"), qualquer posição; com outra figura, exata
+      const fig = (s) => (/(65|43|42|64|7|6|9)$/.exec(String(s || "")) || [""])[0];
+      const base = (s) => String(s || "").slice(0, String(s || "").length - fig(s).length);
+      const vale = (c, p) => c === p || (base(c) === base(p) && (fig(p) === "" || (fig(p) === "7" && ["7", "65", "43", "42"].includes(fig(c)))));
       for (const p of ctx.cifrasPedidas) {
-        if (!ctx.cifras.some((c) => c === p || base(c) === p)) yield [ex.compassoDe(ex.fim - 1), `falta usar ${p}`, []];
+        if (!ctx.cifras.some((c) => vale(c, p))) yield [ex.compassoDe(ex.fim - 1), `falta usar ${p}${fig(p) === "7" ? " (em qualquer inversão)" : ""}`, []];
       }
     }, { porque: "Usar o acorde de propósito, no lugar certo, é o que o transforma de nome em vocabulário.", corrigir: "Encontre um ponto da frase em que o acorde pedido tem a função certa e reescreva o baixo, as cifras e a melodia ali." });
   M.PRECISA_FIM.add("set_cifras_pedidas");
