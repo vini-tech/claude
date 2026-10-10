@@ -151,14 +151,14 @@
       corrigir: "Leve o ♭6 ao 5º grau (lá♭ → sol), ou mantenha-o como nota comum." });
 
   M.definirRegra("sec_napolitana_desce", "O ♭2 da napolitana desce",
-    "Na napolitana, o 2º grau abaixado (ré♭ em dó) desce: à tônica sobre o I6/4 cadencial ou sobre o vii°7/V, ou direto à sensível (3ª diminuta) sobre o V.",
+    "Na napolitana, o 2º grau abaixado (ré♭ em dó), quando está na voz de cima, desce: à tônica sobre o I6/4 cadencial ou sobre o vii°7/V, ou direto à sensível (3ª diminuta) sobre o V.",
     function* (ex, ctx) {
       const hs = harmonias(ex, ctx);
       for (let k = 0; k + 1 < hs.length; k++) {
         const h = hs[k];
         if (!h.cifra.napolitana) continue;
         const b2 = R3.membros(h.cifra, h.tom)[0];
-        for (const v of externas(ex)) {
+        for (const v of externas(ex).slice(0, 1)) {
           const u = ultimaNaHarmonia(v, h);
           if (!u || !u.prox || u.n.altura.nome !== b2) continue;
           const i = F.intervalo(u.n, u.prox);
@@ -175,6 +175,8 @@
     sensivel: ["sensível secundária (vii°/x)", (h) => !!h.cifra.secundaria && h.cifra.secundaria.tipo === 7],
     emprestimo: ["acorde emprestado do menor", (h) => abaixadas(h).length > 0],
     napolitana: ["napolitana", (h) => !!h.cifra.napolitana],
+    napolitana_fundamental: ["napolitana em estado fundamental", (h) => !!h.cifra.napolitana && h.cifra.membroBaixo === 0],
+    picardia: ["terça de picardia (I maior no fim de uma peça em menor)", (h) => h.tom.modo === "minor" && h.cifra.grau === 1 && h.cifra.maior && !h.cifra.secundaria && !h.cifra.alteracao],
   };
   function maiorCadeia(hs) {
     let melhor = 0, atual = 0;

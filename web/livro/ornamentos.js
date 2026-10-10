@@ -28,7 +28,8 @@
   const LICENCAS = ["apojatura_livre", "retardacao", "retardo_sem_preparacao", "retardo_sem_resolucao"];
   const passo = (a, b) => { const iv = F.intervalo(a, b); return iv.geral === 2 || (iv.geral === 1 && Math.abs(iv.semitons) === 1); };
   const salto = (a, b) => F.intervalo(a, b).geral >= 3;
-  const numIv = (sup, inf) => { const g = F.harmonico(sup, inf).geral; return g === 9 ? 9 : ((g - 1) % 7) + 1 === 1 && g > 1 ? 8 : ((g - 1) % 7) + 1; };
+  const numIv = (sup, inf) => { const g = F.harmonico(sup, inf).geral, k = ((g - 1) % 7) + 1; return k === 2 ? 9 : k === 1 && g > 1 ? 8 : k; };
+  const simples = (sup, inf) => ((F.harmonico(sup, inf).geral - 1) % 7) + 1;
 
   function classificar(ex, ctx) {
     if (ex._orn && ex._ornCifras === ctx.cifras) return ex._orn;
@@ -54,7 +55,7 @@
         const acc = n.inicio === h0.inicio || forca(n.inicio) >= 2;
         const sIn = ant && passo(ant, n), sOut = prox && passo(n, prox);
         if (b && b.inicio < n.inicio && bn && F.ehGrau(b, bn) && F.direcao(b, bn) < 0 && tem(hb, n) && forca(n.inicio) > forca(b.inicio)) {
-          add(n, "retardo_baixo", { iv: `${numIv(n, b)}–${numIv(n, bn)}` });
+          add(n, "retardo_baixo", { iv: `${simples(n, b)}–${simples(n, bn)}` });
         } else if (sIn && sOut && F.direcao(ant, n) === F.direcao(n, prox)) add(n, acc ? "passagem_acentuada" : "passagem");
         else if (sIn && sOut) add(n, acc ? "bordadura_acentuada" : "bordadura");
         else if (!acc && prox && prox.ps === n.ps && hP && hP !== h0 && tem(hP, prox)) add(n, "antecipacao");
