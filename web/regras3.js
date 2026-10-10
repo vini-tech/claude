@@ -22,18 +22,35 @@
   const FUNCAO = { 1: "T", 6: "T", 3: "T", 2: "PD", 4: "PD", 5: "D", 7: "D" };
 
   /* "V43" → { grau, setima, membroBaixo (0 fundamental, 1 terça, 2 quinta, 3 sétima), texto } */
+  // dominantes secundárias: "V43/V", "V7/IV", "vii°7/V" (só V e vii° antes da barra)
   function lerCifra(s) {
-    const m = /^([ivIV]+)(°|o|ø)?(7|65|6\/5|43|4\/3|42|4\/2|2|64|6\/4|6)?$/.exec(String(s).trim());
+    const m = /^([ivIV]+)(°|o|ø)?(7|65|6\/5|43|4\/3|42|4\/2|2|64|6\/4|6)?(?:\/([ivIV]+))?$/.exec(String(s).trim());
     if (!m) return null;
     const grau = NUM[m[1].toUpperCase()];
     if (!grau) return null;
     const fig = (m[3] || "").replace("/", "");
     const setima = ["7", "65", "43", "42", "2"].includes(fig);
     const membroBaixo = { "": 0, 7: 0, 6: 1, 65: 1, 64: 2, 43: 2, 42: 3, 2: 3 }[fig];
-    return { grau, setima, membroBaixo, fig, texto: s.trim(), seisQuatro: fig === "64" };
+    const c = { grau, setima, membroBaixo, fig, texto: s.trim(), seisQuatro: fig === "64" };
+    if (m[4]) {
+      const alvo = NUM[m[4].toUpperCase()];
+      if (!alvo || !(grau === 5 || grau === 7)) return null;
+      // o grau passa a ser o da fundamental do acorde (V/V → 2, vii°/V → 4), para as regras de função
+      c.secundaria = { tipo: grau, alvo, semi: m[2] === "ø" ? "meio" : "dim" };
+      c.grau = ((alvo - 1 + (grau === 5 ? 4 : 6)) % 7) + 1;
+    }
+    return c;
   }
 
   function membros(c, tom) {
+    if (c.secundaria) {
+      const esc = R2.escala(tom);
+      const alvo = esc[c.secundaria.alvo - 1];
+      const nomes = c.secundaria.tipo === 5
+        ? [[0, 0], [2, 4], [4, 7], [6, 10]].map(([g, st]) => F.transpor(F.transpor(alvo, 4, 7), g, st).nome)
+        : [[0, 0], [2, 3], [4, 6], [6, c.secundaria.semi === "meio" ? 10 : 9]].map(([g, st]) => F.transpor(F.transpor(alvo, -1, -1), g, st).nome);
+      return c.setima ? nomes : nomes.slice(0, 3);
+    }
     const esc = R2.escala(tom);
     const nomes = [0, 2, 4, 6].map((k) => esc[(c.grau - 1 + k) % 7].nome);
     if (tom.modo === "minor" && (c.grau === 5 || c.grau === 7)) {
@@ -80,12 +97,47 @@
       "A cifra é a sua leitura da harmonia. Se ela não bate com o baixo e com a melodia, ou o acorde não é o que você pensa, ou a nota da melodia é uma dissonância que precisa de tratamento.",
       "Confira qual membro do acorde está no baixo (fundamental = sem número, 3ª = 6, 5ª = 64; com 7ª: 7, 65, 43, 42) e troque a cifra ou a nota.") });
 
+  // Regra da Oitava (Fenaroli, Campion): a cifra de cada grau de um baixo em escala
+  const OITAVA = {
+    sobe: { 1: [[1, 0]], 2: [[5, 2]], 3: [[1, 1]], 4: [[2, 1]], 5: [[5, 0]], 6: [[4, 1]], 7: [[5, 1]] },
+    desce: { 1: [[1, 0]], 2: [[5, 2]], 3: [[1, 1]], 4: [[5, 3]], 5: [[5, 0]], 6: [[2, 2, 5], [4, 1]], 7: [[5, 1]] },
+  };
+  const NOME_OITAVA = {
+    sobe: { 1: "5/3 (I)", 2: "6/4/3 (V43)", 3: "6 (I6)", 4: "6/5 (ii65)", 5: "5/3 (V)", 6: "6 (IV6)", 7: "6/5 (V65)" },
+    desce: { 1: "5/3 (I)", 2: "6/4/3 (V43)", 3: "6 (I6)", 4: "4/2 (V42)", 5: "5/3 (V)", 6: "♯6/4/3 (V43/V) ou, na versão diatônica, 6 (IV6)", 7: "6 (V6)" },
+  };
+  def("regra_da_oitava", "Regra da oitava",
+    "Num baixo que anda por grau, cada grau tem a sua harmonia: subindo 1 5/3, 2 V43, 3 I6, 4 ii65, 5 V, 6 IV6, 7 V65; descendo 7 V6, 6 V43/V (ou IV6), 4 V42.",
+    function* (ex, ctx) {
+      const hs = harmoniasCifradas(ex, ctx);
+      const tom = ex.tonalidade;
+      for (let k = 0; k < hs.length; k++) {
+        const h = hs[k];
+        if (!h.cifra) continue;
+        const ant = hs[k - 1], prox = hs[k + 1];
+        const grauDe = (n) => ((n.altura.letra - tom.tonica.letra) % 7 + 7) % 7 + 1;
+        let dir = null;
+        if (ant && F.ehGrau(ant.baixo, h.baixo)) dir = h.baixo.ps > ant.baixo.ps ? "sobe" : "desce";
+        else if (prox && F.ehGrau(h.baixo, prox.baixo)) dir = prox.baixo.ps > h.baixo.ps ? "sobe" : "desce";
+        if (!dir) continue;
+        const g = grauDe(h.baixo);
+        const ok = OITAVA[dir][g].some(([gr, mb, sec]) => h.cifra.grau === gr && h.cifra.membroBaixo === mb && (!!sec === !!h.cifra.secundaria));
+        if (!ok) yield [ex.compassoDe(h.inicio), `baixo ${h.baixo.nome} (${g}º grau, ${dir === "sobe" ? "subindo" : "descendo"}): a regra da oitava pede ${NOME_OITAVA[dir][g]}, e a cifra é ${h.texto}`, [h.baixo]];
+      }
+    }, { precisaTom: true, ...EXPL(
+      "A Regra da Oitava é o vocabulário básico do baixo por grau: os graus estáveis (1 e 5) levam 5/3, os outros levam acordes de sexta que apontam para eles. Os músicos napolitanos a tocavam em todos os tons antes de qualquer partimento.",
+      "Use a cifra indicada para esse grau e direção; depois confira se a melodia é nota do acorde.") });
+
   def("retrogressao_cifrada", "Retrogressão harmônica",
     "Depois da dominante não se volta à pré-dominante (V → IV, V → ii, vii° → IV).",
     function* (ex, ctx) {
       const hs = harmoniasCifradas(ex, ctx).filter((h) => h.cifra);
       for (let i = 1; i < hs.length; i++) {
         const a = FUNCAO[hs[i - 1].cifra.grau], b = FUNCAO[hs[i].cifra.grau];
+        // exceções: dominante secundária (V43/V…) e acorde de passagem num baixo em escala (V → IV6 da regra da oitava)
+        const passagem = hs[i + 1] && F.ehGrau(hs[i - 1].baixo, hs[i].baixo) && F.ehGrau(hs[i].baixo, hs[i + 1].baixo)
+          && F.direcao(hs[i - 1].baixo, hs[i].baixo) === F.direcao(hs[i].baixo, hs[i + 1].baixo) && hs[i].cifra.membroBaixo > 0;
+        if (hs[i].cifra.secundaria || passagem) continue;
         if (a === "D" && b === "PD" && !hs[i - 1].cifra.seisQuatro) yield [ex.compassoDe(hs[i].inicio), `${hs[i - 1].texto} → ${hs[i].texto}: volta da dominante para a pré-dominante`, [hs[i - 1].baixo, hs[i].baixo]];
       }
     }, { precisaTom: true, ...EXPL(
@@ -254,6 +306,16 @@
     }, EXPL(
       "A dissonância de passagem dá impulso: ela é o que faz a linha andar de uma consonância à outra. Evitá-la sempre deixa o contraponto pálido.",
       "Nos tempos fracos, onde duas notas consonantes estão a uma 3ª, preencha com a nota do meio."));
+
+  def("retardos_minimos", "Retardos",
+    "O exercício pede um número mínimo de retardos: dissonâncias presas (ligadas) no tempo forte.",
+    function* (ex, ctx) {
+      if (!ctx.minRetardos) return;
+      const d = F.dissonancias(ex).filter((x) => x.tipo !== "ataque" && ex.ehTempoForte(x.t));
+      if (d.length < ctx.minRetardos) yield [ex.compassoDe(ex.fim - 1), `${d.length} retardo(s); o exercício pede pelo menos ${ctx.minRetardos}`, []];
+    }, EXPL(
+      "Sem retardos a 4ª espécie vira só um deslocamento rítmico: a síncope é o meio, a dissonância controlada no tempo forte é o que ela produz.",
+      "Procure pontos em que o cantus desce ou sobe por grau sob a sua nota ligada: ali a nota presa vira 7ª (em cima) ou 2ª (embaixo) e resolve descendo."));
 
   def("baixo_por_grau", "Baixo melódico",
     "O baixo anda sobretudo por grau (inversões), com poucos saltos fora da cadência.",

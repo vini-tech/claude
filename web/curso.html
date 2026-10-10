@@ -178,6 +178,17 @@ figure.exemplo .andamento input { width: 110px; }
 .anotacao.sev-erro, .anotacao.sev-aviso, .anotacao.sev-ok, .cifra.sev-erro, .cifra.sev-aviso { fill: var(--sev); }
 .of-escala { margin: 0 0 6px; font-size: 0.9rem; line-height: 1.45; } .of-escala .solf { color: var(--apagado); }
 .t-erro { color: var(--erro); } .t-aviso { color: var(--aviso); }
+.hoje { display: grid; gap: 12px; border-color: var(--acento); }
+.hoje-cab { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.hoje-cab h2 { font-size: 1.3rem; }
+.hoje-num { text-align: right; display: grid; line-height: 1.1; } .hoje-num b { font-family: var(--f-titulo); font-size: 2rem; color: var(--acento); }
+.hoje-num span { font-size: 0.8rem; color: var(--apagado); } .hoje-num small { font-size: 0.75rem; color: var(--apagado); margin-top: 4px; }
+.hoje-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.hoje-lista li { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; padding: 10px 12px; background: var(--papel); border-radius: 10px; }
+.hoje-lista li b { grid-column: 1; } .hoje-lista li span { grid-column: 1; font-size: 0.9rem; color: var(--apagado); } .hoje-lista li .botao { grid-column: 2; grid-row: 1 / span 2; }
+.sugestao { display: grid; gap: 8px; margin-top: 6px; }
+.sugestao .sug { background: var(--folha); border: 1px solid var(--linha); border-radius: 8px; padding: 8px 10px; display: grid; gap: 4px; }
+.sugestao .sug p, .sug-nada, .sug-nota { margin: 0; } .sug-nota, .sug-nada { font-size: 0.85rem; color: var(--apagado); }
 .tabela-modos { display: block; overflow-x: auto; border-collapse: collapse; font-size: 0.88rem; max-width: 100%; }
 .tabela-modos th, .tabela-modos td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--linha); white-space: nowrap; vertical-align: top; }
 .tabela-modos th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--apagado); }
@@ -272,6 +283,7 @@ figure.exemplo .andamento input { width: 110px; }
 <script src="regras2.js"></script>
 <script src="regras3.js"></script>
 <script src="questoes.js"></script>
+<script src="transpor.js"></script>
 <script src="buscador.js"></script>
 <script src="partitura.js"></script>
 <script src="som.js"></script>
@@ -281,7 +293,7 @@ figure.exemplo .andamento input { width: 110px; }
 <script src="temas.js"></script>
 <script>
 "use strict";
-const M = window.Motor, P = window.Partitura, Som = window.Som, G = window.Geradores, Of = window.Oficina, Cn = window.Cantus, Est = window.Estilo, Bu = window.Buscador, Qs = window.Questoes, T = M.T;
+const M = window.Motor, P = window.Partitura, Som = window.Som, G = window.Geradores, Of = window.Oficina, Cn = window.Cantus, Est = window.Estilo, Bu = window.Buscador, Qs = window.Questoes, Tr = window.Transpor, T = M.T;
 const { niveis } = window.TEMAS;
 const $ = (id) => document.getElementById(id);
 const esc = Of.esc, bonito = Of.bonito;
@@ -289,7 +301,7 @@ const bonitoTexto = (s) => String(s).replace(/\b([A-G])(#|b)(\d)\b/g, (m, l, a, 
 
 // ---------------------------------------------------------------- progresso e anotações (localStorage)
 const CHAVE = "drl-atelie:v1";
-const novo = () => ({ v: 1, notas: {}, exercicios: {}, antes: {} });
+const novo = () => ({ v: 1, notas: {}, exercicios: {}, antes: {}, erros: {}, dias: {} });
 let est = novo();
 try { const s = JSON.parse(localStorage.getItem(CHAVE)); if (s && s.v === 1) est = { ...novo(), ...s }; } catch (e) {}
 const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify(est)); } catch (e) {} };
@@ -320,7 +332,7 @@ function desenharInicio() {
     <div class="rotulo">Ateliê de composição · níveis 1 a 3</div>
     <h1>Da regra à <em>liberdade</em></h1>
     <p class="lead">Cada tema tem uma aula curta e técnica, com exemplos comentados na ordem em que foram decididos, e depois uma série de exercícios de composição, do completar ao livre.</p>
-  </header>`;
+  </header>` + treinoDeHojeHTML();
   for (const n of niveis) {
     h += `<section class="nivel"><div class="rotulo">Nível ${n.numero}</div><h2>${esc(n.titulo)}</h2><p class="lead">${esc(n.resumo)}</p><ol class="lista-temas">`;
     for (const t of n.temas) {
@@ -336,6 +348,12 @@ function desenharInicio() {
       <div class="linha-botoes"><button class="botao" id="bt-copiar">Copiar</button><button class="botao" id="bt-colar">Usar um código</button></div></details>
     <p>Para escrever livremente nos 10 níveis, use a <a href="https://claude.ai/artifact/WhPHE6UFcSnxz6QiTVXYjB" target="_blank" rel="noopener">oficina</a>.</p></footer>`;
   $("pagina").innerHTML = h;
+  for (const b of document.querySelectorAll("[data-sugestao]")) b.addEventListener("click", () => {
+    const [tid, eid, modo] = b.dataset.sugestao.split("|");
+    const t = temaPorId(tid), e = t.exercicios.find((x) => x.id === eid);
+    if (modo === "sortear" && e.sortear) { const tx = textoSorteado(e); if (tx) return abrirExercicio(t, { ...e, solucao: null }, tx); }
+    abrirExercicio(t, e);
+  });
   $("codigo").value = btoa(unescape(encodeURIComponent(JSON.stringify(est))));
   $("bt-copiar").addEventListener("click", () => { const t = $("codigo"); (navigator.clipboard ? navigator.clipboard.writeText(t.value) : Promise.reject()).then(() => brinde("Código copiado"), () => { t.select(); brinde("Selecione e copie"); }); });
   $("bt-colar").addEventListener("click", () => {
@@ -344,6 +362,53 @@ function desenharInicio() {
     $("usar").addEventListener("click", () => { try { const s = JSON.parse(decodeURIComponent(escape(atob($("codigo-novo").value.trim())))); if (s.v !== 1) throw 0; est = { ...novo(), ...s }; salvar(); fecharFolha(); rota(); brinde("Progresso carregado"); } catch (e) { brinde("Código inválido"); } });
     $("cancelar").addEventListener("click", fecharFolha);
   });
+}
+
+// ---------------------------------------------------------------- treino de hoje
+// como na classe de harmonia de Paris (um exercício por dia) e nas cadências diárias de Boulanger:
+// uma sessão curta que volta às regras que você mais quebra, um treino transposto e o próximo passo
+function sequenciaDeDias() {
+  const dias = est.dias || {};
+  let n = 0;
+  const d = new Date();
+  if (!dias[diaDeHoje()]) d.setDate(d.getDate() - 1);
+  for (;;) {
+    const k = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    if (!dias[k]) break;
+    n++; d.setDate(d.getDate() - 1);
+  }
+  return n;
+}
+function treinoDeHojeHTML() {
+  const itens = [];
+  const todos = temasEmOrdem.flatMap((t) => t.exercicios.map((e) => ({ t, e })));
+  // 1. revisão dirigida: a regra mais quebrada nas últimas três semanas
+  const limite = new Date(); limite.setDate(limite.getDate() - 21);
+  const lim = `${limite.getFullYear()}-${String(limite.getMonth() + 1).padStart(2, "0")}-${String(limite.getDate()).padStart(2, "0")}`;
+  const contagem = Object.entries(est.erros || {}).map(([r, ds]) => [r, ds.filter((d) => d >= lim).length]).filter(([r, n]) => n && M.REGRAS[r]).sort((a, b) => b[1] - a[1]);
+  if (contagem.length) {
+    const [regra, n] = contagem[0];
+    const cands = todos.filter(({ e }) => (G.perfilDaPratica(e)[regra] === "erro") && (est.antes || {})[temasEmOrdem.find((x) => x.exercicios.includes(e)).id]);
+    const esc1 = cands.find(({ e }) => e.sortear) || cands.find(({ e }) => !exFeito(e.id)) || cands[0];
+    if (esc1) itens.push(`<li><b>Revisão dirigida</b><span>Você quebrou “${esc(M.REGRAS[regra].titulo)}” ${n}× nas últimas semanas. ${esc1.e.sortear ? "Um cantus novo" : "Um exercício"} para trabalhar isso: <i>${esc(esc1.e.titulo)}</i>.</span>
+      <button class="botao" data-sugestao="${esc1.t.id}|${esc1.e.id}|sortear">Abrir</button></li>`);
+  }
+  // 2. o treino transposto do dia
+  const tomEx = todos.find(({ e }) => e.tomDoDia);
+  if (tomEx && (est.antes || {})[tomEx.t.id]) {
+    const st = est.exercicios[tomEx.e.id] || {};
+    const feito = st.diaFeito === diaDeHoje();
+    itens.push(`<li><b>${feito ? "✓ " : ""}${esc(tomEx.e.titulo.replace("no tom do dia", ""))} em ${nomeTom(st.tom || Tr.tomDoDia(tomEx.e.tomDoDia))}</b><span>Transpor até ficar automático, como os napolitanos faziam com a regra da oitava.</span>
+      <button class="botao" data-sugestao="${tomEx.t.id}|${tomEx.e.id}|">${feito ? "De novo" : "Abrir"}</button></li>`);
+  }
+  // 3. o próximo passo
+  const prox = todos.find(({ e }) => !exFeito(e.id));
+  if (prox) itens.push(`<li><b>Continuar</b><span>${esc(prox.t.titulo)} · <i>${esc(prox.e.titulo)}</i></span><button class="botao primario" data-sugestao="${prox.t.id}|${prox.e.id}|">Abrir</button></li>`);
+  const seq = sequenciaDeDias();
+  const semana = Object.entries(est.dias || {}).filter(([d]) => { const x = new Date(); x.setDate(x.getDate() - 7); return d > `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`; }).reduce((a, [, n]) => a + n, 0);
+  return `<section class="cartao hoje"><div class="hoje-cab"><div><div class="rotulo">Treino de hoje</div><h2>Uma sessão curta, todo dia</h2></div>
+    <div class="hoje-num"><b>${seq}</b><span>dia${seq === 1 ? "" : "s"} seguido${seq === 1 ? "" : "s"}</span><small>${semana} exercício${semana === 1 ? "" : "s"} na semana</small></div></div>
+    <ul class="hoje-lista">${itens.join("")}</ul></section>`;
 }
 
 // ---------------------------------------------------------------- exemplos com partitura e som
@@ -448,7 +513,12 @@ function abrirExercicio(t, e, textoInicial) {
   $("titulo-ex").textContent = e.titulo;
   if (oficina) oficina.destruir();
   const st = est.exercicios[e.id] || {};
-  const texto = textoInicial || st.rascunho || e.texto;
+  // treino no tom do dia: transpõe o exercício e a solução (as cifras em graus não mudam)
+  if (e.tomDoDia && !e._tom) {
+    const tom = st.tom || Tr.tomDoDia(e.tomDoDia);
+    return abrirExercicio(t, { ...e, _base: e, _tom: tom, titulo: `${e.titulo}: ${nomeTom(tom)}`, texto: Tr.texto(e.texto, tom), solucao: e.solucao && Tr.texto(e.solucao, tom) }, textoInicial);
+  }
+  const texto = textoInicial || (e._segunda ? e.texto : st.rascunho) || e.texto;
   const caixa = $("oficina");
   // antes do primeiro exercício de cada tema: perguntas obrigatórias sobre o que decidir antes de compor
   if (t.antes && t.antes.length && !(est.antes || {})[t.id]) {
@@ -465,14 +535,22 @@ function abrirExercicio(t, e, textoInicial) {
   oficina = Of.criar(caixa, {
     titulo: e.titulo, instrucoes: e.instrucoes + acoes(e), texto,
     perfil: perfilDe(e), contexto: G.contextoDaPratica(e),
-    cifras: e.cifras, cifrasAluno: e.cifrasAluno, cifrasIniciais: st.cifras != null && !textoInicial ? st.cifras : e.cifrasIniciais,
+    cifras: e.cifras, cifrasAluno: e.cifrasAluno, cifrasIniciais: st.cifras != null && !textoInicial && !e._segunda ? st.cifras : e.cifrasIniciais,
+    aoErro: registrarErros,
     duracao: e.duracao, alvoCompassos: e.alvoCompassos, fimLivre: e.fimLivre,
-    aoMudar: (tx) => { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), rascunho: tx }; salvar(); caixa.querySelector(".depois")?.remove(); },
+    aoMudar: (tx) => { if (!e._segunda) { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), rascunho: tx, ...(e._tom ? { tom: e._tom } : {}) }; salvar(); } caixa.querySelector(".depois")?.remove(); },
     aoMudarCifras: (c) => { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), cifras: c }; salvar(); caixa.querySelector(".depois")?.remove(); },
     aoAprovar: (tx) => {
       const antes = est.exercicios[e.id] || {};
       if (!antes.aprovado) brinde("Exercício aprovado");
-      est.exercicios[e.id] = { ...antes, aprovado: true, rascunho: tx };
+      const hoje = diaDeHoje();
+      est.dias = { ...(est.dias || {}), [hoje]: ((est.dias || {})[hoje] || 0) + 1 };
+      if (e._segunda) {
+        // Schoenberg: a segunda solução só conta se for outra de verdade
+        const dif = diferenca(e._segunda, tx);
+        if (dif < 0.3) { salvar(); mostrarParecida(dif); return; }
+        est.exercicios[e.id] = { ...antes, aprovado: true, segunda: tx };
+      } else est.exercicios[e.id] = { ...antes, aprovado: true, rascunho: tx, ...(e._tom ? { tom: e._tom, diaFeito: hoje } : {}) };
       salvar();
       mostrarDepois(t, e, tx, (oficina && oficina.cifras()) || e.cifras || (antes.cifras || e.cifrasIniciais || "").split(/\s+/).filter(Boolean));
     },
@@ -506,22 +584,77 @@ function montarQuiz(raiz, perguntas, embaralhar, aoConcluir) {
   });
 }
 
+function textoSorteado(e) {
+  const cf = Cn.sortear();
+  if (!cf) return null;
+  const cant = "cantus: " + cf.notas.split(" ").map((x, k) => (k ? x : x + "/4")).join(" ");
+  let tx = e.texto.replace(/^tom:.*$/m, "tom: " + cf.tom).replace(/^cantus:.*$/m, cant).replace(/^contraponto:.*$/m, "contraponto:");
+  if (!/^tom:/m.test(tx)) tx = "tom: " + cf.tom + "\n" + tx;
+  return tx;
+}
+
+const SOLF = { C: "dó", D: "ré", E: "mi", F: "fá", G: "sol", A: "lá", B: "si" };
+const nomeTom = (tom) => { const [n, modo] = tom.split(" "); return SOLF[n[0]] + (n[1] === "b" ? "♭" : n[1] === "#" ? "♯" : "") + " " + modo; };
+const diaDeHoje = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+
+// regras quebradas em cada correção (para o treino dirigido)
+function registrarErros(regras) {
+  const hoje = diaDeHoje();
+  est.erros = est.erros || {};
+  for (const r of regras) est.erros[r] = [...(est.erros[r] || []), hoje].slice(-30);
+  salvar();
+}
+
+// fração das notas do aluno que mudaram de uma solução para a outra (mesmo instante, outra altura)
+function diferenca(tx1, tx2) {
+  let a, b;
+  try { a = M.lerTexto(tx1); b = M.lerTexto(tx2); } catch (err) { return 1; }
+  const nomeCf = (tx2.match(/^cf:\s*(\S+)/m) || [])[1];
+  let total = 0, mudou = 0;
+  b.vozes.forEach((v, i) => {
+    if (v.nome === nomeCf) return;
+    const outra = a.vozes.find((x) => x.nome === v.nome);
+    for (const n of v.notas) {
+      total++;
+      const m = outra && outra.notas.find((x) => x.inicio === n.inicio);
+      if (!m || m.ps !== n.ps || m.duracao !== n.duracao) mudou++;
+    }
+  });
+  return total ? mudou / total : 0;
+}
+
+function mostrarParecida(dif) {
+  const caixa = $("oficina");
+  caixa.querySelector(".depois")?.remove();
+  const s = document.createElement("section");
+  s.className = "cartao depois";
+  s.innerHTML = `<div class="rotulo">Segunda solução</div><p><b>Correta, mas quase igual à primeira:</b> só ${Math.round(dif * 100)}% das notas mudaram.</p>
+    <p class="lead-p">Schoenberg pedia aos alunos outra solução correta e depois outra, até eles enxergarem o princípio que gera todas. Mude uma decisão estrutural — o clímax, o ponto em que a linha cruza o registro, a nota de chegada da cadência intermediária — e não só notas soltas (pelo menos 30% das notas).</p>`;
+  caixa.appendChild(s);
+  s.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function acoes(e) {
   const b = [];
   if (e.sortear) b.push(`<button class="botao" data-acao="sortear">Outro cantus firmus</button>`);
+  if (e._tom) b.push(`<button class="botao" data-acao="tom">Outro tom</button>`);
   b.push(`<button class="botao" data-acao="recomecar">Recomeçar</button>`);
   return `<div class="acoes-pratica" style="margin-top:10px">${b.join("")}</div>`;
 }
 
 function ligarAcoes(t, e) {
   for (const b of $("oficina").querySelectorAll("[data-acao]")) b.addEventListener("click", () => {
-    if (b.dataset.acao === "recomecar") { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), rascunho: null, cifras: null }; salvar(); abrirExercicio(t, e, e.texto); }
+    if (b.dataset.acao === "recomecar") { if (!e._segunda) { est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), rascunho: null, cifras: null }; salvar(); } abrirExercicio(t, e, e.texto); }
+    if (b.dataset.acao === "tom") {
+      const lista = e._base.tomDoDia.filter((x) => x !== e._tom);
+      const tom = lista[Math.floor(Math.random() * lista.length)];
+      est.exercicios[e.id] = { ...(est.exercicios[e.id] || {}), tom, rascunho: null, cifras: null };
+      salvar();
+      abrirExercicio(t, e._base);
+    }
     if (b.dataset.acao === "sortear") {
-      const cf = Cn.sortear();
-      if (!cf) return brinde("Tente de novo");
-      const cant = "cantus: " + cf.notas.split(" ").map((x, k) => (k ? x : x + "/4")).join(" ");
-      let tx = e.texto.replace(/^tom:.*$/m, "tom: " + cf.tom).replace(/^cantus:.*$/m, cant).replace(/^contraponto:.*$/m, "contraponto:");
-      if (!/^tom:/m.test(tx)) tx = "tom: " + cf.tom + "\n" + tx;
+      const tx = textoSorteado(e);
+      if (!tx) return brinde("Tente de novo");
       abrirExercicio(t, { ...e, solucao: null }, tx);
     }
   });
@@ -537,21 +670,24 @@ function mostrarDepois(t, e, tx, cifras) {
   const cf = nomeCf ? ex.vozes.findIndex((v) => v.nome === nomeCf) : -1;
   const itens = Est.relatorio(ex, { cf });
   const prior = [...itens.filter((i) => i.nivel === "atencao"), ...itens.filter((i) => i.nivel === "ok")];
-  const perguntas = Qs.depois(ex, { cf, cifras: cifras && cifras.length ? cifras : null });
+  const perguntas = e._segunda ? [] : Qs.depois(ex, { cf, cifras: cifras && cifras.length ? cifras : null });
   const proximo = proximoExercicio(t, e);
   const s = document.createElement("section");
   s.className = "cartao depois";
-  s.innerHTML = `<div class="rotulo">Releia o que você escreveu</div>
-    <p class="lead-p">As respostas estão na sua partitura: olhe para ela antes de escolher. A versão do professor aparece quando todas estiverem certas.</p>
+  s.innerHTML = (e._segunda ? comparacaoHTML(e._segunda, tx, cf) : `<div class="rotulo">Releia o que você escreveu</div>
+    <p class="lead-p">As respostas estão na sua partitura: olhe para ela antes de escolher. A versão do professor aparece quando todas estiverem certas.</p>`) + `
     <div class="quiz"></div>
     <div class="pos-quiz" hidden>
       <details class="relatorio-det"><summary>Relatório de estilo completo</summary>
       <ul class="relatorio">${prior.map((i) => `<li class="${i.nivel}"><b>${esc(i.titulo)}</b><span class="v">${esc(i.valor)}</span><small>Referência: ${esc(i.referencia)}. ${esc(i.nota)}</small></li>`).join("")}</ul></details>
       ${e.solucao || e.sortear ? `<button class="botao" id="ver-prof">Ver a versão do professor</button><div id="prof" hidden></div>` : ""}
+      ${e._segunda ? "" : `<button class="botao" id="outra">Desafio: outra solução correta</button><p class="lead-p">Schoenberg pedia uma segunda solução, diferente de verdade, e depois o princípio comum às duas. É o exercício que mais ensina depois de acertar.</p>`}
       ${proximo ? `<button class="botao primario grande" id="proximo">${proximo.rotulo}</button>` : ""}
     </div>`;
   caixa.appendChild(s);
   montarQuiz(s.querySelector(".quiz"), perguntas, false, () => { s.querySelector(".pos-quiz").hidden = false; });
+  if (e._segunda) montarExemplos(s);
+  $("outra")?.addEventListener("click", () => abrirExercicio(t, { ...e, _segunda: tx, titulo: e.titulo + " · 2ª solução" }, e.texto));
   $("proximo")?.addEventListener("click", () => {
     if (proximo.tema !== t) history.replaceState(null, "", "#" + proximo.tema.id);
     abrirExercicio(proximo.tema, proximo.ex);
@@ -571,6 +707,18 @@ function mostrarDepois(t, e, tx, cifras) {
       b.hidden = true;
     }, 30);
   });
+}
+
+// as duas soluções lado a lado, com o que mudou entre elas
+function comparacaoHTML(tx1, tx2, cf) {
+  const r1 = Est.relatorio(M.lerTexto(tx1), { cf }), r2 = Est.relatorio(M.lerTexto(tx2), { cf });
+  exemplosDaPagina.set("sol1", { partitura: tx1 });
+  exemplosDaPagina.set("sol2", { partitura: tx2 });
+  const linhas = r2.map((i) => { const j = r1.find((x) => x.titulo === i.titulo); return j ? `<tr><td>${esc(i.titulo)}</td><td>${esc(j.valor)}</td><td>${esc(i.valor)}</td></tr>` : ""; }).join("");
+  return `<div class="rotulo">Duas soluções corretas</div>
+    <div class="par">${exemploHTML({ rotulo: "1ª solução" }, "sol1")}${exemploHTML({ rotulo: "2ª solução" }, "sol2")}</div>
+    <table class="tabela-modos"><thead><tr><th></th><th>1ª</th><th>2ª</th></tr></thead><tbody>${linhas}</tbody></table>
+    <p class="lead-p">O que ficou igual nas duas é o que o exercício (e o estilo) exige; o que mudou é escolha sua. Ouça as duas: qual decisão estrutural fez a diferença — o clímax, o contorno, as consonâncias perfeitas? Esse é o princípio que Schoenberg pedia.</p>`;
 }
 
 // próximo exercício do tema; no último, o primeiro do tema seguinte
@@ -593,7 +741,7 @@ function cifrasDaSolucao(sol, e) {
 }
 
 function solucaoGerada(e, tx) {
-  const especie = e.duracao >= 4 ? 1 : e.duracao >= 2 ? 2 : 3;
+  const especie = e.perfilNivel === 4 ? 4 : e.duracao >= 4 ? 1 : e.duracao >= 2 ? 2 : 3;
   return Bu.solucao({ texto: tx, especie, perfil: perfilDe(e), ctx: G.contextoDaPratica(e) });
 }
 

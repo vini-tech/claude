@@ -20,8 +20,8 @@ vem de [`pesquisa/06`](pesquisa/06-ensinar-composicao-a-avancados.md) (como ensi
 [`pesquisa/07`](pesquisa/07-oficio-de-composicao.md) (o conteúdo). A versão 2, com perguntas
 fechadas, foi retirada.
 
-- **Nível 1 · A linha a duas vozes:** os modos (notas, cor característica, cadência e *musica ficta*), arquitetura da linha, elaborar um esqueleto (2ª espécie), linha contínua (3ª espécie).
-- **Nível 2 · Das vozes à harmonia:** o baixo gera a harmonia (inversões e cifras), ritmo harmônico, esquemas galantes.
+- **Nível 1 · A linha a duas vozes:** os modos (notas, cor característica, cadência e *musica ficta*), arquitetura da linha, elaborar um esqueleto (2ª espécie), linha contínua (3ª espécie), retardos (4ª espécie).
+- **Nível 2 · Das vozes à harmonia:** a regra da oitava (com treino transposto, num tom por dia), o baixo gera a harmonia (inversões e cifras), ritmo harmônico, esquemas galantes.
 - **Nível 3 · A frase e o tema:** esqueleto e superfície da melodia, sentença, período.
 
 Cada tema tem: um **esboço** antes da aula (sem correção); uma aula curta e técnica; um **exemplo
@@ -47,8 +47,27 @@ do modo do exercício, e o piano marca a nota selecionada e a da outra voz no me
 | `web/buscador.js` | acha soluções de 1ª a 3ª espécie com o próprio verificador |
 | `web/estilo.js` | o relatório de estilo (descritivo, não corrige) |
 | `web/questoes.js` | as perguntas de depois, calculadas da partitura do aluno |
+| `web/transpor.js` | transpõe exercícios (treinos em todos os tons) |
 | `web/oficina.js` | o editor com piano usado nos exercícios |
 | `tests/validar_temas.js` | confere cada exemplo, contraste e solução no verificador |
+
+### O que o ateliê faz que um livro não faz
+
+A pesquisa em [`reports/Como se ensina composição.md`](reports/Como%20se%20ensina%20composição.md)
+mostra que as grandes escolas (Fux e Albrechtsberger, Nápoles, Bach, Mozart com Attwood, Paris,
+Schoenberg, Boulanger) dividem um método: material reduzido, uma variável por vez, **correção
+individual e explicada**, repetição diária e uma peça inteira no fim. O ateliê tenta dar isso a quem
+estuda sozinho:
+
+- **Correção com conserto (Albrechtsberger, Mozart):** em cada erro, o app procura as trocas de uma
+  nota que o resolvem sem criar outro, e mostra "se trocar X por Y, este erro some"; dá para ouvir o
+  trecho como está e com a troca, e aplicar.
+- **Outra solução (Schoenberg):** depois de aprovado, o desafio de uma segunda solução correta e
+  diferente de verdade (pelo menos 30% das notas), comparada lado a lado com a primeira.
+- **Treino de hoje (Paris, Boulanger):** uma sessão curta por dia, com revisão dirigida às regras que
+  você mais quebrou nas últimas semanas, o treino transposto do dia e o próximo passo; conta os dias
+  seguidos.
+- **Em todos os tons (Nápoles):** a regra da oitava é treinada num tom diferente a cada dia.
 
 ## Versão web (celular)
 

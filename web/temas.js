@@ -12,6 +12,7 @@
   // perfis
   const N1 = { perfilNivel: 1, nivel: 1, extras: { climax_coincidente: "aviso", notas_do_modo: "erro" } };
   const N2 = { perfilNivel: 2, nivel: 2, extras: { climax_coincidente: "aviso", notas_do_modo: "erro" } };
+  const N4 = { perfilNivel: 4, nivel: 4, extras: { climax_coincidente: "aviso", notas_do_modo: "erro" } };
   const N3 = { perfilNivel: 3, nivel: 3, extras: { climax_coincidente: "aviso", notas_do_modo: "erro", paralelas_entre_tempos: "erro" } };
   const TONAL = {
     quintas_paralelas: "erro", oitavas_paralelas: "erro", quintas_oitavas_ocultas: "erro", cruzamento_de_vozes: "erro",
@@ -289,14 +290,128 @@
               texto: `tom: C maior\ncf: cantus\ncantus: ${CF2}\ncontraponto:`, duracao: 1, plano: PLANO_CP },
           ],
         },
+        {
+          id: "retardos", titulo: "Retardos: a 4ª espécie",
+          antes: [
+            { p: "Um retardo tem três tempos. Quais, em ordem?", o: ["Preparação consonante (fraco) → dissonância ligada (forte) → resolução por grau descendente (fraco)", "Dissonância no fraco → consonância no forte → salto", "Consonância no forte → dissonância no fraco → resolução ascendente", "Dissonância atacada no forte → resolução por salto"], e: "A dissonância do retardo não é atacada: ela já soava como consonância (preparação) e fica presa quando a outra voz se move. Resolve descendo por grau no tempo fraco." },
+            { p: "Contraponto em cima: quais retardos são os bons?", o: ["7–6 e 4–3 (o 9–8 com cuidado)", "2–3 e 4–5", "6–5 e 5–4", "Qualquer um que resolva para cima"], e: "Em cima, a voz presa desce: 7 → 6 e 4 → 3 resolvem em consonância imperfeita. Embaixo, o retardo típico é 2–3. O 9–8 resolve numa perfeita e, em cadeia, soa oco." },
+            { p: "Qual é a cadência da 4ª espécie com o contraponto em cima (cantus 2–1)?", o: ["7–6 sobre o 2º grau, depois a 8ª (a final presa forma 7ª, desce à sensível)", "4–3 sobre o 1º grau", "5–6 sobre o 2º grau", "Uma 8ª ligada até o fim"], e: "Em ré dórico: ré5 preso contra mi4 é 7ª, resolve em dó♯5 (6ª maior) e vai a ré5. Embaixo, a mesma ideia é 2–3: ré4 preso abaixo de mi4, resolve em dó♯4." },
+          ],
+          objetivo: "Usar a síncope para criar tensão no tempo forte: preparar, prender, resolver — e encadear retardos sem perder a direção da linha.",
+          ouvir: ["Corelli, Sonatas op. 1–5: cadeias de 7–6 nos movimentos lentos", "Palestrina, Missa Papae Marcelli, Agnus Dei", "Pachelbel, Cânone: as suspensões das variações lentas", "Bach, Paixão segundo São Mateus, 'Erbarme dich' (retardos sobre o baixo)"],
+          esboco: "Sobre ré4 → mi4 no cantus, um contraponto em cima que termine em ré5: como você criaria uma dissonância no tempo forte do penúltimo compasso sem atacá-la?",
+          secoes: [
+            { tipo: "texto", titulo: "A dissonância que não é atacada", html: `
+              <p>Na 4ª espécie o contraponto anda em mínimas deslocadas: cada nota começa no tempo fraco e é <b>ligada</b> ao tempo forte seguinte. Quando o cantus muda de nota por baixo dela, o intervalo pode virar dissonância — e essa dissonância, já soando antes, é o <b>retardo</b>.</p>
+              <ol><li><b>Preparação</b> (tempo fraco): consonância.</li>
+              <li><b>Retardo</b> (tempo forte): a mesma nota, presa; o cantus andou e o intervalo virou 7ª, 4ª, 2ª ou 9ª.</li>
+              <li><b>Resolução</b> (tempo fraco): um grau abaixo, numa consonância imperfeita.</li></ol>
+              <p>Em cima, os bons são <b>7–6</b> e <b>4–3</b>; embaixo, <b>2–3</b>. Quando não há dissonância, a síncope é consonante (5–6, 6–5, 3–8…) e serve de ligação. Se a ligadura for impossível (uma 5ª ou 8ª no tempo forte vinda de outra, ou um salto necessário), pode-se <b>quebrar a espécie</b> por um compasso.</p>
+              <h3>Cadeias e o que evitar</h3>
+              <ul><li>Cadeias de 7–6 (em cima) e de 2–3 (embaixo) são o vocabulário clássico — Corelli as usa o tempo todo. Mas uma cadeia longa é uma escala disfarçada: ela precisa de um destino.</li>
+              <li>9–8 e 2–1 resolvem em perfeita: em cadeia, viram 8ªs paralelas escondidas pelo atraso.</li>
+              <li>A resolução é sempre para baixo; subir (a "retardo ao contrário") não resolve a tensão.</li></ul>` },
+            { tipo: "exemplo", titulo: "Uma cadeia de retardos com destino", intro: "Contraponto em cima do cantus da 'Arquitetura da linha'.",
+              camadas: [
+                { titulo: "Síncopes e retardos", partitura: "compasso: 2/2\ntom: C maior\ncf: cantus\ncontraponto: P/2 C5~ C5 B4~ B4 A4~ A4 G4~ G4 D5~ D5 C5~ C5 B4~ B4 C5~ C5 B4 C5/4\ncantus: C4/4 D4 F4 E4 G4 A4 F4 E4 D4 C4",
+                  notas: [["decisao", "C. 2: dó5 (8ª preparada sobre dó4) fica preso sobre ré4 — 7ª — e resolve em si4 (6ª). C. 3 e 4: mais dois retardos que descem a linha (si4 sobre fá4, lá4 sobre mi4 → sol4)."],
+                    ["decisao", "C. 5: sol4 preso sobre sol4 é uníssono, consonante: a cadeia para, e o salto sol4 → ré5 abre o registro para a segunda metade."],
+                    ["decisao", "C. 6: ré5 preso sobre lá4 é 4ª, resolve em dó5 (3ª): um 4–3 no ponto mais alto da linha."],
+                    ["checagem", "C. 9: a cadência é o 7–6 clássico — dó5 preso sobre ré4, resolve em si4, que sobe ao dó5 final."]],
+                  pausa: ["Por que o salto do c. 5 vem justamente depois de três retardos seguidos?", "Porque a cadeia de retardos desce por grau a cada compasso: três seguidos já gastaram uma 4ª de registro. O salto (numa síncope consonante, sem retardo) devolve a linha ao agudo e dá início a um segundo arco, que termina na cadência — a cadeia tem destino em vez de virar escala."] },
+              ] },
+            { tipo: "contraste", titulo: "Síncope consonante × síncope com retardos",
+              a: { rotulo: "A — quase só síncopes consonantes", partitura: "compasso: 2/2\ntom: C maior\ncf: cantus\ncontraponto: P/2 G4~ G4 F4~ F4 C5~ C5 B4~ B4 E5~ E5 A4~ A4 B4~ B4 C5~ C5 B4 C5/4\ncantus: C4/4 D4 F4 E4 G4 A4 F4 E4 D4 C4" },
+              b: { rotulo: "B — retardos encadeados", partitura: "compasso: 2/2\ntom: C maior\ncf: cantus\ncontraponto: P/2 C5~ C5 B4~ B4 A4~ A4 G4~ G4 D5~ D5 C5~ C5 B4~ B4 C5~ C5 B4 C5/4\ncantus: C4/4 D4 F4 E4 G4 A4 F4 E4 D4 C4" },
+              pergunta: "As duas usam ligaduras em todos os compassos. Onde cada uma cria tensão, e onde a resolve?",
+              comentario: "<p>A desloca o ritmo mas quase não produz dissonância: a síncope fica como efeito rítmico, e a única tensão real é a da cadência. B transforma cada ligadura num pequeno ciclo tensão → resolução no início da frase, alivia no meio (síncopes consonantes e um salto) e volta ao 7–6 na cadência. A 4ª espécie é isso: a ligadura é o meio, a dissonância controlada é o fim.</p>" },
+          ],
+          exercicios: [
+            { id: "ret1", titulo: "Completar: retardos sobre o cantus de Fux", modo: "completar", ...N4,
+              instrucoes: "<p>Os quatro primeiros compassos estão escritos. Continue a 4ª espécie e termine com o 7–6 sobre o mi do cantus (ré5 preso, dó♯5, ré5).</p>",
+              texto: "compasso: 2/2\ntom: D dorico\ncf: cantus\ncontraponto: P/2 A4~ A4 C5~ C5 D5~ D5 E5~\ncantus: D4/4 F4 E4 D4 G4 F4 A4 G4 F4 E4 D4", duracao: 2,
+              solucao: "compasso: 2/2\ntom: D dorico\ncf: cantus\ncontraponto: P/2 A4~ A4 C5~ C5 D5~ D5 E5~ E5 D5~ D5 E5~ E5 F5~ F5 E5~ E5 D5~ D5 C#5 D5/4\ncantus: D4/4 F4 E4 D4 G4 F4 A4 G4 F4 E4 D4",
+              comentarioSolucao: "Solução encontrada pelo verificador: três retardos 7–6 seguidos nos compassos 8–10, e a cadência." },
+            { id: "ret2", titulo: "Embaixo: a cadeia de 2–3", modo: "restrição", ...N4, extras: { ...N4.extras, retardos_minimos: "erro" }, contexto: { minRetardos: 3 },
+              instrucoes: "<p>Contraponto <b>embaixo</b>, em síncopes. <b>Restrição:</b> pelo menos três retardos (2–3 é o típico embaixo). Termine com o 2–3 sobre o ré do cantus: dó4 preso, si3, dó4.</p>",
+              texto: "compasso: 2/2\ntom: C maior\ncf: cantus\ncantus: C4/4 D4 F4 E4 D4 G4 F4 E4 D4 C4\ncontraponto:", duracao: 2,
+              solucao: "compasso: 2/2\ntom: C maior\ncf: cantus\ncantus: C4/4 D4 F4 E4 D4 G4 F4 E4 D4 C4\ncontraponto: P/2 C4~ C4 B3~ B3 A3~ A3 G3~ G3 F3~ F3 E3~ E3 D3~ D3 C3~ C3 B2 C3/4",
+              comentarioSolucao: "A cadeia de 2–3 em estado puro: a linha desce a escala inteira, cada nota presa contra o cantus. Correta e clássica — mas repare como fica previsível: na sua, onde a cadeia para?" },
+            { id: "ret3", titulo: "4ª espécie livre, em cima", modo: "livre", ...N4,
+              instrucoes: "<p>Contraponto em cima do cantus, em síncopes. Busque pelo menos dois retardos de verdade (7–6 ou 4–3) e um ponto em que a cadeia para.</p>",
+              texto: "compasso: 2/2\ntom: C maior\ncf: cantus\ncontraponto:\ncantus: C4/4 D4 F4 E4 G4 A4 F4 E4 D4 C4", duracao: 2,
+              solucao: "compasso: 2/2\ntom: C maior\ncf: cantus\ncontraponto: P/2 C5~ C5 B4~ B4 A4~ A4 G4~ G4 D5~ D5 C5~ C5 B4~ B4 C5~ C5 B4 C5/4\ncantus: C4/4 D4 F4 E4 G4 A4 F4 E4 D4 C4" },
+            { id: "ret4", titulo: "Retardos sobre um cantus sorteado", modo: "livre", ...N4, sortear: true,
+              instrucoes: "<p>Sobre um cantus sorteado. A versão do professor é procurada na hora pelo verificador (pode levar alguns segundos).</p>",
+              texto: "compasso: 2/2\ntom: D dorico\ncf: cantus\ncontraponto:\ncantus: D4/4 F4 E4 D4 G4 F4 A4 G4 F4 E4 D4", duracao: 2 },
+          ],
+        },
       ],
     },
 
     // ================================================================== NÍVEL 2
     {
       numero: 2, titulo: "Das vozes à harmonia",
-      resumo: "A moldura soprano–baixo como motor da harmonia tonal: desenho do baixo com inversões, ritmo harmônico e esquemas galantes.",
+      resumo: "A moldura soprano–baixo como motor da harmonia tonal: regra da oitava, desenho do baixo com inversões, ritmo harmônico e esquemas galantes.",
       temas: [
+        {
+          id: "oitava", titulo: "A regra da oitava",
+          antes: [
+            { p: "Baixo subindo em dó: dó–ré–mi. Qual a harmonia do ré, pela regra da oitava?", o: ["V4/3 (6/4/3)", "ii (5/3)", "vii°6", "V (5/3)"], e: "O 2º grau subindo leva 6/4/3: a dominante com a 5ª no baixo (V43), que passa da tônica (I) à tônica com a 3ª no baixo (I6). É a mesma troca de vozes do tema 'O baixo gera a harmonia'." },
+            { p: "O 4º grau tem harmonias diferentes subindo e descendo. Quais?", o: ["Subindo 6/5 (ii65); descendo 4/2 (V42)", "Subindo e descendo IV (5/3)", "Subindo V42; descendo ii65", "Subindo IV6; descendo ii6"], e: "Subindo, o fá vai para o sol (5º grau): leva a pré-dominante ii65. Descendo, o fá é a 7ª de V42 e resolve no mi (I6)." },
+            { p: "Por que os napolitanos estudavam a regra da oitava em todos os tons antes dos partimenti?", o: ["Para ter na mão (e no ouvido) a harmonia de qualquer baixo em escala, sem calcular", "Porque ela substitui o estudo das cadências", "Porque cada tom tem uma regra da oitava diferente", "Para aprender a evitar acordes invertidos"], e: "A regra é a mesma em todos os tons (em graus); transpor até ela ficar automática é o que libera a atenção para a melodia e para o desenho do baixo — o mesmo princípio das cadências em todos os tons de Nadia Boulanger." },
+          ],
+          objetivo: "Ter um acorde pronto para cada grau de um baixo em escala, subindo e descendo, em qualquer tom — o vocabulário com que os napolitanos realizavam partimenti.",
+          ouvir: ["Fenaroli, Partimenti, livro 1 (Monuments of Partimenti)", "Corelli, Sonatas op. 5: baixos em escala nos movimentos lentos", "Bach, Prelúdio em dó maior BWV 846, c. 1–11"],
+          esboco: "Sem consultar a aula: que acorde você poria sobre o 7º grau subindo (si, em dó)? E descendo?",
+          secoes: [
+            { tipo: "texto", titulo: "Um acorde por grau, segundo a direção", html: `
+              <p>A <b>Regra da Oitava</b> (Campion, 1716; Fenaroli) é a harmonização-padrão de um baixo que sobe ou desce a escala. Os graus estáveis, <b>1 e 5</b>, levam 5/3; todos os outros levam acordes de sexta que <b>apontam para o próximo grau estável</b>.</p>
+              <table class="tabela-modos"><thead><tr><th>Grau</th><th>Subindo</th><th>Descendo</th></tr></thead><tbody>
+              <tr><td>8 / 1</td><td>5/3 · I</td><td>5/3 · I</td></tr>
+              <tr><td>7</td><td>6/5 · V65 (vai ao 1)</td><td>6 · V6</td></tr>
+              <tr><td>6</td><td>6 · IV6</td><td>♯6/4/3 · V43/V (vai ao 5) — na versão diatônica, IV6</td></tr>
+              <tr><td>5</td><td>5/3 · V</td><td>5/3 · V</td></tr>
+              <tr><td>4</td><td>6/5 · ii65 (vai ao 5)</td><td>4/2 · V42 (resolve no 3)</td></tr>
+              <tr><td>3</td><td>6 · I6</td><td>6 · I6</td></tr>
+              <tr><td>2</td><td>6/4/3 · V43</td><td>6/4/3 · V43</td></tr>
+              </tbody></table>
+              <p>As assimetrias são o ponto: <b>subindo</b>, o 4º grau prepara o 5 (pré-dominante); <b>descendo</b>, ele é a 7ª da dominante e cai no 3. O 6º grau descendo ganha o ♯4 do tom (fá♯ em dó), dominante da dominante, para o 5 chegar como meta.</p>
+              <h3>Como usar</h3>
+              <ul><li>Em qualquer trecho de baixo por grau, a regra dá a harmonia; nos saltos você escolhe (fundamental na articulação, sexta no meio).</li>
+              <li>A melodia escolhe entre as notas do acorde; as sétimas (de V43, ii65, V65, V42, V43/V) resolvem por grau descendente.</li>
+              <li>Ela não depende do tom: escrita em graus romanos, é a mesma em dó, em mi♭ ou em lá. Por isso o treino é transpô-la até ficar automática.</li></ul>` },
+            { tipo: "exemplo", titulo: "A oitava inteira em dó, subindo e descendo",
+              camadas: [
+                { titulo: "O baixo e as cifras", partitura: "tom: C maior\nbaixo: C3/1 D3 E3 F3 G3 A3 B3 C4 B3 A3 G3 F3 E3 D3 C3/2", cifras: [[0, "I"], [1, "V43"], [2, "I6"], [3, "ii65"], [4, "V"], [5, "IV6"], [6, "V65"], [7, "I"], [8, "V6"], [9, "V43/V"], [10, "V"], [11, "V42"], [12, "I6"], [13, "V43"], [14, "I"]],
+                  notas: [["decisao", "Subindo: I V43 I6 ii65 V IV6 V65 I. Descendo: V6 V43/V V V42 I6 V43 I."],
+                    ["checagem", "O V → IV6 da subida não é retrogressão: o IV6 é de passagem, entre o 5 e o 7 do baixo em escala."]] },
+                { titulo: "Uma melodia por cima", partitura: "tom: C maior\nsoprano: E5/1 F5 E5 D5 B4 C5 D5 C5 D5 C5 B4 B4 C5 B4 C5/2\nbaixo: C3/1 D3 E3 F3 G3 A3 B3 C4 B3 A3 G3 F3 E3 D3 C3/2", rotulos: ["soprano", "baixo"], cifras: [[0, "I"], [1, "V43"], [2, "I6"], [3, "ii65"], [4, "V"], [5, "IV6"], [6, "V65"], [7, "I"], [8, "V6"], [9, "V43/V"], [10, "V"], [11, "V42"], [12, "I6"], [13, "V43"], [14, "I"]],
+                  notas: [["decisao", "Começo E5–F5–E5: a 7ª do V43 (F5) resolve em E5 sobre o I6, em movimento contrário ao baixo."],
+                    ["decisao", "Na subida, C5–D5–C5 em 10ªs com o baixo (A3–B3–C4): paralelas imperfeitas, permitidas e cantáveis."],
+                    ["decisao", "Na descida, C5 é a 7ª de V43/V e desce a B4 sobre o V; o B4 fica como sensível e sobe ao C5 sobre o I6."],
+                    ["rejeitada", "Pensei em F5 sobre o V42 (dobrando o baixo): F5–E5 contra F3–E3 seriam 8ªs paralelas. B4 (a sensível) resolve melhor."]],
+                  pausa: ["Por que a melodia quase não salta, se o baixo anda o tempo todo?", "Porque, numa escala no baixo, a melodia ganha independência ficando quase parada ou indo em sentido contrário; se ela também corresse, as duas vozes andariam em paralelo. É o mesmo princípio da 1ª espécie: tecido imperfeito, movimento contrário nas chegadas."] },
+              ] },
+          ],
+          exercicios: [
+            { id: "ro1", titulo: "Completar a oitava em dó", modo: "completar", perfil: { ...TONAL, notas_do_acorde: "erro", regra_da_oitava: "erro" }, nivel: 6,
+              contexto: { nivel: 6, plano: {} }, cifrasAluno: true, cifrasIniciais: "I V43 I6 ii65 V IV6 V65 I",
+              instrucoes: "<p>O baixo sobe e desce a escala de dó. As cifras da subida estão dadas; escreva as da descida e uma melodia (uma nota por nota do baixo) do começo ao fim.</p>",
+              texto: "tom: C maior\ncf: baixo\nsoprano:\nbaixo: C3/1 D3 E3 F3 G3 A3 B3 C4 B3 A3 G3 F3 E3 D3 C3/2", duracao: 1, alvoCompassos: 4,
+              solucao: "tom: C maior\ncf: baixo\nsoprano: E5/1 F5 E5 D5 B4 C5 D5 C5 D5 C5 B4 B4 C5 B4 C5/2\nbaixo: C3/1 D3 E3 F3 G3 A3 B3 C4 B3 A3 G3 F3 E3 D3 C3/2", solucaoCifras: "I V43 I6 ii65 V IV6 V65 I V6 V43/V V V42 I6 V43 I" },
+            { id: "ro2", titulo: "A oitava no tom do dia", modo: "treino", perfil: { ...TONAL, notas_do_acorde: "erro", regra_da_oitava: "erro" }, nivel: 6,
+              contexto: { nivel: 6, plano: {} }, cifrasAluno: true, tomDoDia: ["G maior", "F maior", "D maior", "Bb maior", "A maior", "Eb maior", "E maior", "Ab maior"],
+              instrucoes: "<p>A mesma oitava, num tom diferente a cada dia (ou toque em <b>Outro tom</b>). Escreva todas as cifras e a melodia. O objetivo é ficar automático: tente sem olhar a tabela.</p>",
+              texto: "tom: C maior\ncf: baixo\nsoprano:\nbaixo: C3/1 D3 E3 F3 G3 A3 B3 C4 B3 A3 G3 F3 E3 D3 C3/2", duracao: 1, alvoCompassos: 4,
+              solucao: "tom: C maior\ncf: baixo\nsoprano: E5/1 F5 E5 D5 B4 C5 D5 C5 D5 C5 B4 B4 C5 B4 C5/2\nbaixo: C3/1 D3 E3 F3 G3 A3 B3 C4 B3 A3 G3 F3 E3 D3 C3/2", solucaoCifras: "I V43 I6 ii65 V IV6 V65 I V6 V43/V V V42 I6 V43 I" },
+            { id: "ro3", titulo: "Partimento: escalas e saltos", modo: "aplicar", perfil: { ...TONAL, notas_do_acorde: "erro", regra_da_oitava: "erro" }, nivel: 6,
+              contexto: { nivel: 6, plano: { cadencia: 5 } }, cifrasAluno: true,
+              instrucoes: "<p>Um baixo à maneira dos partimenti: trechos em escala (use a regra da oitava, inclusive descendo) separados por saltos (escolha livre, fundamental nas articulações). Escreva as cifras e a melodia, com cadência perfeita no fim.</p>",
+              texto: "tom: C maior\ncf: baixo\nsoprano:\nbaixo: C3/1 D3 E3 C3 F3 E3 D3 G3 A3 B3 C4 F3 G3/2 G2 C3/4", duracao: 1, alvoCompassos: 5,
+              solucao: "tom: C maior\ncf: baixo\nsoprano: E5/1 F5 E5 G5 D5 C5 B4 B4 C5 D5 E5 D5 B4/2 D5 C5/4\nbaixo: C3/1 D3 E3 C3 F3 E3 D3 G3 A3 B3 C4 F3 G3/2 G2 C3/4", solucaoCifras: "I V43 I6 I V42 I6 V43 V IV6 V65 I ii6 V V7 I" },
+          ],
+        },
         {
           id: "baixo", titulo: "O baixo gera a harmonia",
           // perguntas antes dos exercícios (a primeira opção é a certa; a ordem é embaralhada na página)

@@ -266,6 +266,7 @@
       return `<p><span class="t">Por que é um problema</span>${esc(r.porque || r.explicacao)}</p>
         <p><span class="t">Como corrigir</span>${esc(r.corrigir || "")}</p>
         <p class="nivel-nota">${NOTA_SEV[a.severidade]}</p>
+        ${a.severidade === "erro" ? `<div class="sugestao" data-k="${est.visao ? est.visao.visiveis.indexOf(a) : -1}"></div>` : ""}
         ${lic ? `<button class="botao rever" data-regra="${a.regra}">Rever: ${esc(lic.titulo)}</button>` : ""}`;
     }
 
@@ -292,6 +293,7 @@
         <button class="fechar" aria-label="Fechar">✕</button></div><div>${esc(bonito(a.mensagem))}</div><div class="explica">${explicacao(a)}</div>`;
       det.querySelector(".fechar").addEventListener("click", () => selecionar(null));
       ligarRever(det);
+      for (const caixa of el.querySelectorAll(`.sugestao[data-k="${k}"]`)) mostrarSugestao(caixa, a);
       det.hidden = false;
       desenhar();
       if (daLista && est.layout) {
@@ -301,6 +303,88 @@
           if (topo < window.scrollY + 40 || topo > window.scrollY + window.innerHeight - doca.offsetHeight - 160) window.scrollTo({ top: topo - 60, behavior: "smooth" });
         }
       }
+    }
+
+    // ---------------------------------------------------------------- correção explicada (Albrechtsberger)
+    // procura trocas de uma nota da voz do aluno que façam o erro sumir sem criar outro
+    const assinatura = (x) => `${x.regra}|${x.compasso}|${x.mensagem}`;
+    function sugestoes(a) {
+      if (!est.ex || !est.resultado) return [];
+      const base = est.resultado.achados.filter((x) => x.severidade === "erro");
+      const baseSig = new Set(base.map(assinatura));
+      const ctx = contextoRegras();
+      const t = tom();
+      const alvos = [];
+      est.modelo.vozes.forEach((v, i) => {
+        if (travada(i)) return;
+        const { inicios } = Ed.inicios(v);
+        for (const n of a.notas) {
+          if (!est.ex.vozes[i] || !est.ex.vozes[i].notas.includes(n)) continue;
+          const j = inicios.findIndex((x, k) => x === n.inicio && v.eventos[k].alt);
+          if (j >= 0) alvos.push([i, j, n]);
+        }
+      });
+      const res = [];
+      for (const [i, j, n] of alvos) {
+        const orig = M.lerAltura(est.modelo.vozes[i].eventos[j].alt);
+        let cands = [];
+        for (let d = -9; d <= 9; d++) {
+          if (!d) continue;
+          const midi = orig.ps + d;
+          const nome = grafia(midi);
+          if (t) {
+            const a2 = M.lerAltura(nome);
+            const esc = (Cn.ESCALAS[t.modo] || Cn.ESCALAS.major).map((st, g) => M.transpor(t.tonica, g, st).nome);
+            const lt = M.transpor(t.tonica, -1, -1).nome;
+            if (!esc.includes(a2.nome) && a2.nome !== lt) continue;
+          }
+          cands.push(nome);
+        }
+        for (const nome of cands) {
+          const m = Ed.clonar(est.modelo);
+          m.vozes[i].eventos[j].alt = nome;
+          let ex2;
+          try { ex2 = M.lerTexto(Ed.escrever(m)); } catch (e) { continue; }
+          const r = M.verificarPerfil(ex2, cfg.perfil, ctx);
+          const erros = r.achados.filter((x) => x.severidade === "erro");
+          if (erros.some((x) => x.regra === a.regra && x.compasso === a.compasso)) continue;
+          if (erros.some((x) => !baseSig.has(assinatura(x)))) continue; // criou erro novo
+          const avisos = r.achados.filter((x) => x.severidade === "aviso").length;
+          res.push({ voz: i, ev: j, de: n.nome, para: nome, compasso: est.ex.compassoDe(n.inicio), erros: erros.length, avisos, dist: Math.abs(M.lerAltura(nome).ps - orig.ps), ex: ex2, modelo: m });
+        }
+      }
+      res.sort((x, y) => x.erros - y.erros || x.avisos - y.avisos || x.dist - y.dist);
+      const vistos = new Set();
+      return res.filter((r) => { const k = r.voz + ":" + r.ev; if (vistos.has(k)) return false; vistos.add(k); return true; }).slice(0, 2);
+    }
+    function tocarTrecho(ex, compasso) {
+      const C = ex.duracaoCompasso;
+      Som.tocar(ex, { bpm: +$(".of-bpm").value, T, de: Math.max(0, (compasso - 2) * C), ate: (compasso + 1) * C,
+        aoTick: (tk) => P.moverCursor(est.layout, tk), aoFim: () => P.moverCursor(est.layout, null) });
+    }
+    function mostrarSugestao(caixa, a) {
+      if (caixa.dataset.feito) return;
+      caixa.dataset.feito = "1";
+      const ss = sugestoes(a);
+      if (!ss.length) {
+        caixa.innerHTML = `<p class="sug-nada">Nenhuma troca de uma nota só resolve isto sem criar outro problema: o erro vem da combinação de notas. Mude a linha antes deste ponto (o caminho até aqui), não só a nota marcada.</p>`;
+        return;
+      }
+      caixa.innerHTML = `<p class="t">O que acontece se você mudar</p>` + ss.map((s, k) => `<div class="sug">
+          <p>Se trocar <b>${esc(bonito(s.de))}</b> por <b>${esc(bonito(s.para))}</b> (c. ${s.compasso}), este erro some${s.erros ? ` (restam ${s.erros} outro${s.erros > 1 ? "s" : ""}, que já existiam)` : " e não sobra nenhum"}${s.avisos ? `; ficam ${s.avisos} aviso${s.avisos > 1 ? "s" : ""}` : ""}.</p>
+          <div class="linha-botoes"><button class="botao sug-antes" data-s="${k}">▶ Como está</button><button class="botao sug-ouvir" data-s="${k}">▶ Com a troca</button><button class="botao primario sug-aplicar" data-s="${k}">Aplicar</button></div></div>`).join("")
+        + `<p class="sug-nota">A troca é uma saída possível, não "a" resposta: ouça as duas versões e decida.</p>`;
+      caixa.querySelectorAll(".sug-antes").forEach((b) => b.addEventListener("click", (ev) => { ev.stopPropagation(); tocarTrecho(est.ex, ss[+b.dataset.s].compasso); }));
+      caixa.querySelectorAll(".sug-ouvir").forEach((b) => b.addEventListener("click", (ev) => { ev.stopPropagation(); tocarTrecho(ss[+b.dataset.s].ex, ss[+b.dataset.s].compasso); }));
+      caixa.querySelectorAll(".sug-aplicar").forEach((b) => b.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const s = ss[+b.dataset.s];
+        registrar();
+        est.modelo.vozes[s.voz].eventos[s.ev].alt = s.para;
+        est.sel = { voz: s.voz, pos: s.ev };
+        aplicar();
+        avisar(`Trocado: ${bonito(s.de)} → ${bonito(s.para)}. Toque em Terminei para corrigir de novo.`);
+      }));
     }
 
     // ---------------------------------------------------------------- partitura

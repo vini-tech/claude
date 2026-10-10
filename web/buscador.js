@@ -88,6 +88,48 @@
       }
       return null;
     }
+    // 4ª espécie: pausa + nota ligada; cada compasso repete no tempo forte a nota fraca anterior.
+    // Cadência fixa: a final no tempo forte do penúltimo compasso (7–6 em cima, 2–3 embaixo), depois a sensível.
+    function quarta() {
+      const h = C / 2;
+      const ref = acima ? cfPs[n - 1] + 12 : cfPs[n - 1] - 12;
+      const finais = cands.filter((a) => (a.ps - M.lerAltura(cf[n - 1].alt).ps) % 12 === 0).sort((x, y) => Math.abs(x.ps - ref) - Math.abs(y.ps - ref));
+      const fin = finais[0];
+      const sens = [...cands, ...sensiveis].filter((a) => a.ps === fin.ps - 1)[0] || M.transpor(fin, -1, -1);
+      // [pausa, p0~ | p0, p1~ | p1, p2~ | …]: termina na última nota ligada
+      const montar = (ps) => {
+        const evs = [{ alt: null, dur: h, liga: false }];
+        ps.forEach((a, k) => { if (k) evs.push({ alt: nomeDe(ps[k - 1]), dur: h, liga: false }); evs.push({ alt: nomeDe(a), dur: h, liga: true }); });
+        return evs;
+      };
+      const escolhidas = [];
+      function passo(k) {
+        if (++nos > limite) return null;
+        if (k === n - 2) {
+          // compasso n-1: final ligada (vinda do compasso anterior) e sensível; depois a final
+          if (escolhidas[k - 1].ps !== fin.ps) return null;
+          const evs = montar(escolhidas);
+          evs.push({ alt: nomeDe(fin), dur: h, liga: false }, { alt: nomeDe(sens), dur: h, liga: false }, { alt: nomeDe(fin), dur: C, liga: false });
+          return valido(evs, true) ? textoCom(evs) : null;
+        }
+        const ant = escolhidas[k - 1];
+        let lista = cands.filter((a) => (acima ? a.ps > cfPs[k] - 3 && a.ps <= cfPs[k] + 17 : a.ps < cfPs[k] + 3 && a.ps >= cfPs[k] - 17));
+        if (ant) lista = lista.filter((a) => a.ps !== ant.ps && Math.abs(a.ps - ant.ps) <= 7);
+        if (k === n - 3) lista = lista.filter((a) => a.ps === fin.ps);
+        for (const a of emb(lista)) {
+          escolhidas.push(a);
+          if (valido(montar(escolhidas), false)) {
+            const r = passo(k + 1);
+            if (r) return r;
+          }
+          escolhidas.pop();
+        }
+        return null;
+      }
+      return passo(0);
+    }
+
+    if (especie === 4) return quarta();
     return busca(0, 0);
   }
 
@@ -105,6 +147,13 @@
     for (let s = 1; s <= tentativas; s++) {
       const rng = rngDe(s * 7919);
       if (especie === 1) { const r = contraponto({ texto: base, voz, especie, perfil, ctx: c, rng, filtro: poucos }); if (r) return r; continue; }
+      if (especie === 4) {
+        // a 4ª espécie só ensina se tiver retardos de verdade: pelo menos dois tempos fortes dissonantes
+        const retardos = (ex) => M.ferramentas.momentos(ex, 0, 1).filter((mo) => mo.completo && ex.ehTempoForte(mo.t) && !M.ferramentas.ehConsonante(M.ferramentas.harmonico(mo.sup, mo.inf), true)).length;
+        const r = contraponto({ texto: base, voz, especie, perfil, ctx: c, rng, limite: 8000, filtro: (ex, res) => poucos(ex, res) && retardos(ex) >= 2 });
+        if (r) return r;
+        continue;
+      }
       const esq = contraponto({ texto: base1, voz, especie: 1, perfil: M.perfilDoNivel(1), ctx: { ...c, nivel: 1 }, rng, limite: 5000 });
       if (!esq) continue;
       const esqueleto = Ed.ler(esq).vozes[iv].eventos.map((x) => x.alt);

@@ -48,7 +48,8 @@
   }
 
   /* toca um exercício do Motor. aoTick(t em ticks) a cada quadro; aoFim quando acaba ou para. */
-  function tocar(ex, { bpm = 112, T = 960, aoTick, aoFim } = {}) {
+  // de/ate (ticks): toca só um trecho
+  function tocar(ex, { bpm = 112, T = 960, aoTick, aoFim, de = 0, ate = Infinity } = {}) {
     parar();
     if (!ex || !contexto()) return false;
     const seg = (ticks) => (ticks / T) * (60 / bpm);
@@ -57,14 +58,19 @@
     mestre.gain.value = 0.9 / Math.max(2, ex.vozes.length);
     mestre.connect(ctx.destination);
     const osc = [];
-    for (const v of ex.vozes) for (const n of v.notas) osc.push(...voz(mestre, n.ps, t0 + seg(n.inicio), seg(n.duracao)));
-    const total = seg(ex.fim);
+    const fim = Math.min(ex.fim, ate);
+    for (const v of ex.vozes) for (const n of v.notas) {
+      if (n.fim <= de || n.inicio >= fim) continue;
+      const ini = Math.max(n.inicio, de);
+      osc.push(...voz(mestre, n.ps, t0 + seg(ini - de), seg(Math.min(n.fim, fim) - ini)));
+    }
+    const total = seg(fim - de);
     atual = { osc, raf: 0, aoFim };
     const quadro = () => {
       if (!atual) return;
       const agora = ctx.currentTime - t0;
       if (agora > total + 0.25) { parar(); return; }
-      if (aoTick) aoTick(Math.max(0, agora) * (bpm / 60) * T);
+      if (aoTick) aoTick(de + Math.max(0, agora) * (bpm / 60) * T);
       atual.raf = requestAnimationFrame(quadro);
     };
     atual.raf = requestAnimationFrame(quadro);

@@ -6,6 +6,7 @@ const G = require("../web/geradores.js");
 const Ed = require("../web/editor.js");
 const Bu = require("../web/buscador.js");
 const Qs = require("../web/questoes.js");
+const Tr = require("../web/transpor.js");
 const { niveis } = require("../web/temas.js").TEMAS;
 
 const problemas = [];
@@ -68,9 +69,13 @@ function validarPartitura(onde, obj, perfilEx, ctxEx) {
   if (e) erro(onde, "erros: " + e);
 }
 
-function validarExercicio(onde, p) {
-  if (ids.has(p.id)) erro(onde, "id repetido");
-  ids.add(p.id);
+function validarExercicio(onde, p, transposto = false) {
+  if (!transposto) {
+    if (ids.has(p.id)) erro(onde, "id repetido");
+    ids.add(p.id);
+    // treino "no tom do dia": a solução transposta tem de passar em todos os tons da lista
+    for (const tom of p.tomDoDia || []) validarExercicio(`${onde} [${tom}]`, { ...p, tomDoDia: null, texto: Tr.texto(p.texto, tom), solucao: Tr.texto(p.solucao, tom) }, true);
+  }
   const perfil = G.perfilDaPratica(p);
   for (const id of Object.keys(perfil)) if (!M.REGRAS[id]) erro(onde, "regra desconhecida no perfil " + id);
   if (!p.perfilVariante && !Object.keys(perfil).length) erro(onde, "perfil vazio");
@@ -81,7 +86,7 @@ function validarExercicio(onde, p) {
   if (p.cifrasAluno && !p.solucaoCifras && p.solucao) erro(onde, "solução sem cifras");
   // cantus sorteado: a versão do professor é procurada na hora; tem de existir para o cantus inicial
   if (p.sortear) {
-    const sol = Bu.solucao({ texto: p.texto, especie: p.duracao >= 4 ? 1 : p.duracao >= 2 ? 2 : 3, perfil, ctx: G.contextoDaPratica(p) });
+    const sol = Bu.solucao({ texto: p.texto, especie: p.perfilNivel === 4 ? 4 : p.duracao >= 4 ? 1 : p.duracao >= 2 ? 2 : 3, perfil, ctx: G.contextoDaPratica(p) });
     if (!sol) erro(onde, "o buscador não acha solução para o cantus inicial");
     else if (!p.solucao) p = { ...p, solucao: sol };
   }
