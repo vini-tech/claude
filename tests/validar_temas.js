@@ -21,9 +21,10 @@ const T = M.T;
 // regras que são restrições de um exercício, não do estilo: não valem para os exemplos da aula
 const SO_DO_EXERCICIO = ["climax_no_lugar", "perfeitas_no_meio", "esqueleto_preservado", "figuras_obrigatorias", "dissonancias_minimas",
   "sequencia_do_motivo", "esquema", "ideia_repetida", "baixo_por_grau", "ritmo_harmonico", "semicadencia", "cadencia_final",
-  "modulacao", "retardos_minimos", "sec_acordes_pedidos", "cad_pedidas", "cad_acordes_pedidos", "cad_progressao"];
+  "modulacao", "retardos_minimos", "sec_acordes_pedidos", "cad_pedidas", "cad_acordes_pedidos", "cad_progressao",
+  "set_sequencia", "set_setima_no_soprano", "set_cifras_pedidas", "set_setima_preparada"];
 const CTX_DO_EXERCICIO = ["esqueleto", "climax", "maxPerfeitas", "figuras", "minDissonancias", "motivo", "esquemas", "repete", "maxSaltosBaixo",
-  "pedidos", "cadencias", "acordesPedidos", "movimentos", "modulacao", "minRetardos", "sequencia"];
+  "pedidos", "cadencias", "acordesPedidos", "movimentos", "modulacao", "minRetardos", "sequencia", "minSetimasSoprano", "cifrasPedidas"];
 
 function lerOk(onde, texto) {
   try { return M.lerTexto(texto); } catch (e) { erro(onde, "partitura inválida: " + e.message); return null; }
