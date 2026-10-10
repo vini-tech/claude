@@ -245,7 +245,8 @@
         // exceções: dominante secundária (V43/V…) e acorde de passagem num baixo em escala (V → IV6 da regra da oitava)
         const passagem = hs[i + 1] && F.ehGrau(hs[i - 1].baixo, hs[i].baixo) && F.ehGrau(hs[i].baixo, hs[i + 1].baixo)
           && F.direcao(hs[i - 1].baixo, hs[i].baixo) === F.direcao(hs[i].baixo, hs[i + 1].baixo) && hs[i].cifra.membroBaixo > 0;
-        if (hs[i].cifra.secundaria || passagem) continue;
+        // na troca de tom (pivô ou mudança direta) a função é lida no tom novo: não há retrogressão a comparar
+        if (hs[i].cifra.secundaria || passagem || hs[i].pivo || hs[i].mudou) continue;
         if (a === "D" && b === "PD" && !hs[i - 1].cifra.seisQuatro) yield [ex.compassoDe(hs[i].inicio), `${hs[i - 1].texto} → ${hs[i].texto}: volta da dominante para a pré-dominante`, [hs[i - 1].baixo, hs[i].baixo]];
       }
     }, { precisaTom: true, ...EXPL(
