@@ -60,7 +60,10 @@ function validarPartitura(onde, obj, perfilEx, ctxEx) {
   for (const [v, i] of obj.anotacoes || []) if (!ex.vozes[v] || !ex.vozes[v].notas[i]) erro(onde, `anotação fora do lugar [${v},${i}]`);
   if (obj.rotulos && obj.rotulos.length !== ex.vozes.length) erro(onde, "rótulos não batem com as vozes");
   // camadas parciais (com pausas ou uma voz só sem cifras) não são verificadas
-  const parcial = /(^|\s)P\//.test(obj.partitura) || ex.vozes.length < 2;
+  // camadas parciais (pausa depois de uma nota = trecho ainda não escrito; vozes de tamanhos diferentes; uma voz sem cifras) não são verificadas
+  const fins = ex.vozes.map((v) => (v.notas.length ? v.notas[v.notas.length - 1].fim : 0));
+  const pausaNoMeio = obj.partitura.split("\n").some((l) => /:\s*\S/.test(l) && /\S\s+P\//.test(l.replace(/^[^:]*:\s*(P\/\S+\s+)*/, "")));
+  const parcial = obj.parcial || pausaNoMeio || ex.vozes.length < 2 || new Set(fins).size > 1;
   if (parcial || obj.semVerificar) return;
   const modelo = Ed.ler(obj.partitura);
   // exemplos de "como quebrar" (e outros) podem trazer o próprio perfil e contexto

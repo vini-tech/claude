@@ -136,7 +136,7 @@
               <p>Notas-pivô (a mesma altura voltando várias vezes) estagnam a linha. Saltos: compense o grande com movimento contrário; dois seguidos na mesma direção só se desenharem uma tríade.</p>` },
             { tipo: "exemplo", titulo: "Um contraponto decidido em camadas", intro: "Cantus firmus em dó maior; o contraponto fica em cima.",
               camadas: [
-                { titulo: "Cadência primeiro", partitura: `tom: C maior\ncf: cantus\ncontraponto: P/32 B4/4 C5\ncantus: ${CF1}`, anotacoes: [[0, 0, "6ª M"], [0, 1, "8ª"]],
+                { titulo: "Cadência primeiro", parcial: true, partitura: `tom: C maior\ncf: cantus\ncontraponto: P/32 B4/4 C5\ncantus: ${CF1}`, anotacoes: [[0, 0, "6ª M"], [0, 1, "8ª"]],
                   notas: [["decisao", "B4 → C5 sobre D4 → C4: 6ª maior → 8ª, as duas vozes convergindo por grau."],
                     ["checagem", "O B4 é a sensível: ela vai precisar de uma chegada que não a antecipe (evitar B4 logo antes)."]] },
                 { titulo: "Clímax e início", partitura: `tom: C maior\ncf: cantus\ncontraponto: C5/4 P/12 E5/4 P/12 B4/4 C5\ncantus: ${CF1}`, anotacoes: [[0, 0, "8ª"], [0, 1, "clímax"]],

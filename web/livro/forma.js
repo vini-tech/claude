@@ -402,6 +402,123 @@
     ],
   }, { depoisDe: "periodo" });
 
+  // ================================================================== 3. BINÁRIA, TERNÁRIA E MINUETO
+
+  const B_R1 = "G4/1 C5/1 E5/1 D5/2 F5/1 E5/1 C5/1 G5/1 A5/1 F5/1 D5/1 E5/1 C5/1 G4/1 A4/1 C5/1 E5/1 B4/2 A4/1 G4/2 B4/1";
+  const B_R1B = "C3/3 D3/3 E3/3 F3/2 G3/1 C3/3 C3/3 D3/2 D3/1 G2/3", B_R1C = "I V43 I6 ii6 V I vi6=G:ii6 I64 V I";
+  const B_FONTE = "C#5/1 E5/1 G5/1 F5/1 D5/1 A4/1 B4/1 D5/1 F5/1 E5/3", B_FONTEB = "A2/3 D3/3 G2/3 C3/3", B_FONTEC = "C:V7/ii ii V7 I";
+  const B_MIN = exc(`compasso: 3/4\ntom: C maior\nmelodia: ${B_R1} ${B_FONTE} G4/1 C5/1 E5/1 D5/2 F5/1 G5/1 F5/1 D5/1 C5/3\nbaixo: ${B_R1B} ${B_FONTEB} C3/3 D3/3 E3/1 F3/1 G3/1 C3/3`, `${B_R1C} ${B_FONTEC} I V43 I6 ii6 V7 I`, { contexto: { plano: { cadencia: 16 }, cadencias: null } });
+  const B_SIMPLES = exc(`compasso: 3/4\ntom: C maior\nmelodia: ${B_R1} ${B_FONTE} F5/1 C5/1 A4/1 B4/1 D5/1 G5/1 G5/1 F5/1 D5/1 C5/3\nbaixo: ${B_R1B} ${B_FONTEB} F3/3 G3/3 E3/1 F3/1 G3/1 C3/3`, `${B_R1C} ${B_FONTEC} IV V I6 ii6 V7 I`, { contexto: { plano: { cadencia: 16 }, cadencias: null } });
+  const PLANO_MINUETO = [
+    ["Plano de compassos", "Onde terminam as frases (c. 4, 8, 12, 16) e com que cadência?"],
+    ["Plano de tonalidades", "Para onde vai a 1ª reprise (V ou III) e por que acorde-pivô?"],
+    ["2ª reprise", "Monte, Fonte ou Ponte? Onde volta o começo?"],
+  ];
+  const B_D1 = "F#5/1 E5/0.5 D5/0.5 A4/1 C#5/1 E5/1 A4/1 D5/1 F#5/1 A5/1 B5/1 G5/1 E5/1 F#5/1 E5/0.5 D5/0.5 A4/1 B4/1 D5/1 F#5/1";
+  const B_DB = "D3/3 A2/3 F#3/3 G3/2 A3/1 D3/3 B2/3 E3/2 E3/1 A2/3";
+
+  T.inserir(3, {
+    id: "binaria", titulo: "Binária, ternária e minueto",
+    antes: [
+      { p: "No minueto clássico em tom maior, onde costuma terminar a 1ª reprise?", o: ["Numa cadência perfeita na dominante (ou numa semicadência no tom principal)", "Numa cadência perfeita no tom principal, sempre", "Na subdominante", "Numa cadência de engano"], e: "A 1ª reprise abre o plano tonal: vai para V (em menor, para III) e cadencia lá; às vezes só para numa semicadência. A 2ª reprise traz a música de volta e termina obrigatoriamente com cadência perfeita na tônica." },
+      { p: "O que distingue a binária arredondada da binária simples?", o: ["Na 2ª reprise volta o começo da 1ª, na tônica", "A 2ª reprise é mais curta", "Não há repetições", "A 1ª reprise termina na tônica"], e: "Arredondada: depois de uma parte menos estável (sequência, pedal de dominante), a ideia inicial volta na tônica dentro da 2ª reprise. Na simples a 2ª reprise continua sem esse retorno." },
+      { p: "Para Riepel, o que são Monte, Fonte e Ponte?", o: ["Padrões de continuação para depois da barra dupla do minueto", "Tipos de cadência final", "Três formas de abrir a peça", "Nomes de andamento"], e: "Monte sobe (tonicizando IV e V, ou graus vizinhos), Fonte desce (ii, depois I) e Ponte fica na dominante: três maneiras de começar a 2ª reprise e preparar a volta." },
+    ],
+    objetivo: "Compor um minueto completo em binária arredondada (8 + 8 compassos), com plano de tonalidades, cadências nos lugares certos e Monte, Fonte ou Ponte depois da barra dupla.",
+    ouvir: ["Minuetos do 'Caderno de Anna Magdalena Bach' (o Minueto em sol, atribuído a Petzold)", "Mozart, Sinfonia nº 40, Menuetto e Trio", "Haydn, minuetos dos quartetos op. 33", "Beethoven, Sonata op. 2 nº 2 e nº 3: o Scherzo no lugar do minueto"],
+    esboco: "Escreva o plano de um minueto em ré maior de 16 compassos: em que compasso e em que tom cada frase termina, e onde volta o começo.",
+    secoes: [
+      { tipo: "texto", rotulo: "A regra", titulo: "As formas pequenas e o minueto como escola (Riepel, Koch, Schoenberg)", html: `
+        <p>O minueto foi a forma em que o século XVIII aprendia a compor. Riepel (<i>Anfangsgründe</i>, 1752–) ensina-o em diálogo com um aluno, a partir de frases de 4 compassos; Koch descreve a composição em três etapas — <i>Anlage</i> (o plano), <i>Ausführung</i> (a execução) e <i>Ausarbeitung</i> (a elaboração). Na reconstrução de Eckert do método de Riepel, o minueto tem quatro seções de 4 compassos: abertura em I → movimento para V → padrão de continuação → cadência na tônica; as cadências ocupam 2 compassos (pré-dominante e 6/4 cadencial, depois a chegada).</p>
+        <table class="tabela-modos"><thead><tr><th>Forma</th><th>1ª reprise</th><th>2ª reprise</th></tr></thead><tbody>
+        <tr><td>Binária simples</td><td>A: I → V (ou HC)</td><td>A′ ou B: continua e volta a I, sem retorno do começo</td></tr>
+        <tr><td>Binária balanceada</td><td>A termina em V com uma fórmula cadencial</td><td>a mesma fórmula reaparece no fim, transposta para I</td></tr>
+        <tr><td>Binária arredondada</td><td>A: I → V</td><td>B (instável: Monte/Fonte/Ponte, termina em V) + A′ (o começo volta em I)</td></tr>
+        <tr><td>Ternária pequena</td><td>A fechado (pode terminar em I)</td><td>B contrastante (outra região, 'acorde de anacruse' de dominante) + A′ raramente igual (Schoenberg)</td></tr>
+        <tr><td>Minueto e trio</td><td colspan="2">ternária composta: minueto (binária) – trio (outro minueto, em geral em IV, no homônimo ou no relativo) – minueto da capo sem repetições</td></tr></tbody></table>
+        <h3>Plano de tonalidades</h3>
+        <ul><li>Maior: I → V ‖ (V) … → I. Menor: i → III (ou v) ‖ … → i.</li>
+        <li>A modulação da 1ª reprise passa por um acorde-pivô (vi = ii do tom da dominante) e se confirma com cadência perfeita no tom novo.</li>
+        <li>Depois da barra dupla, os padrões de Riepel: <b>Monte</b> (sequência ascendente, V7/IV–IV, V7/V–V), <b>Fonte</b> (descendente: V7/ii–ii, V7–I), <b>Ponte</b> (prolonga o V, preparando a volta).</li>
+        <li>A 2ª reprise termina com cadência autêntica perfeita na tônica — uma convenção praticamente obrigatória.</li></ul>
+        <p>Ordem de trabalho (a 'escada' de Eckert): primeiro as <b>cadências</b>; depois, dada a 1ª reprise, a <b>2ª reprise</b>; por fim o <b>minueto inteiro</b>.</p>` },
+      { tipo: "exemplo", titulo: "Um minueto em dó maior, das cadências para dentro", intro: "3/4, binária arredondada, 8 + 8 compassos (sem as repetições).",
+        camadas: [
+          { titulo: "O plano", texto: "<b>1ª reprise</b> (c. 1–8): frase de 4 em I com semicadência (c. 4); frase de 4 que modula para sol maior pelo pivô vi6 = ii6 e cadencia lá (c. 8). <b>2ª reprise</b>: Fonte (c. 9–12: V7/ii–ii, V7–I), volta do começo em I (c. 13–14), cadência perfeita (c. 15–16)." },
+          { titulo: "As cadências primeiro", partitura: "compasso: 3/4\ntom: C maior\nmelodia: P/6 A5/1 F5/1 D5/1 P/9 B4/2 A4/1 G4/2 P/1 P/18 G5/1 F5/1 D5/1 C5/3\nbaixo: P/6 F3/2 G3/1 P/9 D3/2 D3/1 G2/3 P/18 E3/1 F3/1 G3/1 C3/3", rotulos: ["melodia", "baixo"],
+            notas: [["decisao", "C. 4: ii6–V, a melodia para no ré (2º grau) — semicadência. C. 7–8: I64–V–I em sol, melodia si–lá–sol. C. 15–16: I6–ii6–V7–I com a melodia sol–fá–ré–dó."],
+              ["checagem", "Três chegadas de força crescente: aberta (V), fechada no tom vizinho, fechada no tom principal. É esse desenho que o ouvinte guarda."]] },
+          { titulo: "1ª reprise", ...exc(`compasso: 3/4\ntom: C maior\nmelodia: ${B_R1}\nbaixo: ${B_R1B}`, B_R1C, { contexto: { plano: {}, cadencias: [{ c: 4, tipo: "semi" }, { c: 8, tipo: "perfeita", tom: "G maior" }] } }), rotulos: ["melodia", "baixo"],
+            anotacoes: [[0, 15, "pivô"], [0, 18, "sol maior"]],
+            notas: [["decisao", "C. 5 retoma o c. 1 com o arpejo invertido (mi–dó–sol): o ouvinte reconhece a abertura, mas a frase vai para outro lugar."],
+              ["decisao", "C. 6: o acorde de lá menor com dó no baixo é vi6 em dó e ii6 em sol — a pré-dominante do tom novo. O fá♯ só aparece no V do c. 7."],
+              ["rejeitada", "Modular com V7/V já no c. 5 seria mais rápido, mas jogaria fora a simetria: a 2ª frase deve começar como a 1ª para o ouvinte perceber o desvio."],
+              ["checagem", "Cadência do c. 8: V em fundamental → I em fundamental no tempo forte, sol na melodia."]] },
+          { titulo: "Minueto inteiro: Fonte e retorno", ...B_MIN, rotulos: ["melodia", "baixo"],
+            anotacoes: [[0, 25, "Fonte"], [0, 31, "Fonte, um grau abaixo"], [0, 35, "retorno"]],
+            notas: [["decisao", "C. 9–12, Fonte: V7/ii–ii, depois V7–I, a mesma figura um grau abaixo. A 7ª de cada dominante (sol, depois fá) desce por grau."],
+              ["decisao", "C. 13–14 = c. 1–2 (binária arredondada); c. 15 acelera (três acordes) para a cadência, que 'rima' com o c. 4: o que lá era pergunta aqui fecha."],
+              ["rejeitada", "Voltar ao começo já no c. 11: a 2ª reprise teria só 2 compassos de contraste e o retorno não seria esperado."],
+              ["checagem", "Plano tonal: dó → sol (c. 8) → passagem por ré menor (c. 9–10) → dó."]],
+            pausa: ["A Fonte termina na tônica (c. 12), e o começo volta logo depois, também na tônica. O que se perde em relação a uma Ponte (pedal de dominante antes do retorno)?", "A tensão antes da volta. Com a Ponte, o retorno resolve uma dominante prolongada; depois da Fonte, ele chega 'de lado' — mais suave, típico de minuetos curtos. Nos exercícios você vai usar a Ponte e o Monte."] },
+        ] },
+      { tipo: "contraste", titulo: "Arredondada × simples",
+        a: { rotulo: "A — o começo volta no c. 13", partitura: B_MIN.partitura, cifras: B_MIN.cifras, contexto: B_MIN.contexto },
+        b: { rotulo: "B — a 2ª reprise continua sem retorno", partitura: B_SIMPLES.partitura, cifras: B_SIMPLES.cifras, contexto: B_SIMPLES.contexto },
+        pergunta: "Mesma 1ª reprise, mesma Fonte, mesma cadência final. Em qual o fim soa mais 'em casa'? E qual soa mais como uma dança barroca?",
+        comentario: "<p>Em A o retorno da ideia inicial na tônica faz o ouvinte sentir que a peça voltou ao ponto de partida — a forma fecha por memória, não só por cadência. Em B a cadência fecha a harmonia, mas a melodia termina em território novo: é a binária simples das danças das suítes barrocas, em que a 2ª reprise continua as ideias. A arredondada é a forma que leva à sonata.</p>" },
+      { tipo: "quebra", titulo: "Quando a 1ª parte não cadencia", html: `
+        <p>A regra dá à 1ª reprise uma cadência (em V, ou uma semicadência) e à 2ª uma cadência perfeita na tônica. As quebras vêm por três lados:</p>
+        <ul><li><b>Beethoven</b> troca o minueto pelo <i>scherzo</i> (já nas Sonatas op. 2 nº 2 e nº 3): mais rápido, com uma 2ª reprise muito mais longa e desenvolvida.</li>
+        <li><b>Schumann</b>, segundo o Open Music Theory, termina a 1ª parte de algumas peças (<i>Papillons</i> nº 1, <i>Kinderszenen</i> nº 9) prolongando a tônica em vez de cadenciar: a parte acaba, mas não 'chega'.</li>
+        <li><b>Chopin</b> esconde ou elide a semicadência antes do retorno, e as repetições passam a ser escritas por extenso, variadas.</li></ul>
+        <p>O que a quebra produz: uma forma mais contínua, de peça de caráter, em que as articulações são sentidas mais pelo material do que pelas cadências.</p>`,
+        exemplos: [
+          exc("compasso: 3/4\ntom: C maior\nmelodia: G4/1 C5/1 E5/1 D5/2 F5/1 E5/1 C5/1 G5/1 A5/1 F5/1 D5/1 E5/1 C5/1 G4/1 A4/1 C5/1 F5/1 E5/1 F5/1 E5/1 C5/3\nbaixo: C3/3 D3/3 E3/3 F3/2 G3/1 C3/3 F3/3 C3/1 C3/1 C3/1 C3/3", "I V43 I6 ii6 V I IV I IV64 I I",
+            { rotulo: "1ª parte terminando sem cadência (exemplo construído)", perfil: { ...BASE, frm_cadencias: "erro" }, contexto: { plano: {}, cadencias: [{ c: 4, tipo: "semi" }, { c: 8, tipo: "aberta" }] },
+              comentario: "C. 7–8: I–IV64–I sobre o pedal de dó, sem nenhum V. A melodia desce para a tônica, mas a harmonia não 'fecha': o ouvido entende o fim da parte pela duração e pelo registro, não pela cadência." }),
+        ] },
+    ],
+    exercicios: [
+      { id: "bin1", titulo: "A escada de Eckert, degrau 1: a cadência da 1ª reprise", modo: "completar", perfil: { ...BASE, frm_cadencias: "erro" }, nivel: 6,
+        contexto: { nivel: 6, plano: {}, cadencias: [{ c: 4, tipo: "semi" }, { c: 8, tipo: "perfeita", tom: "A maior" }] },
+        cifras: "I V I6 IV V I vi=A:ii I64 V I".split(" "),
+        instrucoes: "<p>Ré maior, 3/4. Os c. 1–6, o baixo e as cifras estão dados; o c. 6 é o pivô (vi em ré = ii em lá). Escreva os c. 7–8: <b>cadência perfeita em lá maior</b> sobre I64–V–I, com a tônica do tom novo na melodia no tempo forte do c. 8.</p>",
+        texto: `compasso: 3/4\ntom: D maior\ncf: baixo\nmelodia: ${B_D1}\nbaixo: ${B_DB}`, duracao: 1, alvoCompassos: 8, plano: PLANO_MINUETO,
+        solucao: `compasso: 3/4\ntom: D maior\ncf: baixo\nmelodia: ${B_D1} C#5/2 B4/1 A4/2 C#5/1\nbaixo: ${B_DB}`,
+        comentarioSolucao: "Dó♯ (6ª sobre mi) desce para si (5ª) no V e chega a lá: 6–5 sobre o 6/4 cadencial, a fórmula de 2 compassos de Riepel. O dó♯ do fim do c. 8 já aponta para a 2ª reprise." },
+      { id: "bin2", titulo: "Degrau 2: a 2ª reprise com Ponte", modo: "menos apoio", perfil: { ...MELODIA, frm_cadencias: "erro", ideia_repetida: "erro" }, nivel: 6,
+        contexto: { nivel: 6, plano: { cadencia: 16, repete: [1, 13] }, cadencias: [{ c: 16, tipo: "perfeita" }] },
+        cifras: "I V I6 IV V I vi=A:ii I64 V I D:V I64 V V7 I V I6 ii6 V7 I".split(" "),
+        instrucoes: "<p>A 1ª reprise está pronta. Escreva a 2ª (c. 9–16) sobre o baixo dado: <b>Ponte</b> nos c. 9–12 (pedal de lá, V – 6/4 de bordadura – V – V7), <b>retorno</b> do começo nos c. 13–14 e cadência perfeita no c. 16. Faça a 7ª do c. 12 descer por grau para a primeira nota do retorno.</p>",
+        texto: `compasso: 3/4\ntom: D maior\ncf: baixo\nmelodia: ${B_D1} C#5/2 B4/1 A4/2 C#5/1\nbaixo: ${B_DB} A2/3 A2/3 A2/3 A2/3 D3/3 A2/3 F#3/1 G3/1 A3/1 D3/3`, duracao: 1, alvoCompassos: 16, plano: PLANO_MINUETO,
+        solucao: `compasso: 3/4\ntom: D maior\ncf: baixo\nmelodia: ${B_D1} C#5/2 B4/1 A4/2 C#5/1 E5/1 C#5/1 E5/1 F#5/1 A5/1 F#5/1 E5/1 C#5/1 A4/1 C#5/1 E5/1 G5/1 F#5/1 E5/0.5 D5/0.5 A4/1 C#5/1 E5/1 A4/1 D5/1 E5/1 C#5/1 D5/3\nbaixo: ${B_DB} A2/3 A2/3 A2/3 A2/3 D3/3 A2/3 F#3/1 G3/1 A3/1 D3/3`,
+        comentarioSolucao: "A Ponte fica quatro compassos sobre lá, subindo até o sol (7ª do V7), que desce para fá♯ no retorno: a volta resolve a dominante prolongada. C. 15 acelera (I6–ii6–V7)." },
+      { id: "bin3", titulo: "Degrau 3: minueto em menor com Monte", modo: "restrição", perfil: { ...MELODIA, frm_cadencias: "erro", ideia_repetida: "erro", sequencia_do_motivo: "erro" }, nivel: 6,
+        contexto: { nivel: 6, plano: { cadencia: 16, repete: [1, 13] }, cadencias: [{ c: 4, tipo: "semi" }, { c: 8, tipo: "perfeita", tom: "C maior" }, { c: 12, tipo: "semi" }, { c: 16, tipo: "perfeita" }], motivo: { de: 9, em: [11] } },
+        cifras: "i V6 i iv6 V i iv6=C:ii6 I64 V I a:V7/iv iv V7/V V i V6 i64 V i".split(" "),
+        instrucoes: "<p>Lá menor, 3/4. Baixo e cifras dados: a 1ª reprise vai para o relativo (dó maior, pivô iv6 = ii6); a 2ª começa com um <b>Monte</b> (V7/iv–iv, V7/V–V). Escreva a melodia inteira. <b>Restrição:</b> o c. 11 é uma sequência exata do c. 9 (mesmo ritmo e desenho, um grau acima), e os c. 13–14 retomam os c. 1–2.</p>",
+        texto: "compasso: 3/4\ntom: A menor\ncf: baixo\nmelodia:\nbaixo: A2/3 G#2/3 A2/3 F2/2 E2/1 A2/3 F2/3 G2/2 G2/1 C3/3 A2/3 D3/3 B2/3 E3/3 A2/3 G#2/3 E3/2 E3/1 A2/3", duracao: 1, alvoCompassos: 16, plano: PLANO_MINUETO,
+        solucao: "compasso: 3/4\ntom: A menor\ncf: baixo\nmelodia: E5/1 C5/1 A4/1 B4/2 E5/1 C5/1 E5/1 A5/1 A5/1 D5/1 E5/1 E5/1 C5/1 A4/1 D5/1 F5/1 A5/1 E5/2 D5/1 C5/2 G4/1 A4/1 C#5/1 E5/1 F5/1 D5/1 A4/1 B4/1 D#5/1 F#5/1 G#5/1 B4/1 E5/1 E5/1 C5/1 A4/1 B4/2 E5/1 E5/2 B4/1 A4/3\nbaixo: A2/3 G#2/3 A2/3 F2/2 E2/1 A2/3 F2/3 G2/2 G2/1 C3/3 A2/3 D3/3 B2/3 E3/3 A2/3 G#2/3 E3/2 E3/1 A2/3",
+        comentarioSolucao: "Monte: lá–dó♯–mi sobre A7 → fá–ré–lá sobre ré menor; si–ré♯–fá♯ sobre B7 → sol♯ sobre E. O sol do fim do c. 8 desce a lá (c. 9) e a sensível de cada tonicização sobe por grau. Semicadência no c. 12 e retorno no c. 13." },
+      { id: "bin4", titulo: "Livre: o trio", modo: "livre", perfil: { ...MELODIA, frm_cadencias: "erro", ideia_repetida: "erro" }, nivel: 6,
+        contexto: { nivel: 6, plano: { cadencia: 16, repete: [1, 13] }, cadencias: [{ c: 4, tipo: "semi" }, { c: 8, tipo: "perfeita", tom: "C maior" }, { c: 16, tipo: "perfeita" }] },
+        cifrasAluno: true, alvoCompassos: 16,
+        instrucoes: "<p>Componha o trio do minueto da aula, em <b>fá maior</b> (IV), 3/4, 16 compassos, com melodia, baixo e cifras: semicadência no c. 4, cadência perfeita em <b>dó maior</b> no c. 8 (use um pivô e escreva-o nas cifras, ex.: vi6=C:ii6), 2ª reprise à sua escolha (Monte, Fonte ou Ponte), retorno do começo no c. 13 e cadência perfeita no c. 16. Contraste com o minueto: Schoenberg pede outro caráter — por exemplo, mais legato, em mínimas.</p>",
+        texto: "compasso: 3/4\ntom: F maior\nmelodia:\nbaixo:", duracao: 2, plano: PLANO_MINUETO,
+        solucao: "compasso: 3/4\ntom: F maior\nmelodia: A4/2 C5/1 Bb4/2 G4/1 C5/2 F5/1 D5/2 C5/1 A4/2 C5/1 D5/2 F5/1 E5/2 D5/1 C5/3 C5/2 E5/1 G5/2 E5/1 E5/1 D5/1 C5/1 G4/2 Bb4/1 A4/2 C5/1 Bb4/2 G4/1 C5/1 D5/1 E5/1 F5/3\nbaixo: F3/3 G3/3 A3/3 Bb3/2 C4/1 F3/3 F3/3 G3/2 G3/1 C3/3 C3/3 C3/3 C3/3 C3/3 F3/3 G3/3 A3/1 Bb3/1 C4/1 F3/3",
+        solucaoCifras: "I V43 I6 ii6 V I vi6=C:ii6 I64 V I F:V V V7 V7 I V43 I6 ii6 V7 I",
+        comentarioSolucao: "Mínima + semínima em quase todos os compassos (o minueto andava em semínimas). 2ª reprise: Ponte de quatro compassos sobre o pedal de dó, com a 7ª (si♭) descendo para lá no retorno." },
+      { id: "bin5", titulo: "Quebrar: a 1ª parte que não cadencia", modo: "quebrar", perfil: { ...BASE, frm_cadencias: "erro" }, nivel: 6,
+        contexto: { nivel: 6, plano: {}, cadencias: [{ c: 4, tipo: "semi" }, { c: 8, tipo: "aberta" }] },
+        cifras: "I V43 I6 ii6 V I IV I IV64 I I".split(" "),
+        instrucoes: "<p>Sol maior, 3/4. Escreva a melodia da 1ª parte de uma peça de caráter sobre o baixo dado: semicadência normal no c. 4, mas os c. 7–8 <b>não cadenciam</b> — a tônica é prolongada por um 6/4 de bordadura sobre o pedal (I–IV64–I), à maneira das peças de Schumann citadas na aula. Faça a melodia descer para a tônica, para que o fim da parte se perceba pelo contorno, já que a harmonia não o marca.</p>",
+        texto: "compasso: 3/4\ntom: G maior\ncf: baixo\nmelodia:\nbaixo: G2/3 A2/3 B2/3 C3/2 D3/1 G2/3 C3/3 G2/1 G2/1 G2/1 G2/3", duracao: 1, alvoCompassos: 8, plano: PLANO_MINUETO,
+        solucao: "compasso: 3/4\ntom: G maior\ncf: baixo\nmelodia: B4/1 D5/1 G5/1 F#5/2 A5/1 G5/2 D5/1 E5/2 F#5/1 G5/1 D5/1 B4/1 C5/1 E5/1 G5/1 B4/1 C5/1 B4/1 G4/3\nbaixo: G2/3 A2/3 B2/3 C3/2 D3/1 G2/3 C3/3 G2/1 G2/1 G2/1 G2/3",
+        comentarioSolucao: "C. 7: si–dó–si, bordadura na melodia espelhando o 6/4 de bordadura no baixo; c. 8 desce ao sol grave. Não há V no fim: a parte termina 'em casa', mas sem o gesto de chegada." },
+    ],
+  }, { depoisDe: "expansao" });
+
   const SEM_PLANO = { plano: {}, cadencias: null };
   void SEM_PLANO; void exc; void TONAL; void MELODIA; void PLANO_FRASE; void F;
 })(this);

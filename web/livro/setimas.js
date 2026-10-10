@@ -63,6 +63,31 @@
       corrigir: "Ache a 7ª do acorde (V7: o 4º grau; ii7: o 1º; vii°7: o 6º abaixado) e faça a voz que a tem descer um grau no acorde seguinte. Se a nota de resolução dobraria o baixo de forma ruim, troque a voz que tem a 7ª ou a inversão do acorde." });
   M.OLHA_ADIANTE.add("set_setima");
 
+  // restrição barroca: toda 7ª de acorde numa voz externa vem preparada (a mesma nota já soava no acorde anterior)
+  M.definirRegra("set_setima_preparada", "A 7ª vem preparada",
+    "Estilo estrito: a 7ª de um acorde de sétima, na voz externa que a tem, já soava como consonância no acorde anterior (nota comum, repetida ou ligada) — como num retardo.",
+    function* (ex, ctx) {
+      if (!ex.tonalidade || !ctx.cifras) return;
+      const hs = R3.harmoniasCifradas(ex, ctx);
+      for (let k = 0; k < hs.length; k++) {
+        const h = hs[k];
+        if (!h.cifra || !h.cifra.setima || h.cifra.aumentada) continue;
+        if (k > 0 && mesmoAcorde(hs[k - 1], h) && hs[k - 1].cifra.setima) continue;
+        const sete = R3.membros(h.cifra, h.tom)[3];
+        for (const v of ex.vozes) {
+          for (const n of v.notas) {
+            if (n.altura.nome !== sete || n.fim <= h.inicio || n.inicio >= h.fim) continue;
+            if (n.inicio < h.inicio) continue; // ligada desde o acorde anterior
+            const ant = v.anterior(n);
+            if (ant && ant.ps === n.ps && ant.inicio < h.inicio) continue;
+            yield [ex.compassoDe(n.inicio), `${v.nome}: a 7ª de ${h.texto} (${n.nome}) entra sem preparação`, [n]];
+          }
+        }
+      }
+    }, { precisaTom: true,
+      porque: "No estilo estrito a 7ª é tratada como retardo: a dissonância não é atacada, ela nasce de uma nota que já estava lá quando o baixo muda. É isso que dá às cadeias de sétimas de Corelli e Bach a sua fluidez.",
+      corrigir: "No acorde anterior, coloque na mesma voz a nota que vai virar 7ª (como consonância) e repita-a ou ligue-a; escolha acordes vizinhos que tenham essa nota em comum." });
+
   /* ctx.minSetimasSoprano = n: quantas vezes a 7ª de um acorde aparece no soprano (no ataque do baixo) */
   M.definirRegra("set_setima_no_soprano", "A 7ª na melodia",
     "O exercício pede que a 7ª de um acorde de sétima apareça na voz de cima um número mínimo de vezes (e resolva).",
@@ -380,5 +405,236 @@
     ],
   }, { depoisDe: "setima_dom" });
 
-//CAPITULOS
+  // ================================================================ 3. Sétimas diatônicas
+  const P1 = "tom: G maior\nsoprano: G5/2 F#5 E5 D5 C5 C5 B4/4\nbaixo: G2/2 G2 C3 E3 A2 D3 G2/4";
+  const P1c = "I I7 IV vi7 ii7 V7 I";
+  const P2 = "tom: C maior\nsoprano: E5/2 E5 D5 D5 C5 C5 B4 C5/4\nbaixo: C3/2 A2 B2 G2 A2 F2 G2 C3/4";
+  const P2c = "I IV65 viiø7 iii65 vi7 ii65 V7 I";
+
+  T_.inserir(2, {
+    id: "setimas_diat", titulo: "Sétimas diatônicas",
+    antes: [
+      { p: "Em dó maior, qual é a 7ª do ii7, e para onde ela vai no ii7 → V?", o: ["Dó; desce para si", "Fá; desce para mi", "Lá; desce para sol", "Dó; sobe para ré"], e: "ii7 = ré–fá–lá–dó. A 7ª é dó (a tônica), que desce para si, a 3ª do V. Por isso o ii7 se prepara tão bem a partir do I: o dó já está lá." },
+      { p: "Numa cadeia de quintas descendentes com sétimas em todos os acordes, de onde vem a 7ª de cada acorde?", o: ["Da 3ª do acorde anterior, que fica parada enquanto o baixo muda", "Da 5ª do acorde anterior", "Da fundamental do acorde anterior, que desce", "De um salto, porque não há nota comum"], e: "Se as fundamentais descem por quintas, a 3ª de um acorde é a 7ª do seguinte (lá–dó–mi → ré–fá–lá–dó: o dó). Enquanto uma voz segura a 3ª que vira 7ª, outra resolve a 7ª anterior: as 7ªs se preparam e se resolvem em cadeia." },
+      { p: "Que acorde de sétima diatônico tem a 7ª maior e aparece quase só em sequências ou como passagem?", o: ["I7 (e IV7) — dó–mi–sol–si", "V7", "ii7", "vii°7"], e: "Em maior, I7 e IV7 têm 7ª maior (si sobre dó, mi sobre fá). Fora das cadeias de quintas eles quase só aparecem com a 7ª de passagem (8–7), porque o I7 enfraquece a tônica e o si quer descer, contrariando a sensível." },
+    ],
+    objetivo: "Usar ii7/ii65 como pré-dominante e as outras sétimas diatônicas (IV7, vi7, iii7, I7) com preparação e resolução — sobretudo nas cadeias de quintas descendentes, onde elas se encadeiam sozinhas.",
+    ouvir: [
+      "Corelli, Sonatas op. 5 e Concerti grossi op. 6: cadeias de sétimas sobre baixos em quintas descendentes",
+      "Vivaldi, concertos de L'estro armonico op. 3: progressões de quintas nos episódios",
+      "Corais de Bach: o ii65 antes da cadência, com a 7ª preparada pela tônica",
+    ],
+    esboco: "Em dó maior, sobre o baixo dó–lá–si–sol–lá–fá–sol–dó, que acordes de sétima você poria? Tente uma melodia em que cada nota se repita uma vez antes de descer.",
+    secoes: [
+      { tipo: "texto", rotulo: "A regra", titulo: "Sétimas sobre todos os graus", html: `
+        <p>Qualquer grau pode levar 7ª, e a regra é a do contraponto: a 7ª é uma dissonância, <b>preparada</b> (no Barroco estrito, sempre) e <b>resolvida descendo um grau</b>. O que muda de um grau para outro é a qualidade e o uso.</p>
+        <table class="tabela-modos"><thead><tr><th>Acorde</th><th>Dó maior</th><th>Lá menor</th><th>7ª → resolução</th><th>Uso</th></tr></thead><tbody>
+        <tr><td><b>ii7 / ii65</b></td><td>ré–fá–lá–dó (m7)</td><td>siø7: si–ré–fá–lá</td><td>1̂ → 7̂ (sobre o V)</td><td>a pré-dominante com 7ª; o ii65 é o 4º grau subindo da regra da oitava</td></tr>
+        <tr><td><b>IV7</b></td><td>fá–lá–dó–mi (M7)</td><td>iv7: ré–fá–lá–dó</td><td>3̂ → 2̂ (sobre V ou vii°)</td><td>pré-dominante; cuidado com 5ªs fá–dó → sol–ré a quatro vozes</td></tr>
+        <tr><td><b>vi7</b></td><td>lá–dó–mi–sol</td><td>VI7: fá–lá–dó–mi</td><td>5̂ → 4̂ (sobre ii)</td><td>elo de cadeia: vi7 → ii7 → V7</td></tr>
+        <tr><td><b>iii7</b></td><td>mi–sol–si–ré</td><td>III7: dó–mi–sol–si</td><td>2̂ → 1̂ (sobre vi)</td><td>quase só em sequências</td></tr>
+        <tr><td><b>I7</b></td><td>dó–mi–sol–si (M7)</td><td>i7: lá–dó–mi–sol</td><td>7̂ → 6̂ (sobre IV)</td><td>7ª de passagem 8–7 levando ao IV; em sequência</td></tr>
+        </tbody></table>
+        <h3>A preparação</h3>
+        <p>A 7ª nasce de uma nota comum: o acorde anterior tem a nota que vai virar 7ª, e a mesma voz a mantém enquanto o baixo muda. No ii7 a 7ª é a tônica — vem naturalmente do I ou do vi; no IV7 é o 3º grau, que vem do I. A alternativa histórica é a <b>7ª de passagem</b>: a fundamental desce à 7ª sobre o mesmo baixo (I → I7, 8–7).</p>
+        <h3>A cadeia de quintas</h3>
+        <p>Com as fundamentais descendo por quintas, a 3ª de cada acorde é a 7ª do seguinte. Por isso as sétimas se encadeiam sem esforço (é o que se ouve em Corelli e Vivaldi):</p>
+        <ul><li><b>A quatro vozes</b>, alternam-se acordes completos e incompletos (sem 5ª), e as vozes que têm a 7ª se revezam.</li>
+        <li><b>No par externo</b>, a voz de cima faz <b>3ª → 7ª → 3ª → 7ª</b>: repete uma nota (consonante, depois dissonante) e desce um grau. O baixo pode ir só em fundamentais (saltos de 4ª e 5ª) ou alternar 7 e 65 (lá–si–sol–lá–fá–sol), andando quase por grau.</li>
+        <li>No ii65 → I64 → V a 7ª pode <b>ficar</b> sobre o 6/4 cadencial e descer só no V: o 6/4 é uma dupla apojatura do V, e a resolução é adiada, não abandonada.</li></ul>` },
+      { tipo: "exemplo", titulo: "Uma escala com quatro sétimas", intro: "Sol maior. A melodia desce a oitava sol–sol; cada passo de grau vira a 7ª de um acorde ou a sua resolução.",
+        camadas: [
+          { titulo: "Baixo e cifras", partitura: "tom: G maior\nbaixo: G2/2 G2 C3 E3 A2 D3 G2/4", rotulos: ["baixo"], cifras: cifrar(P1, P1c),
+            notas: [["decisao", "I → I7 sobre o mesmo sol: a 7ª entra de passagem (8–7). Depois IV, e a cadeia vi7 – ii7 – V7 – I em quintas descendentes."],
+              ["checagem", "IV → vi7 não é retrogressão para a regra (pré-dominante → tônica), e prepara a cadeia de quintas que leva ao fim."]] },
+          { titulo: "A melodia", partitura: P1, cifras: cifrar(P1, P1c), rotulos: ["soprano", "baixo"], anotacoes: [[0, 1, "7ª (8–7)"], [0, 3, "7ª (8–7)"], [0, 5, "7ª preparada"]],
+            notas: [["decisao", "Fá♯5 é a 7ª do I7 e desce a mi5 sobre o IV: o I7 funciona como uma dominante do IV sem sair do tom."],
+              ["decisao", "Ré5 sobre mi3 é a 7ª do vi7, de novo de passagem (mi5 → ré5); desce a dó5, a 3ª do ii7."],
+              ["decisao", "O dó5 fica: era 3ª do ii7 e vira 7ª do V7 (preparada), resolvendo em si4 sobre o I."],
+              ["rejeitada", "Pensei em harmonizar o fá♯5 com V (ré3): mais comum, mas o baixo sairia do sol cedo demais e a 7ª maior sobre a tônica — a cor deste exemplo — desapareceria."],
+              ["checagem", "Três 7ªs na melodia (fá♯5, ré5, dó5), todas descendo um grau; nenhuma 5ª ou 8ª entre as vozes a não ser no início."]],
+            pausa: ["Por que a 7ª do ii7 (sol) não está em nenhuma voz externa?", "Porque a melodia está ocupada com a 3ª (dó), que vai ser preparada como 7ª do V7. Na realização a quatro vozes, o sol fica numa voz interna e desce a fá♯ — as duas 7ªs da cadeia se revezam entre as vozes, e só uma cabe no soprano."] },
+        ] },
+      { tipo: "exemplo", titulo: "A cadeia 7 – 65", intro: "Dó maior. Fundamentais descendo por quintas, baixo alternando estado fundamental e 1ª inversão.",
+        camadas: [
+          { titulo: "Baixo e cifras", partitura: "tom: C maior\nbaixo: C3/2 A2 B2 G2 A2 F2 G2 C3/4", rotulos: ["baixo"], cifras: cifrar(P2, P2c),
+            notas: [["decisao", "Fundamentais dó–fá–si–mi–lá–ré–sol–dó; com IV, iii e ii em 6/5, o baixo vira dó–lá–si–sol–lá–fá–sol–dó: quase só graus e 3ªs, sem o trítono fá–si."]] },
+          { titulo: "Com a melodia", partitura: P2, cifras: cifrar(P2, P2c), rotulos: ["soprano", "baixo"], anotacoes: [[0, 1, "7ª"], [0, 3, "7ª"], [0, 5, "7ª"]],
+            notas: [["decisao", "A melodia faz 3–7, 3–7, 3–7: mi5 é 3ª do I e 7ª do IV65, desce a ré5 (3ª do viiø7), que vira 7ª do iii65, e assim por diante."],
+              ["rejeitada", "Pensei em uma melodia que subisse no meio da cadeia: quebraria o padrão de preparação e cada 7ª teria de entrar por salto."],
+              ["checagem", "Todas as 7ªs da melodia estão preparadas (a mesma nota no acorde anterior) e resolvem; as 7ªs dos acordes em estado fundamental (lá, sol, fá) ficam nas vozes internas."]],
+            pausa: ["As 5ªs justas entre as vozes (mi5/lá2, ré5/sol2, dó5/fá2) a cada dois acordes são um problema?", "Não: nunca são consecutivas (entre elas há sempre uma 10ª) e chegam por movimento oblíquo, com a melodia parada. É o padrão da cadeia, e ele se repete igual — o que, no próximo capítulo, vai se chamar sequência."] },
+        ] },
+      { tipo: "contraste", titulo: "Tríades × sétimas sobre o mesmo baixo",
+        a: { rotulo: "A — tríades (I IV6 vii° iii6 vi ii6 V I)", ...ex("tom: C maior\nsoprano: G5/2 F5 F5 E5 E5 D5 D5 C5/4\nbaixo: C3/2 A2 B2 G2 A2 F2 G2 C3/4", "I IV6 vii° iii6 vi ii6 V I") },
+        b: { rotulo: "B — sétimas (I IV65 viiø7 iii65 vi7 ii65 V7 I)", ...ex(P2, P2c) },
+        pergunta: "O baixo é o mesmo. O que as sétimas acrescentam ao movimento?",
+        comentario: "<p>Em A a cadeia anda, mas cada acorde é estável: o impulso vem só do baixo. Em B cada acorde tem uma dissonância que pede o seguinte — a 7ª preparada no acorde anterior cria uma tensão que só se desfaz no próximo, e esse se encarrega de criar a sua. É a 'corrente' que os tratados barrocos admiravam: cada elo puxa o outro, e a cadência final é a primeira chegada sem dissonância.</p>" },
+      { tipo: "quebra", titulo: "Sétimas sem preparação e sétimas paralelas", html: `
+        <p>Já no estilo clássico a preparação deixa de ser obrigatória para o ii7 e o IV7 (como já tinha deixado para o V7). No século XIX a 7ª diatônica vira <b>cor</b>: acordes de 7ª maior e menor aparecem atacados no tempo forte, sustentados, encadeados sem resolver. Satie, na Gymnopédie nº 1, alterna duas 7ªs maiores (sobre sol e sobre ré) durante toda a introdução, sem resolução nenhuma — o efeito é de imobilidade, de um tempo suspenso.</p>
+        <p>No impressionismo (Debussy, Ravel) acordes inteiros, com 7ª e 9ª, <b>deslizam em paralelo</b> sobre a melodia (o <i>planing</i>): a 7ª não é mais uma voz que precisa ir a algum lugar, é parte do timbre do acorde, e o acorde se move como uma linha engrossada. O que se perde é justamente a corrente de tensões da cadeia barroca; o que se ganha é cor e ambiguidade.</p>`,
+        exemplos: [
+          { rotulo: "Sétimas em paralelo (planing), depois uma cadência clássica", ...ex("tom: C maior\nsoprano: B4/1 C5 D5 E5 F5/2 E5/2\nbaixo: C3/1 D3 E3 F3 G3/2 C3/2", "I7 ii7 iii7 IV7 V7 I"),
+            perfil: { ...SET, set_setima: "info" }, comentario: "As vozes sobem juntas em 7ªs: si/dó, dó/ré, ré/mi, mi/fá. Cada 7ª sobe em vez de descer — o verificador anota, mas aqui é a ideia. No V7 a linguagem volta ao normal (fá5 → mi5), e o contraste deixa claro o que o planing suspende." },
+          { rotulo: "Duas 7ªs maiores alternadas, sem resolução", ...ex("tom: D maior\nsoprano: D5/2 F#5/2~ F#5/2 C#5/2 D5/2 F#5/2~ F#5/2 C#5/2\nbaixo: G2/4 D3/4 G2/4 D3/4", "IV7 I7 IV7 I7"),
+            perfil: { ...SET, set_setima: "info", dissonancia_resolucao: "info", dissonancia_aproximacao: "info" }, comentario: "IV7 e I7 em ré maior, alternados como na introdução da Gymnopédie nº 1 de Satie (o desenho da melodia aqui é outro). O fá♯ é 7ª do IV7 e fica, ligado, como 3ª do I7; o dó♯, 7ª do I7, sobe a ré em vez de descer. Nada resolve: as 7ªs são cor." },
+        ] },
+    ],
+    exercicios: [
+      { id: "sd1", titulo: "Completar: a cadeia 7 – 65 em ré maior", modo: "completar", perfil: SET, nivel: 6, contexto: { nivel: 6, plano: {} },
+        cifras: "I IV65 viiø7 iii65 vi7 ii65 V7 I".split(" "),
+        instrucoes: "<p>Ré maior. Baixo e cifras da cadeia de quintas estão prontos; a melodia começa com fá♯5 (3ª do I), repetido como 7ª do IV65. Continue: em cada acorde em 6/5, a melodia tem a 7ª preparada; em cada acorde em estado fundamental, a resolução.</p>",
+        texto: "tom: D maior\ncf: baixo\nsoprano: F#5/2 F#5\nbaixo: D3/2 B2 C#3 A2 B2 G2 A2 D3/4", duracao: 2, alvoCompassos: 4,
+        solucao: "tom: D maior\ncf: baixo\nsoprano: F#5/2 F#5 E5 E5 D5 D5 C#5 D5/4\nbaixo: D3/2 B2 C#3 A2 B2 G2 A2 D3/4",
+        comentarioSolucao: "fá♯–fá♯–mi–mi–ré–ré–dó♯–ré: cada nota é 3ª de um acorde e 7ª do seguinte. A melodia desce uma 3ª em quatro compassos, sempre por preparação e resolução." },
+      { id: "sd2", titulo: "Menos apoio: a cadeia em lá menor", modo: "menos apoio", perfil: SET, nivel: 6, contexto: { nivel: 6, plano: { cadencia: 4 } },
+        cifrasAluno: true, cifrasIniciais: "i iv65",
+        instrucoes: "<p>Lá menor. O baixo (lá–fá–sol–mi–fá–ré–mi–lá) é uma cadeia de quintas alternando 7 e 65. Escreva as cifras (em menor: iv7, VII7, III7, VI7, iiø7, V7) e a melodia, com as 7ªs preparadas e resolvidas, terminando na tônica.</p>",
+        texto: "tom: A menor\ncf: baixo\nsoprano:\nbaixo: A2/2 F2 G2 E2 F2 D2 E2 A2/4", duracao: 2, alvoCompassos: 4,
+        solucao: "tom: A menor\ncf: baixo\nsoprano: C5/2 C5 B4 B4 A4 A4 G#4 A4/4\nbaixo: A2/2 F2 G2 E2 F2 D2 E2 A2/4",
+        solucaoCifras: "i iv65 VII7 III65 VI7 iiø65 V7 i",
+        comentarioSolucao: "Em menor natural a cadeia passa por VII7 e III7 (sol e dó maiores com 7ª): só no fim a sensível sol♯ aparece, no V7. Repare que o iiø65 tem a 7ª (lá) preparada pelo VI7 e resolvida na sensível." },
+      { id: "sd3", titulo: "Restrição: só sétimas preparadas", modo: "restrição", perfil: { ...SET, set_setima_preparada: "erro" }, nivel: 6, contexto: { nivel: 6, plano: { cadencia: 4 } }, cifrasAluno: true,
+        instrucoes: "<p>Fá maior, à maneira barroca. Escreva cifras e melodia para o baixo dado usando pelo menos um IV7 e um ii7. <b>Restrição:</b> toda 7ª de acorde na melodia ou no baixo vem preparada — a mesma nota já soava no acorde anterior.</p>",
+        texto: "tom: F maior\ncf: baixo\nsoprano:\nbaixo: F3/2 Bb2 C3 D3 G2 C3 F2/4", duracao: 2, alvoCompassos: 4,
+        solucao: "tom: F maior\ncf: baixo\nsoprano: A5/2 A5 G5 F5 F5 E5 F5/4\nbaixo: F3/2 Bb2 C3 D3 G2 C3 F2/4",
+        solucaoCifras: "I IV7 V vi ii7 V7 I",
+        comentarioSolucao: "Lá5 (3ª do I) fica e vira a 7ª do IV7, resolvendo em sol5 sobre o V; fá5 (3ª do vi) fica e vira a 7ª do ii7, resolvendo em mi5 sobre o V7. A 7ª do V7 (si♭) fica implícita, preparada pelo ii7." },
+      { id: "sd4", titulo: "Livre: uma cadeia de sétimas em ré menor", modo: "livre", perfil: SET, nivel: 6, contexto: { nivel: 6, plano: { cadencia: 4 } }, cifrasAluno: true, alvoCompassos: 4,
+        instrucoes: "<p>Componha baixo, melodia e cifras em ré menor: 4 compassos com uma cadeia de quintas descendentes que use pelo menos três sétimas diatônicas além do V7, e cadência autêntica perfeita.</p>",
+        texto: "tom: D menor\nsoprano:\nbaixo:", duracao: 2,
+        solucao: "tom: D menor\nsoprano: F5/2 F5 E5 E5 D5 D5 C#5 D5/4\nbaixo: D3/2 Bb2 C3 A2 Bb2 G2 A2 D3/4",
+        solucaoCifras: "i iv65 VII7 III65 VI7 iiø65 V7 i",
+        comentarioSolucao: "A cadeia completa i – iv7 – VII7 – III7 – VI7 – iiø7 – V7 – i, com o baixo alternando 7 e 65 para evitar o trítono si♭–mi e a melodia fazendo 3ª–7ª em cada par." },
+      { id: "sd5", titulo: "Quebrar: sétimas em paralelo", modo: "quebrar", perfil: { ...SET, set_setima: "info" }, nivel: 6, contexto: { nivel: 6, plano: {} },
+        cifras: "I7 ii7 iii7 IV7 V7 I".split(" "),
+        instrucoes: "<p>Sol maior. Baixo e cifras estão dados. <b>A quebra:</b> nos quatro primeiros acordes, a melodia fica sempre uma 7ª acima do baixo e sobe com ele (planing): as 7ªs sobem em vez de descer, como cor. No V7 → I, volte ao tratamento clássico e resolva a 7ª.</p>",
+        texto: "tom: G maior\ncf: baixo\nsoprano:\nbaixo: G2/1 A2 B2 C3 D3/2 G2/2", duracao: 1, alvoCompassos: 2,
+        solucao: "tom: G maior\ncf: baixo\nsoprano: F#4/1 G4 A4 B4 C5/2 B4/2\nbaixo: G2/1 A2 B2 C3 D3/2 G2/2",
+        comentarioSolucao: "Fá♯4–sol4–lá4–si4 sobre sol–lá–si–dó: quatro 7ªs paralelas (maior, menor, menor, maior). O dó5 do V7 é a única 7ª tratada à maneira antiga — e soa como volta à gramática depois da cor." },
+    ],
+  }, { depoisDe: "setima_sens" });
+
+  // ================================================================ 4. Sequências
+  const SEQ = { ...SET, intervalo_melodico_aumentado_diminuto: "aviso", set_sequencia: "erro" };
+  const sq = (modelo, copias, real) => ({ sequencia: { modelo, copias, ...(real ? { real: true } : {}) } });
+  const Q1 = "tom: C maior\nsoprano: E5/2 F5 D5 E5 C5 D5 B4 C5\nbaixo: C3/2 F3 B2 E3 A2 D3 G2 C3";
+  const Q2 = "tom: C maior\nsoprano: E5/2 E5 D5 D5 C5 C5 B4 C5\nbaixo: C3/2 F3 B2 E3 A2 D3 G2 C3";
+  const Q3 = "tom: C maior\nsoprano: G4/1 A4 A4 B4 B4 C5 C5 D5 D5/2 C5/2\nbaixo: C3/1 C3 D3 D3 E3 E3 F3 F3 G3/2 C3/2";
+  const Q4 = "tom: C maior\nsoprano: E5/1 E5 F5 F5 G5 G5 A5 A5 G5/2 E5/2\nbaixo: C3/1 C3 D3 D3 E3 E3 F3 F3 G3/2 C3/2";
+  const Q5 = "tom: C maior\nsoprano: E5/2 D5 C5 B4 A4 G4 A4 B4 C5/4\nbaixo: C3/2 G2 A2 E2 F2 C2 F2 G2 C3/4";
+  const Q6 = "tom: C maior\nsoprano: E5/2 D5 C5 B4 A4 G4 A4 B4 C5/4\nbaixo: C3/2 B2 A2 G2 F2 E2 F2 G2 C3/4";
+
+  T_.inserir(2, {
+    id: "sequencias", titulo: "Sequências",
+    antes: [
+      { p: "O que define uma sequência harmônica?", o: ["Um modelo (vozes e harmonia) repetido em outros graus, com o mesmo desenho em todas as vozes", "Qualquer progressão que passe por todos os graus", "Uma melodia repetida sobre harmonias diferentes", "Um baixo que desce por grau"], e: "A sequência é o princípio modelo + cópia: o bloco inteiro (baixo, melodia, harmonia) é transposto. Repetir só a melodia é sequência melódica; repetir o baixo sob outra melodia é um ostinato." },
+      { p: "Numa sequência diatônica de quintas descendentes em dó maior, o baixo vai de fá a si. O que isso tem de especial?", o: ["É um trítono, aceito porque o padrão da sequência manda", "É um erro: a sequência tem de ser alterada para fá♯", "Nada: fá–si é uma 5ª justa", "Obriga a modular para sol maior"], e: "Na sequência diatônica as qualidades mudam (5ª justa vira diminuta, acorde maior vira diminuto) para continuar no tom. O vii° em estado fundamental e o trítono do baixo são tolerados dentro do padrão — fora dele, seriam evitados." },
+      { p: "Qual destes esquemas de Riepel é uma sequência ascendente que toniciza IV e depois V?", o: ["Monte", "Fonte", "Ponte", "Prinner"], e: "Monte (montanha) sobe: V7/IV – IV, V7/V – V. Fonte (fonte, que desce) toniciza ii e depois I. Ponte (ponte) não é sequência: prolonga a dominante. O Prinner é uma resposta em 10ªs, não uma sequência." },
+    ],
+    objetivo: "Compor sequências — quintas descendentes, 5–6 ascendente e descendente, Romanesca, Monte e Fonte — copiando o modelo voz por voz, e saber quando a sequência deve parar.",
+    ouvir: [
+      "Pachelbel, Cânone em ré: o baixo da Romanesca (1–5–6–3–4–1–4–5) repetido como ostinato",
+      "Vivaldi, concertos de L'estro armonico op. 3: sequências de quintas descendentes nos episódios",
+      "Bach, fugas do Cravo Bem Temperado: os episódios entre as entradas do sujeito são quase sempre sequências",
+      "Minuetos de Haydn e Mozart: Monte e Fonte logo depois da barra dupla",
+    ],
+    esboco: "Escreva um compasso em dó maior (baixo e soprano, duas mínimas) e copie-o duas vezes, um grau abaixo a cada vez, sem mudar nenhum intervalo das vozes. O que acontece com as qualidades dos acordes?",
+    secoes: [
+      { tipo: "texto", rotulo: "A regra", titulo: "Modelo e cópia", html: `
+        <p>Uma sequência é um <b>modelo</b> — um pequeno bloco de baixo, melodia e harmonia — repetido em outros graus. Kostka & Payne a ensinam junto com a progressão harmônica; a pedagogia napolitana dos partimenti a ensinava como <b>movimentos de baixo</b> (os <i>moti</i>) a realizar em todos os tons, e Riepel (<i>Anfangsgründe</i>, 1755) deu nome a três fórmulas galantes: Monte, Fonte e Ponte.</p>
+        <h3>O que tem de se repetir</h3>
+        <ul><li><b>Todas as vozes</b>, com o mesmo ritmo e os mesmos intervalos (contados em graus), transpostas pelo mesmo intervalo. Se a melodia muda o desenho, o ouvido não reconhece a cópia.</li>
+        <li><b>A condução de vozes repete-se exatamente</b>: se o modelo é limpo, a cópia é limpa. Por isso se verifica com cuidado a <b>junção</b> modelo → cópia (o último acorde do modelo para o primeiro da cópia), que é o único lugar novo.</li>
+        <li>Na <b>sequência diatônica</b> (ou tonal) as qualidades mudam para ficar no tom: o I maior vira ii menor, o IV vira vii° diminuto. Dentro do padrão toleram-se o vii° em estado fundamental e o trítono melódico no baixo (fá–si), que fora dele seriam evitados.</li>
+        <li>Na <b>sequência real</b> (ou modulante) a cópia é exata, semitom por semitom, e por isso sai do tom.</li>
+        <li>O uso é limitado: modelo + duas cópias costuma bastar (a terceira já cansa); a sequência <b>precisa de destino</b>, normalmente uma cadência.</li></ul>
+        <h3>Os tipos principais</h3>
+        <table class="tabela-modos"><thead><tr><th>Tipo</th><th>Fundamentais</th><th>Baixo típico (dó maior)</th><th>Observação</th></tr></thead><tbody>
+        <tr><td><b>Quintas descendentes</b></td><td>4ª acima, 5ª abaixo</td><td>dó–fá–si–mi–lá–ré–sol–dó</td><td>a mais comum; aceita 7ªs em cadeia e inversões alternadas (7–65)</td></tr>
+        <tr><td><b>5–6 ascendente</b></td><td>3ª abaixo, 4ª acima</td><td>dó–dó–ré–ré–mi–mi…</td><td>a voz superior faz 5–6 sobre cada nota do baixo: o 6 quebra as 5ªs paralelas de tríades subindo por grau</td></tr>
+        <tr><td><b>Descendente 5–6 / Romanesca</b></td><td>4ª abaixo, 2ª acima</td><td>dó–sol–lá–mi–fá–dó (ou dó–si–lá–sol–fá–mi)</td><td>o baixo do Cânone de Pachelbel; as fundamentais descem por 3ªs a cada par</td></tr>
+        <tr><td><b>Monte</b></td><td>V7/IV–IV, V7/V–V</td><td>mi–fá, fá♯–sol</td><td>sobe um grau; tensão crescente</td></tr>
+        <tr><td><b>Fonte</b></td><td>V7/ii–ii, V7–I</td><td>dó♯–ré, si–dó</td><td>desce um grau, de menor para maior; relaxamento</td></tr>
+        <tr><td><b>Ponte</b></td><td>V prolongado</td><td>sol pedal</td><td>não é sequência: é a dominante sustentada antes da volta do tema</td></tr>
+        </tbody></table>
+        <p>No verificador, a regra <b>Modelo e cópia</b> recebe onde está o modelo e quantas cópias o exercício pede, e confere ritmo, intervalos e transposição em cada voz.</p>` },
+      { tipo: "exemplo", titulo: "Quintas descendentes, com e sem sétimas", intro: "Dó maior. Modelo: o compasso 1. Cada cópia desce um grau.",
+        camadas: [
+          { titulo: "Tríades", ...ex(Q1, "I IV vii° iii vi ii V I"), contexto: sq([0, 4], 3), anotacoes: [[1, 0, "modelo"], [1, 2, "cópia 1"], [1, 4, "cópia 2"], [1, 6, "cópia 3 = cadência"]],
+            notas: [["decisao", "Modelo: baixo dó3 → fá3 (4ª acima), melodia mi5 → fá5 (grau acima) — 10ª → 8ª. As cópias repetem os dois intervalos um grau abaixo."],
+              ["decisao", "A terceira cópia (sol2 → dó3, si4 → dó5) é a própria cadência V–I: a sequência chega ao destino sem mudar de padrão."],
+              ["checagem", "As 8ªs (fá5/fá3, mi5/mi3, ré5/ré3) chegam por movimento direto com a melodia por grau, e nunca são consecutivas. A junção (fá3 → si2 e fá5 → ré5) é a mesma em todas as cópias."]],
+            pausa: ["O baixo fá3 → si2 é uma 5ª diminuta. Por que o verificador só avisa?", "Porque, numa sequência diatônica, a cópia tem de manter os graus para ficar no tom: o trítono é consequência do padrão, e o ouvido o aceita porque já reconheceu o modelo. Alterar o si para si♭ (ou o fá para fá♯) mudaria a sequência para real — e sairia do tom."] },
+          { titulo: "Com sétimas", ...ex(Q2, "I IV7 viiø7 iii7 vi7 ii7 V7 I"), contexto: sq([0, 4], 2),
+            notas: [["decisao", "Melodia mi–mi–ré–ré–dó–dó–si–dó: a nota repetida é 3ª de um acorde e 7ª do seguinte, sempre preparada e resolvida um grau abaixo."],
+              ["rejeitada", "Pensei em manter a melodia da camada anterior (mi–fá–ré–mi…): sobre IV7 o fá dobraria a fundamental e a 7ª ficaria só nas vozes internas — a cadeia de dissonâncias, que é o interesse desta versão, não apareceria na melodia."]] },
+        ] },
+      { tipo: "exemplo", titulo: "5–6 ascendente e Romanesca", intro: "Duas sequências por grau: uma sobe, outra desce.",
+        camadas: [
+          { titulo: "5–6 ascendente: a voz que faz o 5–6", ...ex(Q3, "I vi6 ii vii°6 iii I6 IV ii6 V I"), contexto: sq([0, 2], 3),
+            notas: [["decisao", "Sobre cada nota do baixo (repetida), a voz de cima faz 5ª → 6ª: sol–lá sobre dó, lá–si sobre ré… O 6 transforma cada tríade num acorde de sexta e evita as 5ªs paralelas de I–ii–iii–IV."],
+              ["checagem", "As 5ªs (sol/dó, lá/ré, si/mi, dó/fá) são todas chegadas por movimento oblíquo — a voz de cima fica parada enquanto o baixo sobe."]] },
+          { titulo: "5–6 ascendente: a melodia em 10ªs", ...ex(Q4, "I vi6 ii vii°6 iii I6 IV ii6 V I"), contexto: sq([0, 2], 3),
+            notas: [["decisao", "Numa textura real o 5–6 fica numa voz interna, e a melodia acompanha o baixo em 10ªs: mi–fá–sol–lá sobre dó–ré–mi–fá."],
+              ["checagem", "Dez 10ªs seguidas não são problema para a regra (não são perfeitas), mas a melodia perde independência: por isso a sequência para depois de três cópias e a cadência traz movimento contrário."]] },
+          { titulo: "Romanesca saltada (descendente 5–6)", ...ex(Q5, "I V vi iii IV I IV V I"), contexto: sq([0, 4], 2),
+            notas: [["decisao", "Baixo dó–sol, lá–mi, fá–dó: cada par desce uma 4ª, e o par seguinte começa uma 2ª acima. A melodia desce a escala mi–ré–dó–si–lá–sol, 10ª–5ª em cada par."],
+              ["decisao", "Depois de duas cópias, a sequência para: fá–sol–dó é a cadência (IV–V–I)."]] },
+          { titulo: "Romanesca por graus", ...ex(Q6, "I V6 vi iii6 IV I6 IV V I"), contexto: sq([0, 4], 2),
+            notas: [["decisao", "Com V6 e iii6 o baixo desce por grau (dó–si–lá–sol–fá–mi) sob a mesma melodia, em 10ªs paralelas. É a forma da Romanesca que Gjerdingen chama de 'por graus'."]],
+            pausa: ["As duas Romanescas têm as mesmas fundamentais. Qual delas soa mais como sequência, e por quê?", "A saltada: o salto de 4ª no baixo marca o começo de cada cópia e o ouvido conta os pares. Na versão por graus o baixo vira uma escala contínua e a segmentação em modelo e cópia quase desaparece — soa mais como uma linha descendente que como uma repetição."] },
+        ] },
+      { tipo: "contraste", titulo: "Monte × Fonte",
+        a: { rotulo: "A — Monte: V65/IV – IV, V65/V – V (sobe)", ...ex("tom: C maior\nsoprano: C5/2 Bb4 A4 C5 B4 D5 C5/4\nbaixo: C3/2 E3 F3 F#3 G3 G2 C3/4", "I V65/IV IV V65/V V V7 I"), contexto: sq([2, 6], 1, true) },
+        b: { rotulo: "B — Fonte: V65/ii – ii, V65 – I (desce)", ...ex("tom: C maior\nsoprano: G5/2 G5 F5 F5 E5 D5 B4 C5\nbaixo: E3/2 C#3 D3 B2 C3 F2 G2 C3", "I6 V65/ii ii V65 I ii6 V7 I"), contexto: sq([2, 6], 1) },
+        pergunta: "As duas fazem 'dominante → resolução' duas vezes. Qual cria expectativa, e qual a desfaz?",
+        comentario: "<p>No Monte cada elo é um grau mais alto (fá, depois sol) e termina no V: a música sobe e chega a uma dominante — tensão crescente, ideal para levar à volta do tema. No Fonte o primeiro elo vai a um acorde menor (ii) e o segundo, um grau abaixo, à tônica maior: a música desce e repousa. Riepel deu os nomes pela imagem — a montanha que se sobe, a fonte que corre para baixo. Repare também que o Monte é uma sequência real (as duas metades são idênticas, só transpostas), enquanto o Fonte muda de menor para maior.</p>" },
+      { tipo: "quebra", titulo: "Sequências reais, cromáticas e interrompidas", html: `
+        <p><b>Barroco.</b> Vivaldi e Bach usam sequências como motor: nos episódios das fugas e dos concertos, um fragmento do tema é copiado em quintas descendentes até a próxima entrada ou cadência. A sequência diatônica mantém o tom e gera movimento sem gerar novidade harmônica.</p>
+        <p><b>Clássico.</b> A sequência aparece sobretudo nas seções instáveis (depois da barra dupla, nos desenvolvimentos), e raramente vai além de duas cópias: o modelo é dito, copiado, e a terceira vez é <b>fragmentada ou interrompida</b> por uma cadência. A quebra do padrão é o sinal de que a forma vai mudar de fase.</p>
+        <p><b>Romântico.</b> A sequência real (exata) sai do tom, e é usada justamente para isso: cadeias de dominantes com 7ª, diminutos deslizando por semitom, transposições por 3ªs maiores ou menores que dividem a oitava em partes iguais e apagam o centro tonal. No prelúdio de Tristão e Isolda, Wagner reapresenta o gesto inicial em transposições ascendentes, e a sequência vira o próprio motor da harmonia.</p>`,
+        exemplos: [
+          { rotulo: "Sequência real: dominantes encadeadas", ...ex("tom: C maior\nsoprano: E5/2 D5 C#5 C5 B4 C5\nbaixo: C3/2 E3 A2 D3 G2 C3", "I V7/vi V7/ii V7/V V7 I"),
+            perfil: { ...SEQ, intervalo_melodico_aumentado_diminuto: "info" }, contexto: sq([2, 6], 1, true),
+            comentario: "Mi7 → lá7, ré7 → sol7: a cópia é exata, semitom por semitom. Cada 7ª desce (ré5 → dó♯5, dó5 → si4), mas a 3ª de cada dominante (dó♯) desce cromaticamente em vez de subir — a 'sensível' de ré nunca chega a ré. O ouvido segue o padrão e aceita a saída do tom, que só volta com o V7 → I." },
+          { rotulo: "Sequência interrompida", ...ex("tom: C maior\nsoprano: E5/2 F5 D5 E5 C5/2 B4/2 C5/4\nbaixo: C3/2 F3 B2 E3 F3/2 G3/2 C3/4", "I IV vii° iii IV V I"),
+            perfil: { ...SEQ, set_sequencia: "info" }, contexto: sq([0, 4], 2),
+            comentario: "Modelo e uma cópia de quintas descendentes; a segunda cópia esperada (lá–ré) não vem: o baixo vai a fá e a frase cadencia. O verificador anota a cópia que falta — é exatamente a expectativa frustrada que dá força à cadência." },
+        ] },
+    ],
+    exercicios: [
+      { id: "sq1", titulo: "Completar: as cópias de um modelo com sétimas", modo: "completar", perfil: SEQ, nivel: 6, contexto: { nivel: 6, plano: {}, ...sq([0, 4], 2) },
+        cifras: "I IV7 viiø7 iii7 vi7 ii7 V7 I".split(" "),
+        instrucoes: "<p>Ré maior. O baixo é uma sequência de quintas descendentes; as cifras e o modelo da melodia (compasso 1: fá♯5 repetido, 3ª do I e 7ª do IV7) estão dados. Escreva as duas cópias (compassos 2 e 3), repetindo o desenho do modelo um grau abaixo de cada vez, e a cadência no compasso 4.</p>",
+        texto: "tom: D maior\ncf: baixo\nsoprano: F#5/2 F#5\nbaixo: D3/2 G3 C#3 F#3 B2 E3 A2 D3", duracao: 2, alvoCompassos: 4,
+        solucao: "tom: D maior\ncf: baixo\nsoprano: F#5/2 F#5 E5 E5 D5 D5 C#5 D5\nbaixo: D3/2 G3 C#3 F#3 B2 E3 A2 D3",
+        comentarioSolucao: "Cada cópia repete a nota (3ª → 7ª preparada) e desce: mi–mi sobre viiø7–iii7, ré–ré sobre vi7–ii7. O si do baixo no compasso 3 e o sol–dó♯ da junção do compasso 1 são os trítonos aceitos da sequência diatônica." },
+      { id: "sq2", titulo: "Menos apoio: 5–6 ascendente em sol maior", modo: "menos apoio", perfil: SEQ, nivel: 6, contexto: { nivel: 6, plano: { cadencia: 3 }, ...sq([0, 2], 3) },
+        cifrasAluno: true, cifrasIniciais: "I vi6",
+        instrucoes: "<p>Sol maior. O baixo sobe por grau com cada nota repetida (5–6 ascendente). As duas primeiras cifras estão dadas. Escreva as outras e a melodia: o modelo são os dois primeiros tempos, e cada cópia repete o desenho um grau acima (três cópias). Feche com V–I e a tônica na melodia.</p>",
+        texto: "tom: G maior\ncf: baixo\nsoprano:\nbaixo: G2/1 G2 A2 A2 B2 B2 C3 C3 D3/2 G2/2", duracao: 1, alvoCompassos: 3,
+        solucao: "tom: G maior\ncf: baixo\nsoprano: B4/1 B4 C5 C5 D5 D5 E5 E5 F#5/2 G5/2\nbaixo: G2/1 G2 A2 A2 B2 B2 C3 C3 D3/2 G2/2",
+        solucaoCifras: "I vi6 ii vii°6 iii I6 IV ii6 V I",
+        comentarioSolucao: "A melodia em 10ªs com o baixo (si–dó–ré–mi sobre sol–lá–si–dó) e o 5–6 implícito na voz interna: I–vi6, ii–vii°6, iii–I6, IV–ii6. A sensível fá♯5 sobe a sol5 na cadência." },
+      { id: "sq3", titulo: "Restrição: Monte, com a cópia exata", modo: "restrição", perfil: SEQ, nivel: 6, contexto: { nivel: 6, plano: { cadencia: 4 }, ...sq([2, 6], 1, true) },
+        cifras: "I V65/IV IV V65/V V V7 I".split(" "),
+        instrucoes: "<p>Ré maior. O baixo e as cifras são um Monte (V65/IV – IV, V65/V – V). Escreva a melodia. <b>Restrição:</b> a cópia (compassos 2–3, do sol♯ ao lá) repete o modelo (do fá♯ ao sol) <b>exatamente</b>, semitom por semitom — uma sequência real. A 7ª de cada dominante secundária está na melodia e desce.</p>",
+        texto: "tom: D maior\ncf: baixo\nsoprano:\nbaixo: D3/2 F#3 G3 G#3 A3 A2 D3/4", duracao: 2, alvoCompassos: 4,
+        solucao: "tom: D maior\ncf: baixo\nsoprano: D5/2 C5 B4 D5 C#5 E5 D5/4\nbaixo: D3/2 F#3 G3 G#3 A3 A2 D3/4",
+        comentarioSolucao: "Dó5 (7ª de ré7, a dominante do IV) desce a si4; ré5 (7ª de mi7, a dominante do V) desce a dó♯5. Os dois elos são idênticos um tom acima — o Monte é real por natureza, porque as duas metas (IV e V) são maiores." },
+      { id: "sq4", titulo: "Livre: quintas descendentes em lá menor", modo: "livre", perfil: SEQ, nivel: 6, contexto: { nivel: 6, plano: { cadencia: 4 }, ...sq([0, 4], 2) }, cifrasAluno: true, alvoCompassos: 4,
+        instrucoes: "<p>Componha baixo, melodia e cifras em lá menor: o compasso 1 é o modelo (duas mínimas) de uma sequência de quintas descendentes; os compassos 2 e 3 são duas cópias; o 4 é a cadência perfeita.</p>",
+        texto: "tom: A menor\nsoprano:\nbaixo:", duracao: 2,
+        solucao: "tom: A menor\nsoprano: C5/2 D5 B4 C5 A4 B4 G#4 A4\nbaixo: A2/2 D3 G2 C3 F2 B2 E2 A2",
+        solucaoCifras: "i iv VII III VI ii° V i",
+        comentarioSolucao: "Em menor natural a cadeia passa por VII e III (sol e dó maiores) e por ii° em estado fundamental (tolerado na sequência); só na cópia final, que é a cadência, aparece a sensível sol♯. A melodia sobe um grau em cada par (10ª → 8ª), descendo por cópias." },
+      { id: "sq5", titulo: "Quebrar: uma sequência real que sai do tom", modo: "quebrar", perfil: { ...SEQ, intervalo_melodico_aumentado_diminuto: "info" }, nivel: 6, contexto: { nivel: 6, plano: {}, ...sq([2, 6], 1, true) },
+        cifras: "I V7/vi V7/ii V7/V V7 I".split(" "),
+        instrucoes: "<p>Sol maior. O baixo e as cifras encadeiam dominantes (si7 → mi7, lá7 → ré7) antes do I. <b>A quebra:</b> a cópia tem de ser real — exata, semitom por semitom —, o que obriga a melodia a um semitom cromático que a sequência diatônica evitaria. Escreva a melodia com a 7ª de cada dominante do modelo e da cópia descendo um grau.</p>",
+        texto: "tom: G maior\ncf: baixo\nsoprano:\nbaixo: G2/2 B2 E3 A2 D3 G2", duracao: 2, alvoCompassos: 3,
+        solucao: "tom: G maior\ncf: baixo\nsoprano: G5/2 A5 G#5 G5 F#5 G5\nbaixo: G2/2 B2 E3 A2 D3 G2",
+        comentarioSolucao: "Lá5 (7ª de si7) desce a sol♯5, a 3ª de mi7; sol5 (7ª de lá7) desce a fá♯5, a 3ª de ré7. Entre os dois elos, sol♯5 → sol5: a 'sensível' de lá é abandonada cromaticamente, e é esse semitom que faz a cópia sair da escala e voltar ao tom pela dominante." },
+    ],
+  }, { antesDe: "esquemas" });
 })(this);
