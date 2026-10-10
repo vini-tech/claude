@@ -61,14 +61,44 @@
     return c.setima ? nomes : nomes.slice(0, 3);
   }
 
-  // [{ nota do baixo, cifra lida, texto, notas do acorde }]
+  /* Modulação nas cifras:
+   *   "G:ii6"     a partir daqui o tom é sol maior (letra maiúscula = maior, minúscula = menor: "e:iv")
+   *   "vi=G:ii"   acorde-pivô: vi no tom antigo e ii no novo; o tom novo vale a partir dele */
+  function tomDaLetra(s) {
+    const m = /^([A-Ga-g])(#|b)?$/.exec(s);
+    if (!m) return null;
+    try { return M.interpretarTom(`${m[1].toUpperCase()}${m[2] || ""} ${m[1] === m[1].toUpperCase() ? "maior" : "menor"}`); } catch (e) { return null; }
+  }
+  function lerComTom(texto, tomAtual) {
+    const m = /^([A-Ga-g][#b]?):(.+)$/.exec(texto.trim());
+    if (!m) return { tom: tomAtual, cifra: lerCifra(texto) };
+    const t = tomDaLetra(m[1]);
+    return { tom: t || tomAtual, cifra: t ? lerCifra(m[2]) : null, mudou: !!t };
+  }
+  // [{ nota do baixo, cifra lida, texto, notas do acorde, tom local, pivô }]
   function harmoniasCifradas(ex, ctx) {
     const b = ex.vozes[ex.vozes.length - 1];
     if (!ctx.cifras || !ex.tonalidade || !b) return [];
+    let tom = ex.tonalidade;
     return b.notas.map((n, i) => {
       const texto = ctx.cifras[i];
-      const c = texto ? lerCifra(texto) : null;
-      return { baixo: n, texto, cifra: c, notas: c ? new Set(membros(c, ex.tonalidade)) : null, inicio: n.inicio, fim: n.fim };
+      let c = null, pivo = null, mudou = false;
+      if (texto) {
+        const partes = texto.split("=");
+        if (partes.length === 2) {
+          const velho = lerComTom(partes[0], tom), novo = lerComTom(partes[1], velho.tom);
+          pivo = velho.cifra && novo.cifra ? { velho: { ...velho, notas: new Set(membros(velho.cifra, velho.tom)) }, novo } : null;
+          mudou = novo.tom !== tom;
+          tom = novo.tom; c = novo.cifra;
+        } else {
+          const r = lerComTom(texto, tom);
+          mudou = r.tom !== tom;
+          tom = r.tom; c = r.cifra;
+        }
+      }
+      // no pivô, a melodia e o baixo podem estar grafados em qualquer das duas leituras (enarmonia)
+      const notas = c ? new Set([...membros(c, tom), ...(pivo ? pivo.velho.notas : [])]) : null;
+      return { baixo: n, texto, cifra: c, tom, mudou, pivo, notas, inicio: n.inicio, fim: n.fim };
     });
   }
 
@@ -85,9 +115,12 @@
       for (const h of hs) {
         const c = ex.compassoDe(h.inicio);
         if (!h.texto) { yield [c, `baixo ${h.baixo.nome}: falta a cifra`, [h.baixo]]; continue; }
-        if (!h.cifra) { yield [c, `cifra "${h.texto}" não reconhecida (use I, ii6, V43, I64, V7, vii°6…)`, [h.baixo]]; continue; }
-        const esperado = membros(h.cifra, ex.tonalidade)[h.cifra.membroBaixo];
-        if (h.baixo.altura.nome !== esperado) yield [c, `${h.texto} pede ${esperado} no baixo, e o baixo tem ${h.baixo.nome}`, [h.baixo]];
+        if (!h.cifra) { yield [c, `cifra "${h.texto}" não reconhecida (use I, ii6, V43, I64, V7, vii°6…; G:ii6 muda de tom; vi=G:ii é um pivô)`, [h.baixo]]; continue; }
+        const classes = (ns) => [...new Set([...ns].map((x) => ((M.lerAltura(x.replace(/-/g, "b") + "4").ps % 12) + 12) % 12))].sort().join();
+        if (h.pivo && classes(h.pivo.velho.notas) !== classes(membros(h.cifra, h.tom))) yield [c, `pivô ${h.texto}: as duas leituras não são o mesmo acorde (${[...h.pivo.velho.notas].join("–")} × ${[...h.notas].join("–")})`, [h.baixo]];
+        const esperado = membros(h.cifra, h.tom)[h.cifra.membroBaixo];
+        const esperadoVelho = h.pivo ? membros(h.pivo.velho.cifra, h.pivo.velho.tom)[h.pivo.velho.cifra.membroBaixo] : null;
+        if (h.baixo.altura.nome !== esperado && h.baixo.altura.nome !== esperadoVelho) yield [c, `${h.texto} pede ${esperado} no baixo, e o baixo tem ${h.baixo.nome}`, [h.baixo]];
         const m = mel.soandoEm(h.inicio);
         if (m && mel !== ex.vozes[ex.vozes.length - 1] && !h.notas.has(m.altura.nome)) {
           yield [c, `${m.nome} na melodia não pertence a ${h.texto} (${[...h.notas].join("–")})`, [m, h.baixo]];
@@ -110,11 +143,11 @@
     "Num baixo que anda por grau, cada grau tem a sua harmonia: subindo 1 5/3, 2 V43, 3 I6, 4 ii65, 5 V, 6 IV6, 7 V65; descendo 7 V6, 6 V43/V (ou IV6), 4 V42.",
     function* (ex, ctx) {
       const hs = harmoniasCifradas(ex, ctx);
-      const tom = ex.tonalidade;
       for (let k = 0; k < hs.length; k++) {
         const h = hs[k];
         if (!h.cifra) continue;
         const ant = hs[k - 1], prox = hs[k + 1];
+        const tom = h.tom;
         const grauDe = (n) => ((n.altura.letra - tom.tonica.letra) % 7 + 7) % 7 + 1;
         let dir = null;
         if (ant && F.ehGrau(ant.baixo, h.baixo)) dir = h.baixo.ps > ant.baixo.ps ? "sobe" : "desce";
@@ -127,6 +160,49 @@
     }, { precisaTom: true, ...EXPL(
       "A Regra da Oitava é o vocabulário básico do baixo por grau: os graus estáveis (1 e 5) levam 5/3, os outros levam acordes de sexta que apontam para eles. Os músicos napolitanos a tocavam em todos os tons antes de qualquer partimento.",
       "Use a cifra indicada para esse grau e direção; depois confira se a melodia é nota do acorde.") });
+
+  /* ctx.modulacao = { para: "G maior", tipo: "pivo" | "cromatica" | "enarmonica", ate: compasso da cadência } */
+  def("modulacao", "Modulação",
+    "O exercício pede uma modulação de um tipo dado: a cifra muda para o tom novo pelo meio pedido (acorde-pivô, inflexão cromática ou reinterpretação enarmônica) e o tom novo é confirmado por uma cadência V(7)–I.",
+    function* (ex, ctx) {
+      const md = ctx.modulacao;
+      if (!md) return;
+      const hs = harmoniasCifradas(ex, ctx).filter((h) => h.cifra);
+      if (!hs.length) return;
+      const alvo = M.interpretarTom(md.para);
+      const noAlvo = (h) => h.tom.tonica.nome === alvo.tonica.nome && (h.tom.modo === "minor") === (alvo.modo === "minor");
+      const k = hs.findIndex(noAlvo);
+      const nomeAlvo = md.para;
+      if (k < 0) { yield [ex.compassoDe(ex.fim - 1), `as cifras nunca chegam a ${nomeAlvo} (escreva "${alvo.tonica.nome.replace(/-/g, "b")}:" antes da primeira cifra no tom novo)`, []]; return; }
+      const h = hs[k], ant = hs[k - 1];
+      const c = ex.compassoDe(h.inicio);
+      if (md.tipo === "pivo" && !(h.pivo && !h.pivo.velho.cifra.secundaria)) yield [c, `a mudança para ${nomeAlvo} não tem acorde-pivô: escreva o acorde comum com as duas leituras (ex.: vi=G:ii)`, [h.baixo]];
+      if (md.tipo === "enarmonica") {
+        const enarm = h.pivo && [...h.pivo.velho.notas].sort().join() !== [...membros(h.cifra, h.tom)].sort().join();
+        if (!enarm) yield [c, `a modulação enarmônica pede um pivô que muda de grafia (ex.: vii°7=e:vii°7, ou V7=Gb:Ger65 escrito como acorde do tom novo)`, [h.baixo]];
+      }
+      if (md.tipo === "cromatica") {
+        // alguma voz faz um semitom cromático (mesma letra, outra alteração) entre o acorde anterior e o primeiro do tom novo
+        let cromatico = false;
+        const ini = ant ? ant.inicio : h.inicio, fim = h.fim;
+        for (const v of ex.vozes) {
+          const ns = v.notas.filter((n) => n.fim > ini && n.inicio < fim);
+          for (let i = 1; i < ns.length; i++) if (ns[i].altura.letra === ns[i - 1].altura.letra && ns[i].altura.alter !== ns[i - 1].altura.alter) cromatico = true;
+        }
+        if (h.pivo) yield [c, `a modulação cromática não usa acorde-pivô: o tom novo entra por uma inflexão cromática de uma voz`, [h.baixo]];
+        else if (!cromatico) yield [c, `na entrada de ${nomeAlvo}, nenhuma voz faz o semitom cromático (ex.: dó → dó♯) que caracteriza a modulação cromática`, [h.baixo]];
+      }
+      // confirmação: V(7) → I em estado fundamental no tom novo
+      let cad = -1;
+      for (let i = k; i + 1 < hs.length; i++) {
+        const a = hs[i], b = hs[i + 1];
+        if (noAlvo(a) && noAlvo(b) && a.cifra.grau === 5 && a.cifra.membroBaixo === 0 && !a.cifra.secundaria && b.cifra.grau === 1 && b.cifra.membroBaixo === 0) { cad = i + 1; break; }
+      }
+      if (cad < 0) yield [ex.compassoDe(ex.fim - 1), `${nomeAlvo} não é confirmado por uma cadência (V ou V7 → I, os dois em estado fundamental, no tom novo)`, []];
+      else if (md.ate && ex.compassoDe(hs[cad].inicio) > md.ate) yield [ex.compassoDe(hs[cad].inicio), `a cadência em ${nomeAlvo} chega no compasso ${ex.compassoDe(hs[cad].inicio)}; o plano pede até o ${md.ate}`, [hs[cad].baixo]];
+    }, { precisaTom: true, ...EXPL(
+      "Modular não é passar por um acorde de outro tom (isso é tonicização): é fazer o ouvido aceitar um novo centro. Para isso o caminho de entrada precisa ser claro e o tom novo precisa de uma cadência própria.",
+      "Marque nas cifras onde o tom muda (G:… ou um pivô vi=G:ii) e confirme o tom novo com V–I em estado fundamental.") });
 
   def("retrogressao_cifrada", "Retrogressão harmônica",
     "Depois da dominante não se volta à pré-dominante (V → IV, V → ii, vii° → IV).",
@@ -179,7 +255,8 @@
         if (ult && ex.compassoDe(ult.inicio) >= pl.cadencia) {
           const mel = ex.vozes[0].notas;
           const fim = mel[mel.length - 1];
-          const ok = ult.cifra.grau === 1 && ult.cifra.membroBaixo === 0 && pen && pen.cifra.grau === 5 && pen.cifra.membroBaixo === 0 && fim && fim.altura.nome === F.tonica(ex);
+          const ok = ult.cifra.grau === 1 && ult.cifra.membroBaixo === 0 && pen && pen.cifra.grau === 5 && pen.cifra.membroBaixo === 0 && fim && fim.altura.nome === ult.tom.tonica.nome
+            && (pl.tomFinal ? ult.tom.tonica.nome === M.interpretarTom(pl.tomFinal).tonica.nome : ult.tom.tonica.nome === ex.tonalidade.tonica.nome);
           if (!ok) yield [ex.compassoDe(ult.inicio), `a cadência final não é autêntica perfeita (${pen ? pen.texto : "?"} → ${ult.texto}, melodia em ${fim ? fim.nome : "?"})`, [ult.baixo]];
         }
       }

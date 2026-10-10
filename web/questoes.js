@@ -80,7 +80,7 @@
   }
 
   function inversoes(ex, cifras) {
-    const lidas = cifras.map((c) => { try { return R3.lerCifra(c); } catch (e) { return null; } }).filter(Boolean);
+    const lidas = cifras.map((c) => { try { return R3.lerCifra(String(c).split("=").pop().replace(/^[A-Ga-g][#b]?:/, "")); } catch (e) { return null; } }).filter(Boolean);
     const n = lidas.filter((c) => c.membroBaixo > 0).length;
     const nums = vizinhos(n, 0, lidas.length).slice(0, 4);
     const baixo = ex.vozes[ex.vozes.length - 1].notas;
