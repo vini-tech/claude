@@ -519,6 +519,107 @@
     ],
   }, { depoisDe: "expansao" });
 
-  const SEM_PLANO = { plano: {}, cadencias: null };
-  void SEM_PLANO; void exc; void TONAL; void MELODIA; void PLANO_FRASE; void F;
+  // ================================================================== 4. TEMA E VARIAÇÕES
+
+  const V_B = "G2/4 D3/4 G2/4 D3/4 G2/4 C3/4 D3/2 D3/2 G2/4", V_C = "I V I V I IV I64 V7 I", V_CM = "i V i V i iv i64 V7 i";
+  const V_N = "D5 B4 A4 F#4 G4 B4 A4 D5 D5 B4 C5 E5 D5 A4 G4".split(" ");
+  const V_NM = V_N.map((n) => n.replace("B4", "Bb4").replace("E5", "Eb5"));
+  const meias = (ns) => ns.map((n, i) => n + (i === ns.length - 1 ? "/4" : "/2")).join(" ");
+  const V_TEMA = `tom: G maior\nmelodia: ${meias(V_N)}\nbaixo: ${V_B}`;
+  const V_BORD = `tom: G maior\nmelodia: D5/0.5 E5 D5 C5 B4 C5 B4 G4 A4 B4 A4 G4 F#4 G4 A4 F#4 G4 A4 G4 A4 B4 C5 B4 G4 A4 G4 F#4 A4 D5 E5 D5 C5 D5 E5 D5 C5 B4 A4 B4 D5 C5 D5 C5 D5 E5 D5 C5 E5 D5 E5 D5 B4 A4 B4 A4 F#4 G4/4\nbaixo: ${V_B}`;
+  const V_MIN = `tom: G menor\nmelodia: ${meias(V_NM)}\nbaixo: ${V_B}`;
+  const V_ESQ = V_N.map((n, i) => [2 * i, n]), V_ESQM = V_NM.map((n, i) => [2 * i, n]);
+  const V_ESQ3 = V_N.map((n, i) => [3 * Math.floor(i / 2) + 2 * (i % 2), n]);
+  const PLANO_VAR = [
+    ["Motivo de variação", "Que figura (ritmo e desenho) você vai aplicar a cada nota do esqueleto?"],
+    ["O que fica", "Harmonia, cadências, número de compassos — e o esqueleto, nos tempos marcados?"],
+    ["Liquidação", "A figura para na cadência ou vai até o fim?"],
+  ];
+
+  T.inserir(3, {
+    id: "variacoes", titulo: "Tema e variações",
+    antes: [
+      { p: "Para Schoenberg, o que uma variação clássica deve manter do tema?", o: ["O curso dos acontecimentos: número e ordem dos segmentos, harmonia e cadências", "Só a melodia, nota por nota", "Só o compasso e o andamento", "Nada: cada variação é uma peça nova"], e: "\"O curso dos acontecimentos não deve mudar, mesmo que o caráter mude; o número e a ordem dos segmentos continuam os mesmos\" (Fundamentals, cap. XVII). O que muda é a superfície, organizada por um 'motivo de variação'." },
+      { p: "O que é o 'motivo de variação'?", o: ["Uma figura sistemática aplicada ao esqueleto do tema ao longo de toda a variação", "O primeiro motivo do tema", "Uma melodia nova que substitui o tema", "O acompanhamento do tema"], e: "Schoenberg manda reduzir o tema ao esqueleto e aplicar sobre ele uma figura predeterminada, modificada só o necessário. É ela que dá à variação uma unidade 'maior que a do tema'." },
+      { p: "O que é uma variação 'minore'?", o: ["A variação no modo menor da mesma tônica (homônimo)", "Uma variação mais lenta", "Uma variação no tom relativo menor, com outra tônica", "Uma variação com menos notas"], e: "Num tema em sol maior, a minore está em sol menor: mesma tônica, mesmas funções, terça e sexta abaixadas. É um dos contrastes de caráter mais usados (Mozart, K. 331, var. III)." },
+    ],
+    objetivo: "Compor variações de um tema de 8 compassos mantendo harmonia, cadências e esqueleto: figurais (um motivo de variação), minore e de caráter — e saber quando abandonar o esqueleto.",
+    ouvir: ["Mozart, Sonata K. 331, 1º mov.: tema e variações (var. III em lá menor)", "Beethoven, 32 Variações em dó menor WoO 80", "Haydn, Quarteto op. 76 nº 3, 2º mov.: a melodia passa intacta de instrumento a instrumento", "Beethoven, Variações Diabelli op. 120 (var. 1, Alla marcia)", "Brahms, Variações sobre um tema de Haydn op. 56a: finale em passacaglia"],
+    esboco: "Escreva o esqueleto do tema da aula (uma nota por meio compasso) e invente duas figuras de colcheias que caibam entre duas notas do esqueleto.",
+    secoes: [
+      { tipo: "texto", rotulo: "A regra", titulo: "Mudar a superfície, manter o curso (Schoenberg, Reicha)", html: `
+        <p>O tema típico de variação, diz Schoenberg, tem dois segmentos equilibrados (o primeiro termina em V) e muitas vezes é uma pequena binária. A variação clássica <b>mantém o curso dos acontecimentos</b>: o número e a ordem dos segmentos, o plano harmônico e as cadências. Para escrevê-la:</p>
+        <ol><li>Reduza o tema ao <b>esqueleto</b>, omitindo apojaturas, trinados e escalas (pode haver mais de um esqueleto possível).</li>
+        <li>Escolha um <b>motivo de variação</b> — raramente maior que 2 compassos — e aplique-o sistematicamente a cada nota do esqueleto, modificando-o só o necessário para caber na harmonia.</li>
+        <li>As primeiras variações costumam <b>circunscrever</b> as notas principais com bordaduras; as seguintes aceleram (colcheias, tercinas, semicolcheias), mudam de registro ou de voz.</li></ol>
+        <table class="tabela-modos"><thead><tr><th>Tipo</th><th>O que muda</th><th>O que fica</th></tr></thead><tbody>
+        <tr><td>Figural (ornamental)</td><td>a superfície: um motivo de variação</td><td>esqueleto, harmonia, cadências, compasso</td></tr>
+        <tr><td>Minore / maggiore</td><td>o modo (homônimo)</td><td>tônica, funções, esqueleto adaptado</td></tr>
+        <tr><td>De caráter</td><td>compasso, andamento, textura, às vezes a melodia</td><td>harmonia e cadências (e o número de segmentos)</td></tr>
+        <tr><td>Cantus firmus</td><td>o que está em volta</td><td>a melodia inteira, passando de voz em voz</td></tr>
+        <tr><td>Ostinato (passacaglia, chacona)</td><td>tudo acima do baixo</td><td>o baixo (ou a harmonia) repetido</td></tr></tbody></table>
+        <p>Reicha publicou uma <i>L'art de varier</i> com 57 variações sobre um tema; os tratados do século XIX tratam a série de variações como o lugar natural para treinar os operadores do capítulo 'Motivo e variação'.</p>` },
+      { tipo: "exemplo", titulo: "Um tema, duas variações", intro: "Sol maior, 4/4: período de 8 compassos (semicadência no c. 4, cadência perfeita no c. 8), um acorde por compasso.",
+        camadas: [
+          { titulo: "O tema (que já é o esqueleto)", partitura: V_TEMA, cifras: cif(V_TEMA, V_C), rotulos: ["tema", "baixo"],
+            notas: [["decisao", "Duas mínimas por compasso, todas notas do acorde: o tema é deliberadamente simples, para que qualquer figura caiba sobre ele."],
+              ["checagem", "Contra o baixo: contrário ou oblíquo em todas as mudanças de acorde; semicadência em ré (c. 4), cadência em sol vindo de lá (c. 7–8)."]] },
+          { titulo: "Var. 1: bordaduras em colcheias", partitura: V_BORD, cifras: cif(V_BORD, V_C), rotulos: ["var. 1", "baixo"],
+            notas: [["decisao", "Motivo de variação: nota do esqueleto – bordadura – nota do esqueleto – nota de ligação (passagem ou do acorde) que leva por grau à próxima nota do esqueleto."],
+              ["rejeitada", "No c. 2 a ligação natural seria F#4–E4–… para o sol, mas E4 sairia por salto. Troquei a figura por F#4–G4–A4–F#4: a regra 'modificar só o necessário' em ação."],
+              ["checagem", "Primeira colcheia de cada meio compasso: D5 B4 | A4 F#4 | G4 B4 | A4 D5 | … — o esqueleto inteiro sobreviveu."]],
+            pausa: ["A figura para no c. 8 (semibreve). Por que não continuar as colcheias até o fim?", "Porque a cadência precisa ser mais lenta que a superfície para soar como chegada — é a mesma liquidação da sentença. Muitas variações clássicas guardam a figura até o último compasso e só então param."] },
+          { titulo: "Var. 2: minore", partitura: V_MIN, cifras: cif(V_MIN, V_CM), rotulos: ["minore", "baixo"],
+            notas: [["decisao", "Sol menor: si♭ e mi♭ no lugar de si e mi; o V e o V7 mantêm o fá♯ (sensível)."],
+              ["checagem", "O esqueleto adaptado continua passando no verificador: a troca de modo não cria intervalos aumentados (fá♯ e mi♭ nunca estão lado a lado)."]] },
+        ] },
+      { tipo: "contraste", titulo: "Figura sistemática × ornamentos soltos",
+        a: { rotulo: "A — var. 1: uma figura do começo ao fim", partitura: V_BORD, cifras: cif(V_BORD, V_C) },
+        b: { rotulo: "B — o tema com arpejos: outra figura, também sistemática", partitura: "tom: G maior\nmelodia: D5/0.5 B4 G4 B4 B4 D5 G5 B4 A4 D5 F#5 D5 F#4 A4 D5 A4 G4 B4 D5 B4 B4 D5 G5 B4 A4 D5 F#5 D5 D5 A4 D5 F#4 D5 B4 G4 B4 B4 D5 G5 B4 C5 E5 G5 E5 E5 C5 G4 E5 D5 B4 D5 B4 A4 D5 F#4 A4 G4/4\nbaixo: " + V_B, cifras: cif("tom: G maior\nmelodia: D5/0.5 B4 G4 B4 B4 D5 G5 B4 A4 D5 F#5 D5 F#4 A4 D5 A4 G4 B4 D5 B4 B4 D5 G5 B4 A4 D5 F#5 D5 D5 A4 D5 F#4 D5 B4 G4 B4 B4 D5 G5 B4 C5 E5 G5 E5 E5 C5 G4 E5 D5 B4 D5 B4 A4 D5 F#4 A4 G4/4\nbaixo: " + V_B, V_C) },
+        pergunta: "As duas mantêm o esqueleto. Qual soa mais 'próxima' do tema, e qual mais virtuosística? O que decide isso?",
+        comentario: "<p>A bordadura (A) fica colada às notas do tema: o ouvido acompanha a melodia original o tempo todo. O arpejo (B) espalha cada acorde por mais de uma oitava: o tema fica escondido no alto de cada arpejo e o que se ouve primeiro é a harmonia e o movimento. Por isso as séries clássicas costumam começar pela bordadura e só depois arpejar — do mais reconhecível para o mais distante.</p>" },
+      { tipo: "quebra", titulo: "Variações que abandonam o esqueleto", html: `
+        <p>A regra mantém o esqueleto e muda a superfície. Desde Beethoven, a <b>variação de caráter</b> faz o contrário com frequência: mantém a harmonia e as proporções e troca a melodia, o compasso, o andamento.</p>
+        <ul><li><b>Beethoven, Variações Diabelli:</b> a valsa de Diabelli vira, já na var. 1, uma marcha; outras variações reduzem o tema a poucos traços (o salto inicial, a progressão) e uma delas cita 'Notte e giorno faticar' do <i>Don Giovanni</i>.</li>
+        <li><b>Brahms</b> encerra as Variações op. 56a com uma passacaglia sobre um baixo derivado do tema, e as Variações Handel op. 24 com uma fuga: a série vira processo, não catálogo.</li>
+        <li><b>Elgar, Variações 'Enigma':</b> cada variação é o retrato de uma pessoa — o caráter manda, o tema fica nas proporções.</li></ul>
+        <p>O que a quebra produz: o ouvinte reconhece o tema pelo plano harmônico e pelas cadências, não pela melodia — a variação passa a ser comentário sobre o tema.</p>`,
+        exemplos: [
+          exc("compasso: 3/4\ntom: G menor\nmelodia: G4/1 Bb4/1 D5/1 F#5/1 D5/1 A4/1 Bb4/1 D5/1 G5/1 A5/2 F#5/1 G5/1 D5/1 Bb4/1 C5/1 Eb5/1 G5/1 G5/2 F#5/1 G5/3\nbaixo: G2/3 D3/3 G2/3 D3/3 G2/3 C3/3 D3/2 D3/1 G2/3", V_CM,
+            { rotulo: "Var. de caráter: minore, em 3/4, melodia nova (exemplo construído)", perfil: { ...MELODIA, frm_cadencias: "erro" }, contexto: { plano: { cadencia: 8 }, cadencias: [{ c: 4, tipo: "semi" }, { c: 8, tipo: "perfeita" }] },
+              comentario: "Do tema sobram o plano harmônico (i V i V | i iv i64–V7 i), as cadências nos c. 4 e 8 e o número de compassos. A melodia sobe em arpejo e chega ao clímax lá5 na semicadência — nada disso está no tema, e mesmo assim ele é reconhecível pelo baixo." }),
+        ] },
+    ],
+    exercicios: [
+      { id: "var1", titulo: "Var. em arpejos", modo: "completar", perfil: { ...MELODIA, esqueleto_preservado: "erro" }, nivel: 6,
+        contexto: { nivel: 6, plano: { cadencia: 8 }, esqueleto: V_ESQ },
+        cifras: V_C.split(" "),
+        instrucoes: "<p>O baixo e as cifras são os do tema da aula. Os c. 1–2 já trazem o motivo de variação: <b>arpejo em colcheias que começa na nota do esqueleto</b>. Continue-o até o c. 7 (c. 8: semibreve na tônica), mantendo a nota do esqueleto no começo de cada meio compasso (D5 B4 | A4 F#4 | G4 B4 | A4 D5 | D5 B4 | C5 E5 | D5 A4 | G4).</p>",
+        texto: `tom: G maior\ncf: baixo\nmelodia: D5/0.5 B4 G4 B4 B4 D5 G5 B4 A4 D5 F#5 D5 F#4 A4 D5 A4\nbaixo: ${V_B}`, duracao: 0.5, alvoCompassos: 8, plano: PLANO_VAR,
+        solucao: `tom: G maior\ncf: baixo\nmelodia: D5/0.5 B4 G4 B4 B4 D5 G5 B4 A4 D5 F#5 D5 F#4 A4 D5 A4 G4 B4 D5 B4 B4 D5 G5 B4 A4 D5 F#5 D5 D5 A4 D5 F#4 D5 B4 G4 B4 B4 D5 G5 B4 C5 E5 G5 E5 E5 C5 G4 E5 D5 B4 D5 B4 A4 D5 F#4 A4 G4/4\nbaixo: ${V_B}`,
+        comentarioSolucao: "O arpejo sobe ou desce conforme a próxima nota do esqueleto; a última colcheia de cada meio compasso evita chegar à mudança de acorde por 5ª ou 8ª paralela (por isso B4, e não D5, antes do lá do c. 2). No c. 7 o 6/4 é só ré e si: o sol (a 4ª sobre o baixo) ficaria sem resolução." },
+      { id: "var2", titulo: "Minore com bordaduras", modo: "menos apoio", perfil: { ...MELODIA, esqueleto_preservado: "erro" }, nivel: 6,
+        contexto: { nivel: 6, plano: { cadencia: 8 }, esqueleto: V_ESQM },
+        cifras: V_CM.split(" "),
+        instrucoes: "<p>Escreva a variação <b>minore</b> (sol menor) em colcheias, com o motivo de variação da var. 1 da aula (nota do esqueleto – bordadura – nota do esqueleto – ligação). Esqueleto em menor, no começo de cada meio compasso: D5 B♭4 | A4 F#4 | G4 B♭4 | A4 D5 | D5 B♭4 | C5 E♭5 | D5 A4 | G4. Cuidado com a 2ª aumentada mi♭–fá♯.</p>",
+        texto: `tom: G menor\ncf: baixo\nmelodia:\nbaixo: ${V_B}`, duracao: 0.5, alvoCompassos: 8, plano: PLANO_VAR,
+        solucao: `tom: G menor\ncf: baixo\nmelodia: D5/0.5 Eb5 D5 C5 Bb4 C5 Bb4 G4 A4 Bb4 A4 G4 F#4 G4 A4 F#4 G4 A4 G4 A4 Bb4 C5 Bb4 G4 A4 G4 F#4 A4 D5 Eb5 D5 C5 D5 Eb5 D5 C5 Bb4 A4 Bb4 D5 C5 D5 C5 D5 Eb5 D5 C5 Eb5 D5 Eb5 D5 Bb4 A4 Bb4 A4 F#4 G4/4\nbaixo: ${V_B}`,
+        comentarioSolucao: "A figura da var. 1 transposta para o modo menor; as bordaduras superiores ficam meio tom acima (mi♭ sobre ré, si♭ sobre lá), o que dá à minore o seu peso." },
+      { id: "var3", titulo: "Var. de caráter: em 3/4", modo: "restrição", perfil: { ...MELODIA, esqueleto_preservado: "erro" }, nivel: 6,
+        contexto: { nivel: 6, plano: { cadencia: 8 }, esqueleto: V_ESQ3 },
+        cifras: V_C.split(" "),
+        instrucoes: "<p>Transforme o tema num minueto: <b>compasso 3/4</b>, um compasso de 3/4 para cada compasso do tema. As duas notas do esqueleto caem no 1º e no 3º tempo (a primeira dura dois tempos, ou ganha uma nota de passagem no 2º). Mesma harmonia, mesmas cadências.</p>",
+        texto: "compasso: 3/4\ntom: G maior\ncf: baixo\nmelodia:\nbaixo: G2/3 D3/3 G2/3 D3/3 G2/3 C3/3 D3/2 D3/1 G2/3", duracao: 1, alvoCompassos: 8, plano: PLANO_VAR,
+        solucao: "compasso: 3/4\ntom: G maior\ncf: baixo\nmelodia: D5/1 C5/1 B4/1 A4/1 G4/1 F#4/1 G4/1 A4/1 B4/1 A4/1 F#5/1 D5/1 D5/1 C5/1 B4/1 C5/1 D5/1 E5/1 D5/2 A4/1 G4/3\nbaixo: G2/3 D3/3 G2/3 D3/3 G2/3 C3/3 D3/2 D3/1 G2/3",
+        comentarioSolucao: "Quase toda a variação preenche a 3ª entre as notas do esqueleto com uma passagem no 2º tempo — o movimento contínuo em semínimas do minueto. No c. 4 o salto lá–fá♯5–ré dá o impulso antes da segunda frase." },
+      { id: "var4", titulo: "Quebrar: só a harmonia fica", modo: "quebrar", perfil: { ...MELODIA, esqueleto_preservado: "info", frm_cadencias: "erro", climax_no_lugar: "erro" }, nivel: 6,
+        contexto: { nivel: 6, plano: { cadencia: 8 }, esqueleto: V_ESQ, climax: { compasso: 6 }, cadencias: [{ c: 4, tipo: "semi" }, { c: 8, tipo: "perfeita" }] },
+        cifras: V_C.split(" "),
+        instrucoes: "<p>Escreva uma variação de caráter que <b>abandona o esqueleto</b> (o verificador só o mostra como informação): melodia nova sobre o baixo e as cifras do tema, com a semicadência do c. 4 e a cadência perfeita do c. 8 nos seus lugares. Para que ela não seja o tema disfarçado, ponha o <b>clímax no c. 6</b> (nota mais aguda única), onde o tema não tem nenhum.</p>",
+        texto: `tom: G maior\ncf: baixo\nmelodia:\nbaixo: ${V_B}`, duracao: 1, alvoCompassos: 8, plano: PLANO_VAR,
+        solucao: `tom: G maior\ncf: baixo\nmelodia: G4/1 B4/1 D5/2 F#5/1 D5/1 A4/2 B4/1 D5/1 B4/2 F#5/1 E5/1 D5/2 B4/1 C5/1 D5/2 C5/1 E5/1 G5/1 E5/1 D5/1 B4/1 A4/1 F#4/1 G4/4\nbaixo: ${V_B}`,
+        comentarioSolucao: "Da melodia original quase nada fica nos tempos fortes (o verificador acusa as diferenças como informação). O que garante que é uma variação do mesmo tema é o resto: baixo, harmonia, cadências nos c. 4 e 8 e as proporções 4 + 4." },
+    ],
+  }, { depoisDe: "binaria" });
+
 })(this);
