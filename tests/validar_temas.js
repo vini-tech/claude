@@ -81,6 +81,37 @@ function validarPartitura(onde, obj, perfilEx, ctxEx) {
   if (e) erro(onde, "erros: " + e);
 }
 
+/* Pergunta de antes: { p, partitura?, cifras?, o: [texto | { texto?, partitura?, cifras?, por? }], c?, e, verificar?: { perfil, contexto } }
+ * Com "verificar", a alternativa certa precisa passar no perfil e cada alternativa errada com partitura precisa falhar. */
+function validarPergunta(onde, q, perfilEx, ctxEx) {
+  const ops = (q.o || []).map((x) => (typeof x === "string" ? { texto: x } : x));
+  const c = q.c !== undefined ? q.c : 0;
+  if (!q.p || !q.e || ops.length < 3) { erro(onde, "pergunta malformada (p, e e pelo menos 3 alternativas)"); return; }
+  if (c < 0 || c >= ops.length) erro(onde, "alternativa certa fora do lugar");
+  const chaves = ops.map((o) => (o.texto || "") + "|" + (o.partitura || ""));
+  if (new Set(chaves).size !== chaves.length) erro(onde, "alternativas repetidas");
+  if (q.partitura) lerOk(onde + " (enunciado)", q.partitura);
+  for (const o of ops) if (o.partitura) lerOk(onde + " (alternativa)", o.partitura);
+  if (!q.verificar) return;
+  const perfil = q.verificar.perfil || perfilEx;
+  const passa = (o) => {
+    const ex = lerOk(onde, o.partitura);
+    if (!ex) return null;
+    const modelo = Ed.ler(o.partitura);
+    let ctx = contextoBase({ nivel: (q.verificar.contexto || ctxEx).nivel, contexto: { ...ctxEx, ...(q.verificar.contexto || {}) } }, modelo);
+    if (o.cifras) ctx = comCifras(ctx, ex, cifrasPorNota(onde, ex, o.cifras));
+    const r = M.verificarPerfil(ex, perfil, ctx);
+    return r.achados.filter((a) => a.severidade === "erro");
+  };
+  ops.forEach((o, i) => {
+    if (!o.partitura) return;
+    const errs = passa(o);
+    if (!errs) return;
+    if (i === c && errs.length) erro(onde, `a alternativa certa não passa: ${errs.map((a) => a.regra + " " + a.mensagem).join(" | ")}`);
+    if (i !== c && !errs.length) erro(onde, `a alternativa ${i + 1} (errada) passa no verificador`);
+  });
+}
+
 function validarExercicio(onde, p, transposto = false) {
   if (!transposto) {
     if (ids.has(p.id)) erro(onde, "id repetido");
@@ -129,12 +160,12 @@ for (const n of niveis) {
     for (const campo of ["titulo", "objetivo"]) if (!t[campo]) erro(onde, "sem " + campo);
     if (!t.exercicios || t.exercicios.length < 2) erro(onde, "poucos exercícios");
     if (!t.antes || t.antes.length < 2) erro(onde, "sem perguntas de antes");
-    for (const q of t.antes || []) if (!q.p || !q.e || !q.o || q.o.length < 3 || new Set(q.o).size !== q.o.length) erro(onde, "pergunta de antes malformada: " + q.p);
     const ref = t.exercicios.find((p) => p.solucao) || t.exercicios[0];
     const perfilEx = { ...G.perfilDaPratica(ref) };
     for (const k of SO_DO_EXERCICIO) delete perfilEx[k];
     const ctxEx = { ...G.contextoDaPratica(ref) };
     for (const k of CTX_DO_EXERCICIO) delete ctxEx[k];
+    (t.antes || []).forEach((q, k) => validarPergunta(`${onde}?${k + 1}`, q, perfilEx, ctxEx));
     (t.secoes || []).forEach((s, k) => {
       const os = `${onde}#${k + 1}`;
       if (s.tipo === "exemplo") s.camadas.forEach((c, j) => { if (c.partitura) validarPartitura(`${os}.${j + 1}`, c, perfilEx, ctxEx); });

@@ -744,7 +744,12 @@
     niveis.push({ temas: [], ...nivel });
     niveis.sort((a, b) => a.numero - b.numero);
   }
+  // perguntas de antes dos exercícios em módulos próprios (web/livro/perguntas-*.js)
+  function perguntas(id, lista) {
+    for (const n of niveis) for (const t of n.temas) if (t.id === id) { t.antes = lista; return; }
+    throw new Error("tema inexistente para perguntas: " + id);
+  }
   const perfis = { N1, N2, N3, N4, TONAL, MELODIA, CANTUS, PLANO_CP, PLANO_BAIXO, PLANO_FRASE, FUX, CF1, CF2 };
 
-  raiz.TEMAS = { niveis, inserir, novoNivel, perfis };
+  raiz.TEMAS = { niveis, inserir, novoNivel, perguntas, perfis };
 })(this);

@@ -177,6 +177,11 @@ figure.exemplo .andamento input { width: 110px; }
 .anotacao.sev-erro, .anotacao.sev-aviso, .anotacao.sev-ok, .cifra.sev-erro, .cifra.sev-aviso { fill: var(--sev); }
 .of-escala { margin: 0 0 6px; font-size: 0.9rem; line-height: 1.45; } .of-escala .solf { color: var(--apagado); }
 .t-erro { color: var(--erro); } .t-aviso { color: var(--aviso); }
+.opcoes.com-partitura { gap: 12px; }
+.opcao-p { display: grid; gap: 6px; border: 2px solid var(--linha); border-radius: 12px; padding: 8px; background: var(--folha); }
+.opcao-p.certa { border-color: var(--ok); background: var(--ok-fundo); } .opcao-p.errada { border-color: var(--erro); background: var(--erro-fundo); opacity: 0.85; }
+.opcao-p .opcao { text-align: center; } .opcao-cab { font-size: 0.95rem; }
+.questao .q span:last-child { flex: 1; }
 .comparacao td.atencao { color: var(--aviso); font-weight: 700; } .comparacao td { white-space: normal !important; }
 .dica-pausa { font-size: 0.85rem; color: var(--apagado); margin: 0; }
 details.nivel > summary { list-style: none; cursor: pointer; display: grid; gap: 4px; }
@@ -560,7 +565,7 @@ function abrirExercicio(t, e, textoInicial) {
       <h2>${esc(e.titulo)}</h2><div class="of-instrucoes">${e.instrucoes}</div>
       <p class="lead-p">Responda às perguntas sobre as decisões deste tema. Elas valem para todos os exercícios dele; a partitura abre quando todas estiverem certas.</p>
       <div class="quiz"></div><button class="botao primario grande" id="compor" disabled>Compor</button></section>`;
-    montarQuiz(caixa.querySelector(".quiz"), t.antes.map((q) => ({ ...q, certas: [0] })), true, () => { $("compor").disabled = false; });
+    montarQuiz(caixa.querySelector(".quiz"), t.antes, true, () => { $("compor").disabled = false; });
     $("compor").addEventListener("click", () => { est.antes = { ...(est.antes || {}), [t.id]: true }; salvar(); abrirExercicio(t, e, textoInicial); });
     $("tela-ex").scrollTop = 0;
     return;
@@ -594,22 +599,43 @@ function abrirExercicio(t, e, textoInicial) {
 }
 
 // perguntas de múltipla escolha obrigatórias: só a certa conclui; a errada fica marcada
+/* Perguntas obrigatórias antes dos exercícios. Cada pergunta pode trazer uma partitura e alternativas
+ * com partitura (tocáveis); cada alternativa errada pode explicar por que não serve ("por").
+ *   { p, partitura?, cifras?, o: ["texto" | { texto?, partitura?, cifras?, por? }], c (certa, padrão 0), e } */
 function montarQuiz(raiz, perguntas, embaralhar, aoConcluir) {
   if (!perguntas.length) { aoConcluir(); return; }
   let feitas = 0;
   perguntas.forEach((q, k) => {
-    const ordem = q.o.map((_, i) => i);
+    const certa = q.c !== undefined ? q.c : (q.certas || [0])[0];
+    const ops = q.o.map((x) => (typeof x === "string" ? { texto: x } : x));
+    const ordem = ops.map((_, i) => i);
     if (embaralhar) for (let i = ordem.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [ordem[i], ordem[j]] = [ordem[j], ordem[i]]; }
+    const letras = "ABCDEF";
+    const fig = (ex, chave) => { exemplosDaPagina.set(chave, ex); return exemploHTML(ex, chave); };
     const d = document.createElement("div");
     d.className = "questao";
-    d.innerHTML = `<p class="q"><span class="num">${k + 1}</span>${bonitoTexto(q.p)}</p><div class="opcoes">${ordem.map((i) => `<button class="opcao" type="button" data-i="${i}">${bonitoTexto(q.o[i])}</button>`).join("")}</div><p class="retorno" hidden></p>`;
+    d.innerHTML = `<p class="q"><span class="num">${k + 1}</span><span>${bonitoTexto(q.p)}</span></p>
+      ${q.partitura ? fig({ partitura: q.partitura, cifras: q.cifras || [], rotulos: q.rotulos }, `q${k}-enunciado`) : ""}
+      <div class="opcoes ${ops.some((o) => o.partitura) ? "com-partitura" : ""}">${ordem.map((i, n) => {
+        const o = ops[i];
+        return o.partitura
+          ? `<div class="opcao-p" data-i="${i}"><div class="opcao-cab"><b>${letras[n]}</b>${o.texto ? ` ${bonitoTexto(o.texto)}` : ""}</div>${fig({ partitura: o.partitura, cifras: o.cifras || [], rotulos: o.rotulos }, `q${k}-o${i}`)}
+              <button class="opcao" type="button" data-i="${i}">Escolher ${letras[n]}</button></div>`
+          : `<button class="opcao" type="button" data-i="${i}">${bonitoTexto(o.texto)}</button>`;
+      }).join("")}</div><div class="retorno" hidden></div>`;
     raiz.appendChild(d);
+    montarExemplos(d);
     const ret = d.querySelector(".retorno");
-    for (const b of d.querySelectorAll(".opcao")) b.addEventListener("click", () => {
-      const certa = q.certas.includes(+b.dataset.i);
-      if (!certa) { b.classList.add("errada"); b.disabled = true; ret.hidden = false; ret.className = "retorno nao"; ret.textContent = "Não é essa. Pense de novo" + (embaralhar ? "." : " olhando a partitura."); return; }
-      b.classList.add("certa");
-      for (const o of d.querySelectorAll(".opcao")) o.disabled = true;
+    for (const b of d.querySelectorAll("button.opcao")) b.addEventListener("click", () => {
+      const i = +b.dataset.i;
+      const caixa = b.closest(".opcao-p") || b;
+      if (i !== certa) {
+        caixa.classList.add("errada"); b.disabled = true; ret.hidden = false; ret.className = "retorno nao";
+        ret.innerHTML = ops[i].por ? `<b>Não.</b> ${bonitoTexto(ops[i].por)}` : "Não é essa. Ouça de novo e pense no que a regra pede.";
+        return;
+      }
+      caixa.classList.add("certa");
+      for (const o of d.querySelectorAll("button.opcao")) o.disabled = true;
       ret.hidden = false; ret.className = "retorno sim"; ret.innerHTML = "<b>Isso.</b> " + bonitoTexto(q.e);
       d.classList.add("feita");
       if (++feitas === perguntas.length) aoConcluir();
