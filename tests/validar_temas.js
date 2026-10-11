@@ -5,7 +5,6 @@ const R3 = require("../web/regras3.js");
 const G = require("../web/geradores.js");
 const Ed = require("../web/editor.js");
 const Bu = require("../web/buscador.js");
-const Qs = require("../web/questoes.js");
 const Tr = require("../web/transpor.js");
 const { niveis } = require("../web/temas.js").TEMAS;
 const problemasModulos = [];
@@ -115,10 +114,6 @@ function validarExercicio(onde, p, transposto = false) {
   if (!vis.completo) erro(onde, "a solução não fica completa");
   const e = resumo(r);
   if (e) erro(onde, "a solução tem erros: " + e);
-  // perguntas de depois, calculadas da solução
-  const qs = Qs.depois(ex, { cf: ctx.cf === undefined ? -1 : ctx.cf, cifras: ctx.cifras || null });
-  if (qs.length < 2) erro(onde, "poucas perguntas de depois");
-  for (const q of qs) if (!q.certas.length || new Set(q.o).size !== q.o.length || !q.e) erro(onde, "pergunta de depois malformada: " + q.p);
   // o início não pode estar aprovado antes do aluno escrever
   if (ini && !p.fimLivre && ini.vozes.every((v) => v.notas.length)) {
     const mi = Ed.ler(p.texto);

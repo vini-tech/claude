@@ -37,8 +37,8 @@ em camadas** escrito como diário de decisões (decisão, alternativa descartada
 pausa para você responder; um **contraste** entre duas versões corretas; e **exercícios** em ordem
 (completar → menos apoio → restrição → livre → variante). Antes do primeiro exercício de cada tema há
 três perguntas obrigatórias de múltipla escolha sobre as decisões do tema; a correção é compasso a
-compasso; depois da aprovação, três perguntas calculadas da sua própria partitura (clímax,
-consonâncias, movimento, inversões, ritmo harmônico) obrigam a relê-la, e só então aparecem o
+compasso; depois da aprovação, a sua solução aparece lado a lado com a do professor, com os
+mesmos números do relatório de estilo (clímax, consonâncias, movimento), e
 relatório de estilo e a versão do professor (nos cantus sorteados ela é composta na hora pelo
 buscador). Apagar uma nota no meio da voz a troca por uma pausa de mesmo valor, e mudar a duração
 no meio não desloca o resto.
@@ -54,7 +54,6 @@ do modo do exercício, e o piano marca a nota selecionada e a da outra voz no me
 | `web/regras3.js` | cifras (I6, V43, ii6, I64…) e restrições dos exercícios |
 | `web/buscador.js` | acha soluções de 1ª a 3ª espécie com o próprio verificador |
 | `web/estilo.js` | o relatório de estilo (descritivo, não corrige) |
-| `web/questoes.js` | as perguntas de depois, calculadas da partitura do aluno |
 | `web/transpor.js` | transpõe exercícios (treinos em todos os tons) |
 | `web/oficina.js` | o editor com piano usado nos exercícios |
 | `tests/validar_temas.js` | confere cada exemplo, contraste e solução no verificador |
