@@ -40,7 +40,7 @@ Veja capítulos prontos em `web/temas.js` como modelo (os melhores: `oitava`, `r
   antes: [ { p: "pergunta", o: ["CERTA (sempre a primeira)", "errada", "errada", "errada"], e: "explicação" }, … ], // 3 perguntas
   objetivo: "uma frase: o que o leitor vai conseguir compor",
   ouvir: ["obra real e famosa — compasso só se tiver certeza", …],
-  esboco: "tarefa curta para tentar ANTES da aula, sem correção",
+  // (o campo esboco não é mais mostrado: campos de texto sem correção foram retirados)
   secoes: [
     { tipo: "texto", rotulo: "A regra", titulo: "…", html: `<p>…</p><ul>…</ul><table class="tabela-modos">…</table>` },
     { tipo: "exemplo", titulo: "…", intro: "…", camadas: [

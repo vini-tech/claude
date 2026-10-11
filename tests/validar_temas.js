@@ -131,7 +131,7 @@ function validarExercicio(onde, p, transposto = false) {
 for (const n of niveis) {
   for (const t of n.temas) {
     const onde = `${n.numero}/${t.id}`;
-    for (const campo of ["titulo", "objetivo", "esboco"]) if (!t[campo]) erro(onde, "sem " + campo);
+    for (const campo of ["titulo", "objetivo"]) if (!t[campo]) erro(onde, "sem " + campo);
     if (!t.exercicios || t.exercicios.length < 2) erro(onde, "poucos exercícios");
     if (!t.antes || t.antes.length < 2) erro(onde, "sem perguntas de antes");
     for (const q of t.antes || []) if (!q.p || !q.e || !q.o || q.o.length < 3 || new Set(q.o).size !== q.o.length) erro(onde, "pergunta de antes malformada: " + q.p);

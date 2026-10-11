@@ -178,6 +178,7 @@ figure.exemplo .andamento input { width: 110px; }
 .anotacao.sev-erro, .anotacao.sev-aviso, .anotacao.sev-ok, .cifra.sev-erro, .cifra.sev-aviso { fill: var(--sev); }
 .of-escala { margin: 0 0 6px; font-size: 0.9rem; line-height: 1.45; } .of-escala .solf { color: var(--apagado); }
 .t-erro { color: var(--erro); } .t-aviso { color: var(--aviso); }
+.dica-pausa { font-size: 0.85rem; color: var(--apagado); margin: 0; }
 details.nivel > summary { list-style: none; cursor: pointer; display: grid; gap: 4px; }
 details.nivel > summary::-webkit-details-marker { display: none; }
 details.nivel > summary h2::after { content: " ▾"; font-size: 0.9rem; color: var(--apagado); }
@@ -483,10 +484,6 @@ function montarExemplos(raiz) {
 }
 
 // ---------------------------------------------------------------- página de tema
-function campoAberto(chave, rotulo, dica = "") {
-  return `<label class="campo"><span class="rotulo-campo">${rotulo}</span>
-    <textarea data-nota="${chave}" rows="3" placeholder="${esc(dica)}">${esc(nota(chave))}</textarea></label>`;
-}
 
 function desenharTema(t) {
   exemplosDaPagina.clear();
@@ -497,7 +494,6 @@ function desenharTema(t) {
   let h = `<nav class="migalha"><a href="#">Ateliê</a> · Nível ${t.nivel.numero} · ${esc(t.nivel.titulo)}</nav>
     <header class="cab-tema"><h1>${esc(t.titulo)}</h1><p class="lead">${esc(t.objetivo)}</p>
     ${t.ouvir && t.ouvir.length ? `<div class="ouvir-lista"><span class="rotulo">Para ouvir e estudar</span><ul>${t.ouvir.map((o) => `<li>${esc(o)}</li>`).join("")}</ul></div>` : ""}</header>`;
-  if (t.esboco) h += `<section class="bloco esboco"><div class="rotulo">Antes da aula · esboço</div><p>${t.esboco}</p>${campoAberto(t.id + ":esboco", "Seu esboço ou sua primeira decisão", "Sem correção: escreva o que faria antes de ler.")}</section>`;
   // sumário do capítulo: cada seção com âncora
   const ROTULO = { texto: "", exemplo: "Exemplo", contraste: "Contraste", quebra: "Como quebrar" };
   const ancora = (k) => `${t.id}-s${k}`;
@@ -514,18 +510,17 @@ function desenharTema(t) {
         h += `<div class="camada"><div class="camada-cab"><span class="num">${k + 1}</span><b>${esc(c.titulo)}</b></div>${c.texto ? `<p>${c.texto}</p>` : ""}
           ${c.partitura ? reg(c) : ""}
           ${(c.notas || []).map((x) => `<p class="nota-decisao ${x[0]}"><span class="tag">${{ decisao: "decisão", rejeitada: "alternativa descartada", checagem: "checagem" }[x[0]]}</span>${bonitoTexto(x[1])}</p>`).join("")}
-          ${c.pausa ? `<div class="pausa"><p><b>Pausa:</b> ${c.pausa[0]}</p>${campoAberto(`${t.id}:pausa${k}`, "Sua resposta", "")}
+          ${c.pausa ? `<div class="pausa"><p><b>Pausa:</b> ${c.pausa[0]}</p><p class="dica-pausa">Pense (ou toque o exemplo) antes de abrir o comentário.</p>
             <button class="botao revelar" type="button">Ver o comentário</button><p class="comentario" hidden>${c.pausa[1]}</p></div>` : ""}</div>`;
       });
       h += `</section>`;
     } else if (s.tipo === "contraste") {
       h += `<section class="bloco contraste" ${id}><div class="rotulo">Contraste</div><h2>${esc(s.titulo)}</h2>${s.intro ? `<p>${s.intro}</p>` : ""}
         <div class="par">${reg({ ...s.a, rotulo: s.a.rotulo || "A" })}${reg({ ...s.b, rotulo: s.b.rotulo || "B" })}</div>
-        <p><b>${s.pergunta}</b></p>${campoAberto(`${t.id}:contraste:${s.titulo}`, "O que muda?", "")}
+        <p><b>${s.pergunta}</b></p>
         <button class="botao revelar" type="button">Ver o comentário</button><div class="comentario" hidden>${s.comentario}</div></section>`;
     }
   });
-  if (t.esboco) h += `<section class="bloco"><div class="rotulo">Volta ao esboço</div><p>Releia o que você escreveu antes da aula. O que mudaria agora?</p>${campoAberto(t.id + ":revisao-esboco", "O que mudaria", "")}</section>`;
   h += `<section class="bloco exercicios" id="${t.id}-ex"><div class="rotulo">Compor</div><h2>Exercícios</h2>
     <p class="lead">Em ordem: completar, com menos apoio, com restrição, livre e uma variante sua. Se o primeiro sair limpo, pule para o livre.</p><ol class="lista-ex">`;
   t.exercicios.forEach((e, k) => {
