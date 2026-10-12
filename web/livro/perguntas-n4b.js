@@ -55,7 +55,7 @@
         op("C maior", "E5/2 D5/1 C5/1 F5/2 D5/2 C5/2 A4/2 C5/1 B4/1 C5/2", "C3/2 D3/1 E3/1 D3/2 B2/2 C3/2 F3/2 G3/1 G3/1 C3/2", "I V43 I6 ii=a:iv V43 C:vi6 IV I64 V7 I", {
           por: "Até o 1º tempo do c. 3 vai tudo bem (pivô ré menor, V43 de lá, lá menor com dó no baixo) — mas depois a frase segue IV – I6/4 – V7 – I de dó. O lá menor foi só tonicizado: sem V–i em lá, não há modulação." }),
         op("C maior", "E5/2 D5/1 C5/1 F5/2 E5/2 C5/4", "C3/2 D3/1 E3/1 D3/2 E3/2 A2/4", "I V43 I6 ii=a:iv V i", {
-          por: "Pivô → V → i em três tempos: a cadência vem logo depois do pivô, e a frase acaba ali. O ouvido ainda está em dó e ouve uma cadência no vi — a modulação de coral (veja a quebra do capítulo), não um tom de chegada." }),
+          por: "Pivô → V → i em um compasso: a cadência vem logo depois do pivô, e a frase acaba ali. O ouvido ainda está em dó e ouve uma cadência no vi — a modulação de coral (veja a quebra do capítulo), não um tom de chegada." }),
         op("C maior", "E5/2 D5/1 C5/1 F5/2 G#5/2 A5/2 F5/2 E5/1 D5/1 C5/2", "C3/2 D3/1 E3/1 D3/2 E3/2 C3/2 D3/2 E3/1 E3/1 A2/2", "I V43 I6 ii=a:iv V i6 iv i64 V7 i", {
           por: "Fá5 → sol♯5 no c. 2 é uma 2ª aumentada no soprano: o pivô (ré menor) tem o fá, a dominante nova tem o sol♯, e o salto entre os dois é o erro clássico da modulação para o menor. Deixe a sensível numa voz interna (como no V43) ou faça-a chegar por grau." }),
       ],
@@ -83,7 +83,7 @@
         op("G maior", "B4/1 E5/1 F#5/1 G5/1 D5/1 F#5/1 E5/2 C5/2 B4/1 D#5/1 E5/4", "G2/1 C3/1 D3/1 G2/1 B2/1 D#3/1 E3/2 A2/2 B2/1 B2/1 E3/4", "I IV V I I6 e:V6 i iv i64 V7 i", {
           por: "O ré5 do soprano (I6 de sol) é seguido pelo ré♯3 do baixo (V6 de mi): as duas formas da mesma nota em vozes diferentes, em acordes vizinhos — falsa relação. E nenhuma voz faz o semitom ré → ré♯: a mudança vira choque em vez de inflexão." }),
         op("G maior", "B4/1 E5/1 F#5/1 B4/1 C5/1 D#5/1 E5/2 C5/2 B4/1 D#5/1 E5/4", "G2/1 C3/1 D3/1 G2/1 C3/1 B2/1 E3/2 A2/2 B2/1 B2/1 E3/4", "I IV V I IV e:V i iv i64 V7 i", {
-          por: "Dó5 → ré♯5 (c. 2) é uma 2ª aumentada no soprano. E, como nenhuma voz tinha ré antes, não há inflexão: a sensível nova chega por salto, sem o fio que justifica a modulação cromática." }),
+          por: "Dó5 → ré♯5 (c. 2) é uma 2ª aumentada no soprano. E, como o acorde anterior (IV, com dó no soprano e no baixo) não tem ré, não há nota a alterar — não há inflexão: a sensível nova chega por salto, sem o fio que justifica a modulação cromática." }),
         op("G maior", "B4/1 E5/1 F#5/1 G5/1 D5/1 Eb5/1 E5/2 C5/2 B4/1 D#5/1 E5/4", "G2/1 C3/1 D3/1 G2/1 B2/1 B2/1 E3/2 A2/2 B2/1 B2/1 E3/4", "I IV V I I6 e:V i iv i64 V7 i", {
           por: "Ré → mi♭ → mi não é inflexão: mi♭ é outra letra, e o si maior (V de mi) tem ré♯. A partitura diz \"mi♭, que desce\" e a música sobe ao mi. O semitom cromático da modulação é ré → ré♯: a mesma letra, alterada." }),
       ],
@@ -184,7 +184,7 @@
         "A cadência perfeita fecha a frase (o ouvido aceita um recomeço), a frase seguinte é a mesma, uma 3ª maior abaixo, e o ré5 — tônica de ré, 3ª de si♭ — atravessa a emenda no soprano",
         { texto: "Porque si♭ maior é tom vizinho de ré maior", por: "Ré maior tem dois sustenidos e si♭ maior dois bemóis: quatro acidentes de distância. Si♭ é o ♭VI, uma mediante cromática — longe no círculo das quintas." },
         { texto: "Porque o ré maior final funciona como pivô (I de ré = III de si♭)", por: "Ré maior não existe em si♭ maior (tem fá♯; o III de si♭ é ré menor). Não há acorde com duas leituras: a passagem é direta." },
-        { texto: "Porque o baixo prepara si♭ com a dominante do tom novo", por: "Não há fá7 antes do si♭: o baixo vai do ré da cadência direto ao si♭2. A dominante de si♭ só aparece na cadência do c. 4." },
+        { texto: "Porque o baixo prepara si♭ com a dominante do tom novo", por: "Não há fá7 antes do si♭: o baixo vai do ré da cadência direto ao si♭2. A dominante de si♭ só aparece depois que o tom novo já começou." },
       ],
       e: "A modulação direta troca a ponte harmônica pela articulação de frase: depois de uma cadência perfeita o ouvido aceita um novo começo, e a repetição da frase diz que é a mesma música sob outra luz. A nota comum no soprano (ré) ainda costura as duas frases. Use a direta onde a forma articula; no meio de uma frase, o mesmo salto soaria como engano." },
   ]);
