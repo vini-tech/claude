@@ -166,6 +166,9 @@ for (const n of niveis) {
     const ctxEx = { ...G.contextoDaPratica(ref) };
     for (const k of CTX_DO_EXERCICIO) delete ctxEx[k];
     (t.antes || []).forEach((q, k) => validarPergunta(`${onde}?${k + 1}`, q, perfilEx, ctxEx));
+    // perguntas de julgamento: 3 por capítulo, pelo menos 2 com partitura (no enunciado ou nas alternativas)
+    const comPartitura = (t.antes || []).filter((q) => q.partitura || (q.o || []).some((o) => o && o.partitura)).length;
+    if ((t.antes || []).length < 3 || comPartitura < 2) erro(onde, `perguntas de antes: ${(t.antes || []).length}, com partitura: ${comPartitura} (pede 3, pelo menos 2 com partitura)`);
     (t.secoes || []).forEach((s, k) => {
       const os = `${onde}#${k + 1}`;
       if (s.tipo === "exemplo") s.camadas.forEach((c, j) => { if (c.partitura) validarPartitura(`${os}.${j + 1}`, c, perfilEx, ctxEx); });

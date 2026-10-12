@@ -174,7 +174,7 @@
       o: [
         op("G maior", "D5/2 F5 E5 G5 F#5/4", "G2/2 B2 C3 C#3 D3/4", "I V65/IV IV V65/V V", { texto: "Monte" }),
         op("G maior", "D5/2 D5 C5 C5 B4/4", "B2/2 G#2 A2 F#2 G2/4", "I6 V65/ii ii V65 I",
-          { texto: "Fonte", por: "O Fonte desce (ii, depois I) e para na tônica: a tensão se desfaz antes da volta, e o tema entra sobre a tônica que acabou de soar. Funciona melhor como relaxamento no meio da seção, não como preparação." }),
+          { texto: "Fonte", por: "Em Riepel o Fonte é o gesto típico logo depois da barra dupla — mas ele desce (ii, depois I) e termina na tônica. Posto imediatamente antes da volta, faz o tema entrar sobre a tônica que acabou de soar. Depois de um Fonte, o que prepara a volta é uma Ponte (prolongar o V)." }),
         op("G maior", "D5/2 E5 C5 D5 B4/4", "B2/2 E3 A2 D3 G2/4", "iii vi ii V I",
           { texto: "Quintas descendentes", por: "A cadeia de quintas chega ao I por V–I: é um fechamento, e a volta do tema soaria como mais um começo depois de um fim, não como chegada." }),
       ],
