@@ -116,7 +116,8 @@
         for (const n of v.notas) {
           if (nomes.has(n.altura.nome)) continue;
           const c = ex.compassoDe(n.inicio);
-          const alterada = n.altura.nome === lt.nome || n.altura.nome === seis.nome;
+          // o frígio cadencia sem sensível (o semitom 2–1 desce): nenhuma alteração é permitida
+          const alterada = tom.modo !== "phrygian" && (n.altura.nome === lt.nome || n.altura.nome === seis.nome);
           const k = v.notas.indexOf(n), prox = v.notas[k + 1];
           const cadencial = c >= ultimo - 1 || (n.altura.nome === seis.nome && prox && prox.altura.nome === lt.nome);
           if (alterada && (tom.modo === "minor" || cadencial)) continue;
