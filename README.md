@@ -98,6 +98,13 @@ traz uma explicação de por que é um problema e de como corrigir.
 400 exercícios aleatórios, nos 10 níveis, e exige resultados idênticos. Quando mudar uma regra
 ou a tabela em Python, mude também em `web/motor.js` e rode os testes.
 
+`tests/test_cifras_music21.py` é um segundo verificador das cifras, independente do motor JS: o
+music21 monta cada acorde cifrado do livro (com `tests/coletar_cifras.js`, uns 3.600, inclusive os
+transpostos) e confere se a grafia bate com a de `web/regras3.js`, se o baixo é o membro que a cifra
+pede e se a melodia no ataque é nota do acorde. As convenções do ateliê que o music21 lê de outro
+jeito (`N` em estado fundamental, `#`/`b` sobre o menor natural, 7ª menor nos acordes de fundamental
+alterada) estão explicadas no próprio teste.
+
 ## Instalação
 
 ```
