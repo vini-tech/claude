@@ -19,9 +19,12 @@ outro capítulo, diga isso ao usuário em vez de mexer.
 
 Para mudanças visuais, veja a página de verdade: `.claude/launch.json` sobe `web/` em
 http://localhost:8765 (abra `/curso.html`; se a 8765 estiver ocupada pela outra sessão, o app usa
-outra porta e avisa qual); confira no celular (375 px) e no desktop. `curso.html` não
-declara `<meta charset>`: o servidor de `.claude/servidor.py` manda `charset=utf-8`; outro servidor pode
-quebrar os acentos e a página.
+outra porta e avisa qual); confira no celular (375 px) e no desktop. `curso.html` precisa manter
+`<!doctype html>`, `<meta charset="utf-8">` e `<meta name="viewport">`: sem eles a página cai em quirks
+mode, os acentos dos .js quebram e o celular mostra 980 px encolhidos.
+
+O navegador de teste pode ser compartilhado entre as sessões: abra **uma aba sua** e só navegue,
+redimensione e feche as suas abas; ao terminar, volte o tamanho ao normal.
 
 ## Onde fica cada coisa
 

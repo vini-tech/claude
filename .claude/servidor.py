@@ -1,7 +1,7 @@
 """Servidor local do ateliê para a visualização no navegador (.claude/launch.json).
 
-Serve web/ em http://127.0.0.1:8765 com charset=utf-8: curso.html não declara <meta charset>,
-e sem o charset o navegador lê os acentos dos .js como Latin-1 e a página não carrega."""
+Serve web/ em http://127.0.0.1:8765 (ou na porta PORT) com charset=utf-8 nos .html e .js, para os
+acentos não dependerem só do <meta charset> da página, e sem cache, para ver cada mudança na hora."""
 
 import functools
 import http.server
