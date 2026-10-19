@@ -303,8 +303,38 @@
       "A cadência perfeita termina na tônica chegando por grau (2→1 ou 7→1) no tempo forte: é o ponto final da frase.",
       "Termine com ré→dó ou si→dó (em dó maior), com o dó no primeiro tempo do último compasso.") });
 
+  /* Semelhança entre dois trechos de n compassos da mesma voz (começando nos compassos c1 e c2):
+   *   ritmo: ataques na mesma posição ÷ ataques do trecho maior;
+   *   intervalos: intervalos diatônicos (com direção) iguais, na ordem ÷ intervalos do trecho maior.
+   * Os intervalos são diatônicos, então a repetição transposta (na dominante, um grau abaixo) conta como igual. */
+  function semelhanca(v, c1, c2, n, C) {
+    const trecho = (c) => v.notas.filter((x) => x.inicio >= (c - 1) * C && x.inicio < (c - 1 + n) * C);
+    const a = trecho(c1), b = trecho(c2);
+    const ta = new Set(a.map((x) => x.inicio - (c1 - 1) * C)), tb = b.map((x) => x.inicio - (c2 - 1) * C);
+    const ritmo = tb.filter((t) => ta.has(t)).length / Math.max(a.length, b.length, 1);
+    const ivs = (ns) => ns.slice(1).map((x, k) => F.intervalo(ns[k], x).direcionado);
+    const ia = ivs(a), ib = ivs(b);
+    const intervalos = ia.length || ib.length ? ib.filter((x, k) => x === ia[k]).length / Math.max(ia.length, ib.length) : 1;
+    return { ritmo, intervalos, b };
+  }
+
+  def("apresentacao_repetida", "A apresentação repete a ideia básica",
+    "Na sentença, os compassos 3–4 repetem a ideia básica dos compassos 1–2: o mesmo ritmo (75% dos ataques) e o mesmo desenho de intervalos, exata ou transposta (repetição na dominante).",
+    function* (ex, ctx) {
+      const v = ex.vozes[vozAlvo(ex, ctx)];
+      const C = ex.duracaoCompasso;
+      if (!v || !v.notas.some((x) => x.fim >= 4 * C)) return; // a repetição ainda não está escrita
+      const { ritmo, intervalos, b } = semelhanca(v, 1, 3, 2, C);
+      if (ritmo < 0.75 || intervalos < 0.75) {
+        const falta = [ritmo < 0.75 ? `ritmo (${Math.round(ritmo * 100)}% dos ataques iguais)` : "", intervalos < 0.75 ? `desenho (${Math.round(intervalos * 100)}% dos intervalos iguais)` : ""].filter(Boolean).join(" e ");
+        yield [4, `${v.nome}: os compassos 3–4 deviam repetir a ideia básica dos compassos 1–2; diferem no ${falta}`, b];
+      }
+    }, EXPL(
+      "A sentença se apresenta dizendo a ideia básica duas vezes: é a repetição que fixa a ideia na memória e dá à continuação algo para fragmentar. Sem ela, os 4 primeiros compassos são só material novo.",
+      "Copie o ritmo e o desenho dos compassos 1–2 nos compassos 3–4, igual ou transposto (sobre o V, um grau abaixo ou acima), adaptando as notas à harmonia."));
+
   def("ideia_repetida", "A resposta começa como a pergunta",
-    "No período paralelo, os dois primeiros compassos da resposta repetem (ou quase) os dois primeiros da pergunta.",
+    "No período paralelo, os dois primeiros compassos da resposta repetem (ou quase) os dois primeiros da pergunta, nas mesmas notas ou transpostos (mesmo ritmo e desenho).",
     function* (ex, ctx) {
       const v = ex.vozes[vozAlvo(ex, ctx)];
       const r = ctx.plano && ctx.plano.repete;
@@ -314,7 +344,9 @@
       const a = trecho(r[0]), b = trecho(r[1]);
       if (!b.length) return;
       const iguais = b.filter(([t, ps]) => a.some(([t2, ps2]) => t2 === t && ps2 === ps)).length;
-      if (iguais / Math.max(a.length, b.length) < 0.6) {
+      // também vale a retomada transposta: mesmo ritmo e mesmo desenho de intervalos diatônicos
+      const sem = semelhanca(v, r[0], r[1], 2, C);
+      if (iguais / Math.max(a.length, b.length) < 0.6 && !(sem.ritmo >= 0.75 && sem.intervalos >= 0.75)) {
         yield [r[1] + 1, `${v.nome}: os compassos ${r[1]}–${r[1] + 1} deviam retomar a ideia dos compassos ${r[0]}–${r[0] + 1}`, v.notas.filter((n) => n.inicio >= (r[1] - 1) * C && n.inicio < (r[1] + 1) * C)];
       }
     }, EXPL(
@@ -413,10 +445,35 @@
       "A dominante cria a expectativa da tônica; voltar para o IV desfaz essa tensão sem resolvê-la. É comum no pop, mas evitado no estilo clássico.",
       "Depois do V, vá para o I (ou para o vi, na cadência de engano).") });
 
+  // nPVI (Patel & Daniele 2003): contraste médio entre durações vizinhas; 0 = ritmo uniforme
+  function nPVI(duracoes) {
+    if (duracoes.length < 2) return 0;
+    let s = 0;
+    for (let k = 1; k < duracoes.length; k++) s += Math.abs(duracoes[k - 1] - duracoes[k]) / ((duracoes[k - 1] + duracoes[k]) / 2);
+    return (100 * s) / (duracoes.length - 1);
+  }
+
+  /* Limite calibrado nas soluções dos capítulos de escrita de tema (motivo, sentença, período, expansão,
+   * binária): o menor nPVI é 16,7 e todas usam 3 valores de duração ou mais; temas reais ficam em 41–47. */
+  const NPVI_MINIMO = 10;
+  def("variedade_ritmica", "Variedade rítmica",
+    "A melodia usa pelo menos 3 valores de duração e algum contraste entre durações vizinhas (nPVI ≥ 10).",
+    function* (ex, ctx) {
+      const v = ex.vozes[vozAlvo(ex, ctx)];
+      if (!v || v.notas.length < 8) return;
+      const d = v.notas.map((x) => x.duracao);
+      const valores = new Set(d).size, npvi = nPVI(d);
+      if (valores <= 2 || npvi < NPVI_MINIMO) {
+        yield [ex.compassoDe(ex.fim - 1), `${v.nome}: ritmo quase uniforme (${valores} valor${valores > 1 ? "es" : ""} de duração, nPVI ${npvi.toFixed(0)}; temas reais ficam em torno de 40)`, []];
+      }
+    }, EXPL(
+      "Um tema se reconhece tanto pelo ritmo quanto pelas notas. Com um ou dois valores de duração, a melodia vira uma corrente de notas iguais: nada se destaca, e a continuação não tem como acelerar.",
+      "Misture valores longos e curtos (pontuado, semínimas e colcheias) e use o contraste: nota longa no tempo forte, figuras curtas levando a ela."));
+
   // estas regras precisam do exercício inteiro
-  for (const id of ["cf_final", "cf_chegada", "cf_tamanho", "climax_coincidente", "cadencia_final", "baixo_cadencia"]) M.PRECISA_FIM.add(id);
+  for (const id of ["cf_final", "cf_chegada", "cf_tamanho", "climax_coincidente", "cadencia_final", "baixo_cadencia", "variedade_ritmica"]) M.PRECISA_FIM.add(id);
   // estas olham a nota seguinte
   for (const id of ["cf_salto_recuperado", "notas_do_acorde", "contorno_tritono"]) M.OLHA_ADIANTE.add(id);
 
-  return { acorde, harmoniaDe, grauDe, escala };
+  return { acorde, harmoniaDe, grauDe, escala, semelhanca, nPVI };
 });

@@ -587,4 +587,7 @@
     ],
   }, { depoisDe: "binaria" });
 
+  // escrita de tema: avisar o ritmo quase uniforme (nas variações, a figuração uniforme é proposital)
+  for (const t of T.niveis.find((n) => n.numero === 3).temas) if (["motivo", "expansao", "binaria"].includes(t.id)) T.acrescentarRegras(t, { variedade_ritmica: "aviso" });
+
 })(this);

@@ -94,12 +94,12 @@
               texto: "tom: C maior\ncf: baixo\nmelodia: C5/1.5 E5/0.5 G5/2 F5/1.5 E5/0.5 D5/2 B4/1.5 D5/0.5 F5/2 E5/1.5 D5/0.5 C5/2\nbaixo: C3/4 G2 G2 C3 F3/2 E3 D3 C3 F3/2 G3/1 G3 C3/4",
               duracao: 1, alvoCompassos: 8, plano: PLANO_FRASE,
               solucao: "tom: C maior\ncf: baixo\nmelodia: C5/1.5 E5/0.5 G5/2 F5/1.5 E5/0.5 D5/2 B4/1.5 D5/0.5 F5/2 E5/1.5 D5/0.5 C5/2 A5/0.75 G5/0.25 A5/1 G5/0.75 F5/0.25 G5/1 F5/0.75 E5/0.25 F5/1 E5/0.75 D5/0.25 E5/1 D5/2 E5/1 D5 C5/4\nbaixo: C3/4 G2 G2 C3 F3/2 E3 D3 C3 F3/2 G3/1 G3 C3/4" },
-            { id: "sen2", titulo: "Continuação em sequência", modo: "restrição", perfil: { ...MELODIA, sequencia_do_motivo: "erro" }, nivel: 6,
+            { id: "sen2", titulo: "Continuação em sequência", modo: "restrição", perfil: { ...MELODIA, sequencia_do_motivo: "erro", apresentacao_repetida: "erro" }, nivel: 6,
               contexto: { nivel: 6, plano: { cadencia: 8 }, motivo: { de: 5, em: [6] } }, cifras: "I V7 V7 I IV I6 vii°6 I ii6 I64 V I".split(" "),
               instrucoes: "<p>Sentença inteira sobre o baixo. <b>Restrição:</b> c. 6 = sequência do c. 5.</p>",
               texto: "tom: C maior\ncf: baixo\nmelodia:\nbaixo: C3/4 G2 G2 C3 F3/2 E3 D3 C3 F3/2 G3/1 G3 C3/4", duracao: 1, alvoCompassos: 8, plano: PLANO_FRASE,
               solucao: "tom: C maior\ncf: baixo\nmelodia: C5/1.5 E5/0.5 G5/2 F5/1.5 E5/0.5 D5/2 B4/1.5 D5/0.5 F5/2 E5/1.5 D5/0.5 C5/2 A5/0.75 G5/0.25 A5/1 G5/0.75 F5/0.25 G5/1 F5/0.75 E5/0.25 F5/1 E5/0.75 D5/0.25 E5/1 D5/2 E5/1 D5 C5/4\nbaixo: C3/4 G2 G2 C3 F3/2 E3 D3 C3 F3/2 G3/1 G3 C3/4" },
-            { id: "sen3", titulo: "Sentença com o seu baixo", modo: "livre", perfil: { ...MELODIA, ritmo_harmonico: "erro" }, nivel: 6,
+            { id: "sen3", titulo: "Sentença com o seu baixo", modo: "livre", perfil: { ...MELODIA, ritmo_harmonico: "erro", apresentacao_repetida: "erro" }, nivel: 6,
               contexto: { nivel: 6, plano: { cadencia: 8, acelerar: [[1, 4], [5, 7]] } }, cifrasAluno: true, alvoCompassos: 8,
               instrucoes: "<p>Sentença de 8 compassos (melodia, baixo, cifras), acelerando na continuação, com cadência perfeita.</p>",
               texto: "tom: C maior\nmelodia:\nbaixo:", duracao: 1, plano: PLANO_FRASE },
@@ -144,5 +144,6 @@
           ],
         },
   ];
-  for (const tema of temas) T.inserir(3, tema);
+  // escrita de tema: avisar o ritmo quase uniforme (o esqueleto e a superfície pedem diminuição uniforme de propósito)
+  for (const tema of temas) T.inserir(3, ["sentenca", "periodo"].includes(tema.id) ? T.acrescentarRegras(tema, { variedade_ritmica: "aviso" }) : tema);
 })(this);

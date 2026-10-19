@@ -84,6 +84,14 @@
     if (depoisDe) { const i = lista.findIndex((t) => t.id === depoisDe); if (i >= 0) k = i + 1; }
     lista.splice(k, 0, tema);
   }
+  // acrescenta regras ao perfil de todos os exercícios de um capítulo (sem mexer nos perfis compartilhados)
+  function acrescentarRegras(tema, regras) {
+    for (const e of tema.exercicios) {
+      if (e.perfil) e.perfil = { ...e.perfil, ...regras };
+      else e.extras = { ...(e.extras || {}), ...regras };
+    }
+    return tema;
+  }
   function novoNivel(nivel) {
     if (niveis.some((x) => x.numero === nivel.numero)) return;
     niveis.push({ temas: [], ...nivel });
@@ -96,5 +104,5 @@
   }
   const perfis = { N1, N2, N3, N4, TONAL, MELODIA, CANTUS, PLANO_CP, PLANO_BAIXO, PLANO_FRASE, FUX, CF1, CF2 };
 
-  raiz.TEMAS = { niveis, inserir, novoNivel, perguntas, perfis };
+  raiz.TEMAS = { niveis, inserir, novoNivel, perguntas, perfis, acrescentarRegras };
 })(this);

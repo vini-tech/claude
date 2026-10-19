@@ -119,6 +119,42 @@ def test_setima_casos_do_revisor():
     ) == [[], [], SETIMA, []]
 
 
+IDEIA = "C5/1.5 E5/0.5 G5/2 F5/1.5 E5/0.5 D5/2"            # c. 1–2: a ideia básica do livro
+NA_DOMINANTE = "B4/1.5 D5/0.5 F5/2 E5/1.5 D5/0.5 C5/2"     # um grau abaixo, sobre o V7
+OUTRA = "A4/1 B4/1 C5/1 D5/1 E5/2 C5/2"                    # material novo
+BAIXO4 = "C3/4 G2/4 G2/4 C3/4"
+
+
+def test_apresentacao_da_sentenca():
+    regra = ["apresentacao_repetida"]
+    assert acusa(
+        (duas("C maior", f"{IDEIA} {IDEIA}", BAIXO4), "I V7 V7 I", regra, None),
+        (duas("C maior", f"{IDEIA} {NA_DOMINANTE}", BAIXO4), "I V7 V7 I", regra, None),
+        (duas("C maior", f"{IDEIA} {OUTRA}", BAIXO4), "I V7 V7 I", regra, None),
+        # ainda sem os c. 3–4: não acusa
+        (duas("C maior", IDEIA, BAIXO4), "I V7 V7 I", regra, None),
+    ) == [[], [], regra, []]
+
+
+def test_ideia_repetida_aceita_transposicao():
+    regra = ["ideia_repetida"]
+    assert acusa(
+        (duas("C maior", f"{IDEIA} {NA_DOMINANTE}", BAIXO4), "I V7 V7 I", regra, {"repete": [1, 3]}),
+        (duas("C maior", f"{IDEIA} {OUTRA}", BAIXO4), "I V7 V7 I", regra, {"repete": [1, 3]}),
+    ) == [[], regra]
+
+
+def test_variedade_ritmica():
+    regra = ["variedade_ritmica"]
+    oito = "C3/4 " * 8
+    assert acusa(
+        # só semínimas em 8 compassos
+        (duas("C maior", " ".join(["C5/1 D5/1 E5/1 D5/1"] * 8), oito), "I " * 7 + "I", regra, None),
+        # semínimas, colcheias, mínimas e pontuadas
+        (duas("C maior", " ".join([IDEIA, NA_DOMINANTE, "C5/1 D5/0.5 E5/0.5 F5/2", "E5/1.5 D5/0.5 C5/2"] * 2), oito), "I " * 7 + "I", regra, None),
+    ) == [regra, []]
+
+
 def test_cadencia_no_tempo_forte():
     regra = ["cadencia_tempo_forte"]
     assert acusa(
