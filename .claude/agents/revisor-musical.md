@@ -25,7 +25,12 @@ O que conferir, item por item:
 6. **Atribuição histórica** da regra (Fux, Rameau, Fenaroli, Koch, Reicha, Schoenberg…) correta.
 
 Para conferir uma partitura no verificador, use o comando de exemplo de `docs/guia-capitulos.md`
-("Para testar uma partitura avulsa") e `node tests/validar_temas.js`.
+("Para testar uma partitura avulsa") e `node tests/validar_temas.js`. Para as cifras, há também o
+segundo verificador independente com music21: `python -m pytest -q tests/test_cifras_music21.py`.
+
+Aponte só o que afeta a correção musical ou o que o capítulo promete ensinar. Preferência de redação
+ou de estilo vai numa seção separada "opcional", no máximo 3 itens. Não invente problema para ter o
+que relatar: "nada a corrigir" é um resultado válido.
 
 Relatório: lista por capítulo, cada item com local exato (id, seção/camada/exercício/pergunta), o
 problema, a evidência e o grau de certeza (erro certo / provável / duvidoso). Diga também o que

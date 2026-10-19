@@ -60,6 +60,26 @@ quebrar os acentos e a página.
   `/pesquisar`: todas as fontes (Anthropic Directory, skills, registro MCP, web em modo extended,
   GitHub/npm/PyPI, ISMIR), candidatos verificados no repositório, não só no resumo da busca.
 
+## Papéis (duas sessões: programador e melhorador)
+
+Padrão Escritor/Revisor: quem escreve não é quem revisa, e quem revisa não corrige o código do outro.
+
+| | programador | melhorador |
+|---|---|---|
+| escreve em | `web/`, `verificador/`, `tests/`, `README.md` | `.claude/`, `CLAUDE.md`, `docs/` |
+| faz | capítulos, regras, interface, testes | revisão, ambiente do agente (hooks, agentes, comandos), guias, pesquisa de ferramentas |
+| não faz | mudar `.claude/` ou `CLAUDE.md` sem combinar | editar arquivos do programador |
+
+- Cada sessão trabalha na **sua worktree** (no app: nova sessão em worktree) e entrega por branch; o
+  merge no `master` só acontece com a verificação passando. Duas sessões na mesma pasta se atropelam.
+- O melhorador que achar um problema no código **manda por mensagem** (arquivo, linha, evidência, por
+  que importa); o programador corrige.
+- Ciclo de cada mudança: programador escreve → Stop hook verifica → `/code-review` e `revisor-musical`
+  (contexto limpo) → melhorador revisa o branch → programador corrige. **No máximo duas rodadas** de
+  revisão; depois decide o usuário.
+- Revisão aponta só o que afeta a correção (musical ou de código) ou o pedido do usuário; preferência
+  de estilo é opcional. Revisor que procura lacuna sempre acha alguma: não persiga todas.
+
 ## Hábitos
 
 - Mudança grande: plano primeiro (modo de plano), depois execução.
