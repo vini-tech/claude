@@ -50,7 +50,8 @@ do modo do exercício, e o piano marca a nota selecionada e a da outra voz no me
 
 | arquivo | o que tem |
 |---------|-----------|
-| `web/temas.js` | todo o conteúdo: aulas, exemplos, contrastes e exercícios com soluções |
+| `web/temas.js` | níveis, perfis comuns e as funções `inserir`/`perguntas` (o conteúdo fica em `web/livro/`) |
+| `web/livro/*.js` | os capítulos: aulas, exemplos, contrastes e exercícios com soluções (ordem em `indice.js`) |
 | `web/regras3.js` | cifras (I6, V43, ii6, I64…) e restrições dos exercícios |
 | `web/buscador.js` | acha soluções de 1ª a 3ª espécie com o próprio verificador |
 | `web/estilo.js` | o relatório de estilo (descritivo, não corrige) |

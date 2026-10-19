@@ -1,4 +1,4 @@
-// Valida o conteúdo do ateliê (web/temas.js). Imprime JSON com a lista de problemas.
+// Valida o conteúdo do ateliê (web/temas.js e web/livro/*.js). Imprime JSON com a lista de problemas.
 const M = require("../web/motor.js");
 require("../web/regras2.js");
 const R3 = require("../web/regras3.js");

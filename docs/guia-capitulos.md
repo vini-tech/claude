@@ -31,7 +31,7 @@ módulo com `M.definirRegra(id, titulo, explicacao, function* (ex, ctx) { yield 
 
 ## Formato de um capítulo
 
-Veja capítulos prontos em `web/temas.js` como modelo (os melhores: `oitava`, `retardos`, `superficie`,
+Veja capítulos prontos em `web/livro/nivel1.js`, `nivel2.js` e `nivel3.js` como modelo (os melhores: `oitava`, `retardos`, `superficie`,
 `modos`). Campos:
 
 ```js
@@ -211,10 +211,10 @@ ctx.harmonia=R3.harmoniaDasCifras(ex,ctx);console.log(M.verificarPerfil(ex,{quin
 ## Trabalho em paralelo
 
 Vários autores escrevem ao mesmo tempo, cada um no seu módulo (já listados em `web/livro/indice.js`,
-nesta ordem: contraponto, cadencias, ornamentos, setimas, forma, secundarias, aumentadas, modulacao,
+nesta ordem: nivel1, nivel2, nivel3, contraponto, cadencias, ornamentos, setimas, forma, secundarias, aumentadas, modulacao,
 raros). O validador carrega todos; **ignore problemas de capítulos que não são seus** (filtre a saída
 pelos seus ids). Não faça commit nem mexa em outros arquivos. Use `depoisDe`/`antesDe` só com ids de
-`web/temas.js` ou de módulos que carregam antes do seu.
+módulos que carregam antes do seu.
 
-Ids existentes: nível 1 `modos arquitetura elaborar continua retardos`; nível 2 `oitava baixo ritmo
+Ids existentes (em `web/livro/nivel1.js` a `nivel3.js`): nível 1 `modos arquitetura elaborar continua retardos`; nível 2 `oitava baixo ritmo
 esquemas`; nível 3 `superficie sentenca periodo`; nível 4 (vazio, preenchido pelos módulos).
