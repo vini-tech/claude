@@ -128,99 +128,96 @@
   // ================================================================== capítulo 1
   T.inserir(4, {
     id: "aumentadas", titulo: "Sextas aumentadas",
-    antes: [
-      { p: "Em dó menor, quais são as notas da sexta alemã (Ger65)?", o: ["lá♭–dó–mi♭–fá♯", "lá♭–dó–fá♯", "lá♭–dó–ré–fá♯", "fá–lá♭–dó–mi♭"], e: "As três sextas aumentadas têm o mesmo núcleo — lá♭ (6º abaixado), dó (tônica) e fá♯ (4º elevado). A italiana fica só nisso; a francesa acrescenta ré (2º grau); a alemã acrescenta mi♭ (3º abaixado). Fá–lá♭–dó–mi♭ é o iv7." },
-      { p: "Como resolve o intervalo de 6ª aumentada lá♭–fá♯?", o: ["Abre por semitom nos dois sentidos, até a oitava sol–sol", "Fecha numa 5ª (sol–ré)", "O lá♭ sobe ao lá e o fá♯ sobe ao sol", "Fica parado e o resto do acorde muda"], e: "As duas notas são sensíveis da dominante: lá♭ desce ao sol, fá♯ sobe ao sol. A 6ª aumentada se abre na oitava — por isso nenhuma das duas pode ser dobrada (sairiam oitavas paralelas)." },
-      { p: "Por que a sexta alemã costuma ir ao i6/4 cadencial, e não direto ao V?", o: ["Porque indo direto ao V o mi♭ desce ao ré e forma quintas paralelas com o baixo (lá♭–mi♭ → sol–ré)", "Porque o V não contém o sol", "Porque o 6/4 é obrigatório em toda cadência", "Porque a alemã não tem 6ª aumentada"], e: "A alemã tem uma 5ª justa sobre o baixo. No i6/4 o mi♭ fica parado (é a 3ª do i6/4) e só depois desce ao ré, quando o baixo já está no sol. As 'quintas de Mozart' (Ger65 → V direto) aparecem na prática clássica, mas são a exceção." },
-    ],
-    objetivo: "Usar a sexta italiana, a francesa e a alemã antes da dominante, em menor e em maior, com o ♭6 e o ♯4 abrindo por semitom na oitava do 5º grau.",
-    ouvir: ["Mozart, Sonata em lá menor K. 310, 1º mov.: sextas aumentadas antes das semicadências", "Beethoven, Sinfonia n.º 5, 1º mov.: as sextas aumentadas nas preparações da dominante", "Bach, Cantatas e Paixões: o iv6–V frígio, de onde a sexta aumentada nasce", "Schubert, lieder: a Ger65 como cor nas cadências"],
-    esboco: "Em dó menor, o baixo faz lá♭ → sol (iv6 → V, a cadência frígia). Que nota da melodia você alteraria cromaticamente sobre o lá♭ para intensificar a chegada ao sol?",
+    objetivo: "Usar It6, Fr43 e Ger65 antes do V, em menor e maior, com ♭6 e ♯4 abrindo por semitom na oitava do 5º grau.",
+    ouvir: ["Mozart, Sonata K. 310, 1º mov.", "Beethoven, Sinfonia nº 5, 1º mov.", "Bach, Paixões: o iv6–V frígio"],
+    esboco: "Dó menor, baixo lá♭ → sol (cadência frígia). Que nota da melodia você alteraria sobre o lá♭ para intensificar a chegada?",
     secoes: [
       { tipo: "texto", rotulo: "A regra", titulo: "Duas sensíveis para a dominante", html: `
-        <p>A sexta aumentada nasce da <b>cadência frígia</b> (iv6 → V em menor: baixo ♭6 → 5, voz superior 4 → 5). Elevando o 4º grau, a voz de cima ganha também uma sensível: o acorde passa a ter <b>duas notas que caminham por semitom até o 5º grau</b>, uma de baixo (♭6 → 5) e uma de cima (♯4 → 5). Entre elas soa a 6ª aumentada, que <b>se abre na oitava</b>. Os tratados clássicos (e, hoje, Aldwell &amp; Schachter, Piston, Kostka) a tratam como pré-dominante cromática: vem depois de iv/IV, iv6 ou VI e vai ao V ou ao I6/4 cadencial.</p>
+        <p>Nasce da <b>cadência frígia</b> (iv6 → V) com o 4º elevado: <b>duas sensíveis do 5º grau</b>, ♭6 ↓ e ♯4 ↑, que abrem a 6ª aumentada na oitava. Pré-dominante cromática: vem de iv/IV, iv6 ou VI; vai ao V ou ao I6/4.</p>
         <table class="tabela-modos"><thead><tr><th>Cifra</th><th>Em dó menor</th><th>Acréscimo</th><th>Vai para</th></tr></thead><tbody>
         <tr><td>It6</td><td>lá♭ – dó – fá♯</td><td>dobra-se a tônica (dó)</td><td>V</td></tr>
         <tr><td>Fr43</td><td>lá♭ – dó – ré – fá♯</td><td>2º grau (ré), nota comum com o V</td><td>V (ou V7)</td></tr>
         <tr><td>Ger65</td><td>lá♭ – dó – mi♭ – fá♯</td><td>3º abaixado (mi♭)</td><td>i6/4 → V</td></tr>
         </tbody></table>
-        <p>Os nomes "italiana", "francesa" e "alemã" são convenção didática: não indicam origem nacional comprovada. As cifras <b>It6, Fr43, Ger65</b> lembram os intervalos sobre o baixo (6; 6/4/3; 6/5/3).</p>
-        <h3>A regra, como os manuais a dão</h3>
-        <ul><li><b>Grafia:</b> o ♭6 no baixo (posição normal) e o ♯4 numa voz superior. Em maior, ♭6 e ♭3 são emprestados do menor: em dó maior, lá♭ – dó – (ré | mi♭) – fá♯.</li>
-        <li><b>Resolução:</b> ♭6 desce meio tom, ♯4 sobe meio tom — <b>nunca dobre nenhum dos dois</b>. A tônica (dó) desce ao si ou fica como 4ª do I6/4.</li>
-        <li><b>Preparação:</b> o melhor caminho é o iv6 (o baixo já está no ♭6; o 4 sobe cromaticamente ao ♯4) ou o VI; em maior, o IV6 (o baixo desce cromaticamente lá → lá♭) ou o IV (fá → fá♯ numa voz superior).</li>
-        <li><b>Alemã:</b> vai ao <b>I6/4 cadencial</b>. Direto ao V, o mi♭ desceria ao ré em quintas paralelas com o baixo (lá♭–mi♭ → sol–ré). Em maior, o ♭3 sobe cromaticamente para a 3ª maior do I6/4 (mi♭ → mi) — por isso muitos o escrevem ré♯ (próximo capítulo).</li>
-        <li><b>Duas vozes:</b> aqui trabalhamos com o par soprano–baixo e as cifras. Ponha o ♯4 no soprano quando quiser a 6ª aumentada à mostra (as vozes externas abrem na oitava); com o soprano na tônica ou no ♭3, o ♯4 fica numa voz interna implícita.</li></ul>` },
+        <table class="tabela-modos"><thead><tr><th>Aspecto</th><th>Regra</th></tr></thead><tbody>
+        <tr><td>Grafia</td><td>♭6 no baixo, ♯4 em cima; em maior, ♭6 e ♭3 vêm do menor</td></tr>
+        <tr><td>Resolução</td><td>♭6 ↓, ♯4 ↑ — <b>nunca dobrados</b>; a tônica desce ou fica como 4ª do I6/4</td></tr>
+        <tr><td>Preparação</td><td>Menor: iv6 (4 → ♯4) ou VI. Maior: IV6 (baixo lá → lá♭) ou IV (fá → fá♯)</td></tr>
+        <tr><td>Alemã</td><td>Vai ao I6/4 (direto ao V: 5ªs lá♭–mi♭ → sol–ré). Em maior, ♭3 sobe a 3 (mi♭ → mi)</td></tr>
+        <tr><td>Par externo</td><td>♯4 no soprano mostra a 6ª aum.; senão, fica implícito numa voz interna</td></tr>
+        </tbody></table>
+        <p>Os nomes nacionais são convenção didática.</p>` },
       { tipo: "exemplo", titulo: "Da cadência frígia à sexta alemã", intro: "Dó menor. Mesmo começo nas três camadas; o que muda é a chegada à dominante.",
         camadas: [
           { titulo: "A cadência frígia (iv6 → V)", partitura: "tom: C menor\nsoprano: C5/1 D5/1 Eb5/1 C5/1 Ab4/1 F4/2 G4/1\nbaixo: C3/1 B2/1 C3/1 Eb3/1 F3/1 Ab3/2 G3/1", rotulos: ["soprano", "baixo"],
             cifras: [[0, "i"], [1, "V6"], [2, "i"], [3, "i6"], [4, "iv"], [5, "iv6"], [7, "V"]],
-            notas: [["decisao", "Semicadência frígia: o baixo desce lá♭ → sol (meio tom) e o soprano sobe fá → sol. É a fórmula barroca de onde a sexta aumentada sai."],
-              ["checagem", "Fá4 sobre lá♭3 é 6ª maior; sol4 sobre sol3, oitava, por movimento contrário."]] },
+            notas: [["decisao", "Semicadência frígia: baixo lá♭ → sol, soprano fá → sol."],
+              ["checagem", "6ª maior → oitava, por movimento contrário."]] },
           { titulo: "O ♯4: a sexta italiana", partitura: "tom: C menor\nsoprano: C5/1 D5/1 Eb5/1 C5/1 Ab4/1 F4/1 F#4/1 G4/1\nbaixo: C3/1 B2/1 C3/1 Eb3/1 F3/1 Ab3/1 Ab3/1 G3/1", rotulos: ["soprano", "baixo"],
             cifras: [[0, "i"], [1, "V6"], [2, "i"], [3, "i6"], [4, "iv"], [5, "iv6"], [6, "It6"], [7, "V"]],
             anotacoes: [[0, 6, "♯4"], [1, 6, "♭6"]],
-            notas: [["decisao", "O mesmo iv6, agora com o fá subindo cromaticamente a fá♯ sobre o lá♭ que fica: a 6ª maior vira 6ª aumentada e as duas vozes abrem na oitava sol3–sol4."],
-              ["rejeitada", "Pensei em chegar ao fá♯ direto do lá♭4 (que soava antes): seria uma 3ª diminuta melódica, difícil de cantar e sem a lógica de passagem. O fá intermediário (iv6) é o caminho clássico."],
-              ["checagem", "Nenhuma das notas da 6ª aumentada está dobrada: dó, a tônica, é a nota dobrada da italiana (nas vozes internas)."]],
-            pausa: ["Por que a sexta italiana soa mais 'urgente' que o iv6 que ela substitui?", "Porque o iv6 tem uma só nota atraída por semitom para a dominante (o lá♭ do baixo); a italiana tem duas, em sentidos contrários. A chegada ao V fica mais inevitável — e mais tensa."] },
+            notas: [["decisao", "Fá → fá♯ sobre o lá♭: 6ª maior vira aumentada e abre na oitava."],
+              ["rejeitada", "Lá♭4 → fá♯ direto: 3ª diminuta, sem a lógica de passagem."],
+              ["checagem", "Nada da 6ª aum. dobrado; a italiana dobra a tônica (voz interna)."]],
+            pausa: ["Por que a italiana soa mais urgente que o iv6?", "O iv6 tem uma nota atraída por semitom ao V; a italiana tem duas, em sentidos contrários."] },
           { titulo: "A frase inteira: italiana na semicadência, alemã na cadência", partitura: "tom: C menor\nsoprano: C5/1 D5/1 Eb5/1 C5/1 Ab4/1 F4/1 F#4/1 G4/1 C5/2 Ab4/1 C5/1 C5/1 B4/1 C5/2\nbaixo: C3/1 B2/1 C3/1 Eb3/1 F3/1 Ab3/1 Ab3/1 G3/1 Eb3/2 F3/1 Ab3/1 G3/1 G3/1 C3/2", rotulos: ["soprano", "baixo"],
             cifras: [[0, "i"], [1, "V6"], [2, "i"], [3, "i6"], [4, "iv"], [5, "iv6"], [6, "It6"], [7, "V"], [8, "i6"], [10, "iv"], [11, "Ger65"], [12, "i64"], [13, "V"], [14, "i"]],
-            notas: [["decisao", "Compasso 3: iv → Ger65 com o soprano no dó (nota comum), que fica como 4ª do i6/4 e desce ao si — a cadência composta clássica."],
-              ["decisao", "A alemã vai ao i6/4: o mi♭ (voz interna) fica parado, porque é a 3ª do i6/4; só desce ao ré quando o baixo já chegou ao sol."],
-              ["rejeitada", "Ger65 → V direto daria lá♭–mi♭ → sol–ré nas vozes internas: as 'quintas de Mozart'. Correto na prática clássica como exceção, não como regra (veja a quebra)."],
-              ["checagem", "As duas sextas aumentadas vêm de pré-dominantes (iv6, iv) e vão à dominante; a italiana tem a 6ª aumentada nas vozes externas, a alemã a deixa nas internas."]],
-            pausa: ["A frase tem duas sextas aumentadas. Por que a segunda é a alemã, e não outra italiana?", "Porque a alemã é a mais cheia (quatro sons, com a 5ª justa sobre o baixo) e pede o i6/4: isso alarga a cadência final, enquanto a italiana, mais leve, serve à semicadência do meio. A hierarquia das cadências fica audível."] },
+            notas: [["decisao", "C. 3: iv → Ger65, soprano no dó (nota comum), 4ª do i6/4, desce ao si."],
+              ["decisao", "Mi♭ (voz interna) fica: é a 3ª do i6/4; desce ao ré só sobre o V."],
+              ["rejeitada", "Ger65 → V direto: 'quintas de Mozart' (ver a quebra)."]],
+            pausa: ["Por que a segunda é alemã, e não outra italiana?", "A alemã, mais cheia, pede o i6/4 e alarga a cadência final; a italiana, leve, serve à semicadência."] },
         ] },
       { tipo: "contraste", titulo: "A alemã em menor e em maior",
         a: { rotulo: "A — dó menor: o mi♭ fica", partitura: "tom: C menor\nsoprano: Eb5/1 C5/1 C5/2 C5/1 B4/1 C5/2\nbaixo: C3/1 F3/1 Ab3/2 G3/1 G3/1 C3/2", cifras: [[0, "i"], [1, "iv"], [2, "Ger65"], [4, "i64"], [5, "V"], [6, "i"]] },
         b: { rotulo: "B — dó maior: o mi♭ sobe a mi", partitura: "tom: C maior\nsoprano: E5/1 C5/1 C5/2 C5/1 B4/1 C5/2\nbaixo: C3/1 F3/1 Ab3/2 G3/1 G3/1 C3/2", cifras: [[0, "I"], [1, "IV"], [2, "Ger65"], [4, "I64"], [5, "V"], [6, "I"]] },
         pergunta: "O par externo é quase igual. O que acontece com o 3º grau abaixado (mi♭, numa voz interna) em cada caso?",
-        comentario: "<p>Em menor, o mi♭ da alemã é a própria 3ª do i6/4: fica parado, e a sexta alemã soa como um i6/4 'com o baixo e o ♯4 alterados'. Em maior, o mi♭ é emprestado do menor e precisa <b>subir cromaticamente</b> para o mi do I6/4 — a sonoridade escurece por um instante e clareia na chegada. Como a nota sobe, muitos autores a escrevem ré♯ (a 4ª duplamente aumentada), assunto do próximo capítulo.</p>" },
+        comentario: "<p>Menor: o mi♭ é a 3ª do i6/4 e fica parado. Maior: o mi♭ é emprestado e <b>sobe</b> a mi no I6/4 — escurece e clareia. Por subir, muitos o escrevem ré♯ (próximo capítulo).</p>" },
       { tipo: "quebra", titulo: "As quintas de Mozart", html: `
-        <p>A regra do I6/4 depois da alemã é dos manuais; o repertório clássico a quebra com frequência. A Ger65 que vai <b>direto ao V</b> produz quintas paralelas entre o baixo e a voz com o ♭3 (lá♭–mi♭ → sol–ré): o nome corrente, "quintas de Mozart", diz que eram toleradas no estilo clássico, em geral escondidas numa voz interna e encobertas pela força da resolução por semitom das outras vozes.</p>
-        <p>O que se ganha: uma cadência mais curta e direta (sem o 6/4) e a cor cheia da alemã até o último instante. O que se paga: as quintas — por isso o compositor cuidadoso as deixa no meio da textura, nunca nas vozes externas. No exemplo, para que você as ouça, a voz interna está exposta no soprano.</p>`,
+        <table class="tabela-modos"><thead><tr><th>Prática</th><th>O que quebra</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>Ger65 → V direto (estilo clássico)</td><td>5ªs paralelas lá♭–mi♭ → sol–ré</td><td>Cadência curta, cor cheia até o fim</td></tr>
+        </tbody></table>
+        <p>Toleradas só numa voz interna, encobertas pelas resoluções por semitom. No exemplo, a voz interna está exposta no soprano para ser ouvida.</p>`,
         exemplos: [
           { rotulo: "Ger65 → V, com as quintas à mostra", partitura: "tom: C menor\nsoprano: G4/1 F4/1 Eb4/1 D4/1 C4/4\nbaixo: Eb3/1 F3/1 Ab2/1 G2/1 C3/4", cifras: [[0, "i6"], [1, "iv"], [2, "Ger65"], [3, "V"], [4, "i"]],
             perfil: { ...AUM, quintas_paralelas: "info", aum_ger_64: "info" },
-            comentario: "Lá♭2–mi♭4 → sol2–ré4: quintas paralelas, que no original ficariam numa voz interna. Escrevê-las nas vozes externas, como aqui, é só para o ouvido: na música real, o soprano ficaria no fá♯ → sol ou no dó → si." },
+            comentario: "Lá♭2–mi♭4 → sol2–ré4: 5ªs expostas só para o ouvido. Na música real o soprano faria fá♯ → sol ou dó → si." },
         ] },
     ],
     exercicios: [
       { id: "aum1", titulo: "Completar: italiana e alemã em sol menor", modo: "completar", perfil: { ...AUM }, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 } },
         cifras: "i V6 i i6 iv iv6 It6 V i6 iv Ger65 i64 V i".split(" "),
-        instrucoes: "<p>O baixo e as cifras estão dados, e o soprano do 1º compasso também. Escreva o soprano dos compassos 2–4 (uma nota por nota do baixo). No It6, ponha o ♯4 (dó♯) no soprano e faça-o chegar por semitom; na Ger65, escolha uma nota que siga sem problema para o i6/4.</p>",
+        instrucoes: "<p>Escreva o soprano dos c. 2–4, uma nota por nota do baixo. No It6, ♯4 (dó♯) no soprano, chegando por semitom; na Ger65, uma nota que siga bem ao i6/4.</p>",
         texto: "tom: G menor\ncf: baixo\nsoprano: Bb4/1 A4/1 G4/1 D5/1\nbaixo: G2/1 F#2/1 G2/1 Bb2/1 C3/1 Eb3/1 Eb3/1 D3/1 Bb2/2 C3/1 Eb3/1 D3/1 D3/1 G2/2", duracao: 1, alvoCompassos: 4,
         solucao: "tom: G menor\ncf: baixo\nsoprano: Bb4/1 A4/1 G4/1 D5/1 G4/1 C5/1 C#5/1 D5/1 G5/2 Eb5/1 Bb4/1 Bb4/1 A4/1 G4/2\nbaixo: G2/1 F#2/1 G2/1 Bb2/1 C3/1 Eb3/1 Eb3/1 D3/1 Bb2/2 C3/1 Eb3/1 D3/1 D3/1 G2/2",
-        comentarioSolucao: "No c. 2 o dó5 do iv6 sobe cromaticamente a dó♯5 sobre o mi♭ que fica: a 6ª aumentada mi♭3–dó♯5 abre na oitava ré3–ré5. No c. 3 o si♭4 da alemã (o ♭3) fica parado como 6ª do i6/4 e desce ao lá sobre o V — exatamente o mi♭ do exemplo em dó menor." },
+        comentarioSolucao: "C. 2: dó5 → dó♯5 sobre mi♭; mi♭3–dó♯5 abre em ré3–ré5. C. 3: si♭4 (♭3) fica no i6/4 e desce ao lá sobre o V." },
       { id: "aum2", titulo: "Francesa e alemã em ré maior", modo: "menos apoio", perfil: { ...AUM }, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 } }, cifrasAluno: true, cifrasIniciais: "I V43 I6 IV IV6",
-        instrucoes: "<p>O baixo está dado; as cifras, até o IV6 do c. 2. Escreva as cifras restantes e o soprano. O si♭ do baixo (c. 2 e c. 3) é o 6º grau abaixado: use uma <b>Fr43</b> na semicadência do c. 2 e uma <b>Ger65 → I64</b> no c. 3. Em pelo menos uma delas, ponha o ♯4 (sol♯) no soprano.</p>",
+        instrucoes: "<p>Complete cifras e soprano. Sobre o si♭ (♭6): <b>Fr43</b> na semicadência do c. 2, <b>Ger65 → I64</b> no c. 3. Em uma delas, ♯4 (sol♯) no soprano.</p>",
         texto: "tom: D maior\ncf: baixo\nsoprano:\nbaixo: D3/1 E3/1 F#3/1 G3/1 B3/1 Bb3/1 A3/2 F#3/1 G3/1 Bb3/2 A3/1 A3/1 D3/2", duracao: 1, alvoCompassos: 4,
         solucao: "tom: D maior\ncf: baixo\nsoprano: A4/1 G4/1 F#4/1 B4/1 D5/1 E5/1~ E5/2 D5/1 G4/1 G#4/2 A4/1 C#5/1 D5/2\nbaixo: D3/1 E3/1 F#3/1 G3/1 B3/1 Bb3/1 A3/2 F#3/1 G3/1 Bb3/2 A3/1 A3/1 D3/2",
         solucaoCifras: "I V43 I6 IV IV6 Fr43 V I6 IV Ger65 I64 V I",
-        comentarioSolucao: "Em maior, o baixo chega ao ♭6 descendo cromaticamente do 6 (si → si♭: IV6 → Fr43). Na francesa o soprano fica no mi (2º grau), nota comum com o V; na alemã o sol do IV sobe a sol♯ e a lá: a 6ª aumentada si♭3–sol♯4 abre na oitava lá3–lá4 do I6/4." },
+        comentarioSolucao: "Baixo si → si♭ (IV6 → Fr43); na francesa o soprano fica no mi, nota comum com o V. Na alemã, sol–sol♯–lá: si♭3–sol♯4 abre em lá3–lá4." },
       { id: "aum3", titulo: "Restrição: o ré♯ da melodia pede uma sexta aumentada", modo: "restrição", perfil: { ...AUM, aum_exige: "erro" }, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 }, aumentadas: 1 }, cifrasAluno: true,
-        instrucoes: "<p>A melodia está dada, em lá menor. Escreva o baixo e as cifras. <b>Restrição:</b> o ré♯5 do c. 2 tem de ser harmonizado por uma sexta aumentada (o baixo no fá, 6º grau abaixado), preparada por uma pré-dominante e resolvida no V. Termine em cadência perfeita.</p>",
+        instrucoes: "<p>Escreva baixo e cifras. <b>Restrição:</b> ré♯5 do c. 2 harmonizado por sexta aumentada (fá no baixo), preparada por pré-dominante e resolvida no V. Cadência perfeita.</p>",
         texto: "tom: A menor\ncf: soprano\nsoprano: C5/1 B4/1 A4/1 E5/1 D5/1 D#5/1 E5/2 E5/1 D5/1 C5/1 B4/1 A4/4\nbaixo:", duracao: 1, alvoCompassos: 4,
         solucao: "tom: A menor\ncf: soprano\nsoprano: C5/1 B4/1 A4/1 E5/1 D5/1 D#5/1 E5/2 E5/1 D5/1 C5/1 B4/1 A4/4\nbaixo: A2/1 G#2/1 A2/1 C3/1 F3/1 F3/1 E3/2 C3/1 D3/1 A2/1 E3/1 A2/4",
         solucaoCifras: "i V6 i i6 iv6 It6 V i6 iv i V i",
-        comentarioSolucao: "O ré5 do c. 2 cabe no iv6 (fá no baixo); quando ele sobe a ré♯, o mesmo fá vira o ♭6 de uma italiana. É a cadência frígia intensificada, em movimento contrário: fá3 → mi3 embaixo, ré♯5 → mi5 em cima." },
+        comentarioSolucao: "Ré5 sobre fá = iv6; ré → ré♯ faz do fá o ♭6 de uma italiana. Frígia intensificada: fá3 → mi3 contra ré♯5 → mi5." },
       { id: "aum4", titulo: "Livre: frase com sexta aumentada em si♭ maior", modo: "livre", perfil: { ...AUM, aum_exige: "erro" }, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 }, aumentadas: 2 }, cifrasAluno: true, alvoCompassos: 4,
-        instrucoes: "<p>Componha soprano, baixo e cifras de uma frase de 4 compassos em si♭ maior com <b>duas</b> sextas aumentadas: uma na semicadência do meio e uma (alemã, com o I6/4) na cadência final. O ♭6 de si♭ maior é sol♭.</p>",
+        instrucoes: "<p>Frase de 4 compassos com <b>duas</b> sextas aumentadas: uma na semicadência, uma alemã com I6/4 no fim. O ♭6 é sol♭.</p>",
         texto: "tom: Bb maior\nsoprano:\nbaixo:", duracao: 1,
         solucao: "tom: Bb maior\nsoprano: F4/1 Eb4/1 D4/1 G4/1 Bb4/1 C5/1~ C5/2 Bb4/1 Eb4/1 E4/2 F4/1 A4/1 Bb4/2\nbaixo: Bb2/1 C3/1 D3/1 Eb3/1 G3/1 Gb3/1 F3/2 D3/1 Eb3/1 Gb3/2 F3/1 F3/1 Bb2/2",
         solucaoCifras: "I V43 I6 IV IV6 Fr43 V I6 IV Ger65 I64 V I" },
       { id: "aum5", titulo: "Quebrar: a alemã direto ao V", modo: "quebrar", perfil: { ...AUM, aum_ger_64: "info" }, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 } },
         cifras: "I V43 I6 I IV6 Ger65 V I6 ii6 V V7 I".split(" "),
-        instrucoes: "<p>Quebre a regra no c. 2: a <b>Ger65 vai direto ao V</b>, sem o I6/4 — as 'quintas de Mozart' do estilo clássico. Escreva o soprano dos c. 2–4 de modo que as quintas fiquem <b>só nas vozes internas</b>: no soprano, faça o ♯4 (fá♯) subir ao sol, vindo do fá do IV6 por semitom.</p>",
+        instrucoes: "<p>C. 2: <b>Ger65 direto ao V</b>. Escreva o soprano dos c. 2–4 com as 5ªs <b>só nas vozes internas</b>: fá (IV6) → fá♯ → sol no soprano.</p>",
         texto: "tom: C maior\ncf: baixo\nsoprano: E5/1 D5/1 C5/1 E5/1\nbaixo: C3/1 D3/1 E3/1 C3/1 A2/1 Ab2/1 G2/2 E2/1 F2/1 G2/1 G2/1 C3/4", duracao: 1, alvoCompassos: 4,
         solucao: "tom: C maior\ncf: baixo\nsoprano: E5/1 D5/1 C5/1 E5/1 F5/1 F#5/1 G5/2 G5/1 F5/1 D5/1 B4/1 C5/4\nbaixo: C3/1 D3/1 E3/1 C3/1 A2/1 Ab2/1 G2/2 E2/1 F2/1 G2/1 G2/1 C3/4",
-        comentarioSolucao: "Fá5 → fá♯5 → sol5 contra lá2 → lá♭2 → sol2: as vozes externas abrem em movimento contrário até a oitava, e o soprano não tem quintas com o baixo. As quintas lá♭–mi♭ → sol–ré existem, mas numa voz interna — onde Mozart as deixava." },
+        comentarioSolucao: "Fá5–fá♯5–sol5 contra lá2–lá♭2–sol2: abrem na oitava. As 5ªs lá♭–mi♭ → sol–ré ficam numa voz interna." },
     ],
   });
 
@@ -228,106 +225,102 @@
   const AUM2 = { ...AUM };
   T.inserir(4, {
     id: "aumentadas2", titulo: "Sextas aumentadas além do V",
-    antes: [
-      { p: "Em dó maior, a Ger65 (lá♭–dó–mi♭–fá♯) soa igual a que acorde?", o: ["Lá♭7, o V7 de ré♭ (fá♯ = sol♭)", "Ré7, o V7/V", "Fá♯°7", "Lá♭ maior com 6ª"], e: "Escrevendo o fá♯ como sol♭, a alemã vira lá♭–dó–mi♭–sol♭: uma dominante com sétima de ré♭, o ♭II de dó. É o pivô da modulação enarmônica meio tom acima (ou, ao contrário, o V7 de dó pode virar a alemã de si)." },
-      { p: "Por que, em maior, a alemã às vezes é escrita com ré♯ em vez de mi♭ (lá♭–dó–ré♯–fá♯)?", o: ["Porque a nota sobe ao mi do I6/4: escrita como ré♯, ela é a 4ª duplamente aumentada que resolve por grau ascendente", "Porque ré♯ e mi♭ soam diferente no piano", "Porque a alemã em maior não tem o 3º grau", "Para evitar a 6ª aumentada"], e: "A grafia mostra a direção: mi♭ tende a descer (em menor, fica no i6/4), ré♯ tende a subir. Em maior, o 3º grau abaixado sobe a mi, por isso a grafia ré♯ é a mais lógica — embora mi♭ seja comum." },
-      { p: "Uma sexta aumentada pode preparar outro acorde que não o V do tom?", o: ["Sim: qualquer acorde maior pode ser preparado pelo ♭6 e pelo ♯4 do seu próprio tom (ex.: a sexta aumentada de lá menor antes de Mi maior, o V/vi de dó)", "Não: ela só existe antes do V", "Só o I", "Só em modulações enarmônicas"], e: "A sexta aumentada é uma dupla sensível de uma nota-alvo. Fá–ré♯ abre na oitava mi–mi; em dó maior isso prepara o Mi maior (V/vi), como uma dominante secundária faria." },
-    ],
-    objetivo: "Usar a sexta aumentada fora da semicadência no V: como pivô enarmônico (Ger65 = V7), com a grafia da 4ª duplamente aumentada em maior, em outros graus e em inversões.",
-    ouvir: ["Schubert, lieder e sonatas: a Ger65 reinterpretada como V7 (modulação meio tom acima)", "Wagner, Tristão e Isolda, Prelúdio, c. 1–3: o 'acorde de Tristão' e a sua resolução no Mi com sétima", "Mozart, Sonata em lá menor K. 310: sextas aumentadas em vários graus no desenvolvimento"],
-    esboco: "Toque lá♭–dó–mi♭–fá♯ (Ger65 de dó). Resolva uma vez no i6/4 de dó; depois, chamando o fá♯ de sol♭, resolva no ré♭ maior. Que nota muda de função?",
+    objetivo: "Usar a sexta aumentada como pivô enarmônico (Ger65 = V7), com 4ª dupl. aumentada, em outros graus e invertida.",
+    ouvir: ["Schubert: Ger65 relida como V7", "Wagner, Tristão, Prelúdio, c. 1–3", "Mozart, Sonata K. 310, desenvolvimento"],
+    esboco: "Toque lá♭–dó–mi♭–fá♯. Resolva no i6/4 de dó; depois, com fá♯ = sol♭, em ré♭ maior. Que nota muda de função?",
     secoes: [
       { tipo: "texto", rotulo: "A regra", titulo: "O mesmo som, outra grafia, outro destino", html: `
-        <p>A sexta aumentada é definida pela <b>direção</b> das suas notas, não pelo som. Isso tem três consequências, todas tratadas nos manuais (Aldwell &amp; Schachter, Kostka &amp; Payne, Open Music Theory):</p>
-        <h3>1. Ger65 = V7 (enarmonia)</h3>
-        <p>Lá♭–dó–mi♭–fá♯ e lá♭–dó–mi♭–sol♭ soam iguais. Como Ger65 de dó, o fá♯ sobe e o lá♭ desce (abrem para o sol); como V7 de ré♭, o sol♭ (7ª) desce ao fá e o lá♭ (fundamental) salta para o ré♭. O inverso também vale: o V7 de dó (sol–si–ré–fá) é a Ger65 de si (sol–si–ré–mi♯), e pode abrir para o i6/4 de si. É a <b>modulação enarmônica</b> por meio tom (assunto do capítulo de modulação); na cifra, escreva as duas leituras: <code>Ger65=Db:V7</code> ou <code>V7=b:Ger65</code>.</p>
-        <h3>2. A 4ª duplamente aumentada</h3>
-        <p>Em maior, o ♭3 da alemã sobe à 3ª maior do I6/4 (mi♭ → mi em dó). Escrito ré♯, ele forma com o baixo uma <b>4ª duplamente aumentada</b> (lá♭–ré♯) e resolve por grau ascendente, como uma sensível. A grafia mi♭ é comum, mas é a ré♯ que mostra a condução. (O verificador aceita as duas na Ger65.)</p>
-        <h3>3. Outros graus e inversões</h3>
-        <ul><li><b>Outros alvos:</b> o ♭6–♯4 de qualquer tom prepara a sua dominante. Em dó maior, fá–(lá)–(si)–ré♯ é a sexta aumentada de lá menor e prepara o Mi maior (V/vi). Na cifra, troque o tom: <code>a:Fr43</code>, depois <code>C:V/vi</code>.</li>
-        <li><b>Inversões:</b> com o ♯4 no baixo, a 6ª aumentada vira <b>3ª diminuta</b> (ou 10ª diminuta), que fecha no uníssono/oitava: fá♯ sobe, lá♭ desce, ambos ao sol. É menos comum que a posição com o ♭6 no baixo; os tratados a admitem, sobretudo para a italiana e a francesa.</li>
-        <li><b>Acorde de nota comum:</b> sobre a tônica no baixo, lá♭–ré♯–fá♯ (com dó) enfeita o próprio I em vez de levar ao V — a "sexta aumentada de nota comum" (CT+6) da Open Music Theory, frequente no século XIX.</li></ul>` },
+        <p>A sexta aumentada se define pela <b>direção</b> das notas, não pelo som.</p>
+        <table class="tabela-modos"><thead><tr><th>Uso</th><th>Como funciona</th><th>Cifra</th></tr></thead><tbody>
+        <tr><td>Ger65 = V7 (enarmonia)</td><td>Fá♯ ↑ e lá♭ ↓ abrem ao sol; como V7 de ré♭, sol♭ (7ª) desce e o baixo salta a ré♭. O V7 de dó = Ger65 de si (fá = mi♯)</td><td><code>Ger65=Db:V7</code>, <code>V7=b:Ger65</code></td></tr>
+        <tr><td>4ª duplamente aumentada (maior)</td><td>♭3 escrito ré♯ (lá♭–ré♯) sobe a mi do I6/4; mi♭ também é aceito</td><td>Ger65</td></tr>
+        <tr><td>Outro alvo</td><td>♭6–♯4 de outro tom prepara a sua dominante: fá–lá–si–ré♯ (lá menor) → Mi (V/vi)</td><td><code>a:Fr43</code>, <code>C:V/vi</code></td></tr>
+        <tr><td>Inversão (♯4 no baixo)</td><td>Vira 3ª diminuta, que fecha no sol; mais rara (It, Fr)</td><td>—</td></tr>
+        <tr><td>Nota comum (CT+6)</td><td>Lá♭–dó–ré♯–fá♯ sobre a tônica enfeita o I (séc. XIX)</td><td>—</td></tr>
+        </tbody></table>` },
       { tipo: "exemplo", titulo: "Sexta alemã e V7: a mesma sonoridade", intro: "Dó maior, modulando a ré♭ maior pelo lá♭7.",
         camadas: [
           { titulo: "Ger65 = V7 de ré♭", partitura: "tom: C maior\nsoprano: E5/1 G5/1 F5/1 Gb5/1 F5/1 Db5/1 Db5/1 C5/1 Db5/4\nbaixo: C3/1 E3/1 A2/1 Ab2/1 Db3/1 Gb3/1 Ab3/1 Ab3/1 Db3/4", rotulos: ["soprano", "baixo"],
             cifras: [[0, "I"], [1, "I6"], [2, "IV6"], [3, "Ger65=Db:V7"], [4, "Db:I"], [5, "IV"], [6, "I64"], [7, "V"], [8, "I"]],
             contexto: { plano: { cadencia: 3, tomFinal: "Db maior" } },
-            notas: [["decisao", "IV6 → (lá♭ no baixo): o baixo desce cromaticamente lá → lá♭, como antes de uma sexta aumentada. O ouvido espera a Ger65 abrindo para o I6/4 de dó."],
-              ["decisao", "Mas o soprano escreve sol♭5 (não fá♯) e desce ao fá: o acorde se revela V7 de ré♭, e o baixo salta lá♭ → ré♭. A 6ª aumentada não abre — fecha como 7ª menor."],
-              ["rejeitada", "Pensei em escrever fá♯5 no soprano: seria a grafia da sexta alemã, que pede o sol. Como a nota desce, a grafia certa é sol♭."],
-              ["checagem", "Em ré♭: IV → I6/4 → V → I confirma o tom novo com cadência perfeita."]],
-            pausa: ["Em que momento o ouvinte percebe que não haverá a cadência em dó?", "Só na resolução: até o lá♭7 soar, nada distingue Ger65 de V7. É o ré♭ no baixo (e o sol♭ descendo ao fá) que reescreve o acorde para trás — o princípio de toda modulação enarmônica."] },
+            notas: [["decisao", "Baixo lá → lá♭: o ouvido espera a Ger65 indo ao I6/4 de dó."],
+              ["decisao", "Sol♭5 desce a fá e o baixo salta a ré♭: era V7 de ré♭. Fá♯ seria grafia errada."],
+              ["checagem", "IV–I6/4–V–I confirma ré♭."]],
+            pausa: ["Quando se percebe que não haverá cadência em dó?", "Só na resolução: o ré♭ no baixo reescreve o acorde para trás."] },
         ] },
       { tipo: "exemplo", titulo: "A 4ª duplamente aumentada em maior", intro: "Dó maior: a alemã com ré♯ no soprano.",
         camadas: [
           { titulo: "Ré → ré♯ → mi", partitura: "tom: C maior\nsoprano: E5/2 D5/1 D#5/1 E5/1 D5/1 C5/2\nbaixo: C3/2 F3/1 Ab3/1 G3/1 G3/1 C3/2", rotulos: ["soprano", "baixo"],
             cifras: [[0, "I"], [2, "ii6"], [3, "Ger65"], [4, "I64"], [5, "V"], [6, "I"]],
             anotacoes: [[0, 2, "4ª dupl. aum."]],
-            notas: [["decisao", "Do ii6 (ré no soprano) a voz sobe cromaticamente ré → ré♯ → mi: o ré♯ é a 'sensível' do mi do I6/4. Escrita mi♭, a mesma nota pareceria descer."],
-              ["decisao", "O baixo, ao mesmo tempo, vai de fá ao lá♭ (♭6) e desce ao sol: a cadência composta I6/4–V–I completa."],
-              ["checagem", "Lá♭3–ré♯5 é uma 4ª duplamente aumentada composta; resolve em sol3–mi5 (6ª), sem quintas — a mesma razão pela qual a alemã vai ao 6/4."]] },
+            notas: [["decisao", "Soprano ré–ré♯–mi: ré♯ é sensível do mi do I6/4; mi♭ pareceria descer."],
+              ["decisao", "Baixo fá–lá♭–sol: cadência I6/4–V–I."],
+              ["checagem", "Lá♭3–ré♯5 resolve em sol3–mi5 (6ª), sem quintas."]] },
         ] },
       { tipo: "exemplo", titulo: "Outros graus e inversões",
         camadas: [
           { titulo: "Sexta aumentada de lá menor dentro de dó maior", partitura: "tom: C maior\nsoprano: E5/1 G5/1 A5/1 G#5/1 A5/1 F5/1 E5/1 D5/1 C5/4\nbaixo: C3/1 E3/1 F3/1 E3/1 A2/1 D3/1 G2/1 G2/1 C3/4", rotulos: ["soprano", "baixo"],
             cifras: [[0, "I"], [1, "I6"], [2, "a:Fr43"], [3, "C:V/vi"], [4, "vi"], [5, "ii"], [6, "I64"], [7, "V"], [8, "I"]],
-            notas: [["decisao", "Fá–lá–si–ré♯ é a francesa de lá menor: o fá desce ao mi, o ré♯ (voz interna) sobe ao mi, e o Mi maior soa como dominante de lá (V/vi)."],
-              ["decisao", "O soprano fica no lá (tônica de lá menor, nota da francesa) e desce ao sol♯: a sensível do vi, que sobe de novo ao lá."],
-              ["checagem", "Depois do vi, a frase volta a dó com ii–I6/4–V–I: a sexta aumentada só tonicizou o vi, como uma dominante secundária."]] },
+            notas: [["decisao", "Fá–lá–si–ré♯ = francesa de lá menor: fá ↓ mi, ré♯ ↑ mi; Mi soa como V/vi."],
+              ["decisao", "Soprano lá–sol♯–lá: a sensível do vi sobe."],
+              ["checagem", "ii–I6/4–V–I volta a dó: só tonicizou o vi."]] },
           { titulo: "Italiana invertida: o ♯4 no baixo", partitura: "tom: C menor\nsoprano: C5/1 B4/1 C5/1 Ab4/1 Ab4/2 G4/2 G4/1 Ab4/1 Eb5/1 D5/1 C5/4\nbaixo: C3/1 D3/1 Eb3/1 F3/1 F#3/2 G3/2 Eb3/1 F3/1 G3/1 G3/1 C3/4", rotulos: ["soprano", "baixo"],
             cifras: [[0, "i"], [1, "V43"], [2, "i6"], [3, "iv"], [4, "It (♯4 no baixo)"], [6, "V"], [8, "i6"], [9, "iv"], [10, "i64"], [11, "V"], [12, "i"]],
             perfil: (({ aum_cifras, aum_resolucao, ...p }) => p)(AUM2), contexto: { plano: { cadencia: 4 } },
-            notas: [["decisao", "O baixo sobe fá → fá♯ → sol e o soprano segura o lá♭ (que vem do iv): a 6ª aumentada aparece invertida, como 3ª diminuta composta fá♯3–lá♭4, que fecha na oitava sol3–sol4."],
-              ["rejeitada", "Pensei em dobrar o lá♭ no baixo e no soprano (iv6 → It6 normal): é a posição de manual, mas aqui eu queria o baixo subindo cromaticamente para a dominante."],
-              ["checagem", "As cifras de sexta aumentada do verificador supõem o ♭6 no baixo, por isso esta camada é conferida sem a regra de cifras; as vozes e as paralelas, sim."]],
-            pausa: ["O que soa mais áspero: a 6ª aumentada (lá♭ embaixo, fá♯ em cima) ou a 3ª diminuta (fá♯ embaixo, lá♭ em cima)?", "Em geral a 3ª diminuta: as duas notas estão 'apertadas' e convergem para a mesma nota em vez de se abrirem. Por isso a inversão é mais rara e costuma aparecer em passagens cromáticas do baixo, como aqui."] },
+            notas: [["decisao", "Baixo fá–fá♯–sol, soprano segura lá♭: 3ª diminuta fá♯3–lá♭4 fecha em sol3–sol4."],
+              ["rejeitada", "It6 com lá♭ no baixo: posição de manual, sem o baixo cromático ao V."],
+              ["checagem", "Conferida sem a regra de cifras (que supõe ♭6 no baixo)."]],
+            pausa: ["Mais áspera: 6ª aumentada ou 3ª diminuta?", "A 3ª diminuta: as notas convergem em vez de abrir. Por isso é rara, em baixos cromáticos."] },
         ] },
       { tipo: "contraste", titulo: "Mesmo acorde, duas resoluções",
         a: { rotulo: "A — Ger65: abre para o I6/4 de dó", partitura: "tom: C maior\nsoprano: E5/1 F5/1 F#5/2 G5/1 F5/1 E5/2\nbaixo: C3/1 A2/1 Ab2/2 G2/1 G2/1 C3/2", cifras: [[0, "I"], [1, "IV6"], [2, "Ger65"], [4, "I64"], [5, "V7"], [6, "I"]] },
         b: { rotulo: "B — V7 de ré♭: fecha no ré♭", partitura: "tom: C maior\nsoprano: E5/1 F5/1 Gb5/2 F5/4\nbaixo: C3/1 A2/1 Ab2/2 Db3/4", cifras: [[0, "I"], [1, "IV6"], [2, "Ger65=Db:V7"], [4, "Db:I"]] },
         pergunta: "Os dois primeiros tempos e o acorde do 3º tempo soam iguais. Onde está a diferença, e o que o ouvinte ouve primeiro?",
-        comentario: "<p>Em A, fá♯ sobe a sol e lá♭ desce a sol: a 6ª aumentada abre, e dó se confirma. Em B, a mesma nota (agora sol♭) desce ao fá e o baixo cai ao ré♭: a 6ª aumentada virou 7ª menor de uma dominante. O ouvinte só decide <b>depois</b> — e é isso que torna a enarmonia uma ferramenta de surpresa e de modulação distante.</p>" },
+        comentario: "<p>A: fá♯ ↑ e lá♭ ↓ abrem ao sol; dó se confirma. B: sol♭ desce a fá e o baixo cai a ré♭ — 7ª de dominante. O ouvinte só decide <b>depois</b>: daí a surpresa.</p>" },
       { tipo: "quebra", titulo: "Wagner: a sexta aumentada que não resolve onde deve", html: `
-        <p>No Romantismo tardio a sexta aumentada deixa de ser só uma pré-dominante e vira <b>cor e ambiguidade</b>. O exemplo mais estudado é o começo do Prelúdio de <i>Tristão e Isolda</i> de Wagner: o "acorde de Tristão" (fá–si–ré♯–sol♯) soa enquanto o oboé sobe sol♯ → lá → lá♯ → si, e a frase para num mi com sétima — uma dominante que não resolve na tônica. Uma das leituras correntes (há várias, e a discussão é famosa) ouve o sol♯ como apojatura do lá, o que faz do acorde uma <b>francesa de lá menor</b> (fá–lá–si–ré♯) que vai ao seu V7 — e para aí.</p>
-        <p>O que se quebra: a sexta aumentada chega com a nota "errada" (a apojatura) no tempo forte, e a dominante a que ela leva não resolve. O que se ganha: o anseio sem resolução que define a obra. Outra quebra romântica é a enarmonia usada sem modular: a Ger65 resolvida como V7 do ♭II, que volta logo ao tom (segundo exemplo).</p>`,
+        <table class="tabela-modos"><thead><tr><th>Obra / prática</th><th>O que quebra</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>Wagner, <i>Tristão</i>, c. 1–3 (fá–si–ré♯–sol♯)</td><td>Apojatura (sol♯ → lá) no tempo forte; o V7 não resolve</td><td>Anseio sem resolução</td></tr>
+        <tr><td>Ger65 como V7 do ♭II</td><td>A 6ª aum. não abre; volta logo ao tom</td><td>Enarmonia como cor, sem modular</td></tr>
+        </tbody></table>
+        <p>Uma leitura (entre várias) do Tristão: francesa de lá menor (fá–lá–si–ré♯) indo ao V7 — e parando aí.</p>`,
         exemplos: [
           { rotulo: "Esquema do Tristão (redução a duas vozes, não a partitura)", partitura: "tom: A menor\nsoprano: G#4/1.5 A4/0.5 A#4/1 B4/1\nbaixo: F3/2 E3/2", cifras: [[0, "Fr43 (com apojatura)"], [2, "V7"]],
             perfil: { quintas_paralelas: "erro", oitavas_paralelas: "erro", cruzamento_de_vozes: "erro", aum_cromatismo: "erro" },
-            comentario: "Sol♯ sobre o fá (o 'acorde de Tristão'), resolvido em lá (a francesa de lá menor); o lá♯ passa ao si sobre o mi com sétima. O baixo fá → mi é o ♭6 → 5 da sexta aumentada — mas a dominante fica sem tônica." },
+            comentario: "Sol♯ resolve em lá (francesa de lá menor); lá♯ passa ao si sobre mi7. Baixo fá → mi = ♭6 → 5, mas a dominante fica sem tônica." },
           { rotulo: "Ger65 como V7 do ♭II, sem modular", partitura: "tom: C maior\nsoprano: E5/1 F5/1 Gb5/2 F5/1 Db5/1 C5/1 B4/1 C5/4\nbaixo: C3/1 A2/1 Ab2/2 F2/2 G2/1 G2/1 C3/4", cifras: [[0, "I"], [1, "IV6"], [2, "Ger65=Db:V7"], [4, "C:N6=Db:I6"], [6, "C:I64"], [7, "V7"], [8, "I"]],
             perfil: { ...AUM2 },
-            comentario: "O lá♭7 resolve como dominante no ré♭ (que é a napolitana de dó) e a frase volta a dó pela cadência N6–I6/4–V7–I. A sexta aumentada não abriu: o 'som' da alemã serviu de dominante de passagem." },
+            comentario: "Lá♭7 resolve em ré♭ (= N6 de dó) e volta por N6–I6/4–V7–I. O som da alemã serviu de dominante de passagem." },
         ] },
     ],
     exercicios: [
       { id: "aum6", titulo: "Completar: o V7 de dó vira a alemã de si", modo: "completar", perfil: { ...AUM2 }, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4, tomFinal: "B menor" } },
         cifras: "I V43 I6 IV V7=b:Ger65 b:i64 b:V b:i b:iv b:V b:i".split(" "),
-        instrucoes: "<p>Dó maior, modulando a <b>si menor</b>. O baixo, as cifras e o soprano do c. 1 estão dados. No c. 2, o sol7 (V7 de dó) é reinterpretado como Ger65 de si (o fá vira mi♯) e abre para o i6/4 de si. Escreva o soprano dos c. 2–4: uma escolha segura é a nota comum (si ou ré) sobre o V7, que fica no i6/4.</p>",
+        instrucoes: "<p>Dó → <b>si menor</b>: no c. 2 o sol7 vira Ger65 de si (fá = mi♯) e abre ao i6/4. Escreva o soprano dos c. 2–4; sobre o V7, a nota comum (si ou ré) é segura.</p>",
         texto: "tom: C maior\ncf: baixo\nsoprano: G5/1 F5/1 E5/1 A5/1\nbaixo: C3/1 D3/1 E3/1 F3/1 G3/2 F#3/1 F#3/1 B2/1 E3/1 F#3/2 B2/4", duracao: 1, alvoCompassos: 4,
         solucao: "tom: C maior\ncf: baixo\nsoprano: G5/1 F5/1 E5/1 A5/1 D5/2 D5/1 C#5/1 D5/1 B4/1 A#4/2 B4/4\nbaixo: C3/1 D3/1 E3/1 F3/1 G3/2 F#3/1 F#3/1 B2/1 E3/1 F#3/2 B2/4",
-        comentarioSolucao: "O ré5 é nota comum do sol7 e do i6/4 de si: fica parado, e a surpresa vem do baixo (sol → fá♯) e da voz interna (fá = mi♯ → fá♯). Si menor se confirma com duas cadências V–i." },
+        comentarioSolucao: "Ré5, comum a sol7 e i6/4 de si, fica parado; a surpresa vem do baixo (sol → fá♯) e do mi♯ interno. Duas cadências V–i confirmam si." },
       { id: "aum7", titulo: "A 4ª duplamente aumentada em lá maior", modo: "menos apoio", perfil: { ...AUM2 }, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 } }, cifrasAluno: true, cifrasIniciais: "I V6 I I6 IV ii V",
-        instrucoes: "<p>O baixo está dado, e as cifras dos c. 1–2. Escreva as cifras dos c. 3–4 e o soprano inteiro. No fá do c. 3 use uma <b>Ger65 → I64</b> e escreva no soprano a grafia de 4ª duplamente aumentada: <b>si♯</b> (não dó), subindo ao dó♯ do I6/4.</p>",
+        instrucoes: "<p>Cifre os c. 3–4 e escreva o soprano. No fá do c. 3: <b>Ger65 → I64</b>, com <b>si♯</b> (não dó) no soprano subindo a dó♯.</p>",
         texto: "tom: A maior\ncf: baixo\nsoprano:\nbaixo: A2/1 G#2/1 A2/1 C#3/1 D3/1 B2/1 E3/2 C#3/1 D3/1 F3/2 E3/1 E3/1 A2/2", duracao: 1, alvoCompassos: 4,
         solucao: "tom: A maior\ncf: baixo\nsoprano: C#5/1 B4/1 A4/1 E5/1 D5/1 D5/1 B4/2 A4/1 B4/1 B#4/2 C#5/1 B4/1 A4/2\nbaixo: A2/1 G#2/1 A2/1 C#3/1 D3/1 B2/1 E3/2 C#3/1 D3/1 F3/2 E3/1 E3/1 A2/2",
         solucaoCifras: "I V6 I I6 IV ii V I6 ii6 Ger65 I64 V I",
-        comentarioSolucao: "Lá4 – si4 – si♯4 – dó♯5: o soprano sobe cromaticamente enquanto o baixo vai de ré a fá e desce ao mi. Si♯ (e não dó♮) porque a nota sobe — a grafia conta a condução." },
+        comentarioSolucao: "Lá–si–si♯–dó♯ no soprano; baixo ré–fá–mi. Si♯, não dó♮, porque a nota sobe." },
       { id: "aum8", titulo: "Restrição: sexta aumentada para o V/vi", modo: "restrição", perfil: { ...AUM2, aum_exige: "erro" }, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 }, aumentadas: 1 }, cifrasAluno: true,
-        instrucoes: "<p>Sol maior. A melodia está dada; escreva baixo e cifras. <b>Restrição:</b> o lá♯4 do c. 2 é o ♯4 de <b>mi menor</b>: harmonize-o com uma sexta aumentada de mi menor (baixo no dó) que abra para o Si maior (V/vi). Escreva <code>e:It6</code> (ou <code>e:Fr43</code>, <code>e:Ger65</code>) e volte com <code>G:V/vi</code>. Termine em cadência perfeita em sol.</p>",
+        instrucoes: "<p>Escreva baixo e cifras. <b>Restrição:</b> lá♯4 (c. 2) = ♯4 de mi menor: sexta aumentada de mi (dó no baixo) abrindo ao V/vi. Cifre <code>e:It6</code> (ou Fr43, Ger65), depois <code>G:V/vi</code>.</p>",
         texto: "tom: G maior\ncf: soprano\nsoprano: B4/1 A4/1 G4/1 B4/1 A4/1 A#4/1 B4/2 G4/1 C5/1 B4/1 A4/1 G4/4\nbaixo:", duracao: 1, alvoCompassos: 4,
         solucao: "tom: G maior\ncf: soprano\nsoprano: B4/1 A4/1 G4/1 B4/1 A4/1 A#4/1 B4/2 G4/1 C5/1 B4/1 A4/1 G4/4\nbaixo: G2/1 F#2/1 G2/1 E2/1 A2/1 C3/1 B2/2 E3/1 C3/1 D3/1 D3/1 G2/4",
         solucaoCifras: "I V6 I vi ii e:It6 G:V/vi vi IV I64 V I",
-        comentarioSolucao: "Dó3–lá♯4 abre em si2–si4: a italiana de mi menor faz do Si maior uma dominante local, e o vi que vem depois soa como chegada — a sexta aumentada tonicizou o vi do mesmo modo que um V/vi faria." },
+        comentarioSolucao: "Dó3–lá♯4 abre em si2–si4: a italiana de mi faz do Si uma dominante local, e o vi soa como chegada." },
       { id: "aum9", titulo: "Quebrar: a alemã que vira dominante da napolitana", modo: "quebrar", perfil: { ...AUM2, aum_resolucao: "info" }, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 } },
         cifras: "i V6 i i6 iv Ger65=F:V7 e:N6=F:I6 e:i64 e:V e:i".split(" "),
-        instrucoes: "<p>Mi menor. Quebre a resolução no c. 2: o dó–mi–sol–lá♯ (Ger65 de mi) é tratado como <b>dó7, dominante de fá</b> — e fá maior é a napolitana de mi. A 6ª aumentada não abre: o lá♯ vira si♭ e desce. Escreva o soprano dos c. 2–4; sobre a napolitana use o fá (♭2), que desce ao mi e ao ré♯ na cadência (♭2–1–7–1).</p>",
+        instrucoes: "<p>C. 2: a Ger65 de mi vira <b>dó7, dominante de fá</b> (a N de mi); lá♯ = si♭ desce. Escreva o soprano dos c. 2–4, com fá (♭2) sobre a N: ♭2–1–7–1.</p>",
         texto: "tom: E menor\ncf: baixo\nsoprano: G4/1 F#4/1 G4/1 B4/1\nbaixo: E3/1 D#3/1 E3/1 G3/1 A3/2 C4/2 A3/2 B3/1 B3/1 E3/4", duracao: 1, alvoCompassos: 4,
         solucao: "tom: E menor\ncf: baixo\nsoprano: G4/1 F#4/1 G4/1 B4/1 C5/2 E5/2 F5/2 E5/1 D#5/1 E5/4\nbaixo: E3/1 D#3/1 E3/1 G3/1 A3/2 C4/2 A3/2 B3/1 B3/1 E3/4",
-        comentarioSolucao: "O mi5 sobre o dó7 é a sensível de fá e sobe ao fá5 da napolitana; a 6ª aumentada dó–lá♯ (escrita si♭) fecha em vez de abrir. Depois o fá desce ao mi (i6/4) e ao ré♯ (V): a cadência de mi menor absorve o desvio." },
+        comentarioSolucao: "Mi5 (sensível de fá) sobe a fá5 da N; dó–si♭ fecha em vez de abrir. Fá → mi (i6/4) → ré♯ (V): a cadência absorve o desvio." },
     ],
   });
 })(this);
