@@ -46,7 +46,10 @@ no meio não desloca o resto.
 Enquanto você escreve, a partitura mostra o intervalo de cada nota com a outra voz (ou o intervalo
 melódico, numa voz só) e as cifras, em vermelho quando há erro e em âmbar quando há aviso; a lista
 de correção com as explicações só aparece ao tocar em **Terminei**. Acima da partitura fica a escala
-do modo do exercício, e o piano marca a nota selecionada e a da outra voz no mesmo instante.
+do modo do exercício, e o piano marca a nota selecionada e a da outra voz no mesmo instante. O botão
+**Tabelas**, no alto do exercício, abre as tabelas do capítulo (regra da oitava, inversões, pivôs…) e a
+legenda das cifras num painel que fica preso sob o cabeçalho; ele é montado das tabelas das seções do
+capítulo, então um capítulo novo já ganha o seu. Nas três perguntas de antes ele fica escondido.
 
 | arquivo | o que tem |
 |---------|-----------|

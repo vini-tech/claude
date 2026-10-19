@@ -1,3 +1,7 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ateliê de Composição</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -284,6 +288,19 @@ details.nivel:not([open]) > summary h2::after { content: " ▸"; }
 .legenda td { color: var(--tinta); }
 .ler-cifras { justify-self: start; min-height: 36px; padding: 6px 14px; font-size: 0.85rem; }
 .folha-aviso p { margin: 0; }
+/* tabelas do capítulo durante o exercício: presas sob o cabeçalho, com rolagem própria, sem tapar o piano */
+#titulo-ex { flex: 1; min-width: 0; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 1.25; }
+.abrir-consulta { flex: 0 0 auto; min-height: 36px; padding: 6px 14px; font-size: 0.85rem; }
+.abrir-consulta[aria-expanded="true"] { background: var(--acento-suave); color: var(--acento); }
+.topo-ex { position: sticky; top: 0; z-index: 2; background: var(--papel); }
+.topo-ex .tela-cab { position: static; }
+.consulta { max-width: 640px; margin: 0 auto; max-height: 42vh; overflow-y: auto; background: var(--folha); border-bottom: 1px solid var(--linha); box-shadow: 0 8px 24px rgb(0 0 0 / 0.25); padding: 4px 16px 14px; }
+.consulta details { border-bottom: 1px solid var(--linha); }
+.consulta details:last-child { border-bottom: 0; }
+.consulta summary { padding: 10px 0; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+.consulta summary small { color: var(--apagado); font-weight: 400; }
+.consulta .tabela-modos { margin-bottom: 10px; }
+@media (max-width: 600px) { .consulta { max-height: 30vh; } }
 .brinde { position: fixed; left: 50%; top: calc(16px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); z-index: 40; background: var(--ok); color: var(--sobre-acento); padding: 8px 16px; border-radius: 999px; font-weight: 700; box-shadow: 0 6px 20px rgb(0 0 0 / 0.2); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
@@ -291,7 +308,11 @@ details.nivel:not([open]) > summary h2::after { content: " ▸"; }
 <main class="pagina" id="pagina"></main>
 
 <div class="tela" id="tela-ex" hidden>
-  <div class="tela-cab"><button class="fechar-tela" id="fechar-ex" aria-label="Voltar ao tema">✕</button><b id="titulo-ex"></b></div>
+  <div class="topo-ex">
+    <div class="tela-cab"><button class="fechar-tela" id="fechar-ex" aria-label="Voltar ao tema">✕</button><b id="titulo-ex"></b>
+      <button class="botao abrir-consulta" id="abrir-consulta" type="button" aria-expanded="false" aria-controls="consulta" hidden>Tabelas</button></div>
+    <div class="consulta" id="consulta" hidden></div>
+  </div>
   <div class="oficina" id="oficina"></div>
 </div>
 
@@ -352,6 +373,48 @@ const LEGENDA = [
   ["bVI · iv (no maior)", "empréstimo do modo menor"],
   ["N6 · It6 · Fr43 · Ger65", "napolitana · sextas aumentadas italiana, francesa, alemã"],
 ];
+// tabelas das seções do capítulo (a regra e como quebrar), para consultar durante os exercícios
+function tabelasDoTema(t) {
+  const lista = [];
+  for (const s of t.secoes) {
+    if (!s.html) continue;
+    const tpl = document.createElement("template");
+    tpl.innerHTML = s.html;
+    // nome: o último <h3> antes da tabela na seção, senão o título da seção
+    let sub = "";
+    for (const el of tpl.content.querySelectorAll("h3, table")) {
+      if (el.tagName === "H3") sub = el.textContent.trim();
+      else lista.push({ titulo: sub || s.titulo || "", secao: sub ? s.titulo || "" : "", quebra: s.tipo === "quebra", html: el.outerHTML });
+    }
+  }
+  // nomes repetidos (duas tabelas sob o mesmo subtítulo) ganham número
+  const vezes = {};
+  for (const x of lista) vezes[x.titulo] = (vezes[x.titulo] || 0) + 1;
+  const visto = {};
+  for (const x of lista) {
+    if (vezes[x.titulo] < 2) continue;
+    const n = (visto[x.titulo] = (visto[x.titulo] || 0) + 1);
+    x.titulo = `${x.titulo} (${n})`;
+  }
+  return lista;
+}
+function montarConsulta(t, visivel) {
+  const tabs = tabelasDoTema(t);
+  const botao = $("abrir-consulta"), painel = $("consulta");
+  botao.hidden = !visivel || !tabs.length;
+  painel.hidden = true;
+  botao.setAttribute("aria-expanded", "false");
+  if (botao.hidden) { painel.innerHTML = ""; return; }
+  botao.textContent = `Tabelas (${tabs.length})`;
+  // a primeira tabela da regra vem aberta; as de "como quebrar" ficam fechadas
+  painel.innerHTML = tabs.map((x, k) => `<details${k === 0 && !x.quebra ? " open" : ""}><summary>${esc(x.titulo)}${x.quebra ? " <small>· como quebrar</small>" : x.secao ? ` <small>· ${esc(x.secao)}</small>` : ""}</summary>${x.html}</details>`).join("")
+    + `<details><summary>Como ler as cifras</summary><table class="tabela-modos legenda"><tbody>${LEGENDA.map(([a, b]) => `<tr><th scope="row">${a}</th><td>${b}</td></tr>`).join("")}</tbody></table></details>`;
+}
+$("abrir-consulta").addEventListener("click", () => {
+  const painel = $("consulta"), aberto = painel.hidden;
+  painel.hidden = !aberto;
+  $("abrir-consulta").setAttribute("aria-expanded", String(aberto));
+});
 function mostrarLegenda() {
   folha(`<p><b>Como ler as cifras</b></p><table class="tabela-modos legenda"><tbody>${LEGENDA.map(([a, b]) => `<tr><th scope="row">${a}</th><td>${b}</td></tr>`).join("")}</tbody></table>
     <button class="botao primario" id="fechar-legenda">Fechar</button>`);
@@ -580,7 +643,10 @@ function abrirExercicio(t, e, textoInicial) {
   const texto = textoInicial || (e._segunda ? e.texto : st.rascunho) || e.texto;
   const caixa = $("oficina");
   // antes do primeiro exercício de cada tema: perguntas obrigatórias sobre o que decidir antes de compor
-  if (t.antes && t.antes.length && !(est.antes || {})[t.id]) {
+  const comPerguntas = t.antes && t.antes.length && !(est.antes || {})[t.id];
+  // as tabelas ficam fora das perguntas de antes (elas dariam a resposta) e voltam no exercício
+  montarConsulta(t, !comPerguntas);
+  if (comPerguntas) {
     oficina = null;
     caixa.innerHTML = `<section class="cartao antes-ex"><div class="rotulo">Antes de compor</div>
       <h2>${esc(e.titulo)}</h2><div class="of-instrucoes">${e.instrucoes}</div>
