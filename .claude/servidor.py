@@ -5,6 +5,7 @@ e sem o charset o navegador lê os acentos dos .js como Latin-1 e a página não
 
 import functools
 import http.server
+import os
 from pathlib import Path
 
 WEB = Path(__file__).resolve().parent.parent / "web"
@@ -25,4 +26,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    http.server.ThreadingHTTPServer(("127.0.0.1", 8765), functools.partial(Handler, directory=str(WEB))).serve_forever()
+    # PORT vem do app quando a 8765 está ocupada (por exemplo, pelo servidor da outra sessão)
+    porta = int(os.environ.get("PORT", "8765"))
+    http.server.ThreadingHTTPServer(("127.0.0.1", porta), functools.partial(Handler, directory=str(WEB))).serve_forever()

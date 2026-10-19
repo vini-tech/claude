@@ -18,7 +18,8 @@ Um hook de `Stop` (`.claude/hooks/verificar.js`) roda os dois primeiros quando h
 outro capítulo, diga isso ao usuário em vez de mexer.
 
 Para mudanças visuais, veja a página de verdade: `.claude/launch.json` sobe `web/` em
-http://localhost:8765 (abra `/curso.html`); confira no celular (375 px) e no desktop. `curso.html` não
+http://localhost:8765 (abra `/curso.html`; se a 8765 estiver ocupada pela outra sessão, o app usa
+outra porta e avisa qual); confira no celular (375 px) e no desktop. `curso.html` não
 declara `<meta charset>`: o servidor de `.claude/servidor.py` manda `charset=utf-8`; outro servidor pode
 quebrar os acentos e a página.
 
