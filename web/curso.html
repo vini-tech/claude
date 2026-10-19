@@ -86,6 +86,7 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 500; margin: 0; text-wra
 .migalha a, .rodape a { color: var(--acento); }
 .cab-tema { display: grid; gap: 10px; }
 .cab-tema h1 { font-size: clamp(1.8rem, 6.5vw, 2.5rem); line-height: 1.08; }
+.ouvir-lista summary { cursor: pointer; }
 .ouvir-lista ul { margin: 4px 0 0; padding-left: 18px; color: var(--apagado); font-size: 0.93rem; display: grid; gap: 2px; }
 .bloco { display: grid; gap: 12px; padding-top: 22px; border-top: 1px solid var(--linha); min-width: 0; }
 .bloco h2 { font-size: 1.45rem; line-height: 1.15; }
@@ -183,7 +184,6 @@ figure.exemplo .andamento input { width: 110px; }
 .opcao-p .opcao { text-align: center; } .opcao-cab { font-size: 0.95rem; }
 .questao .q span:last-child { flex: 1; }
 .comparacao td.atencao { color: var(--aviso); font-weight: 700; } .comparacao td { white-space: normal !important; }
-.dica-pausa { font-size: 0.85rem; color: var(--apagado); margin: 0; }
 details.nivel > summary { list-style: none; cursor: pointer; display: grid; gap: 4px; }
 details.nivel > summary::-webkit-details-marker { display: none; }
 details.nivel > summary h2::after { content: " ▾"; font-size: 0.9rem; color: var(--apagado); }
@@ -352,7 +352,7 @@ function desenharInicio() {
   let h = `<header class="topo">
     <div class="rotulo">Ateliê de composição</div>
     <h1>Da regra à <em>liberdade</em></h1>
-    <p class="lead">Um livro de composição em capítulos: em cada um, a regra como os tratados a ensinavam, um exemplo comentado decisão por decisão, como os compositores a quebraram — e exercícios corrigidos na hora, do completar ao livre.</p>
+    <p class="lead">A regra, como quebrá-la, e exercícios corrigidos na hora.</p>
   </header>` + treinoDeHojeHTML();
   // níveis recolhíveis (o livro é longo); abre o nível em que você está
   let cap = 0;
@@ -433,7 +433,7 @@ function treinoDeHojeHTML() {
   if (tomEx && (est.antes || {})[tomEx.t.id]) {
     const st = est.exercicios[tomEx.e.id] || {};
     const feito = st.diaFeito === diaDeHoje();
-    itens.push(`<li><b>${feito ? "✓ " : ""}${esc(tomEx.e.titulo.replace("no tom do dia", ""))} em ${nomeTom(st.tom || Tr.tomDoDia(tomEx.e.tomDoDia))}</b><span>Transpor até ficar automático, como os napolitanos faziam com a regra da oitava.</span>
+    itens.push(`<li><b>${feito ? "✓ " : ""}${esc(tomEx.e.titulo.replace("no tom do dia", ""))} em ${nomeTom(st.tom || Tr.tomDoDia(tomEx.e.tomDoDia))}</b><span>Transposta: até ficar automática.</span>
       <button class="botao" data-sugestao="${tomEx.t.id}|${tomEx.e.id}|">${feito ? "De novo" : "Abrir"}</button></li>`);
   }
   // 3. o próximo passo
@@ -441,7 +441,7 @@ function treinoDeHojeHTML() {
   if (prox) itens.push(`<li><b>Continuar</b><span>${esc(prox.t.titulo)} · <i>${esc(prox.e.titulo)}</i></span><button class="botao primario" data-sugestao="${prox.t.id}|${prox.e.id}|">Abrir</button></li>`);
   const seq = sequenciaDeDias();
   const semana = Object.entries(est.dias || {}).filter(([d]) => { const x = new Date(); x.setDate(x.getDate() - 7); return d > `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`; }).reduce((a, [, n]) => a + n, 0);
-  return `<section class="cartao hoje"><div class="hoje-cab"><div><div class="rotulo">Treino de hoje</div><h2>Uma sessão curta, todo dia</h2></div>
+  return `<section class="cartao hoje"><div class="hoje-cab"><div><div class="rotulo">Treino de hoje</div><h2>Hoje</h2></div>
     <div class="hoje-num"><b>${seq}</b><span>dia${seq === 1 ? "" : "s"} seguido${seq === 1 ? "" : "s"}</span><small>${semana} exercício${semana === 1 ? "" : "s"} na semana</small></div></div>
     <ul class="hoje-lista">${itens.join("")}</ul></section>`;
 }
@@ -497,7 +497,7 @@ function desenharTema(t) {
   const ant = temasEmOrdem[idx - 1], prox = temasEmOrdem[idx + 1];
   let h = `<nav class="migalha"><a href="#">Ateliê</a> · Nível ${t.nivel.numero} · ${esc(t.nivel.titulo)}</nav>
     <header class="cab-tema"><h1>${esc(t.titulo)}</h1><p class="lead">${esc(t.objetivo)}</p>
-    ${t.ouvir && t.ouvir.length ? `<div class="ouvir-lista"><span class="rotulo">Para ouvir e estudar</span><ul>${t.ouvir.map((o) => `<li>${esc(o)}</li>`).join("")}</ul></div>` : ""}</header>`;
+    ${t.ouvir && t.ouvir.length ? `<details class="ouvir-lista"><summary class="rotulo">Para ouvir (${t.ouvir.length})</summary><ul>${t.ouvir.map((o) => `<li>${esc(o)}</li>`).join("")}</ul></details>` : ""}</header>`;
   // sumário do capítulo: cada seção com âncora
   const ROTULO = { texto: "", exemplo: "Exemplo", contraste: "Contraste", quebra: "Como quebrar" };
   const ancora = (k) => `${t.id}-s${k}`;
@@ -514,7 +514,7 @@ function desenharTema(t) {
         h += `<div class="camada"><div class="camada-cab"><span class="num">${k + 1}</span><b>${esc(c.titulo)}</b></div>${c.texto ? `<p>${c.texto}</p>` : ""}
           ${c.partitura ? reg(c) : ""}
           ${(c.notas || []).map((x) => `<p class="nota-decisao ${x[0]}"><span class="tag">${{ decisao: "decisão", rejeitada: "alternativa descartada", checagem: "checagem" }[x[0]]}</span>${bonitoTexto(x[1])}</p>`).join("")}
-          ${c.pausa ? `<div class="pausa"><p><b>Pausa:</b> ${c.pausa[0]}</p><p class="dica-pausa">Pense (ou toque o exemplo) antes de abrir o comentário.</p>
+          ${c.pausa ? `<div class="pausa"><p><b>Pausa:</b> ${c.pausa[0]}</p>
             <button class="botao revelar" type="button">Ver o comentário</button><p class="comentario" hidden>${c.pausa[1]}</p></div>` : ""}</div>`;
       });
       h += `</section>`;
@@ -525,8 +525,7 @@ function desenharTema(t) {
         <button class="botao revelar" type="button">Ver o comentário</button><div class="comentario" hidden>${s.comentario}</div></section>`;
     }
   });
-  h += `<section class="bloco exercicios" id="${t.id}-ex"><div class="rotulo">Compor</div><h2>Exercícios</h2>
-    <p class="lead">Em ordem: completar, com menos apoio, com restrição, livre e uma variante sua. Se o primeiro sair limpo, pule para o livre.</p><ol class="lista-ex">`;
+  h += `<section class="bloco exercicios" id="${t.id}-ex"><div class="rotulo">Compor</div><h2>Exercícios</h2><ol class="lista-ex">`;
   t.exercicios.forEach((e, k) => {
     const st = est.exercicios[e.id];
     h += `<li><button class="ex-link ${st && st.aprovado ? "feito" : ""}" data-ex="${k}"><span class="n">${k + 1}</span><span class="t"><b>${esc(e.titulo)}</b><small>${esc(e.modo || "")}${st && st.aprovado ? " · aprovado" : st && st.rascunho ? " · em andamento" : ""}</small></span></button></li>`;
@@ -563,7 +562,7 @@ function abrirExercicio(t, e, textoInicial) {
     oficina = null;
     caixa.innerHTML = `<section class="cartao antes-ex"><div class="rotulo">Antes de compor</div>
       <h2>${esc(e.titulo)}</h2><div class="of-instrucoes">${e.instrucoes}</div>
-      <p class="lead-p">Responda às perguntas sobre as decisões deste tema. Elas valem para todos os exercícios dele; a partitura abre quando todas estiverem certas.</p>
+      <p class="lead-p">Três perguntas antes de compor (uma vez por capítulo).</p>
       <div class="quiz"></div><button class="botao primario grande" id="compor" disabled>Compor</button></section>`;
     montarQuiz(caixa.querySelector(".quiz"), t.antes, true, () => { $("compor").disabled = false; });
     $("compor").addEventListener("click", () => { est.antes = { ...(est.antes || {}), [t.id]: true }; salvar(); abrirExercicio(t, e, textoInicial); });
@@ -734,12 +733,12 @@ function mostrarDepois(t, e, tx, cifras) {
   const s = document.createElement("section");
   s.className = "cartao depois";
   s.innerHTML = (e._segunda ? comparacaoHTML(e._segunda, tx, cf, "1ª solução", "2ª solução", "Duas soluções corretas",
-      "O que ficou igual nas duas é o que o exercício (e o estilo) exige; o que mudou é escolha sua. Ouça as duas: qual decisão estrutural fez a diferença — o clímax, o contorno, as consonâncias perfeitas? Esse é o princípio que Schoenberg pedia.")
+      "O que ficou igual é o que o estilo exige; o que mudou é escolha sua.")
     : `<div class="rotulo">Aprovado</div>
-      ${temProf ? `<p class="lead-p">Agora compare com a versão do professor: as duas partituras lado a lado, com os mesmos números.</p>
-        <button class="botao primario" id="ver-prof">Comparar com a versão do professor</button><div id="prof" hidden></div>`
+      ${temProf ? `
+        <button class="botao primario" id="ver-prof">Comparar com o professor</button><div id="prof" hidden></div>`
       : `<ul class="relatorio">${prior.map((i) => `<li class="${i.nivel}"><b>${esc(i.titulo)}</b><span class="v">${esc(i.valor)}</span><small>Referência: ${esc(i.referencia)}. ${esc(i.nota)}</small></li>`).join("")}</ul>`}`) + `
-    ${e._segunda ? "" : `<button class="botao" id="outra">Desafio: outra solução correta</button><p class="lead-p">Schoenberg pedia uma segunda solução, diferente de verdade, e depois o princípio comum às duas.</p>`}
+    ${e._segunda ? "" : `<button class="botao" id="outra">Desafio: outra solução correta</button>`}
     ${proximo ? `<button class="botao primario grande" id="proximo">${proximo.rotulo}</button>` : ""}`;
   caixa.appendChild(s);
   if (e._segunda) montarExemplos(s);
@@ -757,8 +756,8 @@ function mostrarDepois(t, e, tx, cifras) {
       const sol = e.solucao || solucaoGerada(e, tx);
       if (!sol) { b.textContent = "Não achei uma solução a tempo"; return; }
       const nota = e.comentarioSolucao && e.solucao ? e.comentarioSolucao
-        : e.solucao ? "Onde as duas diferem — o clímax, as consonâncias perfeitas, o movimento — está a decisão a examinar. Ouça as duas antes de julgar."
-          : "Solução encontrada agora pelo verificador para o seu cantus firmus: correta, não necessariamente bonita. Compare o contorno e as escolhas de consonância com as suas.";
+        : e.solucao ? "Ouça as duas: a diferença está numa decisão (clímax, perfeitas, movimento)."
+          : "Gerada pelo verificador para o seu cantus: correta, não necessariamente bonita.";
       d.innerHTML = comparacaoHTML(tx, sol, cf, "Sua solução", "Professor", "Você × professor", nota, cifrasDaSolucao(sol, e), cifras);
       d.hidden = false;
       montarExemplos(d);

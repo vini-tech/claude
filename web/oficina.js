@@ -194,7 +194,7 @@
       let selo = "Escrevendo", classe = "andamento", chips = "";
       if (!v) selo = "—", classe = "neutro";
       else if (!est.terminado) {
-        prog.innerHTML = "Embaixo das notas aparecem os intervalos entre as vozes: <b class=\"t-erro\">vermelho</b> quando há erro, <b class=\"t-aviso\">âmbar</b> quando há aviso. Quando acabar, toque em <b>Terminei</b> para a correção completa, com as explicações.";
+        prog.innerHTML = "Intervalos ao vivo: <b class=\"t-erro\">erro</b> · <b class=\"t-aviso\">aviso</b>. Toque em <b>Terminei</b> para corrigir.";
         prog.hidden = false;
       } else if (est.falta) {
         selo = "Incompleto"; classe = "reprovado";
@@ -206,7 +206,7 @@
         classe = v.aprovado ? "aprovado" : "reprovado";
         if (!v.visiveis.length) { nada.textContent = "Nenhuma regra quebrada. Toque em Ouvir e escute o resultado."; nada.hidden = false; }
         if (v.aprovado) ter.hidden = true;
-        else { ter.textContent = "Corrigir de novo"; prog.textContent = "Toque num item para ver onde está, por que é um problema e como corrigir. Depois de mudar a partitura, toque em Corrigir de novo."; prog.hidden = false; }
+        else { ter.textContent = "Corrigir de novo"; prog.textContent = "Toque num item para ver o problema e a correção."; prog.hidden = false; }
         v.visiveis.forEach((a, k) => {
           const li = document.createElement("li");
           const b = document.createElement("button");
