@@ -419,6 +419,14 @@
           }
           // nota comum com o acorde seguinte (ex.: a 7ª diminuta de nota comum, #ii°42 → I): pode ficar
           if (seg.ps === n.ps && prox && prox.notas && prox.notas.has(n.altura.nome)) continue;
+          // resolução adiada: a 7ª fica (ligada ou repetida) sobre o acorde seguinte, como um 4–3, e desce
+          // por grau ainda dentro dele
+          if (seg.ps === n.ps && prox) {
+            let fimProx = prox.fim;
+            for (let j = k + 2; hs[j] && hs[j].texto === prox.texto; j++) fimProx = hs[j].fim;
+            const depois = v.notas.slice(v.notas.indexOf(n) + 1).find((x) => x.ps !== n.ps);
+            if (depois && depois.inicio < fimProx && F.direcao(n, depois) < 0 && (F.ehGrau(n, depois) || n.ps - depois.ps === 1)) continue;
+          }
           if (seg === n) { yield [c, `${v.nome}: a 7ª de ${h.texto} (${n.nome}) fica presa no acorde seguinte em vez de descer`, [n]]; continue; }
           // desce um grau, ou um semitom cromático (ré → ré♭, no cromatismo linear)
           if (F.direcao(n, seg) < 0 && (F.ehGrau(n, seg) || n.ps - seg.ps === 1)) continue;
@@ -428,6 +436,10 @@
             && prox.cifra.grau === 1 && prox.cifra.membroBaixo === 1 && i < ex.vozes.length - 1
             && F.ehGrau(n, seg) && F.direcao(n, seg) > 0 && b1 && F.ehGrau(b0, b1) && F.direcao(b0, b1) > 0;
           if (licenca) continue;
+          // licença: vii°7/V → I6/4 cadencial no maior, a 7ª sobe meio tom cromático à 3ª do I (mi♭ → mi em dó)
+          const sec = h.cifra.secundaria;
+          if (sec && sec.tipo === 7 && sec.alvo === 5 && prox && prox.cifra && prox.cifra.seisQuatro && prox.cifra.grau === 1
+            && h.tom.modo !== "minor" && seg.ps - n.ps === 1 && seg.altura.letra === n.altura.letra) continue;
           yield [c, `${v.nome}: ${n.nome} é a 7ª de ${h.texto} e devia descer um grau, mas vai para ${seg.nome}`, [n, seg]];
         }
       }

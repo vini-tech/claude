@@ -124,6 +124,7 @@
   // perfil do capítulo: o cromatismo é permitido, os saltos aumentados não
   const { intervalo_melodico_aumentado_diminuto: _i, dissonancia_aproximacao: _d, cifras_coerentes: _c, ...BASE } = TONAL;
   const AUM = { ...BASE, aum_cromatismo: "erro", aum_aproximacao: "aviso", aum_cifras: "erro", aum_resolucao: "erro", aum_ger_64: "erro" };
+  delete AUM.aumentada_resolve; // a do capítulo (aum_resolucao) também confere o acorde seguinte e o dobramento
 
   // ================================================================== capítulo 1
   T.inserir(4, {

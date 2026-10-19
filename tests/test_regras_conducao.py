@@ -107,6 +107,18 @@ def test_sexta_aumentada_e_napolitana():
     ) == [[], aum, [], nap, []]
 
 
+def test_setima_casos_do_revisor():
+    assert acusa(
+        # 7ª repetida ou ligada sobre o I, como um 4–3, e descendo dentro dele
+        (duas("C maior", "F5/2 F5/1 E5/1", "G2/2 C3/2"), "V7 I", SETIMA, None),
+        (duas("C maior", "D5/1 F5/2 E5/1", "G2/2 C3/2"), "V7 I", SETIMA, None),
+        # presa até o fim do I: continua erro
+        (duas("C maior", "F5/2 F5/2", "G2/2 C3/2"), "V7 I", SETIMA, None),
+        # vii°7/V → I6/4 no maior: mi♭ sobe a mi, 3ª do I6/4
+        (duas("C maior", "E-5/2 E5/1 D5/1 C5/4", "F#2/2 G2/1 G2/1 C3/4"), "vii°7/V I64 V I", SETIMA, None),
+    ) == [[], [], SETIMA, []]
+
+
 def test_cadencia_no_tempo_forte():
     regra = ["cadencia_tempo_forte"]
     assert acusa(

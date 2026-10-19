@@ -33,11 +33,13 @@
   const BASE = { ...TONAL };
   delete BASE.intervalo_melodico_aumentado_diminuto;
   delete BASE.cadencias_do_plano;
-  const CROM = { ...BASE, sec_intervalo_melodico: "erro", sec_falsa_relacao: "erro", sec_sensivel_sobe: "erro", sec_setima_desce: "erro", sec_resolve_no_alvo: "erro" };
+  const CROM = { ...BASE, sec_intervalo_melodico: "erro", sec_falsa_relacao: "erro", sec_resolve_no_alvo: "erro" };
   const MIST = { ...CROM, sec_sexto_abaixado_desce: "erro" };
   const NAP = { ...MIST, sec_napolitana_desce: "erro" };
+  delete NAP.napolitana_resolve;
   const { intervalo_melodico_aumentado_diminuto: _i, dissonancia_aproximacao: _d, cifras_coerentes: _c, cadencias_do_plano: _p, ...BASE_AUM } = TONAL;
   const AUM = { ...BASE_AUM, aum_cromatismo: "erro", aum_aproximacao: "aviso", aum_cifras: "erro", aum_resolucao: "erro", aum_ger_64: "erro" };
+  delete AUM.aumentada_resolve;
   const CTX = { nivel: 6, plano: {} };
 
   // ================================================================ dominantes secundárias

@@ -78,43 +78,8 @@
     }, { porque: "Quando a alteração passa de uma voz para outra, o ouvido escuta as duas versões da nota como um choque, e a linha cromática que daria sentido à alteração some.",
       corrigir: "Deixe a nota natural e a alterada na mesma voz (fá → fá♯), ou afaste-as com um acorde no meio." });
 
-  M.definirRegra("sec_sensivel_sobe", "Sensível secundária sobe",
-    "Quando um acorde secundário (V/x, vii°/x) vai para o seu alvo, a sensível temporária — a 3ª do V/x, a fundamental do vii°/x — sobe meio tom, nas vozes externas.",
-    function* (ex, ctx) {
-      const hs = harmonias(ex, ctx);
-      for (let k = 0; k + 1 < hs.length; k++) {
-        const h = hs[k], prox = hs[k + 1];
-        if (!h.cifra.secundaria) continue;
-        if (PC(raizDe(prox)) !== PC(alvoDe(h))) continue;
-        const m = R3.membros(h.cifra, h.tom);
-        const sens = h.cifra.secundaria.tipo === 5 ? m[1] : m[0];
-        for (const v of externas(ex)) {
-          const u = ultimaNaHarmonia(v, h);
-          if (!u || !u.prox || u.n.altura.nome !== sens) continue;
-          if (u.prox.ps - u.n.ps !== 1) yield [ex.compassoDe(u.prox.inicio), `${v.nome}: ${nomeBonito(sens)} é a sensível de ${h.texto} e devia subir meio tom (vai a ${u.prox.nome})`, [u.n, u.prox]];
-        }
-      }
-    }, { precisaTom: true, porque: "A nota alterada de uma dominante secundária é a sensível do acorde que ela tonaliza: é ela que faz o ouvido esperar o alvo. Se ela não sobe, a tonicização não se cumpre.",
-      corrigir: "Leve a nota alterada meio tom acima (fá♯ → sol em V/V), na mesma voz." });
-
-  M.definirRegra("sec_setima_desce", "Sétima do acorde secundário desce",
-    "A 7ª de um acorde secundário (V7/x, vii°7/x, viiø7/x) desce por grau nas vozes externas, ou fica parada se o acorde seguinte a contém.",
-    function* (ex, ctx) {
-      const hs = harmonias(ex, ctx);
-      for (let k = 0; k + 1 < hs.length; k++) {
-        const h = hs[k], prox = hs[k + 1];
-        if (!h.cifra.secundaria || !h.cifra.setima) continue;
-        const set = R3.membros(h.cifra, h.tom)[3];
-        for (const v of externas(ex)) {
-          const u = ultimaNaHarmonia(v, h);
-          if (!u || !u.prox || u.n.altura.nome !== set) continue;
-          const d = u.n.ps - u.prox.ps;
-          const fica = d === 0 && prox.notas.has(set);
-          if (!fica && !(F.ehGrau(u.n, u.prox) && d > 0)) yield [ex.compassoDe(u.prox.inicio), `${v.nome}: ${nomeBonito(set)} é a 7ª de ${h.texto} e devia descer por grau (vai a ${u.prox.nome})`, [u.n, u.prox]];
-        }
-      }
-    }, { precisaTom: true, porque: "A 7ª é a dissonância do acorde; como em toda dominante, ela resolve descendo por grau.",
-      corrigir: "Leve a 7ª um grau abaixo no acorde seguinte (ou mantenha-a, se ela pertence ao acorde seguinte, como no V7/V → I6/4)." });
+  // a sensível e a 7ª dos acordes secundários são conferidas pelas regras gerais de regras3.js
+  // (sensivel_sobe, sensivel_frustrada, set_setima), que valem para todos os acordes de dominante
 
   M.definirRegra("sec_resolve_no_alvo", "O acorde secundário vai para o seu alvo",
     "V/x e vii°/x resolvem no acorde x (em qualquer inversão). Valem também a troca de posição do próprio acorde secundário e, para V/V e vii°7/V, o I6/4 cadencial que adia o V.",
@@ -210,15 +175,16 @@
     }, { precisaTom: true, porque: "Usar o acorde de propósito, num lugar escolhido, é o que transforma a regra em vocabulário.",
       corrigir: "Procure os pontos em que o baixo ou a melodia permitem o acorde pedido e reescreva a cifra e as vozes ali." });
   M.PRECISA_FIM.add("sec_acordes_pedidos");
-  for (const id of ["sec_sensivel_sobe", "sec_setima_desce", "sec_resolve_no_alvo", "sec_sexto_abaixado_desce", "sec_napolitana_desce"]) M.OLHA_ADIANTE.add(id);
+  for (const id of ["sec_resolve_no_alvo", "sec_sexto_abaixado_desce", "sec_napolitana_desce"]) M.OLHA_ADIANTE.add(id);
 
   // ------------------------------------------------------------ perfis
 
   const BASE = { ...TONAL };
   delete BASE.intervalo_melodico_aumentado_diminuto;
-  const CROM = { ...BASE, sec_intervalo_melodico: "erro", sec_falsa_relacao: "erro", sec_sensivel_sobe: "erro", sec_setima_desce: "erro", sec_resolve_no_alvo: "erro" };
+  const CROM = { ...BASE, sec_intervalo_melodico: "erro", sec_falsa_relacao: "erro", sec_resolve_no_alvo: "erro" };
   const MIST = { ...CROM, sec_sexto_abaixado_desce: "erro" };
   const NAP = { ...MIST, sec_napolitana_desce: "erro" };
+  delete NAP.napolitana_resolve; // a do capítulo é mais precisa (desce no máximo uma 3ª)
 
   // ------------------------------------------------------------ capítulos
   // cifras de um exemplo a partir da linha do baixo: [[tempo em semínimas, cifra], …]
@@ -296,7 +262,7 @@
           <p>Perde-se a confirmação do alvo; ganha-se impulso.</p>`,
           exemplos: [
             ex("tom: C maior\nsoprano: C5/2 B4/1 G#4/1 G4/2 F#4/2 F4/2 E4/2\nbaixo: C3/2 E3/2 A2/2 D3/2 G2/2 C3/2", "I V7/vi V7/ii V7/V V7 I", { rotulo: "Cadeia mi7–lá7–ré7–sol7–dó: a sensível desce e vira 7ª",
-              perfil: { ...CROM, sec_sensivel_sobe: "info" }, contexto: { plano: {} },
+              perfil: { ...CROM, sensivel_sobe: "info", sensivel_frustrada: "info" }, contexto: { plano: {} },
               comentario: "Soprano sol♯–sol–fá♯–fá–mi: cada sensível cai meio tom e vira a 7ª seguinte, que desce por grau. 'Sensível sobe' fica como informação." }),
             ex("tom: C maior\nsoprano: E5/2 D5/2 C5/2 B4/1 D5/1 C5/4\nbaixo: C3/2 E3/2 F3/2 G3/2 C3/4", "I V7/vi IV V I", { rotulo: "V7/vi → IV: o engano secundário",
               perfil: { ...CROM, sec_resolve_no_alvo: "info" },
@@ -332,7 +298,7 @@
           solucao: "tom: E menor\nsoprano: B4/1 G4/1 G#4/2 A4/1 C5/1 C5/2 B4/1 D5/1 E5/1 G5/1 E5/2 D#5/2 E5/4\nbaixo: E3/2 E3/2 A2/2 D3/2 G2/2 C3/2 C#3/2 B2/2 E3/4",
           solucaoCifras: "i V7/iv iv V7/III III VI V43/V V i",
           comentarioSolucao: "Toniciza iv (sol–sol♯–lá no soprano), III (7ª dó → si) e V (dó–dó♯–si no baixo: VI → V43/V). Clímax sol5 no c. 3." },
-        { id: "sec5", titulo: "Quebrar: cadeia de dominantes em sol maior", modo: "quebrar", perfil: { ...CROM, sec_sensivel_sobe: "info" }, nivel: 6, contexto: { nivel: 6, plano: {} },
+        { id: "sec5", titulo: "Quebrar: cadeia de dominantes em sol maior", modo: "quebrar", perfil: { ...CROM, sensivel_sobe: "info", sensivel_frustrada: "info" }, nivel: 6, contexto: { nivel: 6, plano: {} },
           cifras: ["I", "V7/vi", "V7/ii", "V7/V", "V7", "I"],
           instrucoes: "<p>Cadeia si7–mi7–lá7–ré7–sol. Escreva o soprano: <b>cada sensível desce meio tom e vira a 7ª seguinte</b> (ré♯ → ré, dó♯ → dó); a 7ª continua descendo.</p>",
           texto: "tom: G maior\ncf: baixo\nsoprano:\nbaixo: G2/2 B2/2 E3/2 A2/2 D3/4 G2/4", duracao: 2,
@@ -398,7 +364,7 @@
               perfil: { ...CROM, sec_resolve_no_alvo: "info" },
               comentario: "Baixo cromático de si a sol, soprano em 6ªs. Nenhum vii°7/x vai ao alvo (informação); só o último resolve, no I6/4." }),
             ex("tom: C maior\nsoprano: E5/1 C5/1 B4/2 A4/4 G4/2 E5/2 F5/2 D5/2 C5/4\nbaixo: C3/2 D3/2 C#3/2 C3/2 B2/2 C3/2 D3/2 G3/2 C3/4", "I V42/vi V65/ii V42/V V65 I ii V7 I", { rotulo: "Dominantes em inversão: baixo ré–dó♯–dó–si–dó",
-              perfil: { ...CROM, sec_sensivel_sobe: "info" },
+              perfil: { ...CROM, sensivel_sobe: "info", sensivel_frustrada: "info" },
               comentario: "Cada 7ª do baixo desce por grau; dó♯ desce a dó porque ré chega já como ré7. O soprano segura lá4 como nota comum." }),
           ] },
       ],
