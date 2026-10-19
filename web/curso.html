@@ -97,7 +97,8 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 500; margin: 0; text-wra
 .camada { display: grid; gap: 10px; padding-left: 14px; border-left: 3px solid var(--linha); min-width: 0; }
 .camada-cab { display: flex; gap: 10px; align-items: center; }
 .camada-cab .num { flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--acento); color: var(--sobre-acento); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
-.nota-decisao { padding: 9px 12px; border-radius: 8px; background: var(--folha); border: 1px solid var(--linha); font-size: 0.98rem; }
+.nota-decisao { margin: 0; padding: 2px 0 2px 10px; border-left: 3px solid var(--linha); font-size: 0.95rem; line-height: 1.45; }
+.nota-decisao.decisao { border-color: var(--acento); } .nota-decisao.rejeitada { border-color: var(--erro); } .nota-decisao.checagem { border-color: var(--ok); }
 .nota-decisao .tag { display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 8px; padding: 1px 8px; border-radius: 999px; vertical-align: 1px; }
 .nota-decisao.decisao .tag { background: var(--acento-suave); color: var(--acento); }
 .nota-decisao.rejeitada .tag { background: var(--erro-fundo); color: var(--erro); }
@@ -513,7 +514,7 @@ function desenharTema(t) {
       s.camadas.forEach((c, k) => {
         h += `<div class="camada"><div class="camada-cab"><span class="num">${k + 1}</span><b>${esc(c.titulo)}</b></div>${c.texto ? `<p>${c.texto}</p>` : ""}
           ${c.partitura ? reg(c) : ""}
-          ${(c.notas || []).map((x) => `<p class="nota-decisao ${x[0]}"><span class="tag">${{ decisao: "decisão", rejeitada: "alternativa descartada", checagem: "checagem" }[x[0]]}</span>${bonitoTexto(x[1])}</p>`).join("")}
+          ${(c.notas || []).map((x) => `<p class="nota-decisao ${x[0]}"><span class="tag">${{ decisao: "decisão", rejeitada: "descartada", checagem: "checagem" }[x[0]]}</span>${bonitoTexto(x[1])}</p>`).join("")}
           ${c.pausa ? `<div class="pausa"><p><b>Pausa:</b> ${c.pausa[0]}</p>
             <button class="botao revelar" type="button">Ver o comentário</button><p class="comentario" hidden>${c.pausa[1]}</p></div>` : ""}</div>`;
       });

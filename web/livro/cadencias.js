@@ -173,24 +173,16 @@
   // ================================================================== CADÊNCIAS
   T.inserir(2, {
     id: "cadencias", titulo: "Cadências",
-    antes: [
-      { p: "Quais são as condições de uma cadência autêntica perfeita?", o: ["V(7) e I em estado fundamental, com a tônica na voz de cima no acorde final", "V–I com qualquer inversão, desde que a melodia termine na tônica", "IV–I com a tônica na melodia", "V–I em estado fundamental com a 3ª do I na melodia"], e: "As três condições juntas: dominante e tônica em estado fundamental (baixo 5→1) e 1̂ na melodia. Com o I invertido, ou com 3̂/5̂ em cima, a cadência é imperfeita; IV–I é plagal." },
-      { p: "Em lá menor, a semicadência frígia é:", o: ["iv6 → V: fá no baixo descendo meio tom para mi", "ii°6 → i", "V → VI", "iv → i em estado fundamental"], e: "O nome vem do semitom descendente no baixo (♭6̂→5̂), o mesmo da cadência do modo frígio. Por cima, a voz superior sobe ré→mi: as externas abrem de uma 6ª para a 8ª." },
-      { p: "O 6/4 cadencial:", o: ["Cai num tempo mais forte que o V que o resolve, sobre o mesmo baixo (5̂), com 6–5 e 4–3", "Cai no tempo fraco, logo antes do V", "É o I em 2ª inversão e pode fechar a frase", "Resolve no IV"], e: "É uma dupla apojatura do V: a 6ª e a 4ª acima do baixo resolvem descendo sobre o mesmo baixo. Como toda apojatura, precisa do apoio métrico; no tempo fraco soa como erro de ritmo." },
-    ],
-    objetivo: "Escolher a cadência certa para cada ponto da frase — perfeita, imperfeita, semicadência (inclusive a frígia), plagal, de engano ou evitada — e escrevê-la no par soprano–baixo com o 6/4 cadencial no lugar métrico certo.",
+    objetivo: "Escolher a cadência de cada ponto da frase e escrevê-la no par soprano–baixo, com o 6/4 cadencial no tempo certo.",
     ouvir: [
-      "Bach, Concerto de Brandemburgo nº 3, o 'Adagio' entre os dois Allegros: só uma semicadência frígia em mi menor",
-      "Corais de Bach: compare os fins de verso (semicadências, cadências de engano) com o fim do coral",
-      "Mozart, Sonata K. 545, 1º mov.: cadências perfeitas com 6/4 cadencial",
-      "Händel, Messias, 'Hallelujah': o fim plagal (IV–I) depois da última pausa",
-      "Wagner, Tristão e Isolda, Prelúdio: a cadência de engano em fá maior (VI de lá menor) no c. 17",
-      "Schumann, Dichterliebe nº 1, 'Im wunderschönen Monat Mai': termina num acorde de 7ª de dominante sem resolução",
+      "Bach, Brandemburgo nº 3, Adagio: uma semicadência frígia",
+      "Mozart, Sonata K. 545, 1º mov.: CAP com 6/4 cadencial",
+      "Wagner, Prelúdio de Tristão, c. 17: cadência de engano",
     ],
     esboco: "Pense numa melodia de 8 compassos em sol maior que você conheça (ou invente). Onde ela respira no meio? Que nota tem a melodia ali, e que acorde você poria por baixo? E no fim?",
     secoes: [
       { tipo: "texto", rotulo: "A regra", titulo: "Os tipos de cadência e a sua força", html: `
-        <p>Cadência é a fórmula que <b>fecha uma frase</b> ou uma parte dela. As cláusulas do contraponto renascentista já eram fórmulas de duas vozes (a sensível sobe, o 2º grau desce, a 6ª maior abre para a 8ª); Rameau (1722) as transformou em progressões de acordes, com a <i>cadence parfaite</i> (V–I, baixo fundamental descendo uma 5ª) como modelo; Koch (1782–93) mede a forma pelos pontos de repouso. Os manuais modernos (Aldwell &amp; Schachter, Kostka &amp; Payne) e Caplin (<i>Classical Form</i>, 1998) usam a mesma tipologia:</p>
+        <p>Cadência: fórmula que <b>fecha uma frase</b> (Rameau, 1722; Caplin, 1998).</p>
         <table class="tabela-modos"><thead><tr><th>Tipo</th><th>Harmonia</th><th>Baixo</th><th>Voz de cima</th><th>Efeito</th><th>Lugar na frase</th></tr></thead><tbody>
         <tr><td><b>Autêntica perfeita</b> (CAP)</td><td>V(7) → I, ambos em fundamental</td><td>5 → 1</td><td>termina em 1̂</td><td>fechamento completo</td><td>fim do consequente, fim de seção</td></tr>
         <tr><td><b>Autêntica imperfeita</b> (CAI)</td><td>V → I com 3̂ ou 5̂ em cima (ou vii°6–I, V6–I)</td><td>5 → 1 (ou 7/2 → 1)</td><td>3̂ ou 5̂</td><td>fecha, mas deixa algo em aberto</td><td>fim de frase interna, antecedente forte</td></tr>
@@ -334,11 +326,6 @@
 
   T.inserir(2, {
     id: "funcao", titulo: "Função e progressão",
-    antes: [
-      { p: "Qual é a ordem normativa das funções numa frase tonal?", o: ["T → PD → D → T", "T → D → PD → T", "PD → T → D → T", "D → PD → T → D"], e: "Tônica, pré-dominante, dominante, tônica: o modelo de frase dos manuais (Aldwell & Schachter, Kostka & Payne). A pré-dominante prepara a dominante; a dominante cria a expectativa que a tônica resolve." },
-      { p: "Para Schoenberg, que movimento de fundamental é 'forte' (ascendente)?", o: ["4ª acima (= 5ª abaixo) ou 3ª abaixo, como V–I e I–vi", "4ª abaixo ou 3ª acima, como I–V e I–iii", "Por grau, como IV–V", "A mesma fundamental em outra inversão"], e: "Nas progressões fortes, a fundamental do primeiro acorde passa a ser um membro secundário do seguinte (o sol de G vira a 5ª de C). As descendentes (I–V, I–iii) fazem o contrário; as superfortes (por grau) não têm nota comum." },
-      { p: "Por que V → IV é chamado de retrogressão?", o: ["Porque volta da dominante para a pré-dominante, desfazendo a tensão sem resolvê-la", "Porque produz 5ªs paralelas inevitáveis", "Porque toda fundamental que desce por grau é proibida", "Porque o IV não pode seguir nenhum acorde maior"], e: "A dominante pede a tônica; voltar à pré-dominante anda para trás no caminho T → PD → D → T. No estilo estrito ela só é aceita quando o IV6 é de passagem (baixo 5–6–7). No blues e no rock, V–IV–I é idioma." },
-    ],
     objetivo: "Encadear acordes pela função (T–PD–D–T), escolhendo o movimento das fundamentais e os substitutos (vi, ii/IV, iii) pelo efeito que produzem — e reconhecer quando a retrogressão é um recurso, e não um erro.",
     ouvir: [
       "Corais de Bach: quase todas as progressões são de 5ª descendente ou substitutos dela",
