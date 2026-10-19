@@ -279,7 +279,10 @@ details.nivel:not([open]) > summary h2::after { content: " ▸"; }
 .doca.recolhida .so-aberta { display: none !important; }
 
 .folha-aviso { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: var(--folha); border-top: 1px solid var(--linha); box-shadow: 0 -8px 30px rgb(0 0 0 / 0.15); padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
-.folha-aviso .dentro { max-width: 640px; margin: 0 auto; display: grid; gap: 10px; }
+.folha-aviso .dentro { max-width: 640px; margin: 0 auto; display: grid; gap: 10px; max-height: 80vh; overflow-y: auto; }
+.legenda th { text-transform: none; letter-spacing: 0; font-size: 0.88rem; color: var(--acento); width: 34%; min-width: 0; }
+.legenda td { color: var(--tinta); }
+.ler-cifras { justify-self: start; min-height: 36px; padding: 6px 14px; font-size: 0.85rem; }
 .folha-aviso p { margin: 0; }
 .brinde { position: fixed; left: 50%; top: calc(16px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); z-index: 40; background: var(--ok); color: var(--sobre-acento); padding: 8px 16px; border-radius: 999px; font-weight: 700; box-shadow: 0 6px 20px rgb(0 0 0 / 0.2); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
@@ -333,6 +336,27 @@ const exFeito = (id) => est.exercicios[id] && est.exercicios[id].aprovado;
 
 function folha(html) { $("folha-dentro").innerHTML = html; $("folha").hidden = false; }
 function fecharFolha() { $("folha").hidden = true; }
+// legenda das cifras: abre de qualquer capítulo
+const LEGENDA = [
+  ["I · ii · vii°", "grau do acorde: maiúscula = maior, minúscula = menor, ° = diminuto, + = aumentado"],
+  ["V6 · V64", "inversão: 6 = 3ª no baixo; 64 = 5ª no baixo"],
+  ["V7 · V65 · V43 · V42", "acorde de 7ª: fundamental no baixo · 3ª · 5ª · 7ª no baixo"],
+  ["5/3 · 6 · 6/4", "baixo cifrado: os intervalos acima do baixo. 5/3 = estado fundamental, 6 = 1ª inversão, 6/4 = 2ª inversão"],
+  ["7 · 6/5 · 6/4/3 · 4/2", "o mesmo com 7ª: = V7 · V65 · V43 · V42 (6/4/3 é o nome completo de 43)"],
+  ["♯6 · ♭3 · ♮", "a nota a essa distância do baixo, alterada"],
+  ["7–6 · 4–3 · 9–8 · 2–3", "retardo: o intervalo da dissonância presa → o da resolução"],
+  ["1–7–6 · 3–2–1", "graus da escala (na melodia ou no baixo), não acordes"],
+  ["V/V · V7/ii", "dominante secundária: o V do V, o V7 do ii"],
+  ["vi=ii", "acorde-pivô: vi no tom velho, ii no novo"],
+  ["G: ii6", "daqui em diante, os graus são do tom de sol maior"],
+  ["bVI · iv (no maior)", "empréstimo do modo menor"],
+  ["N6 · It6 · Fr43 · Ger65", "napolitana · sextas aumentadas italiana, francesa, alemã"],
+];
+function mostrarLegenda() {
+  folha(`<p><b>Como ler as cifras</b></p><table class="tabela-modos legenda"><tbody>${LEGENDA.map(([a, b]) => `<tr><th scope="row">${a}</th><td>${b}</td></tr>`).join("")}</tbody></table>
+    <button class="botao primario" id="fechar-legenda">Fechar</button>`);
+  $("fechar-legenda").addEventListener("click", fecharFolha);
+}
 let tBrinde = null;
 function brinde(msg) { const b = $("brinde"); b.textContent = msg; b.hidden = false; clearTimeout(tBrinde); tBrinde = setTimeout(() => (b.hidden = true), 2400); }
 
@@ -493,6 +517,7 @@ function desenharTema(t) {
   const ant = temasEmOrdem[idx - 1], prox = temasEmOrdem[idx + 1];
   let h = `<nav class="migalha"><a href="#" class="voltar" aria-label="Voltar ao início">←</a><span>Nível ${t.nivel.numero} · ${esc(t.nivel.titulo)}</span></nav>
     <header class="cab-tema"><h1>${esc(t.titulo)}</h1><p class="lead">${esc(t.objetivo)}</p>
+    <button class="botao ler-cifras" type="button">Como ler as cifras</button>
     ${t.ouvir && t.ouvir.length ? `<details class="ouvir-lista"><summary class="rotulo">Para ouvir (${t.ouvir.length})</summary><ul>${t.ouvir.map((o) => `<li>${esc(o)}</li>`).join("")}</ul></details>` : ""}</header>`;
   // sumário do capítulo: cada seção com âncora
   const ROTULO = { texto: "", exemplo: "Exemplo", contraste: "Contraste", quebra: "Como quebrar" };
@@ -531,6 +556,7 @@ function desenharTema(t) {
   montarExemplos($("pagina"));
   for (const a of document.querySelectorAll(".sumario a")) a.addEventListener("click", () => document.getElementById(a.dataset.alvo)?.scrollIntoView({ behavior: "smooth", block: "start" }));
   for (const ta of document.querySelectorAll("textarea[data-nota]")) ta.addEventListener("input", () => guardarNota(ta.dataset.nota, ta.value));
+  document.querySelector(".ler-cifras").addEventListener("click", mostrarLegenda);
   for (const b of document.querySelectorAll(".revelar")) b.addEventListener("click", () => { b.nextElementSibling.hidden = false; b.hidden = true; });
   for (const b of document.querySelectorAll(".ex-link")) b.addEventListener("click", () => abrirExercicio(t, t.exercicios[+b.dataset.ex]));
 }

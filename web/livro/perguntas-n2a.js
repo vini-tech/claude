@@ -62,7 +62,7 @@
       o: [
         "IV6 de passagem: baixo 5–6–7 entre duas dominantes (V – IV6 – V65)",
         { texto: "Porque o IV6 está invertido: retrogressão só conta entre acordes em estado fundamental", por: "V → ii6 também é invertido e é retrogressão. O que salva o IV6 é o baixo de passagem." },
-        { texto: "Porque na subida o 6º grau é um grau estável", por: "Só 1 e 5 são estáveis (5/3); o 6 leva sexta porque aponta para o 7." },
+        { texto: "Porque na subida o 6º grau é um grau estável", por: "Só 1 e 5 são estáveis (acorde em estado fundamental); o 6 leva sexta porque aponta para o 7." },
         { texto: "Porque o IV6 resolve diretamente na tônica", por: "O IV6 vai ao V65, não ao I." },
       ],
       e: "Função se mede no caminho: sol3 é passagem entre fá3 e lá3. Se o baixo voltasse ou saltasse, seria retrogressão." },

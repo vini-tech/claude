@@ -292,9 +292,9 @@
         <li><b>Retardo:</b> tempo mais forte, mesma nota ligada; o baixo muda.</li>
         <li><b>Resolução:</b> grau abaixo, nota do acorde que soa então (o baixo pode mudar).</li></ol>
         <table class="tabela-modos"><thead><tr><th>Retardo</th><th>Onde aparece</th><th>Exemplo em dó maior</th><th>Cuidado</th></tr></thead><tbody>
-        <tr><td><b>4–3</b></td><td>sobre o V (cadência), sobre qualquer 5/3</td><td>dó5 do IV preso sobre sol → si4</td><td>a 3ª de resolução não deve soar ao mesmo tempo em outra voz</td></tr>
+        <tr><td><b>4–3</b></td><td>sobre o V (cadência), sobre qualquer acorde em estado fundamental</td><td>dó5 do IV preso sobre sol → si4</td><td>a 3ª de resolução não deve soar ao mesmo tempo em outra voz</td></tr>
         <tr><td><b>7–6</b></td><td>sobre acordes de sexta, baixo descendo por grau</td><td>dó5 (6ª sobre mi3) preso sobre ré3 → si4</td><td>em cadeia: o modelo de Corelli; a 6ª de resolução vira a preparação seguinte</td></tr>
-        <tr><td><b>9–8</b></td><td>sobre 5/3 em estado fundamental</td><td>mi5 do V preso sobre ré3 (em ré menor) → ré5</td><td>resolve numa 8ª: em cadeia, as 8ªs ficam paralelas por baixo do atraso — evite encadear</td></tr>
+        <tr><td><b>9–8</b></td><td>sobre acorde em estado fundamental</td><td>mi5 do V preso sobre ré3 (em ré menor) → ré5</td><td>resolve numa 8ª: em cadeia, as 8ªs ficam paralelas por baixo do atraso — evite encadear</td></tr>
         <tr><td><b>2–3</b> (baixo)</td><td>baixo preso, voz de cima ataca</td><td>baixo dó3 preso sob ré5 → si2 (V6)</td><td>a voz de cima ataca no tempo forte; quem resolve é o baixo</td></tr>
         </tbody></table>
         <h3>Cadeias e resoluções ornamentadas</h3>

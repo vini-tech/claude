@@ -330,16 +330,17 @@
           esboco: "Sem consultar a aula: que acorde você poria sobre o 7º grau subindo (si, em dó)? E descendo?",
           secoes: [
             { tipo: "texto", titulo: "Um acorde por grau, segundo a direção", html: `
-              <p><b>Regra da Oitava</b> (Campion, 1716): graus <b>1 e 5</b> levam 5/3; os outros, acordes de sexta que <b>apontam para o próximo grau estável</b>.</p>
-              <table class="tabela-modos"><thead><tr><th>Grau</th><th>Subindo</th><th>Descendo</th></tr></thead><tbody>
-              <tr><td>8 / 1</td><td>5/3 · I</td><td>5/3 · I</td></tr>
-              <tr><td>7</td><td>6/5 · V65 (vai ao 1)</td><td>6 · V6</td></tr>
-              <tr><td>6</td><td>6 · IV6</td><td>♯6/4/3 · V43/V (vai ao 5) — na versão diatônica, IV6</td></tr>
-              <tr><td>5</td><td>5/3 · V</td><td>5/3 · V</td></tr>
-              <tr><td>4</td><td>6/5 · ii65 (vai ao 5)</td><td>4/2 · V42 (resolve no 3)</td></tr>
-              <tr><td>3</td><td>6 · I6</td><td>6 · I6</td></tr>
-              <tr><td>2</td><td>6/4/3 · V43</td><td>6/4/3 · V43</td></tr>
+              <p><b>Regra da Oitava</b> (Campion, 1716): sobre os graus <b>1 e 5</b>, acorde em estado fundamental; nos outros, inversões que <b>apontam para o próximo grau estável</b>. Entre parênteses, o mesmo acorde em baixo cifrado (intervalos acima do baixo), como os partimentos escrevem.</p>
+              <table class="tabela-modos"><thead><tr><th>Grau do baixo</th><th>Subindo</th><th>Descendo</th></tr></thead><tbody>
+              <tr><td>8 / 1</td><td>I <small>(5/3)</small></td><td>I <small>(5/3)</small></td></tr>
+              <tr><td>7</td><td>V65 <small>(6/5)</small> → 1</td><td>V6 <small>(6)</small></td></tr>
+              <tr><td>6</td><td>IV6 <small>(6)</small></td><td>V43/V <small>(♯6/4/3)</small> → 5; diatônico: IV6</td></tr>
+              <tr><td>5</td><td>V <small>(5/3)</small></td><td>V <small>(5/3)</small></td></tr>
+              <tr><td>4</td><td>ii65 <small>(6/5)</small> → 5</td><td>V42 <small>(4/2)</small> → 3</td></tr>
+              <tr><td>3</td><td>I6 <small>(6)</small></td><td>I6 <small>(6)</small></td></tr>
+              <tr><td>2</td><td>V43 <small>(6/4/3)</small></td><td>V43 <small>(6/4/3)</small></td></tr>
               </tbody></table>
+              <p><small>Leia: 6 = 1ª inversão; 6/5, 6/4/3, 4/2 = acorde de 7ª na 1ª, 2ª, 3ª inversão (= 65, 43, 42); ♯6 = a 6ª acima do baixo, alterada.</small></p>
               <ul><li>4º grau: subindo prepara o 5; descendo é 7ª do V e cai no 3.</li>
               <li>6º grau descendo: ♯4 do tom (V/V), para o 5 chegar como meta.</li>
               <li>Baixo por grau: a regra dá a harmonia. Saltos: fundamental na articulação, sexta no meio.</li>
@@ -481,7 +482,7 @@
               <tr><td rowspan="3">continuação</td><td>Monte</td><td colspan="2">sobe, tonicizando IV e V</td></tr>
               <tr><td>Fonte</td><td colspan="2">desce, ii e I</td></tr>
               <tr><td>Ponte</td><td colspan="2">prolonga o V</td></tr>
-              <tr><td>cadência</td><td colspan="3">simples, composta (6/4–5/3 sobre 5), dupla; convergente (4–♯4–5) na semicadência; Quiescenza no fim</td></tr>
+              <tr><td>cadência</td><td colspan="3">simples, composta (I64–V sobre o 5), dupla; convergente (baixo 4–♯4–5) na semicadência; Quiescenza no fim</td></tr>
               </tbody></table>
               <p>Gramática: <b>abertura → Prinner → (continuação) → cadência</b>; ligações por nota comum ou grau no soprano, contrário ou 10ªs no baixo; ritmo harmônico acelerando.</p>` },
             { tipo: "exemplo", titulo: "Do-Re-Mi → Prinner → cadência composta",

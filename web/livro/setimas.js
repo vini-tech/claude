@@ -450,10 +450,10 @@
               ["rejeitada", "V (ré3) sob fá♯5: mais comum, mas perde a 7ª maior sobre a tônica."]],
             pausa: ["Por que a 7ª do ii7 (sol) não está no par externo?", "A melodia está na 3ª (dó), que será 7ª do V7; o sol fica numa voz interna. Só uma 7ª da cadeia cabe no soprano."] },
         ] },
-      { tipo: "exemplo", titulo: "A cadeia 7 – 65", intro: "Dó maior. Quintas descendentes; baixo alternando estado fundamental e 6/5.",
+      { tipo: "exemplo", titulo: "A cadeia 7 – 65", intro: "Dó maior. Quintas descendentes; baixo alternando estado fundamental e 1ª inversão (65).",
         camadas: [
           { titulo: "Baixo e cifras", partitura: "tom: C maior\nbaixo: C3/2 A2 B2 G2 A2 F2 G2 C3/4", rotulos: ["baixo"], cifras: cifrar(P2, P2c),
-            notas: [["decisao", "Fundamentais dó–fá–si–mi–lá–ré–sol–dó; com os 6/5, baixo dó–lá–si–sol–lá–fá–sol–dó, sem o trítono fá–si."]] },
+            notas: [["decisao", "Fundamentais dó–fá–si–mi–lá–ré–sol–dó; com as 1ªs inversões, baixo dó–lá–si–sol–lá–fá–sol–dó, sem o trítono fá–si."]] },
           { titulo: "Com a melodia", partitura: P2, cifras: cifrar(P2, P2c), rotulos: ["soprano", "baixo"], anotacoes: [[0, 1, "7ª"], [0, 3, "7ª"], [0, 5, "7ª"]],
             notas: [["decisao", "Melodia 3–7, 3–7: mi5 é 3ª do I e 7ª do IV65, desce a ré5, que vira 7ª do iii65…"],
               ["rejeitada", "Melodia subindo no meio: quebraria a preparação, e as 7ªs entrariam por salto."],
@@ -482,7 +482,7 @@
     exercicios: [
       { id: "sd1", titulo: "Completar: a cadeia 7 – 65 em ré maior", modo: "completar", perfil: SET, nivel: 6, contexto: { nivel: 6, plano: {} },
         cifras: "I IV65 viiø7 iii65 vi7 ii65 V7 I".split(" "),
-        instrucoes: "<p>Ré maior. A melodia começa em fá♯5 (3ª do I), repetido como 7ª do IV65. Continue: nos acordes em 6/5, a 7ª preparada; nos em estado fundamental, a resolução.</p>",
+        instrucoes: "<p>Ré maior. A melodia começa em fá♯5 (3ª do I), repetido como 7ª do IV65. Continue: nos acordes em 1ª inversão (65), a 7ª preparada; nos em estado fundamental, a resolução.</p>",
         texto: "tom: D maior\ncf: baixo\nsoprano: F#5/2 F#5\nbaixo: D3/2 B2 C#3 A2 B2 G2 A2 D3/4", duracao: 2, alvoCompassos: 4,
         solucao: "tom: D maior\ncf: baixo\nsoprano: F#5/2 F#5 E5 E5 D5 D5 C#5 D5/4\nbaixo: D3/2 B2 C#3 A2 B2 G2 A2 D3/4",
         comentarioSolucao: "Fá♯–fá♯–mi–mi–ré–ré–dó♯–ré: cada nota é 3ª de um acorde e 7ª do seguinte." },
