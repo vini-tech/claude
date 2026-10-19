@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "atelie",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [".claude/servidor.py"],
+      "port": 8765
+    }
+  ]
+}
