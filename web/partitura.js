@@ -1,4 +1,4 @@
-/* Desenho da partitura em SVG, usado pela oficina (index.html) e pelas aulas (curso.html).
+/* Desenho da partitura em SVG, usado pelo Ateliê (curso.html).
  *
  *   const layout = Partitura.desenhar(elemento, ex, opcoes)
  *

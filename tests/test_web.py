@@ -116,11 +116,3 @@ def test_exercicios_aleatorios_iguais():
     diferencas = [(n, t) for (t, n), r in zip(casos, js) if r != rodar_python(t, n)]
     assert not diferencas, diferencas[0]
 
-
-def test_exemplos_js_atualizado():
-    import importlib.util
-    spec = importlib.util.spec_from_file_location("gerar", RAIZ / "web" / "gerar_exemplos.py")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    assert (RAIZ / "web" / "exemplos.js").read_text(encoding="utf-8") == mod.gerar(), \
-        "rode: python web/gerar_exemplos.py"

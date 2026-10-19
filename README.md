@@ -84,11 +84,10 @@ cantus firmi, escolhe o nível, vê a partitura com os erros marcados e ouve o r
 
 | arquivo | o que tem |
 |---------|-----------|
-| `web/index.html` | a página |
+| `web/curso.html` | a página (Ateliê de Composição) |
 | `web/motor.js` | as regras e a tabela de níveis, portadas do Python |
 | `web/editor.js` | o modelo que o piano edita, e a conversão para o formato de texto |
 | `web/cantus.js` | sorteio de cantus firmi; cada um só é aceito se existir contraponto de 1ª espécie sem erros acima e abaixo dele |
-| `web/exemplos.js` | os exemplos de `exercicios/exemplos/`, gerados por `python web/gerar_exemplos.py` |
 
 Na versão web um erro só aparece quando todas as vozes completaram o compasso dele; as regras
 que dependem do fim (cadência, final, ponto culminante) esperam o exercício inteiro. Cada erro
