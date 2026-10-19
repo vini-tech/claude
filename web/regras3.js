@@ -323,7 +323,7 @@
   // ------------------------------------------------------------ notas com destino (7ª, sensível, +6, N)
 
   /* Acordes cifrados agrupados: notas seguidas do baixo com a mesma cifra no mesmo tom são um acorde só.
-   * [{ cifra, tom, texto, inicio, fim, membros, notas (Set, as duas leituras no pivô), baixo }] */
+   * [{ cifra (null se não se lê), tom, texto, inicio, fim, membros, notas (Set, as duas leituras no pivô), baixo, pivo }] */
   const cacheAcordes = new WeakMap(); // ex → { cifras, grupos }: as regras de destino leem a mesma lista
   function acordesCifrados(ex, ctx) {
     const c = cacheAcordes.get(ex);
@@ -331,8 +331,14 @@
     const grupos = [];
     for (const h of harmoniasCifradas(ex, ctx)) {
       const ult = grupos[grupos.length - 1];
-      if (!h.cifra) { if (ult) ult.fim = h.fim; continue; }
-      if (ult && ult.texto === h.texto && ult.tom === h.tom && !h.mudou) { ult.fim = h.fim; continue; }
+      // sem cifra ainda (o aluno não escreveu): o acorde anterior continua; cifra que não se lê (rótulo
+      // de exemplo, como "It (♯4 no baixo)"): um acorde desconhecido, que separa os vizinhos
+      if (!h.cifra) {
+        if (!h.texto) { if (ult) ult.fim = h.fim; }
+        else grupos.push({ cifra: null, texto: h.texto, inicio: h.inicio, fim: h.fim, baixo: h.baixo, membros: [], notas: new Set() });
+        continue;
+      }
+      if (ult && ult.cifra && ult.texto === h.texto && ult.tom === h.tom && !h.mudou) { ult.fim = h.fim; continue; }
       grupos.push({ cifra: h.cifra, tom: h.tom, texto: h.texto, inicio: h.inicio, fim: h.fim, membros: membros(h.cifra, h.tom), notas: h.notas, baixo: h.baixo, pivo: !!h.pivo });
     }
     cacheAcordes.set(ex, { cifras: ctx.cifras, grupos });
@@ -351,7 +357,7 @@
     const cima = ex.vozes[0], baixo = ex.vozes[ex.vozes.length - 1];
     for (let k = 0; k + 1 < gs.length; k++) {
       const g = gs[k], prox = gs[k + 1];
-      if (g.pivo || prox.pivo) continue;
+      if (!g.cifra || !prox.cifra || g.pivo || prox.pivo) continue;
       for (const d of destinos(g, prox, k, gs)) {
         if (prox.notas.has(d.nome)) continue; // nota comum: segue no acorde seguinte
         for (const v of d.soCima ? [cima] : d.soBaixo ? [baixo] : [cima, baixo]) {
@@ -501,7 +507,7 @@
       if (ex.vozes.length < 2) return;
       const sup = ex.vozes[0], bai = ex.vozes[ex.vozes.length - 1];
       for (const g of acordesCifrados(ex, ctx)) {
-        const lt = sensivelDe(g);
+        const lt = g.cifra && sensivelDe(g);
         if (!lt) continue;
         // no ataque do acorde (ou na entrada da voz de cima, se ela estava em pausa): numa diminuição,
         // a sensível que passa depois, no meio do acorde, não é dobramento
@@ -537,6 +543,72 @@
     }, { precisaTom: true, ...EXPL(
       "O ♭2 é uma inflexão para baixo: ele puxa para a tônica e para a sensível. Subindo, ele soa como uma nota errada do 2º grau natural.",
       "Leve o ♭2 para baixo: direto à sensível (ré♭ → si, 3ª diminuta, em dó) ou passando pela tônica (ré♭ → dó → si).") });
+
+  // ------------------------------------------------------------ métrica da harmonia
+
+  // chegada de um acorde: se um I6/4 cadencial com o mesmo baixo vem logo antes, a chegada é a do 6/4
+  function chegada(gs, k) {
+    const g = gs[k], ant = gs[k - 1];
+    return ant && ant.cifra && ant.cifra.seisQuatro && ant.cifra.grau === 1 && ant.baixo.altura.nome === g.baixo.altura.nome ? ant.inicio : g.inicio;
+  }
+
+  def("cadencia_tempo_forte", "Cadência no tempo forte",
+    "O I da cadência final e o V da semicadência chegam num tempo forte (o 1º tempo, ou o meio do compasso nos compassos de 2 e 4 tempos); com o 6/4 cadencial, conta a chegada do 6/4.",
+    function* (ex, ctx) {
+      const pl = ctx.plano || {};
+      if (!pl.cadencia && !pl.semicadencia) return;
+      const gs = acordesCifrados(ex, ctx);
+      const C = ex.duracaoCompasso;
+      const fraco = (t) => ex.forcaMetrica(t) < 2;
+      if (pl.semicadencia) {
+        const k = gs.findIndex((g) => g.inicio < pl.semicadencia * C && g.fim >= pl.semicadencia * C);
+        const g = gs[k];
+        if (g && g.cifra && g.cifra.grau === 5 && !g.cifra.secundaria && fraco(chegada(gs, k))) {
+          yield [ex.compassoDe(g.inicio), `o V da semicadência chega num tempo fraco (compasso ${ex.compassoDe(g.inicio)}); a chegada da frase pede o tempo forte`, [g.baixo]];
+        }
+      }
+      if (pl.cadencia && gs.length) {
+        const k = gs.length - 1, g = gs[k];
+        if (g.cifra && ex.compassoDe(g.inicio) >= pl.cadencia && g.cifra.grau === 1 && g.cifra.membroBaixo === 0 && fraco(g.inicio)) {
+          yield [ex.compassoDe(g.inicio), `o I final chega num tempo fraco (compasso ${ex.compassoDe(g.inicio)}); a cadência pede o tempo forte`, [g.baixo]];
+        }
+      }
+    }, { precisaTom: true, ...EXPL(
+      "A cadência é a chegada da frase, e a chegada se ouve no tempo forte. No tempo fraco ela soa adiantada ou de passagem, e o fim da frase fica mole.",
+      "Desloque a harmonia para que o I final (ou o V da semicadência) caia no 1º tempo: alongue um acorde anterior ou comece a frase em anacruse.") });
+
+  // mesmo acorde sobre o mesmo baixo, com ou sem a 7ª acrescentada (V → V7); trocar a inversão (I → I6)
+  // move o baixo e marca a barra, então não conta
+  function mesmaHarmonia(a, b) {
+    const x = a.cifra, y = b.cifra;
+    if (!x || !y) return false;
+    return a.tom === b.tom && a.baixo.altura.nome === b.baixo.altura.nome && x.grau === y.grau && x.maior === y.maior && (x.alteracao || 0) === (y.alteracao || 0)
+      && !!x.aumentada === !!y.aumentada && !!x.napolitana === !!y.napolitana && !x.seisQuatro && !y.seisQuatro
+      && (!x.secundaria) === (!y.secundaria) && (!x.secundaria || x.secundaria.alvo === y.secundaria.alvo);
+  }
+
+  def("harmonia_sincopada", "Harmonia sincopada",
+    "O mesmo acorde, sobre o mesmo baixo, começa num tempo fraco e continua no 1º tempo do compasso seguinte. Não vale para o acorde inicial (anacruse), para a troca de inversão nem sobre um pedal.",
+    function* (ex, ctx) {
+      const gs = acordesCifrados(ex, ctx);
+      const C = ex.duracaoCompasso;
+      for (let k = 1; k < gs.length; k++) {
+        if (!gs[k].cifra) continue;
+        let fim = gs[k].fim, j = k;
+        while (gs[j + 1] && mesmaHarmonia(gs[k], gs[j + 1])) fim = gs[++j].fim;
+        const ini = gs[k].inicio, barra = (Math.floor(ini / C) + 1) * C;
+        // o acorde anterior já era o mesmo (só acontece com o acorde inicial em anacruse): não é síncope
+        const continua = mesmaHarmonia(gs[k - 1], gs[k]);
+        // pedal: o acorde anterior já estava sobre o mesmo baixo (I – IV6/4 – I sobre a tônica)
+        const pedal = gs[k - 1].baixo.altura.nome === gs[k].baixo.altura.nome;
+        if (!continua && !pedal && ex.forcaMetrica(ini) < 2 && barra < fim) {
+          yield [ex.compassoDe(barra), `${gs[k].texto} começa no tempo fraco do compasso ${ex.compassoDe(ini)} e continua no 1º tempo do ${ex.compassoDe(barra)}`, [gs[k].baixo]];
+        }
+        k = j;
+      }
+    }, { precisaTom: true, ...EXPL(
+      "A troca de acorde marca o tempo forte. Quando o acorde chega no tempo fraco e fica no forte, o ouvido ouve a barra de compasso no lugar errado: a métrica balança.",
+      "Troque o acorde no 1º tempo (ou repita o do tempo fraco só até a barra e mude nela). Se a síncope é proposital (hemíola, pedal), deixe: é só aviso.") });
 
   // ------------------------------------------------------------ esquemas
 
@@ -657,7 +729,7 @@
       "Um baixo só de fundamentais pula o tempo todo e soa como acompanhamento. Com inversões ele vira uma segunda melodia, e a harmonia ganha direção.",
       "Troque fundamentais por inversões que liguem por grau: I–V43–I6, I6–ii6–V, IV6–V."));
 
-  for (const id of ["cadencias_do_plano", "ritmo_harmonico", "climax_no_lugar", "perfeitas_no_meio", "figuras_obrigatorias", "dissonancias_minimas", "baixo_por_grau"]) M.PRECISA_FIM.add(id);
+  for (const id of ["cadencia_tempo_forte", "cadencias_do_plano", "ritmo_harmonico", "climax_no_lugar", "perfeitas_no_meio", "figuras_obrigatorias", "dissonancias_minimas", "baixo_por_grau"]) M.PRECISA_FIM.add(id);
   for (const id of ["seis_quatro", "retrogressao_cifrada", "set_setima", "sensivel_sobe", "sensivel_frustrada", "aumentada_resolve", "napolitana_resolve"]) M.OLHA_ADIANTE.add(id);
   M.PRECISA_FIM.add("modulacao");
 

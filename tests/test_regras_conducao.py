@@ -107,6 +107,32 @@ def test_sexta_aumentada_e_napolitana():
     ) == [[], aum, [], nap, []]
 
 
+def test_cadencia_no_tempo_forte():
+    regra = ["cadencia_tempo_forte"]
+    assert acusa(
+        # I final no 1º tempo do c. 2; depois no 2º tempo (fraco)
+        (duas("C maior", "E5/2 D5/2 C5/4", "C3/2 G2/2 C3/4"), "I V I", regra, {"cadencia": 2}),
+        (duas("C maior", "E5/2 D5/1 D5/2 C5/3", "C3/2 F3/1 G2/2 C3/3"), "I IV V I", regra, {"cadencia": 2}),
+        # semicadência: V no 1º tempo do c. 2, ou com o 6/4 cadencial no 1º tempo e o V no 2º
+        (duas("C maior", "E5/2 C5/2 D5/4", "C3/2 F3/2 G2/4"), "I IV V", regra, {"semicadencia": 2}),
+        (duas("C maior", "E5/2 D5/2 E5/1 D5/3", "C3/2 F3/2 G2/1 G2/3"), "I ii6 I64 V", regra, {"semicadencia": 2}),
+    ) == [[], regra, [], []]
+
+
+def test_harmonia_sincopada():
+    regra = ["harmonia_sincopada"]
+    assert acusa(
+        # V entra no 4º tempo e fica no 1º do compasso seguinte
+        (duas("C maior", "E5/3 D5/2 C5/3", "C3/3 G2/2 C3/3"), "I V I", regra, None),
+        # troca de inversão na barra (i → i6) não é síncope
+        (duas("C maior", "E5/3 C5/1 E5/4", "C3/3 C3/1 E3/4"), "I IV I6", regra, None),
+        # pedal: I – IV6/4 – I sobre a tônica
+        (duas("C maior", "E5/2 F5/1 E5/1 E5/4", "C3/2 C3/1 C3/1 C3/4"), "I IV64 I I", regra, None),
+        # acorde inicial em anacruse
+        (duas("C maior", "G4/1 C5/3 D5/4", "C3/1 C3/3 G2/4"), "I I V", regra, None),
+    ) == [regra, [], [], []]
+
+
 def test_correcoes_da_revisao():
     assert acusa(
         # V+ → I na cadência: a sensível também tem de subir
