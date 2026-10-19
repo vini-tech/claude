@@ -26,7 +26,7 @@
         if (iv.nome === "A1" || iv.nome === "d1" || (iv.semitons === 0 && a.ps === b.ps)) continue;
         if (iv.qual[0] === "A" || iv.qual[0] === "d") yield [ex.compassoDe(b.inicio), `${v.nome}: ${F.nomeIntervalo(iv)} de ${a.nome} para ${b.nome}`, [a, b]];
       }
-    }, { porque: "Saltos aumentados e diminutos são difíceis de cantar e apontam para tons que a harmonia não confirma. O semitom cromático é outra coisa: ele altera a mesma nota e mostra ao ouvido, numa voz só, que a escala mudou.",
+    }, { porque: "Saltos aumentados e diminutos são difíceis de cantar e sugerem tons que a harmonia não confirma; o semitom cromático mostra, numa voz, que a escala mudou.",
       corrigir: "Troque o salto por um intervalo justo, maior ou menor; se a nota alterada é a sensível nova, faça-a chegar pela mesma letra (fá → fá♯) ou por grau." });
 
   def("mod_falsa_relacao", "Falsa relação",
@@ -50,7 +50,7 @@
           }
         }
       }
-    }, { porque: "Quando a forma natural e a alterada da mesma nota soam em vozes diferentes, uma logo depois da outra, o ouvido ouve as duas escalas ao mesmo tempo: a mudança de tom vira um choque em vez de uma inflexão.",
+    }, { porque: "Natural e alterada em vozes diferentes, em sequência: o ouvido ouve as duas escalas e a mudança vira choque.",
       corrigir: "Ponha a alteração na voz que tinha a nota natural (fá → fá♯ no soprano), ou tire a nota natural do acorde anterior." });
 
   def("mod_pivo_predominante", "Pivô pré-dominante no tom novo",
@@ -65,7 +65,7 @@
         else if (g === 1) yield [c, `pivô ${h.texto}: no tom novo ele é a própria tônica — a chegada fica sem preparação`, [h.baixo]];
         else yield [c, `pivô ${h.texto}: funciona, mas o pivô mais claro é pré-dominante no tom novo (ii ou IV; iv em menor)`, [h.baixo]];
       }
-    }, { precisaTom: true, porque: "O pivô pré-dominante já 'aponta' para a dominante do tom novo: a frase segue PD → D → T no tom novo sem que o ouvido perceba a costura. Um pivô que já é V do tom novo soa ao mesmo tempo como estável (no tom velho) e instável (no novo); se for a tônica nova, não há caminho.",
+    }, { precisaTom: true, porque: "O pivô pré-dominante aponta para a dominante nova: PD → D → T sem costura audível. Se já é V do tom novo, soa estável e instável ao mesmo tempo; se é a tônica nova, não há caminho.",
       corrigir: "Procure, entre os acordes comuns aos dois tons, o que é ii ou IV (iv em menor) no tom novo; no tom velho ele costuma ser I, IV ou vi." });
 
   def("mod_caminho", "Tempo entre o pivô e a cadência",
@@ -83,7 +83,7 @@
           break;
         }
       }
-    }, { precisaTom: true, porque: "Os manuais pedem que não se cadencie logo depois do pivô: o ouvido ainda está no tom velho e ouve a cadência como uma tonicização passageira. Um ou dois acordes no tom novo (a pré-dominante, um 6/4 cadencial, uma cadência de engano) dão tempo à mudança.",
+    }, { precisaTom: true, porque: "Logo depois do pivô o ouvido ainda está no tom velho e ouve a cadência como tonicização passageira.",
       corrigir: "Depois do pivô, passe por mais um acorde do tom novo (ii6, IV, I64 cadencial) antes do V–I." });
 
   def("mod_nota_comum", "Nota comum segura no soprano",
@@ -96,7 +96,7 @@
       const s = ex.vozes[0];
       const antes = s.soandoEm(h.inicio - 1), agora = s.soandoEm(h.inicio);
       if (!antes || !agora || antes.ps !== agora.ps) yield [ex.compassoDe(h.inicio), `na entrada do tom novo (${h.texto}) o soprano ${antes && agora ? `vai de ${antes.nome} a ${agora.nome}` : "não tem nota"}; a nota comum deveria ficar parada`, [antes, agora].filter(Boolean)];
-    }, { precisaTom: true, porque: "Sem acorde comum, a única coisa que liga os dois tons é uma nota. Se ela fica no soprano, presa enquanto a harmonia muda por baixo, o ouvido segue o fio e aceita a mudança, por mais distante que seja o tom novo.",
+    }, { precisaTom: true, porque: "Sem acorde comum, só uma nota liga os tons; presa no soprano, o ouvido segue o fio e aceita a mudança.",
       corrigir: "Escolha uma nota que pertença ao último acorde do tom velho e ao primeiro do novo (mi em dó maior e em mi maior) e deixe-a parada no soprano na troca." });
 
   def("mod_grafia_enarmonica", "Grafia pela resolução",
@@ -112,7 +112,7 @@
           if (n && !novo.has(n.altura.nome)) yield [ex.compassoDe(h.inicio), `${n.nome} está grafado na leitura antiga de ${h.texto}; pela resolução seria ${[...novo].find((x) => pc(x) === pc(n.altura.nome)) || "outra grafia"}`, [n]];
         }
       }
-    }, { precisaTom: true, porque: "A grafia mostra ao intérprete para onde cada nota vai: a sensível sobe, a 7ª desce. Escrevendo o acorde na leitura do tom novo, a partitura conta a resolução que o ouvido vai ouvir.",
+    }, { precisaTom: true, porque: "A grafia mostra para onde cada nota vai (sensível sobe, 7ª desce): escrita na leitura nova, conta a resolução.",
       corrigir: "Reescreva as notas do pivô pela leitura nova (por exemplo, lá♭ → sol♯, sol♭ → fá♯)." });
 
   def("mod_plano_de_tons", "Plano de tons",
@@ -128,7 +128,7 @@
         const alvo = M.interpretarTom(nome);
         if (!mesmoTom(h.tom, alvo)) yield [comp, `no compasso ${comp} o plano pede ${nome}, e as cifras estão em ${h.tom.tonica.nome.replace(/-/g, "b")} ${h.tom.modo === "minor" ? "menor" : "maior"}`, [h.baixo]];
       }
-    }, { precisaTom: true, porque: "Numa forma tonal, o plano de tons é a arquitetura: cada seção tem o seu tom, e as chegadas a eles são os pontos de articulação. Um tom no lugar errado muda a forma.",
+    }, { precisaTom: true, porque: "O plano de tons é a arquitetura da forma: um tom no lugar errado muda a forma.",
       corrigir: "Confira onde o plano pede cada tom e marque nas cifras a troca (G:… ou um pivô) antes desse compasso." });
 
   for (const id of ["mod_plano_de_tons"]) M.PRECISA_FIM.add(id);
