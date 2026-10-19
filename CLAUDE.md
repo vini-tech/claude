@@ -55,7 +55,10 @@ quebrar os acentos e a página.
 
 - Subagente `autor-capitulo` (`.claude/agents/`): escreve um capítulo; um hook o impede de editar fora de `web/livro/`.
 - Subagente `revisor-musical`: só lê e aponta erros musicais e fatos duvidosos; não edita.
-- Comandos: `/novo-capitulo`, `/enxugar`, `/perguntas` (`.claude/skills/`).
+- Comandos: `/novo-capitulo`, `/enxugar`, `/perguntas`, `/pesquisar` (`.claude/skills/`).
+- Antes de construir algo que talvez já exista, ou ao procurar ferramenta/biblioteca/plugin, siga
+  `/pesquisar`: todas as fontes (Anthropic Directory, skills, registro MCP, web em modo extended,
+  GitHub/npm/PyPI, ISMIR), candidatos verificados no repositório, não só no resumo da busca.
 
 ## Hábitos
 
