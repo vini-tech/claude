@@ -31,7 +31,7 @@ process.stdout.write(JSON.stringify({saida, tabela: M.TABELA, niveis: M.NIVEIS})
 def rodar_node(casos):
     r = subprocess.run(
         ["node", "-e", SCRIPT_NODE, str(RAIZ / "web" / "motor.js")],
-        input=json.dumps(casos), capture_output=True, text=True, check=True,
+        input=json.dumps(casos), capture_output=True, text=True, encoding="utf-8", check=True,
     )
     return json.loads(r.stdout)
 
