@@ -176,13 +176,12 @@
 
   T.inserir(2, {
     id: "ornamentos", titulo: "Notas fora do acorde",
-    objetivo: "Ornamentar uma melodia sobre um baixo cifrado com cada tipo de nota fora do acorde — passagem, bordadura, apojatura, escapada, antecipação — sabendo de onde ela vem, para onde vai e em que tempo cai, e escolher o tipo pelo caráter que ele dá à linha.",
-    ouvir: ["Mozart, Requiem K. 626, 'Lacrimosa': os violinos em suspiros (apojaturas descendentes ligadas duas a duas)", "Mozart, Sinfonia nº 40 em sol menor K. 550, 1º mov.: o motivo de semitom descendente (mi♭–ré) que abre o tema", "Chopin, Prelúdio em mi menor op. 28 nº 4: a melodia que oscila entre si e dó sobre acordes que mudam por baixo", "Wagner, Tristão e Isolda, Prelúdio: a apojatura cromática sol♯–lá sobre o 'acorde de Tristão'", "Corais de Bach: notas de passagem e bordaduras em todas as vozes; antecipações nas cadências"],
+    objetivo: "Ornamentar uma melodia sobre baixo cifrado com cada nota fora do acorde, sabendo como chega, sai e em que tempo cai.",
+    ouvir: ["Mozart, Requiem, 'Lacrimosa': apojaturas em suspiro", "Chopin, Prelúdio op. 28 nº 4: si–dó sobre acordes que mudam", "Wagner, Prelúdio de Tristão: apojatura sol♯–lá"],
     esboco: "Sobre I – IV – V – I em sol maior (uma mínima por acorde), escreva primeiro uma nota do acorde por mínima. Depois, sem consultar nada, acrescente uma nota fora do acorde em cada compasso e tente dizer o nome de cada uma.",
     secoes: [
       { tipo: "texto", rotulo: "A regra", titulo: "Dissonância acidental: de onde vem, para onde vai", html: `
-        <p>A harmonia escolar separa dois tipos de dissonância. A <b>essencial</b> pertence ao acorde (a 7ª do V7, do ii65): ela está na cifra e resolve descendo. A <b>acidental</b> é a nota que está fora do acorde e se explica só pela condução da voz: ela vem de uma nota do acorde e vai para outra por um caminho conhecido. A distinção aparece com nitidez em Kirnberger (<i>Die Kunst des reinen Satzes</i>, 1771–79), mas os caminhos são mais antigos: a <b>nota de passagem</b> é a dissonância da 2ª espécie de Fux (1725); a <b>bordadura</b> e a cambiata, da 3ª; a <b>ligadura</b> (retardo), da 4ª. A <b>apojatura</b> vem da prática do século XVIII: C. P. E. Bach (<i>Versuch</i>, 1753) dedica aos <i>Vorschläge</i> um capítulo inteiro — a apojatura longa toma metade do valor da nota principal (dois terços, se ela é pontuada) e é tocada mais forte que a resolução, que se apaga.</p>
-        <p>Os manuais do século XIX (Richter, Dubois) e os modernos (Piston, Aldwell &amp; Schachter, Kostka &amp; Payne) organizam tudo por três perguntas: <b>como a nota chega</b>, <b>como sai</b> e <b>em que tempo cai</b>.</p>
+        <p>Dissonância <b>essencial</b>: está na cifra (7ª do V7). <b>Acidental</b>: fora do acorde, explicada pela condução (Kirnberger, 1771; espécies de Fux, 1725). Três perguntas: <b>como chega</b>, <b>como sai</b>, <b>em que tempo cai</b>.</p>
         <table class="tabela-modos"><thead><tr><th>Tipo</th><th>Chega</th><th>Sai</th><th>Tempo</th><th>Observação</th></tr></thead><tbody>
         <tr><td><b>Passagem</b></td><td>grau</td><td>grau, mesma direção</td><td>fraco</td><td>preenche uma 3ª entre notas do acorde; duas seguidas preenchem uma 4ª. <b>Cromática</b>: o semitom intermediário (dó–dó♯–ré)</td></tr>
         <tr><td><b>Passagem acentuada</b></td><td>grau</td><td>grau, mesma direção</td><td>forte</td><td>a dissonância cai com o baixo: mais tensa, mais "vocal"</td></tr>
@@ -195,81 +194,84 @@
         <tr><td><b>Pedal</b></td><td colspan="2">nota longa (quase sempre no baixo: tônica ou dominante) sobre a qual as harmonias mudam</td><td>—</td><td>começa e termina consonante; no meio, as vozes de cima podem formar acordes estranhos a ela</td></tr>
         </tbody></table>
         <h3>Em que voz, e para quê</h3>
-        <ul><li>No coral a quatro vozes todas as vozes ornamentam; aqui, a duas vozes, os ornamentos ficam no <b>soprano</b> e o baixo traz as cifras (uma por nota): cada nota do baixo é membro do acorde. O pedal fica de fora da escrita cifrada: num baixo cifrado ele é uma nota longa sob várias cifras (no exemplo mais simples, I – IV64 – I sobre a tônica repetida).</li>
-        <li><b>Passagem e bordadura</b> dão fluência: são a superfície de uma linha que se move por grau. <b>Apojatura e passagem acentuada</b> põem a dissonância no tempo forte e por isso falam: são o "suspiro". <b>Escapada e antecipação</b> são gestos de cadência: deixam a linha chegar antes ou depois do baixo.</li>
-        <li>Procedimento: (1) esqueleto — uma nota do acorde por cifra, conferida como 1ª espécie contra o baixo; (2) ornamentos fracos para ligar; (3) poucos ornamentos fortes, onde você quer acento; (4) confira de novo as 5ªs e 8ªs: <b>a nota fora do acorde também forma intervalo com o baixo</b>, e uma passagem pode criar paralelas.</li></ul>
-        <p>Nos exercícios, a regra <b>Notas fora do acorde com tratamento</b> classifica cada nota da melodia que não pertence à cifra e recusa as que não se explicam; a <b>Classificação</b> mostra, como informação, o nome que o verificador deu a cada uma.</p>` },
-      { tipo: "exemplo", titulo: "Ornamentar um esqueleto em sol maior", intro: "O baixo e as cifras são os mesmos nas três camadas; só o soprano muda. As cifras mostram o acorde, não as notas de passagem.",
+        <ul><li>Ornamentos no <b>soprano</b>; cada nota do baixo é do acorde.</li>
+        <li>Passagem, bordadura: fluência. Apojatura, passagem acentuada: o “suspiro”. Escapada, antecipação: gestos de cadência.</li></ul>
+        <ol><li>Esqueleto: uma nota do acorde por cifra.</li>
+        <li>Ornamentos fracos para ligar.</li>
+        <li>Poucos fortes, onde quer acento.</li>
+        <li>Reconfira 5ªs e 8ªs: <b>a nota ornamental também forma intervalo</b>.</li></ol>` },
+      { tipo: "exemplo", titulo: "Ornamentar um esqueleto em sol maior", intro: "Baixo e cifras fixos; só o soprano muda.",
         camadas: [
           { titulo: "1. Esqueleto: uma nota do acorde por cifra", partitura: `tom: G maior\nsoprano: D5/2 B4 E5 D5 G5 E5 G5 A5 G5/4\n${B_SOL}`, rotulos: ["soprano", "baixo"], cifras: CIF_SOL,
-            notas: [["decisao", "Contra o baixo: 5 – 8 – 10 – 8 | 10 – 13 – 11 – 12 – 15. As consonâncias perfeitas (c. 1 e 2) chegam por movimento contrário; a 4ª do c. 4 é a do 6/4 cadencial, que é cifra, não ornamento."],
-              ["decisao", "Contorno: desce ao si4, sobe por saltos de acorde até sol5–mi5–sol5 e para no lá5 do V. O ponto mais alto ainda vai ser decidido pelos ornamentos."],
-              ["checagem", "Nenhuma nota fora do acorde: a linha é correta e morta. É o ponto de partida, não o resultado."]] },
+            notas: [["decisao", "Consonâncias perfeitas por movimento contrário; a 4ª do c. 4 é do 6/4 cadencial (cifra)."],
+              ["checagem", "Nenhuma nota fora do acorde: correta e morta. Ponto de partida."]] },
           { titulo: "2. Ornamentos fracos: passagem e bordadura", partitura: `tom: G maior\nsoprano: D5/1 C5 B4 C5/0.5 D5 E5/0.5 F#5 E5/1 D5 F#5 G5/2 E5/1 F#5 G5/2 A5 G5/4\n${B_SOL}`, rotulos: ["soprano", "baixo"], cifras: CIF_SOL,
             anotacoes: [[0, 1, "P"], [0, 3, "P"], [0, 6, "B"], [0, 12, "P"]],
-            notas: [["decisao", "C. 1: o ré5–si4 do esqueleto é uma 3ª — o dó5 no 2º tempo a preenche (passagem descendente). No 4º tempo, outra passagem (si–dó–ré) leva ao mi5 do IV."],
-              ["decisao", "C. 2: o mi5 é repetido no esqueleto; em vez de repetir, uma bordadura superior em colcheia (mi–fá♯–mi). O fá♯ é a sensível do tom contra o dó do baixo: dissonância de passagem rápida, sem peso."],
-              ["rejeitada", "Pensei em preencher o salto ré5–fá♯5 do c. 2 com mi5: viraria três notas por grau (ré–mi–fá♯) e o mi5 cairia como passagem — mas o mi5 acabou de ser ouvido duas vezes. O salto de 3ª, nota de acorde, é mais limpo."],
-              ["checagem", "C. 3: mi5–fá♯5–sol5 sobre o ii6 — fá♯ é passagem no tempo fraco. Todas as notas novas estão em tempo fraco e entram e saem por grau: é o estilo estrito de Fux, transplantado para a harmonia."]],
-            pausa: ["Por que nenhuma nota fora do acorde no 1º ou no 3º tempo, nesta camada?", "Porque nesta camada os ornamentos só ligam: ficam nos tempos fracos, onde o ouvido os toma como movimento. No tempo forte uma nota estranha ao acorde vira acontecimento — apojatura ou passagem acentuada — e isso é a próxima decisão, tomada em poucos lugares."] },
+            notas: [["decisao", "C. 1: dó5 preenche a 3ª ré–si (passagem); si–dó–ré leva ao mi5 do IV."],
+              ["decisao", "C. 2: em vez de repetir mi5, bordadura em colcheia (mi–fá♯–mi)."],
+              ["checagem", "Todas em tempo fraco, entrando e saindo por grau: estilo estrito."]],
+            pausa: ["Por que nada fora do acorde nos tempos 1 e 3?", "Aqui os ornamentos só ligam. No tempo forte a nota estranha vira acontecimento (apojatura): é a próxima decisão."] },
           { titulo: "3. Ornamentos fortes e de cadência: apojatura, antecipação, escapada", partitura: `tom: G maior\nsoprano: D5/1 C5 B4 C5/0.5 D5 E5/0.5 F#5 E5/1 D5 F#5 A5 G5 E5 F#5/0.5 G5 G5/2 A5/1 B5 G5/4\n${B_SOL}`, rotulos: ["soprano", "baixo"], cifras: CIF_SOL,
             anotacoes: [[0, 1, "P"], [0, 3, "P"], [0, 6, "B"], [0, 10, "Apoj."], [0, 13, "P"], [0, 14, "Ant."], [0, 17, "Esc."]],
-            notas: [["decisao", "C. 3, 1º tempo: o sol5 do esqueleto vira lá5 → sol5. O lá5 chega por salto (fá♯5–lá5), cai com o baixo mi3 (uma 4ª contra ele) e resolve por grau: apojatura. É o acento da frase, no compasso do ponto mais alto."],
-              ["decisao", "C. 3, 4º tempo: depois da passagem fá♯5, o sol5 entra uma colcheia antes do 6/4 — antecipação. A chegada ao 6/4 cadencial fica suave, sem salto."],
-              ["decisao", "C. 4: lá5 (V) → si5 → sol5 (I). O si5 sai por grau do lá5 e salta uma 3ª para baixo, na direção contrária: escapada. Ela dá à melodia o seu ponto mais agudo (si5) num tempo fraco, logo antes da tônica."],
-              ["rejeitada", "Na cadência, pensei em lá5–fá♯5–sol5 (sensível resolvendo): mais estrito, mas a linha já tinha usado o fá♯5 três vezes. A escapada deixa a sensível para a voz interna (implícita) e põe um gesto novo no fim."],
-              ["checagem", "O baixo sobe ré3–sol3 na cadência: com o soprano descendo si5–sol5 o movimento é contrário. Se o baixo descesse ao sol2, o salto do soprano faria uma 8ª direta."]],
-            pausa: ["Troque mentalmente a apojatura do c. 3 por uma passagem acentuada (sol5–fá♯5–mi5 com o fá♯ no tempo forte). O que muda?", "A passagem acentuada também põe uma dissonância com o baixo, mas chega por grau e continua: soa como fluxo. A apojatura chega por salto e volta: é um gesto de ênfase, uma 'palavra' acentuada. A escolha não é de correção — as duas são corretas —, é de caráter."] },
+            notas: [["decisao", "C. 3: lá5 chega por salto, cai com o baixo e resolve por grau: apojatura, o acento da frase."],
+              ["decisao", "C. 3, 4º tempo: sol5 uma colcheia antes do 6/4: antecipação."],
+              ["decisao", "C. 4: lá5 → si5 → sol5: escapada; o ponto mais agudo num tempo fraco."]],
+            pausa: ["E com passagem acentuada (sol–fá♯–mi) no lugar da apojatura?", "Chega por grau e segue: fluxo. A apojatura chega por salto e volta: ênfase. Ambas corretas; muda o caráter."] },
         ] },
       { tipo: "contraste", titulo: "As mesmas notas, fracas ou fortes",
         a: { rotulo: "A — ornamentos nos tempos fracos (bordadura, antecipação, passagem)", partitura: "tom: A menor\nsoprano: C5/1 B4 C5 D5 D5 C5 B4/2 A4/4\nbaixo: A2/2 F3 D3 E3 A2/4", cifras: CIF_LAM },
         b: { rotulo: "B — ornamentos nos tempos fortes (bordadura acentuada, apojatura, passagem acentuada)", partitura: "tom: A menor\nsoprano: C5/2 D5/1 C5 E5 D5 C5 B4 A4/4\nbaixo: A2/2 F3 D3 E3 A2/4", cifras: CIF_LAM },
-        pergunta: "As duas melodias usam quase as mesmas notas sobre i – VI – iv – V – i em lá menor. Onde cada uma põe o peso, e qual soa mais 'falada'?",
-        comentario: "<p>Em A as notas estranhas ao acorde ficam entre os tempos: si4 (bordadura), ré5 no 4º tempo (antecipação do iv), dó5 sobre o iv (passagem). O tempo forte é sempre consonante, e a linha flui. Em B as mesmas classes de nota caem com o baixo: ré5 sobre o VI (bordadura acentuada), mi5 sobre o iv chegando por salto (apojatura, a 9ª contra o ré), dó5 sobre o V (passagem acentuada, 6ª menor contra o mi mas fora do acorde de mi maior). B acentua cada compasso com uma dissonância que resolve: é a retórica do 'suspiro'. O preço é a densidade: usada em todos os tempos, a ênfase deixa de enfatizar.</p>" },
+        pergunta: "Quase as mesmas notas. Onde cada uma põe o peso, e qual soa mais 'falada'?",
+        comentario: "<p>A: notas estranhas entre os tempos; tempo forte consonante, a linha flui. B: caem com o baixo (bordadura acentuada, apojatura, passagem acentuada): o 'suspiro' a cada compasso. Em todos os tempos, a ênfase deixa de enfatizar.</p>" },
       { tipo: "quebra", titulo: "Quando a apojatura toma o lugar do acorde", html: `
-        <p>A regra pede que a nota estranha seja <b>subordinada</b>: curta ou fraca, explicada pela resolução. O século XVIII já a esticava — a apojatura longa de C. P. E. Bach dura metade da nota principal e é tocada <i>forte</i>. Mozart transforma o suspiro em tema: no 'Lacrimosa' do Requiem, os violinos tocam apojaturas descendentes ligadas duas a duas; na Sinfonia nº 40, o tema abre com o semitom mi♭–ré repetido, uma dissonância de vizinhança que dá o tom de toda a peça. No Prelúdio em mi menor op. 28 nº 4, Chopin deixa a melodia quase parada no si, com o dó vizinho, enquanto os acordes descem por baixo: a mesma nota muda de função a cada compasso.</p>
-        <p>No Romantismo tardio a hierarquia se inverte. No início do Prelúdio de <i>Tristão e Isolda</i> (Wagner, 1859), o sol♯ do oboé cai sobre o 'acorde de Tristão' (fá–si–ré♯–sol♯) e sobe por semitom ao lá — uma apojatura ascendente, cromática e mais longa que a própria resolução; o lá segue cromaticamente (lá♯) até o si sobre o acorde de dominante de lá menor. A pergunta "qual é a nota real e qual é o ornamento?" deixa de ter resposta única, e é dessa ambiguidade que vive a harmonia cromática. Daí em diante, apojaturas cromáticas se encadeiam: cada resolução já é a próxima apojatura. Schoenberg (<i>Harmonielehre</i>, 1911) tira a conclusão teórica: as chamadas notas estranhas à harmonia não são estranhas a ela — são harmonia que ainda não foi reconhecida como tal. Em Debussy e Ravel, a apojatura que não resolve vira <b>nota acrescentada</b> (6ª, 9ª) e passa a pertencer ao acorde.</p>
-        <p>O que a quebra produz: a dissonância deixa de ser um acidente do caminho e passa a ser o lugar onde a música mora. Para que isso soe intencional, o contexto precisa ser estrito em volta — uma apojatura livre num tecido de passagens corretas é ouvida como gesto, não como erro.</p>`,
+        <table class="tabela-modos"><thead><tr><th>Quem</th><th>O que quebra</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>C. P. E. Bach (1753)</td><td>apojatura longa, metade da nota, tocada <i>forte</i></td><td>o ornamento ganha peso</td></tr>
+        <tr><td>Mozart, 'Lacrimosa'; Sinf. nº 40</td><td>apojaturas e semitom mi♭–ré como tema</td><td>o suspiro vira motivo</td></tr>
+        <tr><td>Chopin, op. 28 nº 4</td><td>si–dó quase parados sob acordes que descem</td><td>a nota muda de função a cada compasso</td></tr>
+        <tr><td>Wagner, Tristão (1859)</td><td>sol♯–lá mais longa que a resolução; apojaturas encadeadas</td><td>nota real ou ornamento? ambíguo</td></tr>
+        <tr><td>Schoenberg (1911); Debussy, Ravel</td><td>apojatura sem resolução vira nota acrescentada (6ª, 9ª)</td><td>a dissonância passa a ser harmonia</td></tr>
+        </tbody></table>
+        <p>Para soar intencional, o contexto em volta precisa ser estrito: a apojatura livre é ouvida como gesto, não como erro.</p>`,
         exemplos: [
           { rotulo: "Redução a duas vozes, à maneira do início de Tristão (não é a partitura de Wagner: só o soprano e o baixo, em 4/4)", partitura: "tom: A menor\nsoprano: G#4/3 A4/1 A#4/2 B4/2\nbaixo: F2/4 E2/4", cifras: [[0, "Fr43"], [4, "V7"]],
             perfil: { ...ORN, intervalo_melodico_aumentado_diminuto: "info" },
-            comentario: "Formalmente a regra se cumpre: sol♯ (apojatura, fora da sexta aumentada francesa fá–lá–si–ré♯) resolve por grau no lá; o lá♯ é passagem cromática acentuada até o si do V7. O que quebra é a proporção: a apojatura dura três tempos e a resolução um, e o ouvido toma o acorde com o sol♯ como a harmonia real. O cromatismo melódico (lá–lá♯), proibido no estilo estrito, fica como informação." },
+            comentario: "Sol♯ resolve por grau no lá; lá♯ é passagem cromática ao si do V7. Quebra a proporção: três tempos de apojatura, um de resolução. Lá–lá♯ fica como informação." },
           { rotulo: "A apojatura que não resolve vira cor (final com 9ª acrescentada)", partitura: "tom: C maior\nsoprano: G5/1 F5 E5/2 A5/1 G5 F5/2 E5/1 C5 D5/2\nbaixo: C3/4 F2/2 G2 C3/4", cifras: [[0, "I"], [4, "IV"], [6, "V7"], [8, "I"]],
             perfil: { ...ORN }, contexto: { ornLicencas: ["apojatura_livre"] },
-            comentario: "Até o 1º tempo do c. 3 tudo é estrito (passagens, a 7ª do V7 descendo ao mi). No 3º tempo o ré5 cai sobre o acorde de dó e fica: não há resolução. A mesma nota que no c. 1 seria uma passagem agora é o som final — a 9ª acrescentada do fim do século XIX. Com a licença 'apojatura livre' ativa, o verificador aceita." },
+            comentario: "Tudo estrito até o c. 3; então o ré5 cai sobre dó e fica sem resolver: a 9ª acrescentada. Aceito com a licença 'apojatura livre'." },
         ] },
     ],
     exercicios: [
       { id: "orn1", titulo: "Completar: apojatura e antecipação na cadência", modo: "completar", perfil: PERFIL_ORN, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 } }, cifras: "I V6 I vi ii6 I64 V7 I".split(" "),
-        instrucoes: "<p>Fá maior. O baixo, as cifras e o soprano dos compassos 1–2 (com duas passagens) estão dados. Escreva os compassos 3–4: ponha uma <b>apojatura</b> sobre o 6/4 cadencial (3º tempo do c. 3) e termine com uma <b>antecipação</b> da tônica. Toda nota fora do acorde precisa se explicar por um dos tipos da tabela.</p>",
+        instrucoes: "<p>Soprano dos c. 3–4: <b>apojatura</b> sobre o 6/4 (3º tempo do c. 3) e <b>antecipação</b> da tônica no fim.</p>",
         texto: "tom: F maior\ncf: baixo\nsoprano: A4/1 Bb4 C5 G4 A4 C5 F5 E5\nbaixo: F2/2 E2 F2 D3 Bb2 C3/1 C3 F2/4", duracao: 1, alvoCompassos: 4, plano: PLANO_ORN,
         solucao: "tom: F maior\ncf: baixo\nsoprano: A4/1 Bb4 C5 G4 A4 C5 F5 E5 D5 Bb4 D5/0.5 C5 E5 F5 F5/4\nbaixo: F2/2 E2 F2 D3 Bb2 C3/1 C3 F2/4",
-        comentarioSolucao: "Ré5 chega por salto (si♭4–ré5) sobre o 6/4 e resolve no dó5: apojatura (a 6ª contra o baixo dó3 vira, na resolução, a 5ª — o 6/4 cadencial ornamentado). No 4º tempo, mi5 (sensível, nota do V7) e fá5 em colcheia: a tônica chega antes do baixo — antecipação. O mi5 do c. 2 é passagem (fá–mi–ré) entre o vi e o ii6." },
+        comentarioSolucao: "Ré5 chega por salto sobre o 6/4 e resolve no dó5: apojatura. No 4º tempo, mi5 – fá5 em colcheia: a tônica chega antes do baixo (antecipação)." },
       { id: "orn2", titulo: "Passagem, bordadura e apojatura em ré menor", modo: "menos apoio", perfil: PERFIL_MIN, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 }, ornMinimos: { passagem: 1, bordadura: 1, apojatura: 1 } }, cifras: "i V6 i iv6 ii°6 V i".split(" "),
-        instrucoes: "<p>Ré menor, baixo e cifras dados. Escreva o soprano inteiro com pelo menos uma <b>nota de passagem</b>, uma <b>bordadura</b> e uma <b>apojatura</b> (no tempo forte, chegando por salto). Em menor, cuidado com a 2ª aumentada si♭–dó♯ e com o dó natural/dó♯: o V usa a sensível, a passagem descendente pode usar o dó natural.</p>",
+        instrucoes: "<p>Soprano com ao menos uma <b>passagem</b>, uma <b>bordadura</b> e uma <b>apojatura</b>. Evite si♭–dó♯; dó♮ só em passagem descendente.</p>",
         texto: "tom: D menor\ncf: baixo\nsoprano:\nbaixo: D3/2 C#3 D3 Bb2 G2 A2 D3/4", duracao: 1, alvoCompassos: 4, plano: PLANO_ORN,
         solucao: "tom: D menor\ncf: baixo\nsoprano: F5/1 G5/0.5 F5 E5/2 D5/1 C5 Bb4/2 D5/1 E5 C#5/2 D5/4\nbaixo: D3/2 C#3 D3 Bb2 G2 A2 D3/4",
-        comentarioSolucao: "Sol5 em colcheia é bordadura superior do fá5; dó5 natural é passagem descendente (ré–dó–si♭) — subindo, seria dó♯. No c. 3, ré5 chega por salto do si♭4 e cai com o sol2 do ii°6: apojatura que resolve subindo no mi5. A apojatura ascendente é menos comum que a descendente, mas é a mesma figura." },
+        comentarioSolucao: "Sol5: bordadura. Dó5♮: passagem descendente. C. 3: ré5 por salto sobre o ii°6, resolve subindo no mi5: apojatura ascendente." },
       { id: "orn3", titulo: "Apojatura, escapada e antecipação", modo: "restrição", perfil: PERFIL_MIN, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 }, ornMinimos: { apojatura: 1, escapada: 1, antecipacao: 1 } }, cifras: "i VI iv V i6 iv V i".split(" "),
-        instrucoes: "<p>Mi menor. <b>Restrição:</b> use pelo menos uma <b>apojatura</b>, uma <b>escapada</b> e uma <b>antecipação</b>, cada uma no lugar em que soa natural (pense: a escapada e a antecipação são gestos de cadência ou de fim de membro; a apojatura pede um tempo forte).</p>",
+        instrucoes: "<p>Soprano com ao menos uma <b>apojatura</b> (tempo forte), uma <b>escapada</b> e uma <b>antecipação</b> (gestos de cadência).</p>",
         texto: "tom: E menor\ncf: baixo\nsoprano:\nbaixo: E3/2 C3 A2 B2 G2 A2 B2 E3", duracao: 1, alvoCompassos: 4, plano: PLANO_ORN,
         solucao: "tom: E menor\ncf: baixo\nsoprano: G5/1 A5 E5/2 G5/1 A5 F#5/2 G5/1 E5 C5/2 B4/1 D#5/0.5 E5 E5/2\nbaixo: E3/2 C3 A2 B2 G2 A2 B2 E3",
-        comentarioSolucao: "C. 1: lá5 sai do sol5 por grau e salta para o mi5 do VI — escapada. C. 2: o mesmo sol5 agora chega por salto (mi5–sol5) no tempo forte do iv e resolve subindo no lá5 — apojatura. As mesmas duas notas mudam de tipo porque mudam de lugar métrico. C. 4: o mi5 em colcheia antecipa a tônica." },
+        comentarioSolucao: "C. 1: sol–lá–mi: escapada. C. 2: sol5 por salto no tempo forte, resolve no lá5: apojatura. Mesmas notas, outro tempo, outro tipo. C. 4: antecipação." },
       { id: "orn4", titulo: "Livre: frase ornamentada com o seu baixo", modo: "livre", perfil: PERFIL_MIN, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 }, ornMinimos: { apojatura: 1, passagem: 1 } }, cifrasAluno: true, alvoCompassos: 4,
-        instrucoes: "<p>Componha soprano, baixo e cifras de uma frase de 4 compassos em dó maior, com cadência perfeita. Primeiro o esqueleto (uma nota do acorde por cifra); depois os ornamentos, com pelo menos uma <b>passagem</b> e uma <b>apojatura</b>. Use a classificação (informativa) para conferir se cada nota foi lida como você pensou.</p>",
+        instrucoes: "<p>Soprano, baixo e cifras, 4 c., CAP. Esqueleto primeiro; depois ao menos uma <b>passagem</b> e uma <b>apojatura</b>.</p>",
         texto: "tom: C maior\nsoprano:\nbaixo:", duracao: 1, plano: PLANO_ORN,
         solucao: "tom: C maior\nsoprano: E5/1 F5/0.5 E5 D5/2 C5/0.5 D5 E5/1 G5 F5 A5 F5 D5 B4 C5/4\nbaixo: C3/2 B2 C3 F3 D3 G3 C3/4", solucaoCifras: "I V6 I IV ii V I",
-        comentarioSolucao: "Bordadura (fá5) e passagem (ré5) nos tempos fracos; no 3º tempo do c. 2, sol5 salta do mi5 para cima do IV e resolve no fá5 — apojatura. Na cadência o baixo sobe ao sol3 e volta ao dó3, para o soprano (ré5–si4–dó5) não chegar em 5ª ou 8ª direta." },
+        comentarioSolucao: "Bordadura e passagem nos tempos fracos; c. 2: sol5 por salto sobre o IV, resolve no fá5 (apojatura). Baixo sol3 → dó3 evita 8ª direta." },
       { id: "orn5", titulo: "Quebrar: o suspiro que não resolve", modo: "quebrar", perfil: PERFIL_MIN, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 4 }, ornLicencas: ["apojatura_livre"], ornMinimos: { apojatura_livre: 1 } }, cifras: "i V6 i VI iv V i".split(" "),
-        instrucoes: "<p>Dó menor. Escreva o soprano. <b>Quebra pedida:</b> no 1º tempo do c. 3, sobre o iv, uma <b>apojatura que não resolve por grau</b>: ela chega por salto, é a nota mais aguda da frase e sai por salto para outra nota do acorde — a resolução fica subentendida (numa voz interna, ou na imaginação do ouvinte). Todo o resto deve ser estrito, para que a quebra se ouça como gesto.</p>",
+        instrucoes: "<p>Soprano. <b>C. 3, 1º tempo (iv):</b> apojatura que chega e sai por salto, nota mais aguda, sem resolver. O resto, estrito.</p>",
         texto: "tom: C menor\ncf: baixo\nsoprano:\nbaixo: C3/2 B2 C3 Ab2 F2 G2 C3/4", duracao: 1, alvoCompassos: 4, plano: PLANO_ORN,
         solucao: "tom: C menor\ncf: baixo\nsoprano: Eb5/2 D5 C5/1 D5 Eb5/2 Bb5/1 F5 D5/2 C5/4\nbaixo: C3/2 B2 C3 Ab2 F2 G2 C3/4",
-        comentarioSolucao: "Si♭5 salta uma 5ª do mi♭5, cai como 4ª contra o fá do iv e, em vez de descer ao lá♭5, salta uma 4ª para o fá5. O ouvido 'ouve' o lá♭ que faltou — o suspiro interrompido. Tudo em volta é estrito: passagem (ré5) no c. 2, 7ª nenhuma sem resolução, cadência V–i." },
+        comentarioSolucao: "Si♭5 por salto, 4ª contra o fá do iv; em vez do lá♭5, salta ao fá5. O ouvido supre o lá♭: suspiro interrompido. O resto é estrito." },
     ],
   }, { depoisDe: "baixo" });
 
@@ -280,15 +282,15 @@
 
   T.inserir(2, {
     id: "retardos_harm", titulo: "Retardos na harmonia",
-    objetivo: "Escrever retardos 4–3, 7–6, 9–8 (no soprano) e 2–3 (no baixo) sobre um baixo cifrado — preparação, dissonância, resolução —, encadeá-los em cadeias e ornamentar a resolução; e saber o que a retardação (resolução para cima) e o retardo sem preparação significam como licença.",
-    ouvir: ["Corelli, Sonatas a três op. 1–4: cadeias de 7–6 e de 2–3 nos movimentos lentos (Grave, Adagio)", "Bach, Ária da Suíte orquestral nº 3 BWV 1068: notas longas do violino presas por cima da barra sobre o baixo que caminha", "Handel: os movimentos lentos das sonatas e concerti grossi op. 6, com retardos encadeados sobre baixos por grau", "Monteverdi, 'Cruda Amarilli' (5º livro de madrigais): as dissonâncias que Artusi criticou em 1600"],
+    objetivo: "Escrever retardos 4–3, 7–6, 9–8 e 2–3 (baixo) sobre baixo cifrado, em cadeias e com resolução ornamentada.",
+    ouvir: ["Corelli, Sonatas a três: cadeias de 7–6 e 2–3", "Bach, Ária BWV 1068: notas presas sobre a barra", "Monteverdi, 'Cruda Amarilli': o que Artusi criticou"],
     esboco: "Em dó maior, baixo fá3 → sol3 → dó3 (IV – V – I). Escreva um soprano que tenha uma dissonância no tempo forte do V sem atacá-la. Que nota você precisa ter no IV?",
     secoes: [
       { tipo: "texto", rotulo: "A regra", titulo: "Preparação, retardo, resolução — agora com cifras", html: `
-        <p>O retardo da 4ª espécie (Fux) entra intacto na harmonia: uma nota do acorde fica presa enquanto o baixo muda, vira dissonância no tempo forte e desce por grau para a nota que o acorde novo pede. No baixo cifrado barroco o retardo está na cifra (<b>4 3</b>, <b>7 6</b>, <b>9 8</b>, e no baixo <b>2 3</b>); os <i>partimenti</i> napolitanos (Fenaroli) os ensinam como fórmulas de cada movimento do baixo. Aqui a cifra mostra o acorde de <b>resolução</b> e o verificador reconhece a nota presa.</p>
-        <ol><li><b>Preparação</b> — tempo fraco, nota do acorde (consonante). Pela regra tradicional, não mais curta que a dissonância.</li>
-        <li><b>Retardo</b> — tempo forte (mais forte que a preparação), a mesma nota, ligada; o baixo mudou por baixo dela.</li>
-        <li><b>Resolução</b> — um grau abaixo, numa nota do acorde. O baixo pode mudar no momento da resolução (resolução com troca de baixo): a nota de chegada só precisa pertencer ao acorde que soa então.</li></ol>
+        <p>A 4ª espécie (Fux) com cifras: a cifra mostra o acorde de <b>resolução</b>.</p>
+        <ol><li><b>Preparação:</b> tempo fraco, nota do acorde, não mais curta que a dissonância.</li>
+        <li><b>Retardo:</b> tempo mais forte, mesma nota ligada; o baixo muda.</li>
+        <li><b>Resolução:</b> grau abaixo, nota do acorde que soa então (o baixo pode mudar).</li></ol>
         <table class="tabela-modos"><thead><tr><th>Retardo</th><th>Onde aparece</th><th>Exemplo em dó maior</th><th>Cuidado</th></tr></thead><tbody>
         <tr><td><b>4–3</b></td><td>sobre o V (cadência), sobre qualquer 5/3</td><td>dó5 do IV preso sobre sol → si4</td><td>a 3ª de resolução não deve soar ao mesmo tempo em outra voz</td></tr>
         <tr><td><b>7–6</b></td><td>sobre acordes de sexta, baixo descendo por grau</td><td>dó5 (6ª sobre mi3) preso sobre ré3 → si4</td><td>em cadeia: o modelo de Corelli; a 6ª de resolução vira a preparação seguinte</td></tr>
@@ -296,79 +298,79 @@
         <tr><td><b>2–3</b> (baixo)</td><td>baixo preso, voz de cima ataca</td><td>baixo dó3 preso sob ré5 → si2 (V6)</td><td>a voz de cima ataca no tempo forte; quem resolve é o baixo</td></tr>
         </tbody></table>
         <h3>Cadeias e resoluções ornamentadas</h3>
-        <ul><li><b>Cadeias</b>: sobre um baixo que desce por grau com acordes de sexta, cada resolução 6 prepara o próximo 7 — I6, vii°6, vi6, V6… A cadeia é uma escala descendente com tensão em cada passo; ela precisa de destino (uma cadência, um salto que a interrompa).</li>
-        <li><b>Resolução ornamentada</b>: entre o retardo e a resolução pode entrar uma nota do acorde (salto e volta) ou a bordadura inferior da nota de chegada, ou a resolução pode ser antecipada em valor curto. A regra é que a nota um grau abaixo chegue antes de o acorde mudar.</li>
-        <li><b>Retardação</b> (Kostka &amp; Payne: <i>retardation</i>): a nota presa resolve <b>subindo</b>, quase sempre a sensível presa sobre a tônica (7–8). Fux não a admite — na 4ª espécie a resolução desce —, e os manuais a tratam como caso à parte. Aqui ela só vale como licença.</li></ul>
-        <p>A duas vozes, as vozes internas ficam implícitas como no baixo cifrado. A regra <b>Notas fora do acorde com tratamento</b> confere preparação, tempo forte e resolução; a <b>Classificação</b> diz que retardo o verificador leu (4–3, 7–6…).</p>` },
+        <ul><li><b>Cadeia:</b> baixo descendo com sextas; cada 6 prepara o próximo 7. Precisa de destino (cadência).</li>
+        <li><b>Resolução ornamentada:</b> nota do acorde ou bordadura inferior antes; a resolução chega antes de o acorde mudar.</li>
+        <li><b>Retardação:</b> resolve <b>subindo</b> (sensível sobre a tônica, 7–8). Só como licença.</li></ul>` },
       { tipo: "exemplo", titulo: "Atrasar o soprano: 9–8, 7–6 e 4–3 em ré menor",
         camadas: [
           { titulo: "1. A moldura sem retardos", partitura: `tom: D menor\nsoprano: F5/2 E5 D5 D5 C#5 D5 Bb4/1 D5 C#5/2 D5/4\n${B_RE}`, rotulos: ["soprano", "baixo"], cifras: CIF_RE,
-            notas: [["decisao", "Progressão i V | i i6 | vii°6 i | iv V | i. O soprano desce fá5–mi5–ré5 e depois gira em volta do ré5 com a sensível dó♯5: uma linha de canto, cheia de 'pontos de apoio' para prender."],
-              ["checagem", "Contra o baixo: 10 – 12 – 8 – 6 | 6 – 8 | 10 – 4 – 3 – 8. Nenhuma paralela; a 4ª no c. 4 (ré5 sobre o lá2) é exatamente onde vai entrar o 4–3."]] },
+            notas: [["decisao", "Soprano desce fá–mi–ré e gira em torno do ré5: pontos de apoio para prender."],
+              ["checagem", "Sem paralelas; a 4ª do c. 4 é onde entra o 4–3."]] },
           { titulo: "2. Prender: três retardos", partitura: `tom: D menor\nsoprano: F5/2 E5/2~ E5/1 D5/3~ D5/1 C#5/1 D5/2 Bb4/1 D5/1~ D5/1 C#5/1 D5/4\n${B_RE}`, rotulos: ["soprano", "baixo"], cifras: CIF_RE,
             anotacoes: [[0, 1, "9–8"], [0, 2, "7–6"], [0, 6, "4–3"]],
-            notas: [["decisao", "C. 1–2: o mi5 do V (5ª sobre lá2, consonante, no 3º tempo) fica preso quando o baixo vai ao ré3: 9ª no tempo forte, que desce ao ré5 — retardo 9–8."],
-              ["decisao", "C. 2–3: o ré5 de resolução passa pelo i6 (ainda nota do acorde) e fica preso sobre o mi3 do vii°6: 7ª, que desce ao dó♯5 (6ª) — retardo 7–6. Uma mesma nota é resolução de um retardo e preparação do seguinte."],
-              ["decisao", "C. 4: ré5 no 2º tempo do iv (preparação curta, num tempo fraco), preso sobre o lá2 do V no 3º tempo: 4ª → dó♯5. É o 4–3 de cadência."],
-              ["rejeitada", "Pensei em preparar o 4–3 com o ré5 no 1º tempo do c. 4 (mínima): a preparação cairia num tempo mais forte que o retardo, e a dissonância soaria como nota que sobrou, não como tensão. Por isso o si♭4 no 1º tempo e o ré5 no 2º."],
-              ["checagem", "Todas as dissonâncias presas caem em tempo mais forte que a sua preparação e resolvem um grau abaixo, numa nota do acorde."]],
-            pausa: ["Por que o 9–8 não seria uma boa escolha para encadear vários seguidos?", "Porque cada 9–8 resolve numa 8ª com o baixo. Numa cadeia, as resoluções formariam 8ªs paralelas apenas deslocadas pelo atraso — o retardo não esconde a paralela, só a adia. Por isso as cadeias clássicas são de 7–6 (em cima) e 2–3 (embaixo), que resolvem em consonâncias imperfeitas."] },
+            notas: [["decisao", "C. 1–2: mi5 do V preso sobre ré3: 9–8. C. 2–3: ré5 preso sobre mi3: 7–6 (a resolução prepara o próximo)."],
+              ["decisao", "C. 4: ré5 no 2º tempo do iv, preso sobre o V: 4–3 de cadência."],
+              ["rejeitada", "Preparar o 4–3 no 1º tempo: mais forte que o retardo, a dissonância soaria como sobra."]],
+            pausa: ["Por que não encadear vários 9–8?", "Cada um resolve numa 8ª: seriam 8ªs paralelas só adiadas. Cadeias usam 7–6 e 2–3, que resolvem em consonâncias imperfeitas."] },
           { titulo: "3. Ornamentar: passagem e resolução ornamentada", partitura: `tom: D menor\nsoprano: F5/2 E5/2~ E5/1 D5/3~ D5/1 C#5/1 D5/1 C5/1 Bb4/1 D5/1~ D5/1 B4/0.5 C#5/0.5 D5/4\n${B_RE}`, rotulos: ["soprano", "baixo"], cifras: CIF_RE,
             anotacoes: [[0, 1, "9–8"], [0, 2, "7–6"], [0, 5, "P"], [0, 7, "4–3"], [0, 8, "B. inc."]],
-            notas: [["decisao", "C. 3: ré5–dó5–si♭4, com o dó natural como passagem descendente (escala menor melódica descendo) sobre o i."],
-              ["decisao", "C. 4: o retardo ré5 não resolve direto: desce uma 3ª ao si4 natural e sobe ao dó♯5 — resolução ornamentada. O si4 é bordadura incompleta da resolução; o dó♯5 chega ainda dentro do V."],
-              ["rejeitada", "Pensei em lá4 como nota intermediária (nota do acorde de V): ré5–lá4–dó♯5 tem um salto de 4ª seguido de outro de 3ª na direção contrária, e o dó♯ chegaria por salto — a resolução deixaria de ser ouvida como grau conjunto."],
-              ["checagem", "Si4 natural e dó♯5: a escala menor melódica subindo para a tônica, sem 2ª aumentada (si♭–dó♯)."]] },
+            notas: [["decisao", "C. 3: dó5♮ como passagem descendente sobre o i."],
+              ["decisao", "C. 4: ré5 desce ao si4♮ e sobe ao dó♯5: resolução ornamentada, dentro do V."],
+              ["rejeitada", "Lá4 como intermediária: dois saltos, e o dó♯ chegaria por salto, não por grau."]] },
         ] },
       { tipo: "contraste", titulo: "Cadeia de 7–6 em cima × cadeia de 2–3 embaixo",
         a: { rotulo: "A — o soprano preso: 7–6, 7–6, 7–6 e o 4–3 da cadência", partitura: `tom: C maior\n${SOL_76}`, cifras: [[0, "I6"], [2, "vii°6"], [4, "vi6"], [6, "V6"], [8, "I"], [10, "IV6"], [12, "V"], [16, "I"]] },
         b: { rotulo: "B — o baixo preso: 2–3, 2–3, 2–3", partitura: "tom: C maior\nsoprano: E5/4 D5 C5 B4 C5\nbaixo: C3/2 C3/2~ C3/2 B2/2~ B2/2 A2/2~ A2/2 G2/2 C3/4", cifras: [[0, "I"], [2, "I"], [6, "V6"], [10, "vi"], [14, "V"], [16, "I"]] },
-        pergunta: "As duas frases descem por grau numa voz e criam uma dissonância presa por compasso. Em qual delas a tensão está no agudo, e o que isso muda na escuta?",
-        comentario: "<p>Em A o soprano é síncopado: cada nota é preparada no tempo fraco, fica presa sobre o novo baixo (7ª) e desce à 6ª; a melodia ouvida é a cadeia de suspiros, e o baixo é só o chão que desce. Em B a melodia é uma escala em semibreves, totalmente consonante na sua chegada, e quem 'atrasa' é o baixo: a 2ª (9ª) nasce quando o soprano ataca, e se desfaz quando o baixo desce. A tensão vem de baixo — soa mais grave, mais 'pesada', e a melodia parece estável sobre um chão que cede. Corelli e Handel usam as duas, muitas vezes alternando-as entre as vozes de uma sonata a três.</p>" },
+        pergunta: "Uma dissonância presa por compasso nas duas. Em qual a tensão está no agudo, e o que muda?",
+        comentario: "<p>A: o soprano síncopado é a cadeia de suspiros; o baixo é só o chão. B: a melodia é estável e quem atrasa é o baixo: tensão de baixo, mais pesada, um chão que cede. Corelli e Handel alternam as duas.</p>" },
       { tipo: "quebra", titulo: "Retardos que sobem, que não resolvem, que não foram preparados", html: `
-        <p>A regra do retardo é a mais antiga das que este livro ensina — e foi a primeira a ser publicamente quebrada. Em 1600, Giovanni Maria Artusi publicou <i>L'Artusi, overo Delle imperfettioni della moderna musica</i>, criticando trechos de madrigais de Monteverdi (entre eles 'Cruda Amarilli') em que dissonâncias entram sem preparação. Monteverdi respondeu no prefácio do 5º livro (1605) com a ideia de uma <b>seconda pratica</b>, em que o texto governa a harmonia; seu irmão Giulio Cesare a explicou em 1607. A dissonância não preparada passa a ser um recurso de expressão, com nome e justificativa.</p>
-        <p>O Barroco italiano faz do retardo preparado um motor: as cadeias de 7–6 e 2–3 de <b>Corelli</b> e <b>Handel</b> e as notas longas presas de <b>Bach</b> (a Ária da Suíte BWV 1068) obedecem à regra e a estendem — preparam com uma resolução, resolvem trocando o baixo, ornamentam a chegada. A <b>retardação</b>, com a sensível presa sobre a tônica e subindo, aparece como fórmula de cadência. No século XIX o retardo se confunde com a apojatura: a nota presa resolve quando o acorde já mudou (a resolução cai numa harmonia nova), a resolução é adiada por vários tempos ou transferida para outra voz ou oitava, e a nota 'presa' muitas vezes nem foi preparada — é uma apojatura longa, que o ouvido toma por retardo pelo contexto.</p>
-        <p>O que se ganha: a tensão deixa de ter prazo. Um retardo estrito promete a resolução no tempo seguinte; um retardo romântico pode adiar a promessa, cumpri-la em outra voz ou não cumpri-la — e o ouvinte, educado na regra, sente cada uma dessas escolhas.</p>`,
+        <table class="tabela-modos"><thead><tr><th>Quem</th><th>O que quebra</th><th>Efeito</th></tr></thead><tbody>
+        <tr><td>Monteverdi, 'Cruda Amarilli' (criticado por Artusi, 1600)</td><td>dissonância sem preparação</td><td><i>seconda pratica</i>: o texto governa a harmonia</td></tr>
+        <tr><td>Corelli, Handel, Bach (BWV 1068)</td><td>cadeias; resolução com troca de baixo, ornamentada</td><td>o retardo vira motor</td></tr>
+        <tr><td>Barroco, cadências</td><td>retardação: a sensível presa sobe</td><td>fórmula de cadência</td></tr>
+        <tr><td>Século XIX</td><td>resolução adiada, em outra voz ou sobre outro acorde; sem preparação</td><td>retardo e apojatura se confundem</td></tr>
+        </tbody></table>
+        <p>A tensão deixa de ter prazo: o retardo romântico pode adiar, deslocar ou negar a resolução que a regra promete.</p>`,
         exemplos: [
           { rotulo: "Retardação: a sensível presa sobre a tônica sobe (7–8)", partitura: "tom: G maior\nsoprano: E5/2 F#5/2~ F#5/2 G5/2\nbaixo: C3/2 D3 G2/4", cifras: [[0, "IV"], [2, "V"], [4, "I"]],
             perfil: { ...ORN }, contexto: { ornLicencas: ["retardacao"] },
-            comentario: "Fá♯5, nota do V, fica preso quando o baixo cai no sol2: 7ª maior contra a tônica. Em vez de descer, sobe ao sol5. A tensão da sensível é a mesma da cadência; o que muda é o atraso, que faz a tônica chegar meio compasso depois do baixo. No estilo estrito o verificador recusaria (retardo que sobe); aqui a licença está ativa." },
+            comentario: "Fá♯5 preso sobre o sol2 (7ª M) sobe ao sol5: a tônica chega meio compasso depois do baixo. Aceito só com a licença." },
           { rotulo: "Retardo sem resolução: a 4ª presa salta e deixa a resolução para a voz interna", partitura: "tom: D menor\nsoprano: F5/1 D5/2 A5/1 F5/4\nbaixo: Bb2/2 A2/2 D3/4", cifras: [[0, "VI"], [2, "V"], [4, "i"]],
             perfil: { ...ORN }, contexto: { ornLicencas: ["retardo_sem_resolucao"] },
-            comentario: "Ré5 preparado no VI (2º tempo) fica preso sobre o lá2 — 4ª — e, em vez de descer ao dó♯5, salta à 5ª do acorde (lá5). Numa textura de piano a resolução apareceria numa voz interna; a duas vozes ela fica subentendida. A expectativa criada pela regra é o que dá sentido à sua quebra." },
+            comentario: "Ré5 preso sobre lá2 (4ª) salta ao lá5 em vez de descer ao dó♯5; a resolução fica subentendida numa voz interna." },
         ] },
     ],
     exercicios: [
       { id: "rh1", titulo: "Completar: a cadeia de 7–6 e o 4–3", modo: "completar", perfil: PERFIL_ORN, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 5 } }, cifras: "I6 vii°6 vi6 V6 I IV6 V I".split(" "),
-        instrucoes: "<p>Dó maior. O baixo desce por grau com acordes de sexta (I6 vii°6 vi6 V6) e depois cadencia (I IV6 V I). O primeiro retardo está escrito: dó5 preparado no 2º tempo, preso sobre o ré3 (7ª), resolvendo no si4 do 4º tempo. <b>Continue a cadeia</b> (cada resolução fica presa sobre o baixo seguinte), pare-a no I do c. 3 e prepare um <b>4–3</b> sobre o V do c. 4.</p>",
+        instrucoes: "<p>O primeiro 7–6 está escrito. <b>Continue a cadeia</b> (cada resolução presa sobre o baixo seguinte) até o I do c. 3 e faça um <b>4–3</b> sobre o V do c. 4.</p>",
         texto: "tom: C maior\ncf: baixo\nsoprano: E5/1 C5/2 B4/2\nbaixo: E3/2 D3 C3 B2 C3 A2 G2/4 C3/4", duracao: 2, alvoCompassos: 5, plano: PLANO_RET,
         solucao: `tom: C maior\ncf: baixo\n${SOL_76}`,
-        comentarioSolucao: "Si4 preso sobre o dó3 (7ª) → lá4; lá4 preso sobre o si2 (7ª) → sol4; o sol4 preso sobre o dó3 é uma 5ª, consonante: a cadeia para sozinha. O dó5 entra no 2º tempo do c. 3, atravessa o IV6 como nota do acorde e fica preso sobre o sol2 do V: 4–3, resolvendo no si4 e subindo à tônica." },
+        comentarioSolucao: "Si4 → lá4, lá4 → sol4 (7–6); sol4 sobre dó3 é 5ª: a cadeia para. Dó5 atravessa o IV6 e fica preso sobre o V: 4–3." },
       { id: "rh2", titulo: "Três retardos em lá menor", modo: "menos apoio", perfil: PERFIL_MIN, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 5 }, ornMinimos: { retardo: 3 } }, cifras: "i V i i6 vii°6 i iv V i".split(" "),
-        instrucoes: "<p>Lá menor, baixo e cifras dados. Escreva o soprano com pelo menos <b>três retardos</b>. Procure onde cada um cabe: um 5/3 depois do V (9–8), um baixo que desce sob um acorde de sexta (7–6), o V da cadência (4–3). Cada preparação num tempo mais fraco que o retardo.</p>",
+        instrucoes: "<p>Soprano com ao menos <b>três retardos</b> (9–8 após o V, 7–6 sobre sexta, 4–3 na cadência). Preparação sempre em tempo mais fraco.</p>",
         texto: "tom: A menor\ncf: baixo\nsoprano:\nbaixo: A2/2 E2 A2 C3 B2 A2 D3 E3 A3/4", duracao: 2, alvoCompassos: 5, plano: PLANO_RET,
         solucao: "tom: A menor\ncf: baixo\nsoprano: C5/2 B4/2~ B4/1 A4/3~ A4/1 G#4/1 A4/2 F4/1 A4/1~ A4/1 G#4/1 A4/4\nbaixo: A2/2 E2 A2 C3 B2 A2 D3 E3 A3/4",
-        comentarioSolucao: "9–8 (si4 sobre lá2), 7–6 (lá4 sobre si2) e 4–3 (lá4 sobre mi3), o mesmo plano do exemplo em ré menor. Experimente variar: uma resolução ornamentada no c. 4, ou mudar a ordem das preparações." },
+        comentarioSolucao: "9–8 (si4 sobre lá2), 7–6 (lá4 sobre si2), 4–3 (lá4 sobre mi3): o plano do exemplo em ré menor." },
       { id: "rh3", titulo: "O baixo preso: cadeia de 2–3", modo: "restrição", perfil: PERFIL_MIN, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 5 }, ornMinimos: { retardo_baixo: 2 } }, cifrasAluno: true,
-        instrucoes: "<p>Sol maior. O soprano desce em semibreves (si4 lá4 sol4 fá♯4 sol4). Escreva o <b>baixo</b> e as cifras. <b>Restrição:</b> pelo menos dois retardos <b>2–3 no baixo</b>: o baixo entra no 3º tempo, fica ligado por cima da barra enquanto o soprano ataca a nota nova (2ª ou 9ª), e desce por grau à 3ª (10ª). Termine com V–I.</p>",
+        instrucoes: "<p>Baixo e cifras com ao menos dois <b>2–3 no baixo</b>: entra no 3º tempo, fica ligado enquanto o soprano ataca, desce à 3ª. Fim V–I.</p>",
         texto: "tom: G maior\ncf: soprano\nsoprano: B4/4 A4 G4 F#4 G4\nbaixo:", duracao: 2, alvoCompassos: 5, plano: PLANO_RET,
         solucao: "tom: G maior\ncf: soprano\nsoprano: B4/4 A4 G4 F#4 G4\nbaixo: G2/2 G2/2~ G2/2 F#2/2~ F#2/2 E2/2~ E2/2 D2/2 G2/4", solucaoCifras: "I I V6 vi V I",
-        comentarioSolucao: "Três 2–3 seguidos: sol2 preso sob lá4 → fá♯2 (V6); fá♯2 preso sob sol4 → mi2 (vi); mi2 preso sob fá♯4 → ré2 (V). O baixo repete o sol2 no começo só para poder entrar no tempo fraco: um baixo atacado no tempo forte não pode ficar preso." },
+        comentarioSolucao: "Três 2–3: sol2 → fá♯2, fá♯2 → mi2, mi2 → ré2. O sol2 é repetido para entrar no tempo fraco: só assim pode ficar preso." },
       { id: "rh4", titulo: "Livre: retardos sobre o seu baixo", modo: "livre", perfil: PERFIL_MIN, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 5 }, ornMinimos: { retardo: 3 } }, cifrasAluno: true, alvoCompassos: 5,
-        instrucoes: "<p>Componha soprano, baixo e cifras de uma frase de 5 compassos em sol maior (ou no tom que preferir, mudando o cabeçalho), com pelo menos <b>três retardos</b> de tipos diferentes no soprano e cadência perfeita. Planeje primeiro onde vão as preparações.</p>",
+        instrucoes: "<p>Soprano, baixo e cifras, 5 c., CAP, com <b>três retardos</b> de tipos diferentes no soprano. Planeje as preparações primeiro.</p>",
         texto: "tom: G maior\nsoprano:\nbaixo:", duracao: 2, plano: PLANO_RET,
         solucao: "tom: G maior\nsoprano: G4/1 B4/1 D5/2~ D5/1 C5/1 A4/2~ A4/1 G4/1 C5/2~ C5/1 B4/1 A4/2 G4/4\nbaixo: G2/2 B2 C3 D3 E3 C3 D3 D3 G2/4", solucaoCifras: "I I6 IV V vi ii6 I64 V I",
-        comentarioSolucao: "9–8 (ré5 sobre o dó3 do IV), 4–3 (lá4 sobre o mi3 do vi) e 7–6 sobre o 6/4 cadencial (dó5 sobre ré3, resolvendo no si4) — o 6/4 cadencial ganha mais uma camada de atraso. Cada nota presa entra no 3º tempo e é presa no 1º." },
+        comentarioSolucao: "9–8 sobre o IV, 4–3 sobre o vi, 7–6 sobre o 6/4 cadencial (mais um atraso). Cada nota entra no 3º tempo e é presa no 1º." },
       { id: "rh5", titulo: "Quebrar: a sensível que sobe", modo: "quebrar", perfil: PERFIL_MIN, nivel: 6,
         contexto: { nivel: 6, plano: { cadencia: 3 }, ornLicencas: ["retardacao"], ornMinimos: { retardacao: 1 } }, cifras: "i VI iv V i".split(" "),
-        instrucoes: "<p>Mi menor, três compassos. <b>Quebra pedida:</b> no último compasso, a sensível (ré♯5) do V fica <b>presa sobre a tônica</b> (7ª maior) e resolve <b>subindo</b> ao mi5 no 3º tempo — uma retardação. Antes disso, tudo estrito.</p>",
+        instrucoes: "<p>No último compasso, ré♯5 <b>preso sobre a tônica</b> resolve <b>subindo</b> ao mi5 (retardação). Antes, tudo estrito.</p>",
         texto: "tom: E menor\ncf: baixo\nsoprano:\nbaixo: E3/2 C3 A2 B2 E3/4", duracao: 2, alvoCompassos: 3, plano: PLANO_RET,
         solucao: "tom: E menor\ncf: baixo\nsoprano: G4/1 B4/1 C5/2 E5/2 D#5/2~ D#5/2 E5/2\nbaixo: E3/2 C3 A2 B2 E3/4",
-        comentarioSolucao: "Ré♯5 entra no V (3º tempo do c. 2), fica preso sobre o mi3 e sobe meio tom. O atraso da tônica é o mesmo de um 4–3, mas a direção é a da sensível: a resolução para cima é ouvida como natural justamente porque a sensível 'quer' subir." },
+        comentarioSolucao: "Ré♯5 entra no V, fica preso sobre mi3 e sobe meio tom: o atraso de um 4–3, na direção natural da sensível." },
     ],
   }, { depoisDe: "ornamentos" });
 })(this);
