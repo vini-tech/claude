@@ -12,56 +12,6 @@
   // ------------------------------------------------------------ regras do capítulo (prefixo set_)
   const F = M.ferramentas, T = M.T;
 
-  // dois acordes seguidos são "o mesmo" (só muda a inversão): a 7ª pode trocar de voz antes de resolver
-  function mesmoAcorde(a, b) {
-    if (!a.cifra || !b.cifra || a.tom !== b.tom) return false;
-    const x = a.cifra, y = b.cifra;
-    return x.grau === y.grau && x.maior === y.maior && x.qualidade === y.qualidade && x.alteracao === y.alteracao && y.setima
-      && !!x.secundaria === !!y.secundaria && (!x.secundaria || x.secundaria.alvo === y.secundaria.alvo);
-  }
-
-  M.definirRegra("set_setima", "A 7ª do acorde desce por grau",
-    "Em qualquer acorde de sétima (V7, V65, ii65, vii°7, IV7…), a voz externa que tem a 7ª do acorde no fim dele desce um grau quando a harmonia muda. Licença: no V43 → I6, com o baixo subindo por grau, a 7ª pode subir em 10ªs paralelas com ele.",
-    function* (ex, ctx) {
-      if (!ex.tonalidade || !ctx.cifras) return;
-      const hs = R3.harmoniasCifradas(ex, ctx);
-      for (let k = 0; k < hs.length; k++) {
-        const h = hs[k];
-        if (!h.cifra || !h.cifra.setima || h.cifra.aumentada || h.cifra.nona) continue;
-        const prox = hs[k + 1];
-        if (prox && mesmoAcorde(h, prox)) continue; // V7 → V65: a resolução fica para depois
-        const sete = R3.membros(h.cifra, h.tom)[3];
-        if (!sete) continue;
-        for (let i = 0; i < ex.vozes.length; i++) {
-          const v = ex.vozes[i];
-          const n = v.soandoEm(h.fim - 1);
-          if (!n || n.altura.nome !== sete) continue;
-          const seg = n.fim > h.fim ? n : v.seguinte(n);
-          const c = ex.compassoDe(h.inicio);
-          if (seg === null) {
-            yield [c, prox ? `${v.nome}: a 7ª de ${h.texto} (${n.nome}) fica sem continuação` : `${v.nome}: ${n.nome} é a 7ª de ${h.texto} e a música termina sem resolvê-la`, [n]];
-            continue;
-          }
-          // ii65 → I64 → V: a 7ª pode ficar (presa ou repetida) sobre o 6/4 cadencial e descer no V
-          if (seg.ps === n.ps && prox && prox.cifra && prox.cifra.seisQuatro) {
-            const depois = v.soandoEm(prox.fim);
-            if (depois && depois.ps !== n.ps && F.ehGrau(n, depois) && F.direcao(n, depois) < 0) continue;
-          }
-          if (seg === n) { yield [c, `${v.nome}: a 7ª de ${h.texto} (${n.nome}) fica presa no acorde seguinte em vez de descer`, [n]]; continue; }
-          if (F.ehGrau(n, seg) && F.direcao(n, seg) < 0) continue;
-          // licença: V43 → I6 com o baixo subindo por grau e a 7ª subindo junto, em 10ªs
-          const b0 = h.baixo, b1 = prox && prox.baixo;
-          const licenca = prox && prox.cifra && h.cifra.grau === 5 && h.cifra.membroBaixo === 2 && !h.cifra.secundaria
-            && prox.cifra.grau === 1 && prox.cifra.membroBaixo === 1 && i < ex.vozes.length - 1
-            && F.ehGrau(n, seg) && F.direcao(n, seg) > 0 && b1 && F.ehGrau(b0, b1) && F.direcao(b0, b1) > 0;
-          if (licenca) continue;
-          yield [c, `${v.nome}: ${n.nome} é a 7ª de ${h.texto} e devia descer um grau, mas vai para ${seg.nome}`, [n, seg]];
-        }
-      }
-    }, { precisaTom: true,
-      porque: "A 7ª é a dissonância que define o acorde de sétima: ela nasceu como retardo ou nota de passagem descendente, e o ouvido continua esperando que ela caia. Se ela salta ou fica parada, a tensão não se desfaz — ou se desfaz numa voz que o ouvinte não está seguindo.",
-      corrigir: "Ache a 7ª do acorde (V7: o 4º grau; ii7: o 1º; vii°7: o 6º abaixado) e faça a voz que a tem descer um grau no acorde seguinte. Se a nota de resolução dobraria o baixo de forma ruim, troque a voz que tem a 7ª ou a inversão do acorde." });
-  M.OLHA_ADIANTE.add("set_setima");
 
   // restrição barroca: toda 7ª de acorde numa voz externa vem preparada (a mesma nota já soava no acorde anterior)
   M.definirRegra("set_setima_preparada", "A 7ª vem preparada",
@@ -72,7 +22,7 @@
       for (let k = 0; k < hs.length; k++) {
         const h = hs[k];
         if (!h.cifra || !h.cifra.setima || h.cifra.aumentada) continue;
-        if (k > 0 && mesmoAcorde(hs[k - 1], h) && hs[k - 1].cifra.setima) continue;
+        if (k > 0 && R3.mesmoAcorde(hs[k - 1], h) && hs[k - 1].cifra.setima) continue;
         const sete = R3.membros(h.cifra, h.tom)[3];
         for (const v of ex.vozes) {
           for (const n of v.notas) {

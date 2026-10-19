@@ -320,6 +320,224 @@
       "A aceleração do ritmo harmônico é um dos sinais mais fortes de que a cadência se aproxima. Com o mesmo ritmo do começo ao fim, a cadência 'não chega'.",
       "Deixe o começo com um acorde por compasso (ou menos) e use dois ou mais nos compassos antes da cadência (por exemplo I6 – ii6 | V64 – V | I).") });
 
+  // ------------------------------------------------------------ notas com destino (7ª, sensível, +6, N)
+
+  /* Acordes cifrados agrupados: notas seguidas do baixo com a mesma cifra no mesmo tom são um acorde só.
+   * [{ cifra, tom, texto, inicio, fim, membros, notas (Set, as duas leituras no pivô), baixo }] */
+  const cacheAcordes = new WeakMap(); // ex → { cifras, grupos }: as regras de destino leem a mesma lista
+  function acordesCifrados(ex, ctx) {
+    const c = cacheAcordes.get(ex);
+    if (c && c.cifras === ctx.cifras) return c.grupos;
+    const grupos = [];
+    for (const h of harmoniasCifradas(ex, ctx)) {
+      const ult = grupos[grupos.length - 1];
+      if (!h.cifra) { if (ult) ult.fim = h.fim; continue; }
+      if (ult && ult.texto === h.texto && ult.tom === h.tom && !h.mudou) { ult.fim = h.fim; continue; }
+      grupos.push({ cifra: h.cifra, tom: h.tom, texto: h.texto, inicio: h.inicio, fim: h.fim, membros: membros(h.cifra, h.tom), notas: h.notas, baixo: h.baixo, pivo: !!h.pivo });
+    }
+    cacheAcordes.set(ex, { cifras: ctx.cifras, grupos });
+    return grupos;
+  }
+
+  /* Para cada acorde que tem notas com destino (ex.: a 7ª), olha as vozes externas na troca para o acorde
+   * seguinte: se a nota soa no fim do acorde e não pertence ao próximo, ela tem de cumprir o destino na
+   * próxima nota diferente da voz; notas fora do acorde seguinte (ornamentos) podem vir antes, mas a
+   * primeira nota do acorde seguinte que a voz alcança tem de ser o destino.
+   * Pivôs ficam de fora: a função da nota depende da leitura.
+   * destinos(acorde, próximo, k, acordes) → [{ nome, ok(de, para), papel?, soCima?, soBaixo? }] */
+  function* conferirDestinos(ex, ctx, destinos, mensagem) {
+    if (ex.vozes.length < 2) return;
+    const gs = acordesCifrados(ex, ctx);
+    const cima = ex.vozes[0], baixo = ex.vozes[ex.vozes.length - 1];
+    for (let k = 0; k + 1 < gs.length; k++) {
+      const g = gs[k], prox = gs[k + 1];
+      if (g.pivo || prox.pivo) continue;
+      for (const d of destinos(g, prox, k, gs)) {
+        if (prox.notas.has(d.nome)) continue; // nota comum: segue no acorde seguinte
+        for (const v of d.soCima ? [cima] : d.soBaixo ? [baixo] : [cima, baixo]) {
+          const n = v.soandoEm(prox.inicio - 1);
+          if (!n || n.altura.nome !== d.nome) continue;
+          const seguintes = v.notas.slice(v.notas.indexOf(n) + 1).filter((x) => x.ps !== n.ps);
+          if (!seguintes.length) continue; // a voz termina na nota (o fim fica para as regras de cadência)
+          const depois = seguintes[0];
+          let cumpriu = d.ok(n, depois);
+          for (const x of seguintes) {
+            if (cumpriu || x.inicio >= prox.fim) break;
+            if (d.ok(n, x)) cumpriu = true;
+            else if (prox.notas.has(x.altura.nome)) break; // chegou a uma nota do acorde que não é o destino
+          }
+          if (!cumpriu) yield [ex.compassoDe(depois.inicio), mensagem(v, d, n, depois, g, prox), [n, depois]];
+        }
+      }
+    }
+  }
+  const semitom = (a, b, dir) => b.ps - a.ps === dir && F.ehGrau(a, b);
+  const nomeVoz = (ex, v) => (v === ex.vozes[0] ? "voz de cima" : "baixo");
+
+  // a 7ª do acorde (antes só no capítulo de sétimas, web/livro/setimas.js; agora em todos os perfis tonais)
+  // dois acordes seguidos são "o mesmo" (só muda a inversão): a 7ª pode trocar de voz antes de resolver
+  function mesmoAcorde(a, b) {
+    if (!a.cifra || !b.cifra || a.tom !== b.tom) return false;
+    const x = a.cifra, y = b.cifra;
+    return x.grau === y.grau && x.maior === y.maior && x.qualidade === y.qualidade && x.alteracao === y.alteracao && y.setima
+      && !!x.secundaria === !!y.secundaria && (!x.secundaria || x.secundaria.alvo === y.secundaria.alvo);
+  }
+
+  def("set_setima", "A 7ª do acorde desce por grau",
+    "Em qualquer acorde de sétima (V7, V65, ii65, vii°7, IV7…), a voz externa que tem a 7ª do acorde no fim dele desce um grau (ou um semitom cromático) quando a harmonia muda; pode ficar se for nota do acorde seguinte. Licença: no V43 → I6, com o baixo subindo por grau, a 7ª pode subir em 10ªs paralelas com ele.",
+    function* (ex, ctx) {
+      if (!ex.tonalidade || !ctx.cifras) return;
+      const hs = harmoniasCifradas(ex, ctx);
+      for (let k = 0; k < hs.length; k++) {
+        const h = hs[k];
+        if (!h.cifra || !h.cifra.setima || h.cifra.aumentada || h.cifra.nona) continue;
+        const prox = hs[k + 1];
+        if (prox && mesmoAcorde(h, prox)) continue; // V7 → V65: a resolução fica para depois
+        if (h.pivo || (prox && prox.pivo)) continue; // no pivô a função da nota depende da leitura
+        const sete = membros(h.cifra, h.tom)[3];
+        if (!sete) continue;
+        for (let i = 0; i < ex.vozes.length; i++) {
+          const v = ex.vozes[i];
+          const n = v.soandoEm(h.fim - 1);
+          if (!n || n.altura.nome !== sete) continue;
+          const seg = n.fim > h.fim ? n : v.seguinte(n);
+          const c = ex.compassoDe(h.inicio);
+          if (seg === null) {
+            yield [c, prox ? `${v.nome}: a 7ª de ${h.texto} (${n.nome}) fica sem continuação` : `${v.nome}: ${n.nome} é a 7ª de ${h.texto} e a música termina sem resolvê-la`, [n]];
+            continue;
+          }
+          // ii65 → I64 → V: a 7ª pode ficar (presa ou repetida) sobre o 6/4 cadencial e descer no V
+          if (seg.ps === n.ps && prox && prox.cifra && prox.cifra.seisQuatro) {
+            const depois = v.soandoEm(prox.fim);
+            if (depois && depois.ps !== n.ps && F.ehGrau(n, depois) && F.direcao(n, depois) < 0) continue;
+          }
+          // nota comum com o acorde seguinte (ex.: a 7ª diminuta de nota comum, #ii°42 → I): pode ficar
+          if (seg.ps === n.ps && prox && prox.notas && prox.notas.has(n.altura.nome)) continue;
+          if (seg === n) { yield [c, `${v.nome}: a 7ª de ${h.texto} (${n.nome}) fica presa no acorde seguinte em vez de descer`, [n]]; continue; }
+          // desce um grau, ou um semitom cromático (ré → ré♭, no cromatismo linear)
+          if (F.direcao(n, seg) < 0 && (F.ehGrau(n, seg) || n.ps - seg.ps === 1)) continue;
+          // licença: V43 → I6 com o baixo subindo por grau e a 7ª subindo junto, em 10ªs
+          const b0 = h.baixo, b1 = prox && prox.baixo;
+          const licenca = prox && prox.cifra && h.cifra.grau === 5 && h.cifra.membroBaixo === 2 && !h.cifra.secundaria
+            && prox.cifra.grau === 1 && prox.cifra.membroBaixo === 1 && i < ex.vozes.length - 1
+            && F.ehGrau(n, seg) && F.direcao(n, seg) > 0 && b1 && F.ehGrau(b0, b1) && F.direcao(b0, b1) > 0;
+          if (licenca) continue;
+          yield [c, `${v.nome}: ${n.nome} é a 7ª de ${h.texto} e devia descer um grau, mas vai para ${seg.nome}`, [n, seg]];
+        }
+      }
+    }, { precisaTom: true,
+      porque: "A 7ª é a dissonância que define o acorde de sétima: ela nasceu como retardo ou nota de passagem descendente, e o ouvido continua esperando que ela caia. Se ela salta ou fica parada, a tensão não se desfaz — ou se desfaz numa voz que o ouvinte não está seguindo.",
+      corrigir: "Ache a 7ª do acorde (V7: o 4º grau; ii7: o 1º; vii°7: o 6º abaixado) e faça a voz que a tem descer um grau no acorde seguinte. Se a nota de resolução dobraria o baixo de forma ruim, troque a voz que tem a 7ª ou a inversão do acorde." });
+
+  // sensível de um acorde de função dominante (V, vii°, e as secundárias): [sensível, alvo]
+  function sensivelDe(g) {
+    const c = g.cifra;
+    if (c.aumentada || c.napolitana || c.alteracao) return null;
+    if (c.secundaria) return c.secundaria.tipo === 5 ? g.membros[1] : g.membros[0];
+    if (c.grau === 5 && c.maior && (!c.qualidade || c.qualidade === "+")) return g.membros[1];
+    if (c.grau === 7 && (c.qualidade === "°" || c.qualidade === "ø")) return g.membros[0];
+    return null;
+  }
+  // o acorde seguinte é a resolução: "alvo" (tem a nota alvo como fundamental), "engano" (V → vi) ou nada
+  function resolveEm(g, prox, alvo) {
+    if (prox.membros[0] === alvo) return "alvo";
+    return !g.cifra.secundaria && g.cifra.grau === 5 && prox.cifra.grau === 6 && !prox.cifra.alteracao && prox.tom === g.tom ? "engano" : null;
+  }
+
+  /* Obrigação da sensível na troca g → prox: null (não há) ou { lt, ok, engano }.
+   * Sem obrigação: o acorde seguinte não é a resolução; o I6/4 cadencial (ainda é dominante: a obrigação
+   * passa para o V depois dele); e o V que fecha a semicadência (a frase termina nele). */
+  function obrigacaoDaSensivel(ex, ctx, g, prox) {
+    const lt = sensivelDe(g);
+    if (!lt || (prox.cifra.seisQuatro && prox.cifra.grau === 1)) return null;
+    const sc = ctx.plano && ctx.plano.semicadencia;
+    if (sc && g.fim === sc * ex.duracaoCompasso) return null;
+    const alvo = F.transpor(M.lerAltura(lt.replace(/-/g, "b") + "4"), 1, 1).nome;
+    const res = resolveEm(g, prox, alvo);
+    if (!res) return null;
+    // cadeia de dominantes (V7/ii → V7/V, V7/V → V7): a sensível desce cromaticamente e vira a 7ª do seguinte
+    const cromatica = (a, b) => prox.cifra.setima && a.ps - b.ps === 1 && a.altura.letra === b.altura.letra && b.altura.nome === prox.membros[3];
+    return { lt, ok: (a, b) => semitom(a, b, 1) || cromatica(a, b), engano: res === "engano" };
+  }
+  /* a resolução é uma cadência: acorde de chegada em estado fundamental no compasso da cadência do plano
+   * ou depois; sem plano (exemplos da aula), o último acorde. Com plano, o último acorde escrito de um
+   * exercício pela metade não conta como cadência. */
+  const ehCadencia = (ex, ctx, prox, k, gs) => prox.cifra.membroBaixo === 0
+    && (ctx.plano && ctx.plano.cadencia ? ex.compassoDe(prox.inicio) >= ctx.plano.cadencia : k + 2 === gs.length);
+
+  def("sensivel_sobe", "A sensível sobe",
+    "A sensível de um acorde de dominante (V, vii°, V/x, vii°/x) sobe meio tom quando ele resolve no acorde alvo: no baixo sempre (V6 → I), na voz de cima na cadência (inclusive a de engano, V → vi).",
+    function* (ex, ctx) {
+      yield* conferirDestinos(ex, ctx,
+        (g, prox, k, gs) => {
+          const o = obrigacaoDaSensivel(ex, ctx, g, prox);
+          if (!o) return [];
+          const cad = ehCadencia(ex, ctx, prox, k, gs);
+          // na cadência de engano só a voz de cima tem obrigação (o baixo em V6 → vi desce na escala)
+          if (o.engano) return cad ? [{ nome: o.lt, ok: o.ok, soCima: true }] : [];
+          return [{ nome: o.lt, ok: o.ok, soBaixo: !cad }];
+        },
+        (v, d, n, depois, g, prox) => `${nomeVoz(ex, v)}: ${n.nome} é a sensível de ${g.texto} e vai para ${depois.nome} em ${prox.texto}; ela devia subir meio tom`);
+    }, { precisaTom: true, ...EXPL(
+      "A sensível fica meio tom abaixo da nota alvo e é o que faz a dominante soar como dominante. No baixo e na voz de cima da cadência, quando ela não sobe, o ouvido percebe a resolução frustrada e a cadência perde a força.",
+      "Leve a sensível meio tom acima (si → dó em dó maior; dó♯ → ré no V/ii). No baixo, V6 → I: o baixo sobe da sensível à tônica.") });
+
+  def("sensivel_frustrada", "Sensível frustrada na voz de cima",
+    "No meio da frase, a sensível na voz de cima que não sobe para a nota alvo (salta para o 5º ou o 3º grau).",
+    function* (ex, ctx) {
+      yield* conferirDestinos(ex, ctx,
+        (g, prox, k, gs) => {
+          const o = obrigacaoDaSensivel(ex, ctx, g, prox);
+          return o && !o.engano && !ehCadencia(ex, ctx, prox, k, gs) ? [{ nome: o.lt, ok: o.ok, soCima: true }] : [];
+        },
+        (v, d, n, depois, g, prox) => `voz de cima: ${n.nome} é a sensível de ${g.texto} e vai para ${depois.nome} em ${prox.texto}, sem subir`);
+    }, { precisaTom: true, ...EXPL(
+      "Na escrita a duas vozes ao piano, a sensível que salta para baixo no meio da frase é comum: a resolução fica implícita numa voz interna. Mas a voz de cima é a que se ouve, e a sensível que não sobe enfraquece a chegada.",
+      "Se quer a chegada clara, leve a sensível meio tom acima. Se o salto é a ideia da melodia, deixe: aqui não é erro.") });
+
+  def("sensivel_dupla", "Sensível dobrada",
+    "No ataque de um acorde de dominante (ou na entrada da voz de cima nele), a sensível não está nas duas vozes ao mesmo tempo.",
+    function* (ex, ctx) {
+      if (ex.vozes.length < 2) return;
+      const sup = ex.vozes[0], bai = ex.vozes[ex.vozes.length - 1];
+      for (const g of acordesCifrados(ex, ctx)) {
+        const lt = sensivelDe(g);
+        if (!lt) continue;
+        // no ataque do acorde (ou na entrada da voz de cima, se ela estava em pausa): numa diminuição,
+        // a sensível que passa depois, no meio do acorde, não é dobramento
+        const entrada = sup.soandoEm(g.inicio) ? g.inicio : (sup.notas.find((n) => n.inicio > g.inicio && n.inicio < g.fim) || {}).inicio;
+        if (entrada === undefined) continue;
+        const a = sup.soandoEm(entrada), b = bai.soandoEm(entrada);
+        if (a && b && a.altura.nome === lt && b.altura.nome === lt) yield [ex.compassoDe(entrada), `${lt} (sensível de ${g.texto}) nas duas vozes`, [a, b]];
+      }
+    }, { precisaTom: true, ...EXPL(
+      "A sensível tem um destino só. Dobrada, as duas vozes sobem juntas para a mesma nota: 8ªs paralelas, ou uma delas não resolve.",
+      "Deixe a sensível numa voz só e dobre a fundamental ou a 5ª do acorde.") });
+
+  def("aumentada_resolve", "A sexta aumentada se abre na 8ª",
+    "Nas vozes externas, o ♭6 da sexta aumentada desce meio tom e o ♯4 sobe meio tom, os dois para o 5º grau.",
+    function* (ex, ctx) {
+      yield* conferirDestinos(ex, ctx,
+        (g) => (g.cifra.aumentada ? [
+          { nome: g.membros[0], ok: (a, b) => semitom(a, b, -1), papel: "♭6" },
+          { nome: g.membros[g.membros.length - 1], ok: (a, b) => semitom(a, b, 1), papel: "♯4" },
+        ] : []),
+        (v, d, n, depois, g) => `${nomeVoz(ex, v)}: ${n.nome} é o ${d.papel} de ${g.texto} e vai para ${depois.nome}; devia ${d.papel === "♭6" ? "descer" : "subir"} meio tom para o 5º grau`);
+    }, { precisaTom: true, ...EXPL(
+      "As duas notas que formam a 6ª aumentada são sensíveis do 5º grau, uma de cada lado. O acorde só se explica pela expansão: o intervalo se abre na oitava do V.",
+      "Leve o ♭6 meio tom abaixo e o ♯4 meio tom acima (lá♭ → sol e fá♯ → sol, em dó). Se vier o I6/4 cadencial antes do V, elas já chegam ao 5º grau nele.") });
+
+  def("napolitana_resolve", "O ♭2 da napolitana desce",
+    "Nas vozes externas, o 2º grau abaixado da napolitana desce (à sensível, por 3ª diminuta, ou passando pela tônica).",
+    function* (ex, ctx) {
+      yield* conferirDestinos(ex, ctx,
+        // só na voz de cima: no baixo, o ♭2 é a napolitana em estado fundamental, que salta para o 5º grau
+        (g) => (g.cifra.napolitana ? [{ nome: g.membros[0], ok: (a, b) => F.direcao(a, b) < 0, soCima: true }] : []),
+        (v, d, n, depois, g) => `${nomeVoz(ex, v)}: ${n.nome} é o ♭2 de ${g.texto} e vai para ${depois.nome}; ele devia descer`);
+    }, { precisaTom: true, ...EXPL(
+      "O ♭2 é uma inflexão para baixo: ele puxa para a tônica e para a sensível. Subindo, ele soa como uma nota errada do 2º grau natural.",
+      "Leve o ♭2 para baixo: direto à sensível (ré♭ → si, 3ª diminuta, em dó) ou passando pela tônica (ré♭ → dó → si).") });
+
   // ------------------------------------------------------------ esquemas
 
   def("esquema", "Esquema galante",
@@ -440,8 +658,8 @@
       "Troque fundamentais por inversões que liguem por grau: I–V43–I6, I6–ii6–V, IV6–V."));
 
   for (const id of ["cadencias_do_plano", "ritmo_harmonico", "climax_no_lugar", "perfeitas_no_meio", "figuras_obrigatorias", "dissonancias_minimas", "baixo_por_grau"]) M.PRECISA_FIM.add(id);
-  for (const id of ["seis_quatro", "retrogressao_cifrada"]) M.OLHA_ADIANTE.add(id);
+  for (const id of ["seis_quatro", "retrogressao_cifrada", "set_setima", "sensivel_sobe", "sensivel_frustrada", "aumentada_resolve", "napolitana_resolve"]) M.OLHA_ADIANTE.add(id);
   M.PRECISA_FIM.add("modulacao");
 
-  return { lerCifra, membros, harmoniaDasCifras, harmoniasCifradas };
+  return { lerCifra, membros, harmoniaDasCifras, harmoniasCifradas, mesmoAcorde };
 });

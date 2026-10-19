@@ -21,6 +21,7 @@
     dissonancia_aproximacao: "aviso", dissonancia_resolucao: "erro", cifras_coerentes: "erro", retrogressao_cifrada: "erro",
     seis_quatro: "erro", cadencias_do_plano: "erro", salto_maior_que_oitava: "erro", intervalo_melodico_aumentado_diminuto: "erro",
     salto_nao_compensado: "aviso",
+    set_setima: "erro", sensivel_sobe: "erro", sensivel_frustrada: "aviso", sensivel_dupla: "erro", aumentada_resolve: "erro", napolitana_resolve: "erro",
   };
   const MELODIA = { ...TONAL, notas_do_acorde: "erro", cadencia_final: "erro" };
   const CANTUS = {

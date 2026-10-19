@@ -298,7 +298,7 @@
         cifrasAluno: true, alvoCompassos: 5,
         instrucoes: "<p>Componha vozes e cifras: lá menor → mi menor (v) em 5 c., pivô pré-dominante, ré♯ na voz do ré natural (ou longe dele), cadência perfeita no c. 5.</p>",
         texto: "tom: A menor\nsoprano:\nbaixo:", duracao: 1,
-        solucao: "tom: A menor\nsoprano: E5/2 D5/1 A4/1 A4/1 G#4/1 A4/1 E5/1 D#5/1 E5/1 F#5/1 E5/1 E5/2 D#5/2 E5/4\nbaixo: A2/2 B2/1 C3/1 D3/1 E3/1 C3/1 A2/1 F#2/1 G2/1 A2/2 B2/2 B2/2 E2/4",
+        solucao: "tom: A menor\nsoprano: E5/2 D5/1 C5/1 A4/1 G#4/1 A4/1 E5/1 D#5/1 E5/1 F#5/1 E5/1 E5/2 D#5/2 E5/4\nbaixo: A2/2 B2/1 C3/1 D3/1 E3/1 C3/1 A2/1 F#2/1 G2/1 A2/2 B2/2 B2/2 E2/4",
         solucaoCifras: "i V43 i6 iv V i6 i=e:iv V43 i6 ii°6 i64 V7 i",
         comentarioSolucao: "i de lá = iv de mi, logo após o i6: costura invisível. Fá♯ e ré♯ entram no V43; ii°6 e 6/4 dão tempo antes do V7 → i." },
       { id: "pv5", titulo: "Quebrar: a cadência de coral", modo: "quebrar", perfil: { ...P1, mod_caminho: "info" }, nivel: 6,
