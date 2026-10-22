@@ -457,7 +457,8 @@
   }
 
   /* Limite calibrado nas soluções dos capítulos de escrita de tema (motivo, sentença, período, expansão,
-   * binária): o menor nPVI é 16,7 e todas usam 3 valores de duração ou mais; temas reais ficam em 41–47. */
+   * binária): o menor nPVI é 16,7 e todas usam 3 valores de duração ou mais. Médias de temas instrumentais
+ * (Patel & Daniele 2003): ingleses ≈ 47, franceses ≈ 41. */
   const NPVI_MINIMO = 10;
   def("variedade_ritmica", "Variedade rítmica",
     "A melodia usa pelo menos 3 valores de duração e algum contraste entre durações vizinhas (nPVI ≥ 10).",
@@ -467,7 +468,7 @@
       const d = v.notas.map((x) => x.duracao);
       const valores = new Set(d).size, npvi = nPVI(d);
       if (valores <= 2 || npvi < NPVI_MINIMO) {
-        yield [ex.compassoDe(ex.fim - 1), `${v.nome}: ritmo quase uniforme (${valores} valor${valores > 1 ? "es" : ""} de duração, nPVI ${npvi.toFixed(0)}; temas instrumentais ficam entre 41 e 47, segundo Patel & Daniele)`, []];
+        yield [ex.compassoDe(ex.fim - 1), `${v.nome}: ritmo quase uniforme (${valores} valor${valores > 1 ? "es" : ""} de duração, nPVI ${npvi.toFixed(0)}; médias de temas instrumentais: ingleses ≈ 47, franceses ≈ 41, segundo Patel & Daniele)`, []];
       }
     }, EXPL(
       "Um tema se reconhece tanto pelo ritmo quanto pelas notas. Com um ou dois valores de duração, a melodia vira uma corrente de notas iguais: nada se destaca, e a continuação não tem como acelerar.",
