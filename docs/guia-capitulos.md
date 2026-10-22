@@ -152,7 +152,9 @@ Restrições de exercício usam campos do `contexto` (indicados na explicação)
 - `notas_do_acorde` — Notas do acorde nos tempos fortes: Nos tempos fortes a melodia usa notas do acorde; as outras notas ficam nos tempos fracos e andam por grau (passagem ou bordadura).
 - `semicadencia` — Pergunta termina em semicadência: O antecedente (a pergunta) termina no 2º, 5º ou 7º grau, sobre o acorde de dominante (V).
 - `cadencia_final` — Resposta termina na tônica: O consequente (a resposta) termina na tônica, no tempo forte, vindo do 2º grau ou da sensível.
-- `ideia_repetida` — A resposta começa como a pergunta: No período paralelo, os dois primeiros compassos da resposta repetem (ou quase) os dois primeiros da pergunta.
+- `ideia_repetida` — A resposta começa como a pergunta: No período paralelo, os dois primeiros compassos da resposta repetem (ou quase) os dois primeiros da pergunta, nas mesmas notas ou transpostos (mesmo ritmo e desenho).
+- `apresentacao_repetida` — A apresentação repete a ideia básica: Na sentença, os compassos 3–4 repetem a ideia básica dos compassos 1–2: o mesmo ritmo (75% dos ataques) e o mesmo desenho (intervalos ou, ao menos, o contorno), exata ou transposta (repetição na dominante).
+- `variedade_ritmica` — Variedade rítmica: A melodia usa pelo menos 3 valores de duração e algum contraste entre durações vizinhas (nPVI ≥ 10). Só nos capítulos de escrita de tema; nos de diminuição e variação o ritmo uniforme é o exercício.
 - `sequencia_do_motivo` — Sequência do motivo: Cada compasso da sequência repete o ritmo e o desenho de intervalos do motivo, começando em outra nota.
 - `baixo_graus` — O baixo usa I, IV e V: Cada nota do baixo é a fundamental de um dos acordes permitidos (no começo, I, IV e V).
 - `acorde_contem_melodia` — O acorde contém a nota da melodia: O acorde formado sobre cada nota do baixo precisa conter a nota da melodia que soa junto.
@@ -173,6 +175,19 @@ Restrições de exercício usam campos do `contexto` (indicados na explicação)
 - `dissonancias_minimas` — Dissonâncias de passagem: O exercício pede um número mínimo de dissonâncias nos tempos fracos.
 - `retardos_minimos` — Retardos: O exercício pede um número mínimo de retardos: dissonâncias presas (ligadas) no tempo forte.
 - `baixo_por_grau` — Baixo melódico: O baixo anda sobretudo por grau (inversões), com poucos saltos fora da cadência.
+- `set_setima` — A 7ª do acorde desce por grau: Em qualquer acorde de sétima (V7, V65, ii65, vii°7, IV7…), a voz externa que tem a 7ª do acorde no fim dele desce um grau (ou um semitom cromático) quando a harmonia muda; pode ficar se for nota do acorde seguinte. Licença: no V43 → I6, com o baixo subindo por grau, a 7ª pode subir em 10ªs paralelas com ele.
+- `sensivel_sobe` — A sensível sobe: A sensível de um acorde de dominante (V, vii°, V/x, vii°/x) sobe meio tom quando ele resolve no acorde alvo: no baixo sempre (V6 → I), na voz de cima na cadência (inclusive a de engano, V → vi).
+- `sensivel_frustrada` — Sensível frustrada na voz de cima: No meio da frase, a sensível na voz de cima que não sobe para a nota alvo (salta para o 5º ou o 3º grau). Aviso no perfil `TONAL`.
+- `sensivel_dupla` — Sensível dobrada: No ataque de um acorde de dominante (ou na entrada da voz de cima nele), a sensível não está nas duas vozes ao mesmo tempo.
+- `aumentada_resolve` — A sexta aumentada se abre na 8ª: Nas vozes externas, o ♭6 da sexta aumentada desce meio tom e o ♯4 sobe meio tom, os dois para o 5º grau.
+- `napolitana_resolve` — O ♭2 da napolitana desce: Na voz de cima, o 2º grau abaixado da napolitana desce no máximo uma 3ª (à sensível, por 3ª diminuta, ou passando pela tônica).
+- `cadencia_tempo_forte` — Cadência no tempo forte: O I da cadência final e o V da semicadência chegam num tempo forte (o 1º tempo, ou o meio do compasso nos compassos de 2 e 4 tempos); com o 6/4 cadencial, conta a chegada do 6/4.
+- `harmonia_sincopada` — Harmonia sincopada: O mesmo acorde, sobre o mesmo baixo, começa depois do 1º tempo e continua no 1º tempo do compasso seguinte. Não vale para o acorde inicial (anacruse) nem para o final, para a troca de inversão nem sobre um pedal.
+
+O perfil `TONAL` já liga as regras de condução com cifras (`set_setima`, `sensivel_sobe`, `sensivel_dupla`,
+`aumentada_resolve`, `napolitana_resolve` como erro; `sensivel_frustrada`, `cadencia_tempo_forte`,
+`harmonia_sincopada` como aviso). Para ligar uma regra em todos os exercícios de um capítulo sem mexer nos
+perfis comuns, use `TEMAS.acrescentarRegras(tema, { regra: "erro" })`.
 
 Contextos úteis: `plano: { cadencia: n, semicadencia: n, tomFinal: "G maior", acelerar: [[1,4],[5,7]], repete: [1,5] }`,
 `modulacao: { para: "G maior", tipo: "pivo"|"cromatica"|"enarmonica", ate: n }`, `esqueleto: [[semínima, "G4"], …]`,
@@ -187,7 +202,14 @@ node tests/validar_temas.js      # tem de imprimir []
 Ele verifica: partituras legíveis; cada camada/contraste/exemplo de quebra completo passa no perfil do
 capítulo (o do primeiro exercício com solução, sem as restrições) ou no `perfil` próprio do exemplo;
 cada solução passa no seu perfil e fica completa; o início de cada exercício não começa aprovado;
-perguntas bem formadas. Itere até zerar. Para testar uma partitura avulsa:
+perguntas bem formadas. Itere até zerar.
+
+Depois de mudar uma solução, recalibre as faixas do relatório de estilo, que vêm das soluções do livro
+(senão `tests/test_estilo.py` falha):
+
+```
+node tests/calibrar_estilo.js --gravar   # regrava web/referencias-estilo.js
+``` Para testar uma partitura avulsa:
 
 ```
 node -e 'const M=require("./web/motor.js");require("./web/regras2.js");const R3=require("./web/regras3.js");
