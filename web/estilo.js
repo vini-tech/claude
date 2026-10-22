@@ -1,9 +1,12 @@
 /* Relatório de estilo: descreve um exercício com números e compara com referências do estilo.
  * Não julga regra (isso é o verificador): mostra como a peça se comporta, para o compositor decidir.
  *
- *   Estilo.relatorio(ex, { cf, cifras, plano }) → [{ grupo, titulo, valor, referencia, nota, nivel: "ok"|"atencao" }]
- *     cifras: uma por nota do baixo (as do exercício ou as do aluno); sem elas não há o grupo Harmonia
- *     plano:  o plano do exercício ({ semicadencia, cadencia }); marca as frases e as cadências
+ *   Estilo.relatorio(ex, { cf, cifras, plano, nivelLivro }) → [{ grupo, titulo, valor, referencia, nota, nivel: "ok"|"atencao", medida? }]
+ *     cifras:     uma por nota do baixo (as do exercício ou as do aluno); sem elas não há o grupo Harmonia
+ *     plano:      o plano do exercício ({ semicadencia, cadencia }); marca as frases e as cadências
+ *     nivelLivro: o nível do capítulo; com ele, cada medida é comparada com a faixa das soluções do livro
+ *                 nesse nível (web/referencias-estilo.js, gerado por tests/calibrar_estilo.js)
+ *   Estilo.numeros(ex, opcoes) → { medida: [valores] }: os números brutos, para a calibração
  *
  * Grupos: Melodia, Ritmo, Harmonia, Forma e Vozes. Fontes das referências: Patel & Daniele 2003 (nPVI),
  * Huron 1993 (ritmo complementar), Huron 1996 (contorno, canções folclóricas), von Hippel & Huron 2000
@@ -11,9 +14,12 @@
  * McAdams 2014 (cadências), Schoenberg e Caplin (liquidação).
  */
 (function (raiz, fabrica) {
-  if (typeof module === "object" && module.exports) module.exports = fabrica(require("./motor.js"), require("./regras2.js"), require("./regras3.js"));
-  else raiz.Estilo = fabrica(raiz.Motor, raiz.Regras2, raiz.Regras3);
-})(this, function (M, R2, R3) {
+  if (typeof module === "object" && module.exports) {
+    let refs = null;
+    try { refs = require("./referencias-estilo.js"); } catch (e) { refs = null; }
+    module.exports = fabrica(require("./motor.js"), require("./regras2.js"), require("./regras3.js"), refs);
+  } else raiz.Estilo = fabrica(raiz.Motor, raiz.Regras2, raiz.Regras3, raiz.ReferenciasEstilo || null);
+})(this, function (M, R2, R3, REFERENCIAS) {
   "use strict";
   const F = M.ferramentas;
   const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
@@ -209,6 +215,7 @@
         referencia: "linhas vocais: cerca de 2/3 ou mais por grau",
         nota: p.pares && p.graus / p.pares < 0.55 ? "A linha salta muito: tende a soar como arpejo, não como melodia." : "Equilíbrio de linha cantável.",
         nivel: p.pares && p.graus / p.pares < 0.55 ? "atencao" : "ok",
+        medida: p.pares ? ["porGrau", pct(p.graus, p.pares)] : null,
       });
       const pos = Math.round(p.posClimax * 100);
       item("Melodia", {
@@ -216,13 +223,15 @@
         referencia: "único, entre ~40% e ~75% do percurso",
         nota: p.cumes > 1 ? "O ponto mais agudo se repete: o arco perde definição." : pos < 30 ? "Clímax muito cedo: o resto da linha só desce." : pos > 85 ? "Clímax quase no fim: pouca linha para resolver a tensão." : "Posição que dá tempo de preparar e de resolver.",
         nivel: p.cumes > 1 || pos < 30 || pos > 85 ? "atencao" : "ok",
+        medida: p.cumes === 1 ? ["posClimax", pos] : ["climaxRepetido", p.cumes],
       });
       item("Melodia", {
         titulo: `Âmbito${nome}`, valor: `${F.nomeIntervalo(p.ambito)}`, referencia: "de uma 6ª a uma 10ª",
         nota: p.ambito.geral < 6 ? "Âmbito estreito: a linha pode soar estática." : p.ambito.geral > 10 ? "Âmbito largo para uma voz." : "Âmbito de voz real.",
         nivel: p.ambito.geral < 6 || p.ambito.geral > 10 ? "atencao" : "ok",
+        medida: ["ambito", p.ambito.geral],
       });
-      if (p.repet) item("Melodia", { titulo: `Notas repetidas${nome}`, valor: String(p.repet), referencia: "0 a 1", nota: "Cada repetição congela o movimento da linha.", nivel: p.repet > 1 ? "atencao" : "ok" });
+      if (p.repet) item("Melodia", { titulo: `Notas repetidas${nome}`, valor: String(p.repet), referencia: "0 a 1", nota: "Cada repetição congela o movimento da linha.", nivel: p.repet > 1 ? "atencao" : "ok", medida: ["notasRepetidas", p.repet] });
 
       const fs = frases(ex, v, opcoes.plano).map(contorno).filter(Boolean);
       if (fs.length) item("Melodia", {
@@ -245,7 +254,7 @@
           titulo: `Variedade rítmica${nome}`, valor: `nPVI ${np.toFixed(0)} · ${valores} valores de duração`,
           referencia: "médias de temas instrumentais: ingleses ≈ 47, franceses ≈ 41 (Patel & Daniele 2003); 0 = ritmo uniforme",
           nota: np < 20 ? "Pouco contraste entre durações vizinhas: o ritmo corre uniforme." : np > 70 ? "Contraste forte entre durações vizinhas (pontuados, longas e curtas): ritmo marcado." : "Contraste moderado entre durações vizinhas.",
-          nivel: "ok",
+          nivel: "ok", medida: ["npvi", Math.round(np)],
         });
         const den = densidade(ex, v);
         if (den.length >= 4) {
@@ -275,6 +284,7 @@
         referencia: "Fux: mais imperfeitas que perfeitas (perfeitas no começo, no fim e em pontos de articulação)",
         nota: imp < perf ? "Muitas 5ªs e 8ªs: o tecido fica oco e as vozes perdem identidade." : "3ªs e 6ªs formam o tecido; as perfeitas marcam pontos.",
         nivel: imp < perf ? "atencao" : "ok",
+        medida: tipos.length ? ["imperfeitas", pct(imp, tipos.length)] : null,
       });
       const suc = F.sucessoes(ex, ...par).filter(([, b]) => b.atacaSup || b.atacaInf);
       // movimento de tempo a tempo (como a referência dos corais): as notas que soam em cada tempo
@@ -300,23 +310,25 @@
         referencia: "corais de Bach, soprano e baixo nos tempos: contrário 43%, oblíquo 26%, direto 27%, paralelo 5% (medido com o music21)",
         nota: cont.contrario < Math.max(cont.direto, cont.paralelo) ? "As vozes andam muito juntas: a independência sofre, mesmo sem erro de regra." : "Boa independência de direção.",
         nivel: cont.contrario < Math.max(cont.direto, cont.paralelo) ? "atencao" : "ok",
+        medida: tot ? ["contrario", pct(cont.contrario, tot)] : null,
       });
       // saltos simultâneos
       let simult = 0;
       for (const [a, b] of suc) if (b.atacaSup && b.atacaInf && F.ehSalto(a.sup, b.sup) && F.ehSalto(a.inf, b.inf)) simult++;
       if (simult) item("Vozes", { titulo: "Saltos simultâneos", valor: String(simult), referencia: "raros: quando uma voz salta, a outra costuma andar por grau",
-        nota: "Saltos nas duas vozes ao mesmo tempo chamam atenção e dificultam o equilíbrio.", nivel: simult > 1 ? "atencao" : "ok" });
+        nota: "Saltos nas duas vozes ao mesmo tempo chamam atenção e dificultam o equilíbrio.", nivel: simult > 1 ? "atencao" : "ok", medida: ["saltosSimultaneos", simult] });
       // clímax coincidente
       const top = (v) => { const m = Math.max(...v.notas.map((n) => n.ps)); return v.notas.filter((n) => n.ps === m).map((n) => ex.compassoDe(n.inicio)); };
       const a = ex.vozes[par[0]], b = ex.vozes[par[1]];
       if (a.notas.length && b.notas.length) {
         const coincide = top(a).some((c) => top(b).includes(c));
         item("Vozes", { titulo: "Clímax das duas vozes", valor: coincide ? "no mesmo compasso" : "em compassos diferentes", referencia: "em momentos diferentes",
-          nota: coincide ? "Os dois pontos altos juntos fazem as vozes soarem como bloco." : "Cada voz tem o seu arco.", nivel: coincide ? "atencao" : "ok" });
+          nota: coincide ? "Os dois pontos altos juntos fazem as vozes soarem como bloco." : "Cada voz tem o seu arco.", nivel: coincide ? "atencao" : "ok", medida: ["climaxJunto", coincide ? 1 : 0] });
         const comp = complementaridade(ex, a, b);
         if (comp !== null) item("Ritmo", {
           titulo: "Ritmo entre as vozes", valor: `${comp.toFixed(2)} × o acaso`,
           referencia: "nas Invenções de Bach, as vozes atacam juntas menos que o acaso prevê (Huron 1993)",
+          medida: ["complementaridade", Math.round(comp * 100) / 100],
           nota: comp < 0.9 ? "Ritmo complementar: quando uma voz se move, a outra tende a esperar." : comp > 1.5 ? "As vozes atacam juntas bem mais que o acaso: o baixo marca os tempos da melodia (textura de melodia acompanhada, não de duas vozes iguais)." : "Ataques juntos perto da medida do acaso.",
           nivel: "ok",
         });
@@ -332,6 +344,7 @@
         referencia: "em Bach, a grande maioria (Meeùs, Tymoczko); a retrogressão é rara, não proibida. Saídas do I não contam",
         nota: dom / total < 0.5 ? "Muitas progressões para trás: a harmonia anda em círculos em vez de avançar para a cadência." : "A harmonia avança como no estilo tonal.",
         nivel: dom / total < 0.5 ? "atencao" : "ok",
+        medida: ["dominantes", pct(dom, total)],
       });
       const n = ex.compassoDe(ex.fim - 1);
       // acordes que soam em cada compasso (o que vem do compasso anterior também conta)
@@ -380,8 +393,26 @@
         });
       }
     }
+    // faixas do livro: a atenção só fica se a medida também foge do que as soluções do nível fazem
+    const faixas = REFERENCIAS && opcoes.nivelLivro ? REFERENCIAS[opcoes.nivelLivro] : null;
+    if (faixas) {
+      for (const i of itens) {
+        const f = i.medida && faixas[i.medida[0]];
+        if (!f) continue;
+        const [lo, hi] = f, x = i.medida[1];
+        i.referencia += `; nas soluções do livro neste nível: ${lo}–${hi}`;
+        if (i.nivel === "atencao" && x >= lo && x <= hi) { i.nivel = "ok"; i.nota += " Ainda assim, dentro do que as soluções do livro fazem neste nível."; }
+      }
+    }
     return itens;
   }
 
-  return { relatorio, medidas: { nPVI, densidade, complementaridade, acordes, fundamentais, cadenciaEm, contorno, frases, afastamentos, formaPorCompasso, liquidacao } };
+  // os números brutos do relatório (sem as faixas), para a calibração
+  function numeros(ex, opcoes = {}) {
+    const n = {};
+    for (const i of relatorio(ex, { ...opcoes, nivelLivro: null })) if (i.medida) (n[i.medida[0]] = n[i.medida[0]] || []).push(i.medida[1]);
+    return n;
+  }
+
+  return { relatorio, numeros, medidas: { nPVI, densidade, complementaridade, acordes, fundamentais, cadenciaEm, contorno, frases, afastamentos, formaPorCompasso, liquidacao } };
 });

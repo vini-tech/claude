@@ -29,6 +29,7 @@ const saida = casos.map(([tipo, texto, extra]) => {
   if (tipo === 'fundamentais') return md.fundamentais(md.acordes(ex, extra.split(' ')));
   if (tipo === 'cadencia') return md.cadenciaEm(ex, md.acordes(ex, extra.cifras.split(' ')), extra.c);
   if (tipo === 'relatorio') return Est.relatorio(ex, extra).map((i) => [i.grupo, i.titulo]);
+  if (tipo === 'relatorio_nivel') return Object.fromEntries(Est.relatorio(ex, extra).map((i) => [i.titulo, i.nivel]));
 });
 process.stdout.write(JSON.stringify(saida));
 """
@@ -113,6 +114,22 @@ def test_fundamentais_e_cadencias():
         # V6 no fim da frase não é semicadência
         ("cadencia", duas("E5/2 F5/2 D5/4", "C3/2 F3/2 B2/4"), {"cifras": "I IV V6", "c": 2}),
     ) == [{"dom": 2, "total": 2}, "PAC", "IAC", "SC", "engano", {"dom": 1, "total": 1}, {"dom": 2, "total": 2}, "PAC", None]
+
+
+def test_referencias_em_dia_com_o_livro():
+    """web/referencias-estilo.js é gerado das soluções; se uma solução mudar, recalibre com
+    `node tests/calibrar_estilo.js --gravar`."""
+    r = subprocess.run(["node", str(RAIZ / "tests" / "calibrar_estilo.js")], capture_output=True, text=True, encoding="utf-8", check=True)
+    gravado = (RAIZ / "web" / "referencias-estilo.js").read_text(encoding="utf-8")
+    assert r.stdout.replace("\r\n", "\n") == gravado.replace("\r\n", "\n")
+
+
+def test_faixa_do_livro_tira_a_atencao_dentro_dela():
+    # baixo com clímax a 20% da linha: pelo critério fixo, "atenção"; no nível 2 o livro vai de 0% a 80%
+    texto = duas("E5/2 F5/2 G5/2 F5/2 E5/2 D5/2 D5/2 C5/2", "C3/2 E3/2 D3/2 C3/2 B2/2 C3/2 G2/2 C3/2")
+    sem, com = medir(("relatorio_nivel", texto, {"cf": 0}), ("relatorio_nivel", texto, {"cf": 0, "nivelLivro": 2}))
+    assert sem["Clímax (baixo)"] == "atencao"
+    assert com["Clímax (baixo)"] == "ok"
 
 
 def test_grupos_do_relatorio():

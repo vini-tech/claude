@@ -329,6 +329,7 @@ details.nivel:not([open]) > summary h2::after { content: " ▸"; }
 <script src="partitura.js"></script>
 <script src="som.js"></script>
 <script src="geradores.js"></script>
+<script src="referencias-estilo.js"></script>
 <script src="estilo.js"></script>
 <script src="oficina.js"></script>
 <script src="temas.js"></script>
@@ -815,14 +816,15 @@ function mostrarDepois(t, e, tx, cifras) {
   const nomeCf = (tx.match(/^cf:\s*(\S+)/m) || [])[1];
   const cf = nomeCf ? ex.vozes.findIndex((v) => v.nome === nomeCf) : -1;
   const plano = (G.contextoDaPratica(e) || {}).plano;
-  const itens = Est.relatorio(ex, { cf, cifras, plano });
+  const nivelLivro = t.nivel && t.nivel.numero;
+  const itens = Est.relatorio(ex, { cf, cifras, plano, nivelLivro });
   const prior = [...itens.filter((i) => i.nivel === "atencao"), ...itens.filter((i) => i.nivel === "ok")];
   const proximo = proximoExercicio(t, e);
   const temProf = !e._segunda && (e.solucao || e.sortear);
   const s = document.createElement("section");
   s.className = "cartao depois";
   s.innerHTML = (e._segunda ? comparacaoHTML(e._segunda, tx, cf, "1ª solução", "2ª solução", "Duas soluções corretas",
-      "O que ficou igual é o que o estilo exige; o que mudou é escolha sua.", null, null, plano)
+      "O que ficou igual é o que o estilo exige; o que mudou é escolha sua.", null, null, plano, nivelLivro)
     : `<div class="rotulo">Aprovado</div>
       ${temProf ? `
         <button class="botao primario" id="ver-prof">Comparar com o professor</button><div id="prof" hidden></div>`
@@ -847,7 +849,7 @@ function mostrarDepois(t, e, tx, cifras) {
       const nota = e.comentarioSolucao && e.solucao ? e.comentarioSolucao
         : e.solucao ? "Ouça as duas: a diferença está numa decisão (clímax, perfeitas, movimento)."
           : "Gerada pelo verificador para o seu cantus: correta, não necessariamente bonita.";
-      d.innerHTML = comparacaoHTML(tx, sol, cf, "Sua solução", "Professor", "Você × professor", nota, cifrasDaSolucao(sol, e), cifras, plano);
+      d.innerHTML = comparacaoHTML(tx, sol, cf, "Sua solução", "Professor", "Você × professor", nota, cifrasDaSolucao(sol, e), cifras, plano, nivelLivro);
       d.hidden = false;
       montarExemplos(d);
       b.hidden = true;
@@ -857,10 +859,10 @@ function mostrarDepois(t, e, tx, cifras) {
 
 // duas soluções lado a lado, com os números do relatório de estilo de cada uma
 // cifras2: pares [tempo, cifra] da solução do professor; cifras1: uma por nota do baixo do aluno
-function comparacaoHTML(tx1, tx2, cf, rot1, rot2, titulo, nota, cifras2, cifras1, plano) {
+function comparacaoHTML(tx1, tx2, cf, rot1, rot2, titulo, nota, cifras2, cifras1, plano, nivelLivro) {
   const porNota = (tx, pares) => { try { const b = M.lerTexto(tx).vozes.slice(-1)[0]; const m = new Map((pares || []).map(([t, c]) => [t, c])); return b.notas.map((n) => m.get(n.inicio / T) || ""); } catch (err) { return []; } };
-  const r1 = Est.relatorio(M.lerTexto(tx1), { cf, cifras: Array.isArray(cifras1) ? cifras1 : undefined, plano });
-  const r2 = Est.relatorio(M.lerTexto(tx2), { cf, cifras: cifras2 ? porNota(tx2, cifras2) : undefined, plano });
+  const r1 = Est.relatorio(M.lerTexto(tx1), { cf, cifras: Array.isArray(cifras1) ? cifras1 : undefined, plano, nivelLivro });
+  const r2 = Est.relatorio(M.lerTexto(tx2), { cf, cifras: cifras2 ? porNota(tx2, cifras2) : undefined, plano, nivelLivro });
   const cif1 = Array.isArray(cifras1) && cifras1.length ? alinharCifras(tx1, cifras1) : [];
   exemplosDaPagina.set("sol1", { partitura: tx1, cifras: cif1 });
   exemplosDaPagina.set("sol2", { partitura: tx2, cifras: cifras2 || [] });
