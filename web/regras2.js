@@ -305,7 +305,8 @@
 
   /* Semelhança entre dois trechos de n compassos da mesma voz (começando nos compassos c1 e c2):
    *   ritmo: ataques na mesma posição ÷ ataques do trecho maior;
-   *   intervalos: intervalos diatônicos (com direção) iguais, na ordem ÷ intervalos do trecho maior.
+   *   intervalos: intervalos diatônicos (com direção) iguais, na ordem ÷ intervalos do trecho maior;
+   *   contorno: o mesmo, comparando só a direção (sobe, desce, repete).
    * Os intervalos são diatônicos, então a repetição transposta (na dominante, um grau abaixo) conta como igual. */
   function semelhanca(v, c1, c2, n, C) {
     const trecho = (c) => v.notas.filter((x) => x.inicio >= (c - 1) * C && x.inicio < (c - 1 + n) * C);
@@ -314,19 +315,21 @@
     const ritmo = tb.filter((t) => ta.has(t)).length / Math.max(a.length, b.length, 1);
     const ivs = (ns) => ns.slice(1).map((x, k) => F.intervalo(ns[k], x).direcionado);
     const ia = ivs(a), ib = ivs(b);
-    const intervalos = ia.length || ib.length ? ib.filter((x, k) => x === ia[k]).length / Math.max(ia.length, ib.length) : 1;
-    return { ritmo, intervalos, b };
+    const parte = (igual) => (ia.length || ib.length ? ib.filter((x, k) => k < ia.length && igual(x, ia[k])).length / Math.max(ia.length, ib.length) : 1);
+    const intervalos = parte((x, y) => x === y), contorno = parte((x, y) => Math.sign(x) === Math.sign(y));
+    return { ritmo, intervalos, contorno, b };
   }
 
   def("apresentacao_repetida", "A apresentação repete a ideia básica",
-    "Na sentença, os compassos 3–4 repetem a ideia básica dos compassos 1–2: o mesmo ritmo (75% dos ataques) e o mesmo desenho de intervalos, exata ou transposta (repetição na dominante).",
+    "Na sentença, os compassos 3–4 repetem a ideia básica dos compassos 1–2: o mesmo ritmo (75% dos ataques) e o mesmo desenho (intervalos ou, ao menos, o contorno), exata ou transposta (repetição na dominante).",
     function* (ex, ctx) {
       const v = ex.vozes[vozAlvo(ex, ctx)];
       const C = ex.duracaoCompasso;
       if (!v || !v.notas.some((x) => x.fim >= 4 * C)) return; // a repetição ainda não está escrita
-      const { ritmo, intervalos, b } = semelhanca(v, 1, 3, 2, C);
-      if (ritmo < 0.75 || intervalos < 0.75) {
-        const falta = [ritmo < 0.75 ? `ritmo (${Math.round(ritmo * 100)}% dos ataques iguais)` : "", intervalos < 0.75 ? `desenho (${Math.round(intervalos * 100)}% dos intervalos iguais)` : ""].filter(Boolean).join(" e ");
+      const { ritmo, intervalos, contorno, b } = semelhanca(v, 1, 3, 2, C);
+      // com o ritmo igual, basta o mesmo contorno: a repetição na dominante ajusta intervalos à harmonia (Caplin)
+      if (ritmo < 0.75 || (intervalos < 0.75 && contorno < 0.75)) {
+        const falta = [ritmo < 0.75 ? `ritmo (${Math.round(ritmo * 100)}% dos ataques iguais)` : "", intervalos < 0.75 && contorno < 0.75 ? `desenho (${Math.round(intervalos * 100)}% dos intervalos e ${Math.round(contorno * 100)}% das direções iguais)` : ""].filter(Boolean).join(" e ");
         yield [4, `${v.nome}: os compassos 3–4 deviam repetir a ideia básica dos compassos 1–2; diferem no ${falta}`, b];
       }
     }, EXPL(
@@ -464,7 +467,7 @@
       const d = v.notas.map((x) => x.duracao);
       const valores = new Set(d).size, npvi = nPVI(d);
       if (valores <= 2 || npvi < NPVI_MINIMO) {
-        yield [ex.compassoDe(ex.fim - 1), `${v.nome}: ritmo quase uniforme (${valores} valor${valores > 1 ? "es" : ""} de duração, nPVI ${npvi.toFixed(0)}; temas reais ficam em torno de 40)`, []];
+        yield [ex.compassoDe(ex.fim - 1), `${v.nome}: ritmo quase uniforme (${valores} valor${valores > 1 ? "es" : ""} de duração, nPVI ${npvi.toFixed(0)}; temas instrumentais ficam entre 41 e 47, segundo Patel & Daniele)`, []];
       }
     }, EXPL(
       "Um tema se reconhece tanto pelo ritmo quanto pelas notas. Com um ou dois valores de duração, a melodia vira uma corrente de notas iguais: nada se destaca, e a continuação não tem como acelerar.",

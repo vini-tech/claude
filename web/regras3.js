@@ -546,11 +546,12 @@
       "Leve o ♭6 meio tom abaixo e o ♯4 meio tom acima (lá♭ → sol e fá♯ → sol, em dó). Se vier o I6/4 cadencial antes do V, elas já chegam ao 5º grau nele.") });
 
   def("napolitana_resolve", "O ♭2 da napolitana desce",
-    "Nas vozes externas, o 2º grau abaixado da napolitana desce (à sensível, por 3ª diminuta, ou passando pela tônica).",
+    "Na voz de cima, o 2º grau abaixado da napolitana desce no máximo uma 3ª (à sensível, por 3ª diminuta, ou passando pela tônica).",
     function* (ex, ctx) {
       yield* conferirDestinos(ex, ctx,
         // só na voz de cima: no baixo, o ♭2 é a napolitana em estado fundamental, que salta para o 5º grau
-        (g) => (g.cifra.napolitana ? [{ nome: g.membros[0], ok: (a, b) => F.direcao(a, b) < 0, soCima: true }] : []),
+        // desce no máximo uma 3ª (à tônica ou, por 3ª diminuta, à sensível)
+        (g) => (g.cifra.napolitana ? [{ nome: g.membros[0], ok: (a, b) => F.direcao(a, b) < 0 && a.ps - b.ps <= 4, soCima: true }] : []),
         (v, d, n, depois, g) => `${nomeVoz(ex, v)}: ${n.nome} é o ♭2 de ${g.texto} e vai para ${depois.nome}; ele devia descer`);
     }, { precisaTom: true, ...EXPL(
       "O ♭2 é uma inflexão para baixo: ele puxa para a tônica e para a sensível. Subindo, ele soa como uma nota errada do 2º grau natural.",
@@ -600,7 +601,7 @@
   }
 
   def("harmonia_sincopada", "Harmonia sincopada",
-    "O mesmo acorde, sobre o mesmo baixo, começa num tempo fraco e continua no 1º tempo do compasso seguinte. Não vale para o acorde inicial (anacruse), para a troca de inversão nem sobre um pedal.",
+    "O mesmo acorde, sobre o mesmo baixo, começa depois do 1º tempo e continua no 1º tempo do compasso seguinte. Não vale para o acorde inicial (anacruse) nem para o final, para a troca de inversão nem sobre um pedal.",
     function* (ex, ctx) {
       const gs = acordesCifrados(ex, ctx);
       const C = ex.duracaoCompasso;
@@ -611,10 +612,14 @@
         const ini = gs[k].inicio, barra = (Math.floor(ini / C) + 1) * C;
         // o acorde anterior já era o mesmo (só acontece com o acorde inicial em anacruse): não é síncope
         const continua = mesmaHarmonia(gs[k - 1], gs[k]);
-        // pedal: o acorde anterior já estava sobre o mesmo baixo (I – IV6/4 – I sobre a tônica)
-        const pedal = gs[k - 1].baixo.altura.nome === gs[k].baixo.altura.nome;
-        if (!continua && !pedal && ex.forcaMetrica(ini) < 2 && barra < fim) {
-          yield [ex.compassoDe(barra), `${gs[k].texto} começa no tempo fraco do compasso ${ex.compassoDe(ini)} e continua no 1º tempo do ${ex.compassoDe(barra)}`, [gs[k].baixo]];
+        // pedal: o acorde vizinho (antes ou depois) está sobre o mesmo baixo (I – IV6/4 – I, V – #vi°42 – V)
+        const mesmoBaixo = (g) => g && g.baixo.altura.nome === gs[k].baixo.altura.nome;
+        const pedal = mesmoBaixo(gs[k - 1]) || mesmoBaixo(gs[j + 1]);
+        // o acorde final fica com cadencia_tempo_forte (sem aviso duplo)
+        const final = j === gs.length - 1;
+        // qualquer tempo mais fraco que a barra (inclusive o 3º do 4/4) que atravessa o 1º tempo
+        if (!continua && !pedal && !final && ex.forcaMetrica(ini) < ex.forcaMetrica(barra) && barra < fim) {
+          yield [ex.compassoDe(barra), `${gs[k].texto} começa depois do 1º tempo do compasso ${ex.compassoDe(ini)} e continua no 1º tempo do ${ex.compassoDe(barra)}`, [gs[k].baixo]];
         }
         k = j;
       }

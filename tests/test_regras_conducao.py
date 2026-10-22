@@ -102,9 +102,11 @@ def test_sexta_aumentada_e_napolitana():
         # N6 → V em lá menor: si♭ desce (à sensível); subir é erro
         (duas("A menor", "B-4/2 G#4/2", "D3/2 E3/2"), "N6 V", nap, None),
         (duas("A menor", "B-4/2 C5/2", "D3/2 E3/2"), "N6 V", nap, None),
+        # desce, mas mais que uma 3ª (si♭4 → mi4): não é a resolução da napolitana
+        (duas("A menor", "B-4/2 E4/2", "D3/2 E3/2"), "N6 V", nap, None),
         # napolitana em estado fundamental: o si♭ no baixo salta ao 5º grau
         (duas("A menor", "F5/2 E5/2", "B-2/2 E2/2"), "N V", nap, None),
-    ) == [[], aum, [], nap, []]
+    ) == [[], aum, [], nap, nap, []]
 
 
 def test_setima_casos_do_revisor():
@@ -133,7 +135,11 @@ def test_apresentacao_da_sentenca():
         (duas("C maior", f"{IDEIA} {OUTRA}", BAIXO4), "I V7 V7 I", regra, None),
         # ainda sem os c. 3–4: não acusa
         (duas("C maior", IDEIA, BAIXO4), "I V7 V7 I", regra, None),
-    ) == [[], [], regra, []]
+        # ideia curta (4 notas) repetida na dominante com um intervalo ajustado (3ª → 4ª): mesmo contorno, passa
+        (duas("C maior", "C5/2 E5/2 D5/2 C5/2 B4/2 E5/2 D5/2 C5/2", BAIXO4), "I V7 V7 I", regra, None),
+        # mesmo ritmo, contorno invertido: acusa
+        (duas("C maior", "C5/2 E5/2 D5/2 C5/2 B4/2 G4/2 A4/2 B4/2", BAIXO4), "I V7 V7 I", regra, None),
+    ) == [[], [], regra, [], [], regra]
 
 
 def test_ideia_repetida_aceita_transposicao():
@@ -178,7 +184,13 @@ def test_harmonia_sincopada():
         (duas("C maior", "E5/2 F5/1 E5/1 E5/4", "C3/2 C3/1 C3/1 C3/4"), "I IV64 I I", regra, None),
         # acorde inicial em anacruse
         (duas("C maior", "G4/1 C5/3 D5/4", "C3/1 C3/3 G2/4"), "I I V", regra, None),
-    ) == [regra, [], [], []]
+        # V no 3º tempo do 4/4 atravessando a barra (caso do revisor)
+        (duas("C maior", "E5/2 D5/2 D5/2 C5/2 C5/4", "C3/2 G2/2 G2/2 C3/2 C3/4"), "I V V I I", regra, None),
+        # I final no tempo fraco: fica só com cadencia_tempo_forte
+        ("compasso: 3/4\n" + duas("C maior", "D5/1 C5/3", "G2/1 C3/3"), "V I", regra + ["cadencia_tempo_forte"], {"cadencia": 1}),
+        # pedal de dominante que continua depois: V – #vi°42 – V sobre ré
+        (duas("G maior", "E5/2 F#5/2 F#5/1 E#5/1 F#5/2 G5/4", "C3/2 D3/2 D3/1 D3/1 D3/2 G2/4"), "IV V V #vi°42 V I", regra, None),
+    ) == [regra, [], [], [], regra, ["cadencia_tempo_forte"], []]
 
 
 def test_correcoes_da_revisao():
