@@ -828,7 +828,7 @@ function mostrarDepois(t, e, tx, cifras) {
     : `<div class="rotulo">Aprovado</div>
       ${temProf ? `
         <button class="botao primario" id="ver-prof">Comparar com o professor</button><div id="prof" hidden></div>`
-      : `<ul class="relatorio">${prior.map((i) => `<li class="${i.nivel}"><b>${esc(i.titulo)}</b><span class="v">${esc(i.valor)}</span><small>Referência: ${esc(i.referencia)}. ${esc(i.nota)}</small></li>`).join("")}</ul>`}`) + `
+      : `<ul class="relatorio">${prior.map((i) => `<li class="${i.nivel}"><b>${esc(i.titulo)}</b><span class="v">${esc(i.valor)}</span><small>Referência: ${esc(i.referencia)}. ${esc(i.nota)}${i.nivel === "atencao" && i.compassos && i.compassos.length ? ` Onde: c. ${i.compassos.join(", ")}.` : ""}</small></li>`).join("")}</ul>`}`) + `
     ${e._segunda ? "" : `<button class="botao" id="outra">Desafio: outra solução correta</button>`}
     ${proximo ? `<button class="botao primario grande" id="proximo">${proximo.rotulo}</button>` : ""}`;
   caixa.appendChild(s);
@@ -866,7 +866,8 @@ function comparacaoHTML(tx1, tx2, cf, rot1, rot2, titulo, nota, cifras2, cifras1
   const cif1 = Array.isArray(cifras1) && cifras1.length ? alinharCifras(tx1, cifras1) : [];
   exemplosDaPagina.set("sol1", { partitura: tx1, cifras: cif1 });
   exemplosDaPagina.set("sol2", { partitura: tx2, cifras: cifras2 || [] });
-  const linhas = r1.map((i) => { const j = r2.find((x) => x.titulo === i.titulo); return j ? `<tr><td>${esc(i.titulo)}</td><td class="${i.nivel}">${esc(i.valor)}</td><td class="${j.nivel}">${esc(j.valor)}</td></tr>` : ""; }).join("");
+  const onde = (i) => (i.nivel === "atencao" && i.compassos && i.compassos.length ? ` <small>(c. ${i.compassos.join(", ")})</small>` : "");
+  const linhas = r1.map((i) => { const j = r2.find((x) => x.titulo === i.titulo); return j ? `<tr><td>${esc(i.titulo)}</td><td class="${i.nivel}">${esc(i.valor)}${onde(i)}</td><td class="${j.nivel}">${esc(j.valor)}${onde(j)}</td></tr>` : ""; }).join("");
   return `<div class="rotulo" style="margin-top:8px">${esc(titulo)}</div>
     <div class="par">${exemploHTML({ rotulo: rot1 }, "sol1")}${exemploHTML({ rotulo: rot2 }, "sol2")}</div>
     <table class="tabela-modos comparacao"><thead><tr><th></th><th>${esc(rot1)}</th><th>${esc(rot2)}</th></tr></thead><tbody>${linhas}</tbody></table>

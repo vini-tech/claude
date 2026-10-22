@@ -679,10 +679,17 @@
     function* (ex) {
       for (const v of ex.vozes) {
         const ps = v.paresMelodicos();
+        // extremo do registro: os 15% de cima ou de baixo do âmbito da voz (von Hippel & Huron 2000)
+        const alts = v.notas.map((n) => n.ps), topo = Math.max(...alts), fundo = Math.min(...alts);
+        const lim = Math.max(1, Math.round((topo - fundo) * 0.15));
+        const noExtremo = (n) => topo - fundo >= 5 && (n.ps >= topo - lim || n.ps <= fundo + lim);
         for (let k = 0; k + 1 < ps.length; k++) {
           const [n1, n2] = ps[k], [m1, n3] = ps[k + 1];
           if (m1 !== n2 || Math.abs(n2.ps - n1.ps) <= 5) continue;
-          if (direcao(n2, n3) === direcao(n1, n2)) yield [cN(ex, n3), `${v.nome}: depois do salto ${n1.nome}→${n2.nome} a melodia continua na mesma direção (${n3.nome})`, [n1, n2, n3]];
+          if (direcao(n2, n3) === direcao(n1, n2)) {
+            const extremo = noExtremo(n2) ? `; o salto já chega ao extremo do registro, e o ouvido espera a volta ao centro` : "";
+            yield [cN(ex, n3), `${v.nome}: depois do salto ${n1.nome}→${n2.nome} a melodia continua na mesma direção (${n3.nome})${extremo}`, [n1, n2, n3]];
+          }
         }
       }
     });
@@ -943,7 +950,7 @@
       "Escolha outra nota, ou chegue à mesma nota passando por uma intermediária."],
     salto_de_sexta_ou_setima: ["No estilo estrito, 7ªs e 6ªs maiores são difíceis de cantar e chamam atenção demais. Só a 6ª menor ascendente é aceita.",
       "Troque o salto por um menor (3ª, 4ª ou 5ª) ou por uma 8ª."],
-    salto_nao_compensado: ["Um salto grande abre um espaço que o ouvido quer ver preenchido. Continuar na mesma direção deixa a linha desequilibrada.",
+    salto_nao_compensado: ["Um salto grande abre um espaço que o ouvido quer ver preenchido. Continuar na mesma direção deixa a linha desequilibrada. Há também a regressão ao centro: um salto grande costuma levar a linha para perto do extremo do seu registro, e de lá a continuação mais provável (e a que o ouvido espera) é voltar para o meio (von Hippel & Huron 2000).",
       "Depois de um salto maior que uma 4ª, mude de direção, de preferência por grau conjunto."],
     saltos_consecutivos: ["Vários saltos na mesma direção viram um arpejo sem rumo e esticam demais o âmbito.",
       "Depois de um salto, mude de direção ou siga por grau. Dois saltos seguidos só se formarem um acorde dentro de uma 8ª."],

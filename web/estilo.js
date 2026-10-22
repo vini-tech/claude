@@ -1,7 +1,8 @@
 /* Relatório de estilo: descreve um exercício com números e compara com referências do estilo.
  * Não julga regra (isso é o verificador): mostra como a peça se comporta, para o compositor decidir.
  *
- *   Estilo.relatorio(ex, { cf, cifras, plano, nivelLivro }) → [{ grupo, titulo, valor, referencia, nota, nivel: "ok"|"atencao", medida? }]
+ *   Estilo.relatorio(ex, { cf, cifras, plano, nivelLivro }) → [{ grupo, titulo, valor, referencia, nota, nivel: "ok"|"atencao", medida?, compassos? }]
+ *     compassos: onde olhar, quando a medida aponta para lugares da peça (como os erros do verificador)
  *     cifras:     uma por nota do baixo (as do exercício ou as do aluno); sem elas não há o grupo Harmonia
  *     plano:      o plano do exercício ({ semicadencia, cadencia }); marca as frases e as cadências
  *     nivelLivro: o nível do capítulo; com ele, cada medida é comparada com a faixa das soluções do livro
@@ -37,7 +38,9 @@
     const agudo = v.notas.find((n) => n.ps === topo), grave = v.notas.find((n) => n.ps === fundo);
     let mudancas = 0;
     for (let k = 1; k < pares.length; k++) if (F.direcao(...pares[k - 1]) * F.direcao(...pares[k]) < 0) mudancas++;
-    return { pares: pares.length, graus, saltos, repet, cumes: cumes.length, posClimax, ambito: F.intervalo(grave, agudo), mudancas };
+    const ondeSaltos = pares.filter(([a, b]) => F.ehSalto(a, b)).map(([, b]) => b);
+    const ondeRepet = pares.filter(([a, b]) => a.ps === b.ps).map(([, b]) => b);
+    return { pares: pares.length, graus, saltos, repet, cumes: cumes.length, posClimax, ambito: F.intervalo(grave, agudo), mudancas, ondeCumes: cumes, ondeSaltos, ondeRepet };
   }
 
   // ------------------------------------------------------------ medidas (exportadas para a calibração)
@@ -83,6 +86,7 @@
   }
   function fundamentais(acs) {
     let dom = 0, total = 0;
+    const atras = [];
     const tonica = (a) => a.grau === 1 && !a.cifra.secundaria && !a.cifra.alteracao;
     for (let k = 1; k < acs.length; k++) {
       const a = acs[k - 1], b = acs[k];
@@ -91,8 +95,9 @@
       if (d === 0) continue;
       total++;
       if ([3, 5, 1].includes(d)) dom++;
+      else atras.push(b);
     }
-    return { dom, total };
+    return { dom, total, atras };
   }
 
   // tipo da cadência que termina no compasso c: PAC, IAC, SC (semicadência), engano ou nenhuma
@@ -202,6 +207,7 @@
 
   function relatorio(ex, opcoes = {}) {
     const itens = [];
+    const cs = (notas) => [...new Set(notas.map((n) => ex.compassoDe(n.inicio)))].sort((a, b) => a - b);
     const item = (grupo, x) => itens.push({ grupo, ...x });
     const cf = opcoes.cf !== undefined ? opcoes.cf : ex.cantusFirmus;
     const alvos = ex.vozes.map((_, i) => i).filter((i) => i !== cf && ex.vozes[i].notas.length > 1);
@@ -215,7 +221,7 @@
         referencia: "linhas vocais: cerca de 2/3 ou mais por grau",
         nota: p.pares && p.graus / p.pares < 0.55 ? "A linha salta muito: tende a soar como arpejo, não como melodia." : "Equilíbrio de linha cantável.",
         nivel: p.pares && p.graus / p.pares < 0.55 ? "atencao" : "ok",
-        medida: p.pares ? ["porGrau", pct(p.graus, p.pares)] : null,
+        medida: p.pares ? ["porGrau", pct(p.graus, p.pares)] : null, compassos: cs(p.ondeSaltos),
       });
       const pos = Math.round(p.posClimax * 100);
       item("Melodia", {
@@ -223,7 +229,7 @@
         referencia: "único, entre ~40% e ~75% do percurso",
         nota: p.cumes > 1 ? "O ponto mais agudo se repete: o arco perde definição." : pos < 30 ? "Clímax muito cedo: o resto da linha só desce." : pos > 85 ? "Clímax quase no fim: pouca linha para resolver a tensão." : "Posição que dá tempo de preparar e de resolver.",
         nivel: p.cumes > 1 || pos < 30 || pos > 85 ? "atencao" : "ok",
-        medida: p.cumes === 1 ? ["posClimax", pos] : ["climaxRepetido", p.cumes],
+        medida: p.cumes === 1 ? ["posClimax", pos] : ["climaxRepetido", p.cumes], compassos: cs(p.ondeCumes),
       });
       item("Melodia", {
         titulo: `Âmbito${nome}`, valor: `${F.nomeIntervalo(p.ambito)}`, referencia: "de uma 6ª a uma 10ª",
@@ -231,7 +237,7 @@
         nivel: p.ambito.geral < 6 || p.ambito.geral > 10 ? "atencao" : "ok",
         medida: ["ambito", p.ambito.geral],
       });
-      if (p.repet) item("Melodia", { titulo: `Notas repetidas${nome}`, valor: String(p.repet), referencia: "0 a 1", nota: "Cada repetição congela o movimento da linha.", nivel: p.repet > 1 ? "atencao" : "ok", medida: ["notasRepetidas", p.repet] });
+      if (p.repet) item("Melodia", { titulo: `Notas repetidas${nome}`, valor: String(p.repet), referencia: "0 a 1", nota: "Cada repetição congela o movimento da linha.", nivel: p.repet > 1 ? "atencao" : "ok", medida: ["notasRepetidas", p.repet], compassos: cs(p.ondeRepet) });
 
       const fs = frases(ex, v, opcoes.plano).map(contorno).filter(Boolean);
       if (fs.length) item("Melodia", {
@@ -244,7 +250,7 @@
         titulo: `Afastamento nos extremos${nome}`, valor: `${af.length} vez${af.length > 1 ? "es" : ""}`,
         referencia: "depois de uma nota no extremo do registro, a linha costuma voltar ao centro (von Hippel & Huron 2000)",
         nota: af.length > 1 ? "A linha segue se afastando a partir do extremo do registro: o ouvido espera a volta ao centro." : "Um afastamento isolado a partir do extremo; vale conferir se ele prepara o clímax.",
-        nivel: af.length > 1 ? "atencao" : "ok",
+        nivel: af.length > 1 ? "atencao" : "ok", compassos: cs(af),
       });
 
       const d = v.notas.map((x) => x.duracao), valores = new Set(d).size;
@@ -279,12 +285,13 @@
         return F.classePerfeita(iv) ? "perfeita" : F.ehConsonante(iv, true) ? "imperfeita" : "dissonante";
       });
       const perf = tipos.filter((t) => t === "perfeita").length, imp = tipos.filter((t) => t === "imperfeita").length;
+      const ondePerf = fortes.filter((_, k) => tipos[k] === "perfeita").map((m) => ex.compassoDe(m.t));
       item("Vozes", {
         titulo: "Consonâncias nos tempos fortes", valor: `${pct(imp, tipos.length)}% imperfeitas · ${pct(perf, tipos.length)}% perfeitas`,
         referencia: "Fux: mais imperfeitas que perfeitas (perfeitas no começo, no fim e em pontos de articulação)",
         nota: imp < perf ? "Muitas 5ªs e 8ªs: o tecido fica oco e as vozes perdem identidade." : "3ªs e 6ªs formam o tecido; as perfeitas marcam pontos.",
         nivel: imp < perf ? "atencao" : "ok",
-        medida: tipos.length ? ["imperfeitas", pct(imp, tipos.length)] : null,
+        medida: tipos.length ? ["imperfeitas", pct(imp, tipos.length)] : null, compassos: [...new Set(ondePerf)],
       });
       const suc = F.sucessoes(ex, ...par).filter(([, b]) => b.atacaSup || b.atacaInf);
       // movimento de tempo a tempo (como a referência dos corais): as notas que soam em cada tempo
@@ -297,12 +304,12 @@
         if (a.sup && a.inf && b.sup && b.inf && (a.sup !== b.sup || a.inf !== b.inf)) nosTempos.push([a, b]);
       }
       const cont = { contrario: 0, obliquo: 0, direto: 0, paralelo: 0 };
+      const juntas = [];
       for (const [a, b] of nosTempos) {
         const ds = F.direcao(a.sup, b.sup), di = F.direcao(a.inf, b.inf);
         if (ds === 0 || di === 0) cont.obliquo++;
         else if (ds !== di) cont.contrario++;
-        else if (F.harmonico(a.sup, a.inf).simples === F.harmonico(b.sup, b.inf).simples) cont.paralelo++;
-        else cont.direto++;
+        else { if (F.harmonico(a.sup, a.inf).simples === F.harmonico(b.sup, b.inf).simples) cont.paralelo++; else cont.direto++; juntas.push(b.sup.inicio > b.inf.inicio ? b.sup : b.inf); }
       }
       const tot = nosTempos.length;
       item("Vozes", {
@@ -310,20 +317,21 @@
         referencia: "corais de Bach, soprano e baixo nos tempos: contrário 43%, oblíquo 26%, direto 27%, paralelo 5% (medido com o music21)",
         nota: cont.contrario < Math.max(cont.direto, cont.paralelo) ? "As vozes andam muito juntas: a independência sofre, mesmo sem erro de regra." : "Boa independência de direção.",
         nivel: cont.contrario < Math.max(cont.direto, cont.paralelo) ? "atencao" : "ok",
-        medida: tot ? ["contrario", pct(cont.contrario, tot)] : null,
+        medida: tot ? ["contrario", pct(cont.contrario, tot)] : null, compassos: cs(juntas),
       });
       // saltos simultâneos
-      let simult = 0;
-      for (const [a, b] of suc) if (b.atacaSup && b.atacaInf && F.ehSalto(a.sup, b.sup) && F.ehSalto(a.inf, b.inf)) simult++;
+      const ondeSimult = [];
+      for (const [a, b] of suc) if (b.atacaSup && b.atacaInf && F.ehSalto(a.sup, b.sup) && F.ehSalto(a.inf, b.inf)) ondeSimult.push(b.sup);
+      const simult = ondeSimult.length;
       if (simult) item("Vozes", { titulo: "Saltos simultâneos", valor: String(simult), referencia: "raros: quando uma voz salta, a outra costuma andar por grau",
-        nota: "Saltos nas duas vozes ao mesmo tempo chamam atenção e dificultam o equilíbrio.", nivel: simult > 1 ? "atencao" : "ok", medida: ["saltosSimultaneos", simult] });
+        nota: "Saltos nas duas vozes ao mesmo tempo chamam atenção e dificultam o equilíbrio.", nivel: simult > 1 ? "atencao" : "ok", medida: ["saltosSimultaneos", simult], compassos: cs(ondeSimult) });
       // clímax coincidente
       const top = (v) => { const m = Math.max(...v.notas.map((n) => n.ps)); return v.notas.filter((n) => n.ps === m).map((n) => ex.compassoDe(n.inicio)); };
       const a = ex.vozes[par[0]], b = ex.vozes[par[1]];
       if (a.notas.length && b.notas.length) {
-        const coincide = top(a).some((c) => top(b).includes(c));
+        const comuns = top(a).filter((c) => top(b).includes(c)), coincide = comuns.length > 0;
         item("Vozes", { titulo: "Clímax das duas vozes", valor: coincide ? "no mesmo compasso" : "em compassos diferentes", referencia: "em momentos diferentes",
-          nota: coincide ? "Os dois pontos altos juntos fazem as vozes soarem como bloco." : "Cada voz tem o seu arco.", nivel: coincide ? "atencao" : "ok", medida: ["climaxJunto", coincide ? 1 : 0] });
+          nota: coincide ? "Os dois pontos altos juntos fazem as vozes soarem como bloco." : "Cada voz tem o seu arco.", nivel: coincide ? "atencao" : "ok", medida: ["climaxJunto", coincide ? 1 : 0], compassos: [...new Set(comuns)] });
         const comp = complementaridade(ex, a, b);
         if (comp !== null) item("Ritmo", {
           titulo: "Ritmo entre as vozes", valor: `${comp.toFixed(2)} × o acaso`,
@@ -338,13 +346,13 @@
     // harmonia (só com cifras)
     const acs = acordes(ex, opcoes.cifras);
     if (acs.length >= 3) {
-      const { dom, total } = fundamentais(acs);
+      const { dom, total, atras } = fundamentais(acs);
       if (total) item("Harmonia", {
         titulo: "Movimento das fundamentais", valor: `${pct(dom, total)}% "dominantes" (5ª ↓, 3ª ↓, 2ª ↑)`,
         referencia: "em Bach, a grande maioria (Meeùs, Tymoczko); a retrogressão é rara, não proibida. Saídas do I não contam",
         nota: dom / total < 0.5 ? "Muitas progressões para trás: a harmonia anda em círculos em vez de avançar para a cadência." : "A harmonia avança como no estilo tonal.",
         nivel: dom / total < 0.5 ? "atencao" : "ok",
-        medida: ["dominantes", pct(dom, total)],
+        medida: ["dominantes", pct(dom, total)], compassos: [...new Set(atras.map((x) => ex.compassoDe(x.inicio)))],
       });
       const n = ex.compassoDe(ex.fim - 1);
       // acordes que soam em cada compasso (o que vem do compasso anterior também conta)
@@ -366,7 +374,7 @@
           titulo: "Cadências", valor: cads.map(([c, t]) => `c. ${c} ${t}`).join(" → "),
           referencia: "força percebida: PAC > IAC > SC > engano (Caplin; Sears, Caplin & McAdams 2014); a última cadência é a mais forte",
           nota: fraca ? "A cadência final não é mais forte que a anterior: o fim não soa como fim." : "As cadências ficam mais fortes até o fim.",
-          nivel: fraca ? "atencao" : "ok",
+          nivel: fraca ? "atencao" : "ok", compassos: fraca ? [cads[cads.length - 1][0]] : [],
         });
       }
     }

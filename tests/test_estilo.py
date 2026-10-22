@@ -26,9 +26,10 @@ const saida = casos.map(([tipo, texto, extra]) => {
   if (tipo === 'afastamentos') return md.afastamentos(v).length;
   if (tipo === 'forma') return md.formaPorCompasso(ex, v).join(' ');
   if (tipo === 'complementar') return md.complementaridade(ex, ex.vozes[0], ex.vozes[1]);
-  if (tipo === 'fundamentais') return md.fundamentais(md.acordes(ex, extra.split(' ')));
+  if (tipo === 'fundamentais') { const f = md.fundamentais(md.acordes(ex, extra.split(' '))); return { dom: f.dom, total: f.total }; }
   if (tipo === 'cadencia') return md.cadenciaEm(ex, md.acordes(ex, extra.cifras.split(' ')), extra.c);
   if (tipo === 'relatorio') return Est.relatorio(ex, extra).map((i) => [i.grupo, i.titulo]);
+  if (tipo === 'relatorio_onde') return Object.fromEntries(Est.relatorio(ex, extra).filter((i) => i.nivel === 'atencao').map((i) => [i.titulo, i.compassos || []]));
   if (tipo === 'relatorio_nivel') return Object.fromEntries(Est.relatorio(ex, extra).map((i) => [i.titulo, i.nivel]));
 });
 process.stdout.write(JSON.stringify(saida));
@@ -130,6 +131,12 @@ def test_faixa_do_livro_tira_a_atencao_dentro_dela():
     sem, com = medir(("relatorio_nivel", texto, {"cf": 0}), ("relatorio_nivel", texto, {"cf": 0, "nivelLivro": 2}))
     assert sem["Clímax (baixo)"] == "atencao"
     assert com["Clímax (baixo)"] == "ok"
+
+
+def test_onde_olhar():
+    # clímax (sol5) repetido nos c. 1 e 3; o item em atenção aponta os compassos
+    itens = medir(("relatorio_onde", uma("C5/2 G5/2 E5/2 D5/2 G5/2 E5/2 D5/2 C5/2"), {}))[0]
+    assert itens["Clímax"] == [1, 3]
 
 
 def test_grupos_do_relatorio():
