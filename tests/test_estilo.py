@@ -133,6 +133,14 @@ def test_faixa_do_livro_tira_a_atencao_dentro_dela():
     assert com["Clímax (baixo)"] == "ok"
 
 
+def test_baixo_harmonico_nao_e_julgado_como_melodia():
+    # baixo em fundamentais (I IV V I…): só saltos. Sem cifras, o critério de melodia acusa; com cifras, só descreve
+    texto = duas("E5/2 F5/2 D5/2 C5/2 E5/2 F5/2 D5/2 C5/2", "C3/2 F2/2 G2/2 C3/2 C3/2 F2/2 G2/2 C3/2")
+    sem, com = medir(("relatorio_nivel", texto, {"cf": -1}), ("relatorio_nivel", texto, {"cf": -1, "cifras": "I IV V I I IV V I".split()}))
+    assert sem["Graus e saltos (baixo)"] == "atencao"
+    assert com["Graus e saltos (baixo)"] == "ok"
+
+
 def test_onde_olhar():
     # clímax (sol5) repetido nos c. 1 e 3; o item em atenção aponta os compassos
     itens = medir(("relatorio_onde", uma("C5/2 G5/2 E5/2 D5/2 G5/2 E5/2 D5/2 C5/2"), {}))[0]

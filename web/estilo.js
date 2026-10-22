@@ -253,6 +253,19 @@
         nivel: af.length > 1 ? "atencao" : "ok", compassos: cs(af),
       });
 
+      // baixo harmônico (a voz mais grave, com cifras): os critérios acima são de melodia. As fundamentais
+      // saltam 4ª e 5ª, e o baixo repete nota no pedal: os itens ficam só descritivos
+      if (opcoes.cifras && ex.vozes.length > 1 && i === ex.vozes.length - 1) {
+        for (const x of itens) {
+          if (x.grupo !== "Melodia" || !x.titulo.endsWith(nome)) continue;
+          x.nivel = "ok";
+          if (x.titulo.startsWith("Graus e saltos")) {
+            x.referencia = "baixo harmônico: as fundamentais saltam 4ª e 5ª; as inversões deixam o baixo andar por grau";
+            x.nota = "Critério de baixo, não de melodia.";
+          } else x.referencia += " (critério de melodia: no baixo, só descreve)";
+        }
+      }
+
       const d = v.notas.map((x) => x.duracao), valores = new Set(d).size;
       if (valores > 1) {
         const np = nPVI(v);
@@ -314,7 +327,7 @@
       const tot = nosTempos.length;
       item("Vozes", {
         titulo: "Movimento entre as vozes", valor: `contrário ${pct(cont.contrario, tot)}% · oblíquo ${pct(cont.obliquo, tot)}% · direto ${pct(cont.direto, tot)}% · paralelo ${pct(cont.paralelo, tot)}%`,
-        referencia: "corais de Bach, soprano e baixo nos tempos: contrário 43%, oblíquo 26%, direto 27%, paralelo 5% (medido com o music21)",
+        referencia: "corais de Bach (os 371 do corpus do music21), soprano e baixo de semínima em semínima: contrário 43%, oblíquo 26%, direto 27%, paralelo 5% (medição do ateliê, não número publicado)",
         nota: cont.contrario < Math.max(cont.direto, cont.paralelo) ? "As vozes andam muito juntas: a independência sofre, mesmo sem erro de regra." : "Boa independência de direção.",
         nivel: cont.contrario < Math.max(cont.direto, cont.paralelo) ? "atencao" : "ok",
         medida: tot ? ["contrario", pct(cont.contrario, tot)] : null, compassos: cs(juntas),
@@ -349,7 +362,7 @@
       const { dom, total, atras } = fundamentais(acs);
       if (total) item("Harmonia", {
         titulo: "Movimento das fundamentais", valor: `${pct(dom, total)}% "dominantes" (5ª ↓, 3ª ↓, 2ª ↑)`,
-        referencia: "em Bach, a grande maioria (Meeùs, Tymoczko); a retrogressão é rara, não proibida. Saídas do I não contam",
+        referencia: "em Bach, cerca de 75% numa contagem aproximada (Tymoczko; Meeùs supunha 90%), contando também as saídas do I, que aqui ficam de fora: compare só de modo aproximado. A retrogressão é rara, não proibida",
         nota: dom / total < 0.5 ? "Muitas progressões para trás: a harmonia anda em círculos em vez de avançar para a cadência." : "A harmonia avança como no estilo tonal.",
         nivel: dom / total < 0.5 ? "atencao" : "ok",
         medida: ["dominantes", pct(dom, total)], compassos: [...new Set(atras.map((x) => ex.compassoDe(x.inicio)))],
