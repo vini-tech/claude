@@ -612,9 +612,10 @@
         const ini = gs[k].inicio, barra = (Math.floor(ini / C) + 1) * C;
         // o acorde anterior já era o mesmo (só acontece com o acorde inicial em anacruse): não é síncope
         const continua = mesmaHarmonia(gs[k - 1], gs[k]);
-        // pedal: o acorde vizinho (antes ou depois) está sobre o mesmo baixo (I – IV6/4 – I, V – #vi°42 – V)
+        // pedal: o baixo já vinha do acorde anterior (I – IV6/4 – I), ou continua por pelo menos dois
+        // acordes depois (V – #vi°42 – V). Um só acorde seguinte no mesmo baixo (IV → ii65 sobre fá) não é pedal.
         const mesmoBaixo = (g) => g && g.baixo.altura.nome === gs[k].baixo.altura.nome;
-        const pedal = mesmoBaixo(gs[k - 1]) || mesmoBaixo(gs[j + 1]);
+        const pedal = mesmoBaixo(gs[k - 1]) || (mesmoBaixo(gs[j + 1]) && mesmoBaixo(gs[j + 2]));
         // o acorde final fica com cadencia_tempo_forte (sem aviso duplo)
         const final = j === gs.length - 1;
         // qualquer tempo mais fraco que a barra (inclusive o 3º do 4/4) que atravessa o 1º tempo
